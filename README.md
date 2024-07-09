@@ -45,8 +45,8 @@ src/
 
 ## 5. URL Convention
 ### url을 명명할 때는 하이픈(-)을 사용해 주세요.
-- [O] pathname/test-name
-- [X] pathname/testName
+- pathname/test-name (O)
+- pathname/testName (X)
 
 ## 6. Folder Convention
 ### 폴더 이름은 소문자로, 이름이 길어진다면 하이픈(-)을 사용해 주세요.
