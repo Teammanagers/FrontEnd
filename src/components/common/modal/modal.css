@@ -1,0 +1,46 @@
+.DialogOverlay {
+  background-color: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  inset: 0;
+}
+
+.DialogContent {
+  background-color: white;
+  border-radius: 4px;
+  box-shadow:
+    hsl(206, 22%, 7%) 0px 10px 38px -10px,
+    hsl(206, 22%, 7%) 0px 10px 20px -15px;
+  padding: 20px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90vw;
+  max-width: 450px;
+}
+
+.DialogTitle {
+  margin: 0;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.DialogDescription {
+  margin: 20px 0;
+  font-size: 1rem;
+}
+
+.Button {
+  background-color: #007bff;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.Button:hover {
+  background-color: #0056b3;
+}
