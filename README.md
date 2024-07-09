@@ -1,30 +1,34 @@
-# React + TypeScript + Vite
+## 1. Setting
+### 1. git clone (폴더 이동)
+### 2. npm install
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 2. Branch Convention
+### 1. main에서 git pull
+### 2. git checkout -b '브랜치 이름'
+### 3. '브랜치 이름'에서 pull request 생성
+### 4. 코드 리뷰 진행 후 main에 merge
 
-Currently, two official plugins are available:
+## 3. Commit Convention
+- feat: 새로운 기능 추가
+- fix: 버그 수정
+- style: css 파일 위주의 ui 작업
+- docs: 문서 수정
+- refactor: 코드 리팩토링
+- chore: 빌드 업무 수정, 패키지 매니저 수정
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 4. URL Convention
+### url을 명명할 때는 하이픈(-)을 사용해 주세요.
+- [O] pathname/test-name
+- [X] pathname/testName
 
-## Expanding the ESLint configuration
+## 5. Folder Convention
+### 폴더 이름은 소문자로, 이름이 길어진다면 하이픈(-)을 사용해 주세요.
+#### validator, share-memo...
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## 6. File Convention
+### 1) 컴포넌트는 대문자로 시작하게 명명해 주세요.
+#### Button.tsx / SideBar.tsx ...
+### 2) 함수는 소문자로 시작하게 명명해 주세요.
+#### checkAvailableDate.ts ...
+### 3) custom hook은 use로 시작하게 명명해 주세요.
+#### useShareWork.ts...
