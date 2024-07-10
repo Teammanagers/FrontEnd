@@ -1,4 +1,4 @@
-import Modal from '../../components/common/modal';
+import Modal from '@/components/common/Modal';
 
 export const LoginPage = () => {
   return (
