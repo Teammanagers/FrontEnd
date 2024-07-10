@@ -3,10 +3,16 @@
 ### 2. npm install
 
 ## 2. Branch Convention
-### 1. main에서 git pull
-### 2. git checkout -b '브랜치 이름'
-### 3. '브랜치 이름'에서 pull request 생성
-### 4. 코드 리뷰 진행 후 main에 merge
+### 1. develop에서 git pull
+### 2. git checkout -b '상태/브랜치 이름'
+#### 2-1. 상태는 아래와 같이 정의한다.
+ex) feat/login-ui
+- feat: 기능 개발
+- refactor: 코드 리팩토링
+- hotfix: 이슈 해결
+### 3. '상태/브랜치 이름'에서 pull request 생성
+### 4. 코드 리뷰 진행 후 develop에 merge
+### 5. 버전에 따라 develop을 main에 merge
 
 ## 3. 폴더구조
 
