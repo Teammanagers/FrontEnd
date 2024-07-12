@@ -1,3 +1,11 @@
+import Styled from './styles';
+
 export const CalendarPage = () => {
-  return <>Calendar 페이지입니다.</>;
+  return (
+    <>
+      <Styled.Container>
+        <h1>hi</h1>
+      </Styled.Container>
+    </>
+  );
 };
