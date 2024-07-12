@@ -5,7 +5,6 @@ export const CalendarPage = () => {
   return (
     <>
       <Styled.Container>
-        <h1>hi</h1>
         <Calendar />
       </Styled.Container>
     </>
