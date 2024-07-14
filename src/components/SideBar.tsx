@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Home from '@/assets/sidebar/home.svg';
+import Home from '@assets/sidebar/home.svg';
 
 export const SideBar = () => {
   return (
