@@ -6,6 +6,9 @@ export const CalendarPage = () => {
     <>
       <Styled.Container>
         <Calendar />
+        <div className="upcoming-schedule">
+          <h2>다가오는 일정</h2>
+        </div>
       </Styled.Container>
     </>
   );

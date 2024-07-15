@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { StyledCalendarWrapper, StyledCalendar } from './styles';
 import moment from 'moment';
+import Modal from './Modal';
 
 type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
@@ -48,6 +49,8 @@ const Calendar = () => {
         prev2Label={null} // 년도 이동 버튼 숨기기
         minDetail="year" // 10년단위 년도 숨기기
       />
+      <div>{moment(date).format('YYYY년 MM월 DD일')}</div>
+      <Modal />
     </StyledCalendarWrapper>
   );
 };

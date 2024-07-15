@@ -3,18 +3,20 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 
 export const StyledCalendarWrapper = styled.div`
-  width: 100%;
-  height: 100vh;
-  display: flex;
+  width: 630px;
+  height: 520px;
+  margin-right: 23px;
+
+  /* display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center; */
   /* position: relative; */
 
   .react-calendar {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 630px;
+    width: inherit;
     height: 520px;
     padding: 24px 47px;
     background-color: rgba(255, 255, 255, 1);
