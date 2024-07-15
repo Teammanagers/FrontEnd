@@ -1,5 +1,5 @@
 import Styled from './styles';
-import Calendar from '@components/calendar/calendar';
+import Calendar from '@components/calendar/Calendar';
 
 export const CalendarPage = () => {
   return (
