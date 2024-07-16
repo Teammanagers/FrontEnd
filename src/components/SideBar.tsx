@@ -164,6 +164,8 @@ const SideBarText = styled.p<SelectedProps>`
   color: ${({ selected, theme }) =>
     selected ? theme.colors.black : theme.colors.darkGray};
   margin-left: 18px;
+  white-space: nowrap;
+  overflow: hidden;
 `;
 
 const IconContainer = styled.div<SelectedProps>`
