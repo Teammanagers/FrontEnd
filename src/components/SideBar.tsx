@@ -44,7 +44,6 @@ export const SideBar = () => {
     >
       <LogoImg />
       <Hr style={{ margin: '12px 0 18px 0' }} />
-      {/*선택되었을 때 / hover 때는 이미지 다르게 */}
       <IconContainer
         onClick={() => {
           handleNavigate(`/`);
@@ -138,6 +137,9 @@ export const SideBar = () => {
 };
 
 const SideBarContainer = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 73px;
   height: 832px;
   background-color: white;
@@ -145,6 +147,7 @@ const SideBarContainer = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 6px;
+  transition: width 0.3s ease; // 화면 효과 부드럽게 전환
 
   &:hover {
     width: 158px;
