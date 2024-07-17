@@ -2,15 +2,15 @@ import styled from 'styled-components';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 
-export const StyledCalendarWrapper = styled.div`
+export const StyledCalendarContainer = styled.div`
   width: 630px;
   height: 520px;
   margin-right: 23px;
+  position: relative;
 
   /* display: flex;
   justify-content: center;
   align-items: center; */
-  /* position: relative; */
 
   .react-calendar {
     display: flex;

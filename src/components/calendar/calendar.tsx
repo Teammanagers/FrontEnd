@@ -1,7 +1,8 @@
-import { useState } from 'react';
-import { StyledCalendarWrapper, StyledCalendar } from './styles';
+import { useEffect, useState } from 'react';
+import { StyledCalendarContainer, StyledCalendar } from './styles';
 import moment from 'moment';
 import Modal from './Modal';
+import { ScheduleInfo } from './types';
 
 type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
@@ -9,26 +10,24 @@ type Value = ValuePiece | [ValuePiece, ValuePiece];
 const Calendar = () => {
   const today = new Date();
   const [date, setDate] = useState<Value>(today);
+  const [schedule, setSchedule] = useState<ScheduleInfo | null>({
+    date: '',
+    title: '',
+    memo: ''
+  });
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const handleDateChange = (newDate: Value) => {
     setDate(newDate);
+    setIsModalOpen(true);
   };
 
-  const formatShortWeekday = (
-    locale: string | undefined,
-    date: Date
-  ): string => {
-    const weekdaysShort = moment.weekdaysShort();
-    const weekdayIndex = moment(date).weekday();
-    const weekdayShort = weekdaysShort[weekdayIndex];
-    return (
-      weekdayShort.charAt(0).toUpperCase() +
-      weekdayShort.slice(1, 3).toLowerCase()
-    );
-  };
+  useEffect(() => {
+    console.log(schedule);
+  }, [schedule]);
 
   return (
-    <StyledCalendarWrapper>
+    <StyledCalendarContainer>
       <StyledCalendar
         locale="en-US"
         value={date}
@@ -42,16 +41,21 @@ const Calendar = () => {
         formatMonthYear={(locale: string | undefined, date: Date) =>
           moment(date).format('YYYY. MM')
         } // 네비게이션에서 2023. 12 이렇게 보이도록 설정
-        formatShortWeekday={formatShortWeekday}
         calendarType="gregory" // 일요일 부터 시작
         showNeighboringMonth={true} // 전달, 다음달 날짜 숨기기
         next2Label={null} // 년도 이동 버튼 숨기기
         prev2Label={null} // 년도 이동 버튼 숨기기
         minDetail="year" // 10년단위 년도 숨기기
       />
-      <div>{moment(date).format('YYYY년 MM월 DD일')}</div>
-      <Modal />
-    </StyledCalendarWrapper>
+      {date && (
+        <Modal
+          date={date}
+          setSchedule={setSchedule}
+          onClose={() => setDate(null)}
+          isOpen={isModalOpen}
+        />
+      )}
+    </StyledCalendarContainer>
   );
 };
 
