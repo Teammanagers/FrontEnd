@@ -1,18 +1,38 @@
 name: GitHub Actions Demo
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-on: [push]
+
+on:
+  push:
+    branches:
+      - develop  # 빌드할 브랜치 설정
+
 jobs:
-  Explore-GitHub-Actions:
+  explore-github-actions:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-      - name: Check out repository code
-        uses: actions/checkout@v4
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: List files in the repository
-        run: |
-          ls ${{ github.workspace }}
-      - run: echo "🍏 This job's status is ${{ job.status }}."
+      - name: Checkout 코드
+        uses: actions/checkout@v2
+
+      - name: Node.js 설치
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18.18.0'  # Node.js 버전 설정
+
+      - name: 의존성 설치
+        run: npm install
+
+      - name: 빌드
+        run: npm run build  # 여기에 실제 빌드 스크립트를 입력하세요
+
+      - name: 저장소 파일 목록 확인
+        run: ls ${{ github.workspace }}
+
+      - name: 빌드 결과 압축
+        uses: montudor/action-zip@v0.3.1
+        with:
+          files: |
+            build/  # 빌드된 파일의 경로 설정
+          name: build-artifact  # 압축 파일 이름 설정
+
+      - name: 출력 확인
+        run: echo "🍏 이 작업의 상태는 ${{ job.status }}."
