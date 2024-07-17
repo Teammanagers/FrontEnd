@@ -1,21 +1,21 @@
 import styled from 'styled-components';
-import Logo from '@assets/sidebar/logo.svg';
-import Home from '@assets/sidebar/home.svg';
-import HomeClick from '@assets/sidebar/home-click.svg';
-import Bell from '@assets/sidebar/bell.svg';
-import BellClick from '@assets/sidebar/bell-click.svg';
-import List from '@assets/sidebar/list.svg';
-import ListClick from '@assets/sidebar/list-click.svg';
-import Calendar from '@assets/sidebar/calendar.svg';
-import CalendarClick from '@assets/sidebar/calendar-click.svg';
-import Memo from '@assets/sidebar/memo.svg';
-import MemoClick from '@assets/sidebar/memo-click.svg';
-import File from '@assets/sidebar/file.svg';
-import FileClick from '@assets/sidebar/file-click.svg';
-import Team from '@assets/sidebar/team.svg';
-import TeamClick from '@assets/sidebar/team-click.svg';
-import MyPage from '@assets/sidebar/mypage.svg';
-import MyPageClick from '@assets/sidebar/mypage-click.svg';
+import Logo from '@assets/images/sidebar/logo.svg';
+import Home from '@assets/images/sidebar/home.svg';
+import HomeClick from '@assets/images/sidebar/home-click.svg';
+import Bell from '@assets/images/sidebar/bell.svg';
+import BellClick from '@assets/images/sidebar/bell-click.svg';
+import List from '@assets/images/sidebar/list.svg';
+import ListClick from '@assets/images/sidebar/list-click.svg';
+import Calendar from '@assets/images/sidebar/calendar.svg';
+import CalendarClick from '@assets/images/sidebar/calendar-click.svg';
+import Memo from '@assets/images/sidebar/memo.svg';
+import MemoClick from '@assets/images/sidebar/memo-click.svg';
+import File from '@assets/images/sidebar/file.svg';
+import FileClick from '@assets/images/sidebar/file-click.svg';
+import Team from '@assets/images/sidebar/team.svg';
+import TeamClick from '@assets/images/sidebar/team-click.svg';
+import MyPage from '@assets/images/sidebar/mypage.svg';
+import MyPageClick from '@assets/images/sidebar/mypage-click.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 export const SideBar = () => {
@@ -30,8 +30,6 @@ export const SideBar = () => {
   const isActive = (path: string): boolean => {
     return location.pathname === path;
   };
-
-  console.log(location);
 
   return (
     <SideBarContainer
