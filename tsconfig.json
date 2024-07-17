@@ -8,5 +8,5 @@
       "path": "./tsconfig.node.json"
     }
   ],
-  "include": ["src", "svg.d.ts"]
+  "include": ["src"]
 }
