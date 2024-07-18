@@ -31,8 +31,6 @@ export const SideBar = () => {
     return location.pathname === path;
   };
 
-  console.log(location);
-
   return (
     <SideBarContainer
       onMouseEnter={() => {
