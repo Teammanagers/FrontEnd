@@ -1,26 +1,27 @@
 import styled from 'styled-components';
 import * as Popover from '@radix-ui/react-popover';
 import moment from 'moment';
-import { ScheduleInfo } from './types';
+import { ScheduleInfo, Value } from './types';
 import ClosedBtn from '@assets/calendar/closed-btn.svg';
 // import { Theme } from '@/style/theme';
 
 type ModalProps = {
-  date: Date;
+  date: Value;
   setSchedule: (schedule: ScheduleInfo) => void;
   onClose: () => void;
   isOpen: boolean;
 };
 
 const Modal = ({ date, setSchedule, onClose, isOpen }: ModalProps) => {
-  const handleSubmit = (e: Event) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const target = e.target as HTMLFormElement;
     const title = (target[0] as HTMLInputElement).value;
     const memo = (target[2] as HTMLTextAreaElement).value;
 
+    const dateAsDate = date instanceof Date ? date : null;
     const schedule: ScheduleInfo = {
-      date: moment(date).format('YYYY.MM.DD'),
+      date: moment(dateAsDate).format('YYYY.MM.DD'),
       title,
       memo
     };
@@ -43,7 +44,9 @@ const Modal = ({ date, setSchedule, onClose, isOpen }: ModalProps) => {
                   </div>
                 </Popover.Close>
                 <span className="date">
-                  {moment(date).format('YYYY.MM.DD')}
+                  {moment(date instanceof Date ? date : null).format(
+                    'YYYY.MM.DD'
+                  )}
                 </span>
               </div>
               <hr />

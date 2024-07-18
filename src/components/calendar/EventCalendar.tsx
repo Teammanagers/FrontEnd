@@ -3,9 +3,7 @@ import { StyledCalendarContainer, StyledCalendar } from './styles';
 import moment from 'moment';
 import Modal from './Modal';
 import { ScheduleInfo } from './types';
-
-type ValuePiece = Date | null;
-type Value = ValuePiece | [ValuePiece, ValuePiece];
+import { Value } from './types';
 
 const Calendar = () => {
   const today = new Date();
