@@ -8,9 +8,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Remove npm cache and reinstall
+      - name: Remove file reinstall
         run: |
-          npm cache clean --force
           rm -rf package-lock.json node_modules
           npm install
 

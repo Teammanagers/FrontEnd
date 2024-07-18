@@ -1,14 +1,14 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { CalendarPage, ExtraCalendarPage } from './pages/calendar';
-import { LoginPage, ExtraLoginPage } from './pages/login';
-import { ManagementPage, ExtraManagementPage } from './pages/management';
-import { MemoPage, ExtraMemoPage } from './pages/memo';
-import { MyPage, ExtraMyPage } from './pages/mypage';
-import { SharePage, ExtraSharePage } from './pages/share';
-import { TodoListPage, ExtraTodoListPage } from './pages/todo-list';
-import ErrorPage from './pages/error';
-import MainPage from './pages/main';
-import Layout from './components/Layout';
+import { CalendarPage, ExtraCalendarPage } from '@pages/calendar';
+import { LoginPage, ExtraLoginPage } from '@pages/login';
+import { ManagementPage, ExtraManagementPage } from '@pages/management';
+import { MemoPage, ExtraMemoPage } from '@pages/memo';
+import { MyPage, ExtraMyPage } from '@pages/mypage';
+import { SharePage, ExtraSharePage } from '@pages/share';
+import { TodoListPage, ExtraTodoListPage } from '@pages/todo-list';
+import ErrorPage from '@pages/error';
+import MainPage from '@pages/main';
+import Layout from '@components/Layout';
 
 const App = () => {
   return (
