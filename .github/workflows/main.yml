@@ -1,0 +1,17 @@
+name: Frontend CI/CD
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Remove file reinstall
+        run: |
+          rm -rf package-lock.json node_modules
+          npm install
+
+      - name: Build
+        run: npm run build
