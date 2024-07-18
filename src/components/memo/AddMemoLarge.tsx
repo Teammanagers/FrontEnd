@@ -37,4 +37,5 @@ const MemoTextContainer = styled.div`
 const MemoText = styled.p`
   font-size: 15px;
   font-weight: 700;
+  color: ${(props) => props.theme.colors.black};
 `;
