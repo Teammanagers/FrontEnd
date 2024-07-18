@@ -16,7 +16,10 @@ export const WriteMemo = () => {
           ...태그가 들어갑니당... 아무것도 없을때는 + 버튼
         </TagContainer>
       </TopContainer>
-      <ContentText placeholder="내용을 입력해주세요"></ContentText>
+      <BottomContainer>
+        <ContentText placeholder="내용을 입력해주세요"></ContentText>
+        <SubmitBtn>메모 등록</SubmitBtn>
+      </BottomContainer>
     </MemoContainer>
   );
 };
@@ -30,7 +33,6 @@ const MemoContainer = styled.div`
   align-items: center;
   flex-direction: column;
   background: white;
-  //background: #535bf2;
 `;
 
 const TopContainer = styled.div`
@@ -48,13 +50,6 @@ const BackBtn = styled.button`
   align-self: flex-start;
   margin-bottom: 9px;
   padding: 0;
-  // background: url(${BackButton});
-  //background-image: url('../../assets/images/memo/back-button.svg');
-  //background-size: contain; // 이미지 크기 버튼 크기에 맞춤
-  //background-repeat: no-repeat;
-  //background-position: center center;
-  //background-color: cornflowerblue;
-  background: transparent;
   cursor: pointer;
   border: none;
 `;
@@ -83,10 +78,29 @@ const TagContainer = styled.div`
   align-items: center;
 `;
 
+const BottomContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
 const ContentText = styled.textarea`
   width: 985px;
   height: 347px;
   border: none;
   font-size: 15px;
   line-height: 23px;
+`;
+
+const SubmitBtn = styled.button`
+  width: 157px;
+  height: 36px;
+  margin: 19px 0 0 auto;
+  background: ${(props) => props.theme.colors.mainBlue};
+  border-radius: 3px;
+  border: none;
+  color: white;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 18px;
+  cursor: pointer;
 `;
