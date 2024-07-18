@@ -8,10 +8,6 @@ export const StyledCalendarContainer = styled.div`
   margin-right: 23px;
   position: relative;
 
-  /* display: flex;
-  justify-content: center;
-  align-items: center; */
-
   .react-calendar {
     display: flex;
     flex-direction: column;
@@ -27,6 +23,7 @@ export const StyledCalendarContainer = styled.div`
   /* 전체 폰트 컬러 */
   .react-calendar__month-view {
     abbr {
+      font-family: 'Roboto', sans-serif;
       color: rgba(29, 29, 29, 1);
     }
   }
@@ -60,6 +57,7 @@ export const StyledCalendarContainer = styled.div`
       height: 24px;
       padding: 0;
     }
+
     /* 기본 hover 효과 무시 */
     .react-calendar__navigation__prev-button:hover,
     .react-calendar__navigation__next-button:hover,

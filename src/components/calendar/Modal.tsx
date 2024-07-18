@@ -2,7 +2,80 @@ import styled from 'styled-components';
 import * as Popover from '@radix-ui/react-popover';
 import moment from 'moment';
 import { ScheduleInfo } from './types';
+import ClosedBtn from '@assets/calendar/closed-btn.svg';
 // import { Theme } from '@/style/theme';
+
+type ModalProps = {
+  date: Date;
+  setSchedule: (schedule: ScheduleInfo) => void;
+  onClose: () => void;
+  isOpen: boolean;
+};
+
+const Modal = ({ date, setSchedule, onClose, isOpen }: ModalProps) => {
+  const handleSubmit = (e: Event) => {
+    e.preventDefault();
+    const target = e.target as HTMLFormElement;
+    const title = (target[0] as HTMLInputElement).value;
+    const memo = (target[2] as HTMLTextAreaElement).value;
+
+    const schedule: ScheduleInfo = {
+      date: moment(date).format('YYYY.MM.DD'),
+      title,
+      memo
+    };
+
+    setSchedule(schedule);
+    console.log(schedule);
+  };
+
+  return (
+    <Container>
+      <Popover.Root open={isOpen} onOpenChange={onClose}>
+        <Popover.Anchor />
+        <Popover.Portal>
+          <Popover.Content>
+            <Content>
+              <div className="header">
+                <Popover.Close asChild>
+                  <div className="closed-btn-container">
+                    <StyledClosedBtn />
+                  </div>
+                </Popover.Close>
+                <span className="date">
+                  {moment(date).format('YYYY.MM.DD')}
+                </span>
+              </div>
+              <hr />
+              <form onSubmit={handleSubmit}>
+                <input
+                  type="text"
+                  className="schedule-title"
+                  placeholder="일정 제목"
+                />
+                <hr />
+                <div className="participants">
+                  <span>참여자</span>
+                </div>
+                <hr />
+                <textarea
+                  className="memo"
+                  name="memo"
+                  placeholder="메모"
+                ></textarea>
+                <button className="add-schedule-btn" type="submit">
+                  일정 추가하기
+                </button>
+              </form>
+            </Content>
+          </Popover.Content>
+        </Popover.Portal>
+      </Popover.Root>
+    </Container>
+  );
+};
+
+export default Modal;
 
 const Container = styled.div`
   position: absolute;
@@ -16,6 +89,7 @@ const Content = styled(Popover.Content)`
   align-items: center;
   width: 350px;
   height: 290px;
+  padding-top: 15px;
   border-radius: 6px;
   box-shadow: 1.52px 3.04px 9.12px 0 rgb(0, 0, 0, 0.08);
   background-color: #ffffff;
@@ -38,16 +112,6 @@ const Content = styled(Popover.Content)`
       width: inherit;
       display: flex;
       justify-content: flex-end;
-
-      .closed-btn {
-        width: 20px;
-        height: 20px;
-        padding: 0;
-        color: black;
-        background-color: white;
-        border: none;
-        cursor: pointer;
-      }
     }
     .date {
       font-size: 10px;
@@ -90,14 +154,6 @@ const Content = styled(Popover.Content)`
         font-weight: 500;
         color: #999999;
       }
-
-      .add-participants-btn {
-        background-color: white;
-        padding: 0;
-        border: none;
-        color: #5c9eff;
-        cursor: pointer;
-      }
     }
 
     .memo {
@@ -131,79 +187,6 @@ const Content = styled(Popover.Content)`
   }
 `;
 
-type ModalProps = {
-  date: Date;
-  setSchedule: (schedule: ScheduleInfo) => void;
-  onClose: () => void;
-  isOpen: boolean;
-};
-
-const Modal = ({ date, setSchedule, onClose, isOpen }: ModalProps) => {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const target = e.target as HTMLFormElement;
-    const title = (target[0] as HTMLInputElement).value;
-    const memo = (target[2] as HTMLTextAreaElement).value;
-
-    const schedule: ScheduleInfo = {
-      date: moment(date).format('YYYY.MM.DD'),
-      title,
-      memo
-    };
-
-    setSchedule(schedule);
-    console.log(schedule);
-  };
-
-  return (
-    <Container>
-      <Popover.Root open={isOpen} onOpenChange={onClose}>
-        <Popover.Anchor />
-        <Popover.Portal>
-          <Popover.Content>
-            <Content>
-              <div className="header">
-                <Popover.Close asChild>
-                  <div className="closed-btn-container">
-                    <button className="closed-btn" type="button">
-                      X
-                    </button>
-                  </div>
-                </Popover.Close>
-                <span className="date">
-                  {moment(date).format('YYYY.MM.DD')}
-                </span>
-              </div>
-              <hr />
-              <form onSubmit={handleSubmit}>
-                <input
-                  type="text"
-                  className="schedule-title"
-                  placeholder="일정 제목"
-                />
-                <hr />
-                <div className="participants">
-                  <span>참여자</span>
-                  <button className="add-participants-btn" type="button">
-                    +
-                  </button>
-                </div>
-                <hr />
-                <textarea
-                  className="memo"
-                  name="memo"
-                  placeholder="메모"
-                ></textarea>
-                <button className="add-schedule-btn" type="submit">
-                  일정 추가하기
-                </button>
-              </form>
-            </Content>
-          </Popover.Content>
-        </Popover.Portal>
-      </Popover.Root>
-    </Container>
-  );
-};
-
-export default Modal;
+const StyledClosedBtn = styled(ClosedBtn)`
+  cursor: pointer;
+`;

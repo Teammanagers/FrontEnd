@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { StyledCalendarContainer, StyledCalendar } from './styles';
 import moment from 'moment';
 import Modal from './Modal';
@@ -22,10 +22,6 @@ const Calendar = () => {
     setIsModalOpen(true);
   };
 
-  useEffect(() => {
-    console.log(schedule);
-  }, [schedule]);
-
   return (
     <StyledCalendarContainer>
       <StyledCalendar
@@ -35,9 +31,6 @@ const Calendar = () => {
         formatDay={(locale: string | undefined, date: Date) =>
           moment(date).format('D')
         } // MM일 제거 -> 숫자만 보이게
-        formatYear={(locale: string | undefined, date: Date) =>
-          moment(date).format('YYYY')
-        } // 네비게이션 눌렀을때 숫자 년도만 보이게
         formatMonthYear={(locale: string | undefined, date: Date) =>
           moment(date).format('YYYY. MM')
         } // 네비게이션에서 2023. 12 이렇게 보이도록 설정

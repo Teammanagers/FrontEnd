@@ -7,8 +7,7 @@ const Container = styled.div`
   width: 100vw;
   height: 100vh;
   padding: 100px 0 0 126px;
-  /* background-color: rgba(249, 251, 255, 1); */
-  background-color: #c3c3dd;
+  background-color: #f9fbff;
 
   .upcoming-schedule {
     h2 {
