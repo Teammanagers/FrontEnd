@@ -1,13 +1,11 @@
 import styled from 'styled-components';
-import BackButton from '@assets/images/memo/back-button.svg';
+import BackButton from '@assets/memo/back-button.svg';
 
 export const WriteMemo = () => {
   return (
     <MemoContainer>
       <TopContainer>
-        <BackBtn>
-          <BackButton />
-        </BackBtn>
+        <BackBtn />
         <TitleContainer>
           <TitleInput placeholder="제목을 입력해주세요" />
         </TitleContainer>
@@ -43,7 +41,7 @@ const TopContainer = styled.div`
   margin-bottom: 19px;
 `;
 
-const BackBtn = styled.button`
+const BackBtn = styled(BackButton)`
   width: 36px;
   height: 36px;
   display: flex;

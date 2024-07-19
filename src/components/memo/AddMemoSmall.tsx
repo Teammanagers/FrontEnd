@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import AddMemoIcon from '@assets/images/memo/add-memo.svg';
-import PlusIcon from '@assets/images/memo/plus.svg';
+import AddMemoIcon from '@assets/memo/add-memo.svg';
+import PlusIcon from '@assets/memo/plus.svg';
 
 export const AddMemoSmall = () => {
   return (
