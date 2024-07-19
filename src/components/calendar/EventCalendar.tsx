@@ -16,6 +16,11 @@ const EventCalendar = () => {
     setIsModalOpen(true);
   };
 
+  const closedModal = () => {
+    setIsModalOpen(false);
+    setDate(null);
+  };
+
   return (
     <StyledCalendarContainer>
       <StyledCalendar
@@ -34,9 +39,7 @@ const EventCalendar = () => {
         prev2Label={null} // 년도 이동 버튼 숨기기
         minDetail="year" // 10년단위 년도 숨기기
       />
-      {date && (
-        <Modal date={date} onClose={() => setDate(null)} isOpen={isModalOpen} />
-      )}
+      {date && <Modal date={date} onClose={closedModal} isOpen={isModalOpen} />}
     </StyledCalendarContainer>
   );
 };
@@ -44,11 +47,10 @@ const EventCalendar = () => {
 export default EventCalendar;
 
 const StyledCalendarContainer = styled.div`
+  position: relative;
   width: 630px;
   height: 520px;
   margin-right: 23px;
-  position: relative;
-  z-index: -1;
 
   .react-calendar {
     display: flex;
