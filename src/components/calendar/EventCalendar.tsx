@@ -48,6 +48,7 @@ const StyledCalendarContainer = styled.div`
   height: 520px;
   margin-right: 23px;
   position: relative;
+  z-index: -1;
 
   .react-calendar {
     display: flex;
