@@ -16,6 +16,7 @@ import Team from '@assets/sidebar/team.svg';
 import TeamClick from '@assets/sidebar/team-click.svg';
 import MyPage from '@assets/sidebar/mypage.svg';
 import MyPageClick from '@assets/sidebar/mypage-click.svg';
+import End from '@assets/sidebar/end.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 export const SideBar = () => {
@@ -30,8 +31,6 @@ export const SideBar = () => {
   const isActive = (path: string): boolean => {
     return location.pathname === path;
   };
-
-  console.log(location);
 
   return (
     <SideBarContainer
@@ -132,6 +131,23 @@ export const SideBar = () => {
           <SideBarText selected={isActive(`/mypage`)}>마이페이지</SideBarText>
         )}
       </IconContainer>
+      <Hr />
+      <IconContainer
+        onClick={() => {
+          //   추후에 path 수정이 필요할 수 있음
+          handleNavigate(`/management`);
+        }}
+        selected={isActive(`/management`)}
+      >
+        <End />
+        {hover && (
+          <SideBarText selected={isActive(`/management`)} redText>
+            프로젝트
+            <br />
+            종료
+          </SideBarText>
+        )}
+      </IconContainer>
     </SideBarContainer>
   );
 };
@@ -147,7 +163,7 @@ const SideBarContainer = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  transition: width 0.3s ease; // 화면 효과 부드럽게 전환
+  transition: width 0.3s ease;
 
   &:hover {
     width: 158px;
@@ -156,6 +172,7 @@ const SideBarContainer = styled.div`
 
 interface SelectedProps {
   selected: boolean;
+  redText?: boolean;
 }
 
 const SideBarText = styled.p<SelectedProps>`
@@ -164,8 +181,15 @@ const SideBarText = styled.p<SelectedProps>`
   color: ${({ selected, theme }) =>
     selected ? theme.colors.black : theme.colors.darkGray};
   margin-left: 18px;
+  text-align: center;
   white-space: nowrap;
   overflow: hidden;
+
+  ${({ redText, theme }) =>
+    redText &&
+    `
+    color: ${theme.colors.red};
+  `}
 `;
 
 const IconContainer = styled.div<SelectedProps>`
