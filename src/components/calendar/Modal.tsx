@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import * as Popover from '@radix-ui/react-popover';
 import moment from 'moment';
-import { Value } from './types';
+import { Value } from '../../types/calendar';
 import ClosedBtn from '@assets/calendar/closed-btn.svg';
 // import { Theme } from '@/style/theme';
 
