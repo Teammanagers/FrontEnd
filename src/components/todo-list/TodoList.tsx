@@ -14,7 +14,7 @@ const Container = styled.div`
   height: 426px;
   padding: 31px 77px;
   background-color: lightgreen;
-  /* background-color: #ffffff; */
+  background-color: #ffffff;
 `;
 
 export default TodoList;

@@ -2,9 +2,11 @@ import { ChangeEvent, FC, useState } from 'react';
 import styled from 'styled-components';
 import * as Accordion from '@radix-ui/react-accordion';
 import classNames from 'classnames';
+import CheckTodo from './CheckTodo';
 import { AccordionContentProps, AccordionTriggerProps } from './types';
 import ChevronDownIcon from '@assets/todo-list/chevron-down.svg';
 import AddTodoIcon from '@assets/todo-list/add-todo.svg';
+import ModifyTodoIcon from '@assets/todo-list/modify-todo.svg';
 
 const Todos = () => {
   const [todos, setTodos] = useState<string[]>([]);
@@ -28,7 +30,7 @@ const Todos = () => {
     setInputValue('');
     const target = e.target as HTMLFormElement;
     const value = (target[0] as HTMLInputElement).value;
-    setTodos((prev) => [...prev, value]);
+    if (value) setTodos((prev) => [...prev, value]);
     console.log(todos);
   };
 
@@ -50,7 +52,12 @@ const Todos = () => {
             <ul>
               {todos
                 ? todos.map((todo) => {
-                    return <li>{todo}</li>;
+                    return (
+                      <li className="todo">
+                        <CheckTodo todo={todo} />
+                        <ModifyTodoIcon />
+                      </li>
+                    );
                   })
                 : null}
             </ul>
@@ -114,13 +121,15 @@ const AccordionContent: FC<AccordionContentProps> = ({
 export default Todos;
 
 const Container = styled.div`
+  width: 382px;
   * {
     box-sizing: border-box;
   }
 
   button,
   h3,
-  ul {
+  ul,
+  p {
     all: unset;
   }
 
@@ -188,7 +197,6 @@ const Container = styled.div`
     justify-content: center;
     width: 382px;
     height: auto;
-    padding-top: 10px;
     background-color: skyblue;
     background-color: white;
 
@@ -244,6 +252,16 @@ const Container = styled.div`
         color: #1d1d1d;
       }
     }
+
+    .todo {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 382px;
+      height: 30px;
+      padding: 0 18.24px;
+      margin-bottom: 10px;
+    }
   }
 
   .accordion-trigger:focus-within {
@@ -252,11 +270,12 @@ const Container = styled.div`
 
   /* 오픈 시 content 애니메이션 */
   .accordion-content[data-state='open'] .accordion-content-container {
-    animation: slideDown 300ms cubic-bezier(0.87, 0, 0.13, 1);
+    padding-top: 10px;
+    /* animation: slideDown 300ms cubic-bezier(0.87, 0, 0.13, 1); */
     /* animation: slideDown 300ms ease-in-out; */
   }
   .accordion-content[data-state='closed'] .accordion-content-container {
-    animation: slideUp 300ms cubic-bezier(0.87, 0, 0.13, 1);
+    /* animation: slideUp 300ms cubic-bezier(0.87, 0, 0.13, 1); */
     /* animation: slideUp 100ms ease-in-out; */
   }
 
