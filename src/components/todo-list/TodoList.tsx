@@ -12,8 +12,9 @@ const TodoList = () => {
 const Container = styled.div`
   width: 942px;
   height: 426px;
-  /* background-color: #ffffff; */
+  padding: 31px 77px;
   background-color: lightgreen;
+  /* background-color: #ffffff; */
 `;
 
 export default TodoList;

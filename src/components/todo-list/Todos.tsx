@@ -1,19 +1,84 @@
-import { FC } from 'react';
+import { ChangeEvent, FC, useState } from 'react';
 import styled from 'styled-components';
 import * as Accordion from '@radix-ui/react-accordion';
 import classNames from 'classnames';
+import { AccordionContentProps, AccordionTriggerProps } from './types';
 import ChevronDownIcon from '@assets/todo-list/chevron-down.svg';
+import AddTodoIcon from '@assets/todo-list/add-todo.svg';
 
-interface AccordionTriggerProps
-  extends React.ComponentPropsWithoutRef<'button'> {
-  children: React.ReactNode;
-  className?: string;
-}
+const Todos = () => {
+  const [todos, setTodos] = useState<string[]>([]);
+  const [inputValue, setInputValue] = useState('');
+  const [isClickAdd, setIsClickAdd] = useState(false);
 
-interface AccordionContentProps extends React.ComponentPropsWithoutRef<'div'> {
-  children: React.ReactNode;
-  className?: string;
-}
+  const openAddTodo = () => {
+    setIsClickAdd(true);
+  };
+
+  const closedTodo = () => {
+    setIsClickAdd(false);
+  };
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleAddTodo = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setInputValue('');
+    const target = e.target as HTMLFormElement;
+    const value = (target[0] as HTMLInputElement).value;
+    setTodos((prev) => [...prev, value]);
+    console.log(todos);
+  };
+
+  return (
+    <Container>
+      <Accordion.Root type="single" className="accordion-root" collapsible>
+        <Accordion.Item value="item-1" className="accordion-item">
+          <AccordionTrigger onClick={closedTodo}>
+            <div className="trigger-container">
+              <strong className="username">이예은</strong>
+              <div className="tag-container">
+                <span className="tag">기획자</span>
+                <span className="tag">프론트엔드</span>
+                <span className="tag">백엔드</span>
+              </div>
+            </div>
+          </AccordionTrigger>
+          <AccordionContent>
+            <ul>
+              {todos
+                ? todos.map((todo) => {
+                    return <li>{todo}</li>;
+                  })
+                : null}
+            </ul>
+            {isClickAdd ? (
+              <form className="add-todo-form" onSubmit={handleAddTodo}>
+                <input
+                  value={inputValue}
+                  onChange={handleChange}
+                  type="text"
+                  placeholder="할 일을 입력해주세요"
+                  className="todo-input"
+                />
+                <button type="submit" className="add-btn">
+                  등록
+                </button>
+              </form>
+            ) : (
+              <button type="button" className="add-todo" onClick={openAddTodo}>
+                <strong>투두 추가하기</strong>
+                <StyledAddTodoIcon />
+              </button>
+            )}
+          </AccordionContent>
+        </Accordion.Item>
+      </Accordion.Root>
+    </Container>
+  );
+};
 
 const AccordionTrigger: FC<AccordionTriggerProps> = ({
   children,
@@ -26,7 +91,9 @@ const AccordionTrigger: FC<AccordionTriggerProps> = ({
       {...props}
     >
       {children}
-      <StyledChevronDownIcon aria-hidden />
+      <div className="chevrondown-icon">
+        <StyledChevronDownIcon aria-hidden />
+      </div>
     </Accordion.Trigger>
   </Accordion.Header>
 );
@@ -40,29 +107,9 @@ const AccordionContent: FC<AccordionContentProps> = ({
     className={classNames('accordion-content', className)}
     {...props}
   >
-    <div className="AccordionContentText">{children}</div>
+    <div className="accordion-content-container">{children}</div>
   </Accordion.Content>
 );
-
-const Todos = () => {
-  return (
-    <Container>
-      <Accordion.Root type="single" className="accordion-root">
-        <Accordion.Item value="item-1" className="accordion-item">
-          <AccordionTrigger>
-            <strong className="username">이예은</strong>
-            <div className="tag-container">
-              <span className="tag">기획자</span>
-              <span className="tag">프론트엔드</span>
-              <span className="tag">백엔드</span>
-            </div>
-          </AccordionTrigger>
-          <AccordionContent>투두리스트</AccordionContent>
-        </Accordion.Item>
-      </Accordion.Root>
-    </Container>
-  );
-};
 
 export default Todos;
 
@@ -72,76 +119,184 @@ const Container = styled.div`
   }
 
   button,
-  h3 {
+  h3,
+  ul {
     all: unset;
   }
 
+  li {
+    list-style: none;
+  }
+
   .accordion-root {
-    position: relative; // chevron icon absolute 적용
-    display: flex;
-    align-items: center;
     width: 382px;
-    height: 46px;
-    padding-left: 15px;
-    border: 1px solid #f0f0f0;
-    border-radius: 6px;
-    background-color: white;
   }
 
   .accordion-trigger {
     display: flex;
     align-items: center;
-    padding: 0;
+    justify-content: space-between;
+    box-sizing: border-box;
+    width: 100%;
+    height: 46px;
+    padding: 0 15px;
+    border: 1px solid #f0f0f0;
+    border-radius: 6px;
     background-color: white;
-    border: none;
 
-    .username {
-      margin-right: 18px;
-      font-size: 13px;
-      font-weight: 500;
-      color: #1d1d1d;
-    }
-
-    .tag-container {
+    .trigger-container {
       display: flex;
       align-items: center;
-      /* height: 24px; */
-      .tag {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: auto;
-        height: 24px;
-        padding: 0 6px 0 6px;
-        border-radius: 3px;
-        margin-right: 9px;
-        font-size: 9px;
+      justify-content: space-between;
+
+      .username {
+        margin-right: 18px;
+        font-size: 13px;
         font-weight: 500;
-        color: #5c9eff;
-        background-color: #f9fbff;
+        color: #1d1d1d;
+      }
+
+      .tag-container {
+        display: flex;
+        align-items: center;
+
+        .tag {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: auto;
+          height: 24px;
+          padding: 0 6px 0 6px;
+          border-radius: 3px;
+          margin-right: 9px;
+          font-size: 9px;
+          font-weight: 500;
+          color: #5c9eff;
+          background-color: #f9fbff;
+        }
       }
     }
   }
 
-  .accordion-root:focus-within {
+  .accordion-item {
+    width: 100%;
+  }
+
+  /* 투두 리스트 내용 */
+  .accordion-content {
+    display: flex;
+    justify-content: center;
+    width: 382px;
+    height: auto;
+    padding-top: 10px;
+    background-color: skyblue;
+    background-color: white;
+
+    .add-todo-form {
+      display: flex;
+      align-items: center;
+      height: 30px;
+
+      .todo-input,
+      .todo-input::placeholder {
+        color: #5a5a5a;
+        font-size: 11px;
+        font-weight: 500;
+      }
+      .todo-input {
+        width: 306px;
+        height: 30px;
+        padding: 6.7px 10px;
+        margin-right: 9px;
+        border-radius: 5px;
+        border: none;
+        background-color: #f0f0f0;
+        outline: none;
+      }
+
+      .add-btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 50px;
+        height: 25px;
+        border-radius: 3px;
+        font-size: 10px;
+        font-weight: 700;
+        color: white;
+        background-color: #5c9eff;
+      }
+    }
+
+    .add-todo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 36px;
+      background-color: white;
+      cursor: pointer;
+
+      & strong {
+        font-size: 12px;
+        font-weight: 700;
+        margin-right: 9px;
+        color: #1d1d1d;
+      }
+    }
+  }
+
+  .accordion-trigger:focus-within {
     border: 1px solid #5c9eff;
   }
-  .accordion-trigger[data-state='open'] > StyledChevronDownIcon {
+
+  /* 오픈 시 content 애니메이션 */
+  .accordion-content[data-state='open'] .accordion-content-container {
+    animation: slideDown 300ms cubic-bezier(0.87, 0, 0.13, 1);
+    /* animation: slideDown 300ms ease-in-out; */
+  }
+  .accordion-content[data-state='closed'] .accordion-content-container {
+    animation: slideUp 300ms cubic-bezier(0.87, 0, 0.13, 1);
+    /* animation: slideUp 100ms ease-in-out; */
+  }
+
+  /* 버튼 애니메이션 */
+  .chevrondown-icon {
+    transition: transform 500ms ease;
+  }
+
+  .accordion-trigger[data-state='open'] > .chevrondown-icon {
     transform: rotate(180deg);
   }
-  .accordion-trigger[data-state='open'] > .accordion-root {
+
+  /* open | closed state에 따른 스타일 */
+  .accordion-trigger[data-state='open'] {
     background-color: #f9fbff;
     box-shadow: 0 3.04px 9.12px 0 rgba(0, 0, 0, 0.08);
   }
 
-  .accordion-trigger[data-state='open'] > .tag {
-    background-color: rgba(255, 255, 255, 1);
+  .accordion-trigger[data-state='open'] .tag-container .tag {
+    background-color: #ffffff;
+  }
+
+  @keyframes slideDown {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
   }
 `;
 
-const StyledChevronDownIcon = styled(ChevronDownIcon)`
-  position: absolute;
-  top: 14px;
-  right: 15px;
-  transition: transform 300ms;
-`;
+const StyledChevronDownIcon = styled(ChevronDownIcon)``;
+const StyledAddTodoIcon = styled(AddTodoIcon)``;
