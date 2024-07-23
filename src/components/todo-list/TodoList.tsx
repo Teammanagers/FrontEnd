@@ -1,7 +1,12 @@
 import styled from 'styled-components';
+import Todos from './Todos';
 
 const TodoList = () => {
-  return <Container></Container>;
+  return (
+    <Container>
+      <Todos />
+    </Container>
+  );
 };
 
 const Container = styled.div`
