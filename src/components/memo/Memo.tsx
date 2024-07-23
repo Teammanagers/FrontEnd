@@ -1,16 +1,24 @@
 import styled from 'styled-components';
+import { MemoProps } from '@components/memo/MemoList.tsx';
 
-export const Memo = () => {
+interface Memo {
+  memo: MemoProps;
+}
+
+export const Memo = ({ memo }: Memo) => {
+  const { title, tags, content } = memo;
+
   return (
     <MemoContainer>
       <MemoTitleContainer>
-        <MemoTitle>제목</MemoTitle>
+        <MemoTitle>{title}</MemoTitle>
       </MemoTitleContainer>
       <TagContainer>
-        <TagBox>태그1</TagBox>
-        <TagBox>태그2</TagBox>
+        {tags.map((tag, id) => (
+          <TagBox key={id}>{tag}</TagBox>
+        ))}
       </TagContainer>
-      <Content>내용이 들어가요 하이안녕하세요바이</Content>
+      <Content>{content}</Content>
     </MemoContainer>
   );
 };
@@ -21,7 +29,7 @@ const MemoContainer = styled.div`
   justify-content: center;
   align-items: center;
   width: 350px;
-  height: 201px;
+  height: 200px;
   border-radius: 6px;
   gap: 9px;
   background: white;
@@ -31,7 +39,8 @@ const MemoTitleContainer = styled.div`
   display: flex;
   align-items: center;
   width: 314px;
-  height: 20px;
+  height: 21px;
+  margin-top: 9px;
 `;
 
 const MemoTitle = styled.h1`
@@ -43,13 +52,14 @@ const MemoTitle = styled.h1`
 const TagContainer = styled.div`
   display: flex;
   width: 314px;
-  height: 12px;
-  gap: 7px;
+  height: 21px;
+  gap: 6px;
 `;
 
 const TagBox = styled.div`
-  width: 37px;
-  height: 12px;
+  width: auto;
+  padding: 0 6px 0 6px;
+  height: 21px;
   border: 3px;
   background: ${(props) => props.theme.colors.background};
   display: flex;
