@@ -1,7 +1,6 @@
 import { AddMemoSmall } from '@components/memo/AddMemoSmall.tsx';
 import { Memo } from '@components/memo/Memo.tsx';
-// import dummyData from '@assets/memo/dummy-data.json'; // 음? 이거 왜 오류나지
-import dummyData from '../../assets/memo/dummy-data.json';
+import dummyData from '@assets/memo/dummy-data.json';
 import styled from 'styled-components';
 export interface MemoProps {
   id: number;
@@ -13,7 +12,7 @@ export const MemoList = () => {
   return (
     <MemoContainer>
       <AddMemoSmall />
-      {dummyData.map((memo: MemoProps) => (
+      {(dummyData as MemoProps[]).map((memo) => (
         <Memo memo={memo} key={memo.id} />
       ))}
     </MemoContainer>
