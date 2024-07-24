@@ -29,5 +29,5 @@
       "@utils/*": ["src/utils/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "json.d.ts"]
 }
