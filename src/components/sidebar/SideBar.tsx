@@ -19,6 +19,7 @@ import MyPageClick from '@assets/sidebar/mypage-click.svg';
 import End from '@assets/sidebar/end.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { DropDown } from '@components/sidebar/DropDown.tsx';
 export const SideBar = () => {
   const [hover, setHover] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -41,6 +42,7 @@ export const SideBar = () => {
         setHover(false);
       }}
     >
+      <DropDown />
       <LogoImg />
       <Hr style={{ margin: '11px 0 11px 0' }} />
       <IconContainer
