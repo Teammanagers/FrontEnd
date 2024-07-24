@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import * as Popover from '@radix-ui/react-popover';
+import * as Dialog from '@radix-ui/react-dialog';
 import moment from 'moment';
 import { Value } from '../../types/calendar';
 import ClosedBtn from '@assets/calendar/closed-btn.svg';
@@ -21,17 +21,16 @@ const Modal = ({ date, onClose, isOpen }: ModalProps) => {
 
   return (
     <Container>
-      <Popover.Root open={isOpen} onOpenChange={onClose}>
-        <Popover.Anchor />
-        <Popover.Portal>
-          <Popover.Content>
+      <Dialog.Root open={isOpen} onOpenChange={onClose}>
+        <Dialog.Portal>
+          <Dialog.Content>
             <Content>
               <div className="header">
-                <Popover.Close asChild>
+                <Dialog.Close asChild>
                   <div className="closed-btn-container">
                     <StyledClosedBtn />
                   </div>
-                </Popover.Close>
+                </Dialog.Close>
                 <span className="date">
                   {moment(date instanceof Date ? date : null).format(
                     'YYYY.MM.DD'
@@ -60,9 +59,9 @@ const Modal = ({ date, onClose, isOpen }: ModalProps) => {
                 </button>
               </form>
             </Content>
-          </Popover.Content>
-        </Popover.Portal>
-      </Popover.Root>
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>
     </Container>
   );
 };
@@ -71,11 +70,13 @@ export default Modal;
 
 const Container = styled.div`
   position: absolute;
-  top: 115px;
-  left: 315px;
+  top: 0;
+  left: 0;
+  /* top: 115px;
+  left: 315px; */
 `;
 
-const Content = styled(Popover.Content)`
+const Content = styled(Dialog.Content)`
   display: flex;
   flex-direction: column;
   align-items: center;

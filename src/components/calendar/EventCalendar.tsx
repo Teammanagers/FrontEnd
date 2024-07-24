@@ -47,6 +47,9 @@ const EventCalendar = () => {
 export default EventCalendar;
 
 const StyledCalendarContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 630px;
   height: 520px;
   margin-right: 23px;
