@@ -23,13 +23,14 @@ const Modal = ({ date, onClose, isOpen }: ModalProps) => {
     <Container>
       <Dialog.Root open={isOpen} onOpenChange={onClose}>
         <Dialog.Portal>
+          <DialogOverlay />
           <Dialog.Content>
             <Content>
               <div className="header">
                 <Dialog.Close asChild>
-                  <div className="closed-btn-container">
+                  <button className="closed-btn-container">
                     <StyledClosedBtn />
-                  </div>
+                  </button>
                 </Dialog.Close>
                 <span className="date">
                   {moment(date instanceof Date ? date : null).format(
@@ -68,15 +69,18 @@ const Modal = ({ date, onClose, isOpen }: ModalProps) => {
 
 export default Modal;
 
-const Container = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  /* top: 115px;
-  left: 315px; */
+const Container = styled.div``;
+
+const DialogOverlay = styled(Dialog.Overlay)`
+  background-color: rgba(0, 0, 0, 0.1);
+  position: fixed;
+  inset: 0;
 `;
 
 const Content = styled(Dialog.Content)`
+  position: fixed;
+  top: 50%;
+  left: 50%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -105,6 +109,9 @@ const Content = styled(Dialog.Content)`
       width: inherit;
       display: flex;
       justify-content: flex-end;
+      background-color: white;
+      border: none;
+      cursor: pointer;
     }
     .date {
       font-size: 10px;
@@ -176,6 +183,26 @@ const Content = styled(Dialog.Content)`
       color: white;
       background-color: #5c9eff;
       cursor: pointer;
+    }
+  }
+
+  @keyframes overlayShow {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes contentShow {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -48%) scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
     }
   }
 `;
