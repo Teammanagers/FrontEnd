@@ -3,7 +3,10 @@ import styled from 'styled-components';
 import * as Accordion from '@radix-ui/react-accordion';
 import classNames from 'classnames';
 import CheckTodo from './CheckTodo';
-import { AccordionContentProps, AccordionTriggerProps } from './types';
+import {
+  AccordionContentProps,
+  AccordionTriggerProps
+} from '../../types/todo-list';
 import ChevronDownIcon from '@assets/todo-list/chevron-down.svg';
 import AddTodoIcon from '@assets/todo-list/add-todo.svg';
 import ModifyTodoIcon from '@assets/todo-list/modify-todo.svg';
