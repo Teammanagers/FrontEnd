@@ -14,11 +14,9 @@ type ModalProps = {
 const Modal = ({ date, onClose, isOpen }: ModalProps) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const target = e.target as HTMLFormElement;
-    const title = (target[0] as HTMLInputElement).value;
-    const memo = (target[1] as HTMLTextAreaElement).value;
-    console.log(title);
-    console.log(memo);
+    // const target = e.target as HTMLFormElement;
+    // const title = (target[0] as HTMLInputElement).value;
+    // const memo = (target[1] as HTMLTextAreaElement).value;
   };
 
   return (

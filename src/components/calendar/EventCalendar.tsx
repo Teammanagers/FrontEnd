@@ -47,7 +47,6 @@ const EventCalendar = () => {
 export default EventCalendar;
 
 const StyledCalendarContainer = styled.div`
-  position: relative;
   width: 630px;
   height: 520px;
   margin-right: 23px;
