@@ -42,7 +42,7 @@ export const SideBar = () => {
       }}
     >
       <LogoImg />
-      <Hr style={{ margin: '12px 0 18px 0' }} />
+      <Hr style={{ margin: '11px 0 11px 0' }} />
       <IconContainer
         onClick={() => {
           handleNavigate(`/`);
@@ -131,7 +131,6 @@ export const SideBar = () => {
           <SideBarText selected={isActive(`/mypage`)}>마이페이지</SideBarText>
         )}
       </IconContainer>
-      <Hr />
       <IconContainer
         onClick={() => {
           //   추후에 path 수정이 필요할 수 있음
@@ -157,13 +156,14 @@ const SideBarContainer = styled.div`
   top: 0;
   left: 0;
   width: 73px;
-  height: 832px;
+  height: 821px;
   background-color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
   transition: width 0.3s ease;
+  box-shadow: 4px 0 16px 0 rgba(0, 0, 0, 0.06);
 
   &:hover {
     width: 158px;
@@ -194,24 +194,28 @@ const SideBarText = styled.p<SelectedProps>`
 
 const IconContainer = styled.div<SelectedProps>`
   width: 100%;
-  height: 49px;
+  height: 51px;
   background-color: ${({ selected, theme }) =>
     selected ? theme.colors.background : 'white'};
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
+
+  &:last-child {
+    margin-top: 18px;
+  }
 `;
 
 const LogoImg = styled(Logo)`
   width: 37px;
   height: 37px;
-  margin-top: 47px;
+  margin-top: 49px;
 `;
 
 const Hr = styled.div`
   width: 100%;
-  height: 2px;
+  height: 1px;
   background-color: ${(props) => props.theme.colors.subLightBlue};
-  margin: 18px 0 18px 0;
+  margin: 11px 0 11px 0;
 `;
