@@ -206,6 +206,7 @@ const Container = styled.div`
     .add-todo-form {
       display: flex;
       align-items: center;
+      justify-content: center;
       height: 30px;
 
       .todo-input,
