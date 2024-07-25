@@ -2,33 +2,36 @@ import { ChangeEvent, FC, useState } from 'react';
 import styled from 'styled-components';
 import * as Accordion from '@radix-ui/react-accordion';
 import classNames from 'classnames';
-import CheckTodo from './CheckTodo';
+import Todo from './Todo';
 import {
   AccordionContentProps,
   AccordionTriggerProps
 } from '../../types/todo-list';
 import ChevronDownIcon from '@assets/todo-list/chevron-down.svg';
 import AddTodoIcon from '@assets/todo-list/add-todo.svg';
-import ModifyTodoIcon from '@assets/todo-list/modify-todo.svg';
 
 const Todos = () => {
   const [todos, setTodos] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isClickAdd, setIsClickAdd] = useState(false);
+  const [isClickModify, setIsClickModify] = useState(false);
 
+  // 투두 추가하기
   const openAddTodo = () => {
     setIsClickAdd(true);
   };
 
+  // 토글 헤드 누르면 투두 추가 input 닫기
   const closedTodo = () => {
     setIsClickAdd(false);
+    setInputValue('');
   };
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleAddTodoInput = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
 
-  const handleAddTodo = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleAddTodoSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setInputValue('');
     const target = e.target as HTMLFormElement;
@@ -53,22 +56,24 @@ const Todos = () => {
           </AccordionTrigger>
           <AccordionContent>
             <ul>
+              {/* 투두 리스트 */}
               {todos
                 ? todos.map((todo) => {
                     return (
                       <li className="todo">
-                        <CheckTodo todo={todo} />
-                        <ModifyTodoIcon />
+                        <Todo todo={todo} />
                       </li>
                     );
                   })
                 : null}
             </ul>
+
+            {/* 투두 추가하기 눌럿을 때 */}
             {isClickAdd ? (
-              <form className="add-todo-form" onSubmit={handleAddTodo}>
+              <form className="add-todo-form" onSubmit={handleAddTodoSubmit}>
                 <input
                   value={inputValue}
-                  onChange={handleChange}
+                  onChange={handleAddTodoInput}
                   type="text"
                   placeholder="할 일을 입력해주세요"
                   className="todo-input"
