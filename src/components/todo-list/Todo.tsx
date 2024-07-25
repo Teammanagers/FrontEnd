@@ -29,6 +29,7 @@ const Todo = ({ todo }: TodoProps) => {
             <CheckedIcon />
           </Checkbox.Indicator>
         </Checkbox.Root>
+        {/* 투두 내용 */}
         <label className="todo-text">{todo}</label>
       </CheckboxWrapper>
 

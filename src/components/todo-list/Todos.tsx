@@ -10,11 +10,10 @@ import {
 import ChevronDownIcon from '@assets/todo-list/chevron-down.svg';
 import AddTodoIcon from '@assets/todo-list/add-todo.svg';
 
-const Todos = () => {
+const Todos = ({ userInfo }) => {
   const [todos, setTodos] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isClickAdd, setIsClickAdd] = useState(false);
-  const [isClickModify, setIsClickModify] = useState(false);
 
   // 투두 추가하기
   const openAddTodo = () => {
@@ -46,7 +45,7 @@ const Todos = () => {
         <Accordion.Item value="item-1" className="accordion-item">
           <AccordionTrigger onClick={closedTodo}>
             <div className="trigger-container">
-              <strong className="username">이예은</strong>
+              <strong className="username">{userInfo.username}</strong>
               <div className="tag-container">
                 <span className="tag">기획자</span>
                 <span className="tag">프론트엔드</span>

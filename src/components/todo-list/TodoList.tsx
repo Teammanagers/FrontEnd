@@ -1,10 +1,23 @@
 import styled from 'styled-components';
 import Todos from './Todos';
+import MockData from '@assets/todo-list/mock-data.json';
+
+interface UserInfo {
+  id: number;
+  username: string;
+  tags: string[];
+}
+
+const Mock: UserInfo[] = MockData as UserInfo[];
 
 const TodoList = () => {
   return (
     <Container>
-      <Todos />
+      <ul>
+        {Mock.map((userInfo: UserInfo) => (
+          <Todos userInfo={userInfo} />
+        ))}
+      </ul>
     </Container>
   );
 };
