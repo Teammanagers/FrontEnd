@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import * as Accordion from '@radix-ui/react-accordion';
 import classNames from 'classnames';
 import Todo from './Todo';
+import { UserInfo } from 'src/types/todo-list';
 import {
   AccordionContentProps,
   AccordionTriggerProps
@@ -10,7 +11,11 @@ import {
 import ChevronDownIcon from '@assets/todo-list/chevron-down.svg';
 import AddTodoIcon from '@assets/todo-list/add-todo.svg';
 
-const Todos = ({ userInfo }) => {
+interface TodosProps {
+  userInfo: UserInfo;
+}
+
+const Todos = ({ userInfo }: TodosProps) => {
   const [todos, setTodos] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isClickAdd, setIsClickAdd] = useState(false);
@@ -47,9 +52,9 @@ const Todos = ({ userInfo }) => {
             <div className="trigger-container">
               <strong className="username">{userInfo.username}</strong>
               <div className="tag-container">
-                <span className="tag">기획자</span>
-                <span className="tag">프론트엔드</span>
-                <span className="tag">백엔드</span>
+                {userInfo.tags.map((tag: string) => (
+                  <span className="tag">{tag}</span>
+                ))}
               </div>
             </div>
           </AccordionTrigger>
@@ -194,7 +199,7 @@ const Container = styled.div`
     }
   }
 
-  .accordion-item {
+  .accorditag {
     width: 100%;
   }
 

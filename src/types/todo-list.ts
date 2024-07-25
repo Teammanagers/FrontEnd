@@ -9,3 +9,9 @@ export interface AccordionContentProps
   children: React.ReactNode;
   className?: string;
 }
+
+export interface UserInfo {
+  id: number;
+  username: string;
+  tags: string[];
+}
