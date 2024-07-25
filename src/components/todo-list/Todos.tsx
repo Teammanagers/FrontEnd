@@ -41,7 +41,6 @@ const Todos = ({ userInfo }: TodosProps) => {
     const target = e.target as HTMLFormElement;
     const value = (target[0] as HTMLInputElement).value;
     if (value) setTodos((prev) => [...prev, value]);
-    console.log(todos);
   };
 
   return (

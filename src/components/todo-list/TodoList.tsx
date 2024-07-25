@@ -22,8 +22,25 @@ const Container = styled.div`
   width: 942px;
   height: 426px;
   padding: 31px 77px;
+  overflow: auto;
   background-color: lightgreen;
   background-color: #ffffff;
+
+  &::-webkit-scrollbar {
+    width: 9px;
+    background-color: white;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #f0f0f0;
+    border-radius: 76px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: inset 0px 0px 5px white;
+  }
 
   ul {
     all: unset;
