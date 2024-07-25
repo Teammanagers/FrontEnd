@@ -4,7 +4,11 @@ import Plus from '@assets/sidebar/add-new-team.svg';
 import Search from '@assets/sidebar/search.svg';
 import { useState } from 'react';
 
-export const AddTeamModal = () => {
+interface AddTeamModalProps {
+  modalClose: () => void;
+}
+
+export const AddTeamModal: React.FC<AddTeamModalProps> = ({ modalClose }) => {
   const [hover, setHover] = useState<number | null>(null);
 
   const handleHover = (index: number | null) => {
@@ -15,7 +19,10 @@ export const AddTeamModal = () => {
     <AddTeamContainer>
       <TopContainer>
         <Title>팀 추가하기</Title>
-        <CloseBtn />
+        {/* svg 컴포넌트에 바로 onClick을 하면 에러가 뜬다 .. 구글링하니 div로 감싸면 안 뜬다고 한다.. */}
+        <div onClick={modalClose}>
+          <CloseBtn />
+        </div>
       </TopContainer>
       <MenuContainer
         onMouseEnter={() => {
@@ -46,9 +53,10 @@ export const AddTeamModal = () => {
 };
 
 const AddTeamContainer = styled.div`
+  // 위치는 일단 임시로..
   position: fixed;
-  top: 0;
-  left: 0;
+  top: 30%;
+  left: 30%;
 
   display: flex;
   justify-content: center;
@@ -59,6 +67,7 @@ const AddTeamContainer = styled.div`
   border-radius: 8px;
   flex-direction: column;
   background: white;
+  box-shadow: 4px 0 16px 0 rgba(0, 0, 0, 0.5); // 일단 임시로..
 `;
 
 const TopContainer = styled.div`

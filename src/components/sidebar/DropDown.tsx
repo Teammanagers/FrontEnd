@@ -3,7 +3,8 @@ import TeamManager from '@assets/sidebar/drop-down-logo.svg';
 import Giraffe from '@assets/sidebar/giraffe.svg';
 import Mountain from '@assets/sidebar/mountain.svg';
 import Plus from '@assets/sidebar/plus.svg';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { AddTeamModal } from '@components/sidebar/AddTeamModal.tsx';
 
 export const teams = [
   { id: '0', name: 'UMC 6th 팀매니저', logo: <TeamManager /> },
@@ -14,11 +15,20 @@ export const teams = [
 export const DropDown = () => {
   const [selected, setSelected] = useState<string>(teams[0].id);
   const [hovered, setHovered] = useState<string | null>(null);
+  const [modal, setModal] = useState<boolean>(false);
 
   // 선택된 팀이 젤 위로 오도록 teams 배열 재정렬
   const sortedTeams = teams
     .filter((team) => team.id === selected)
     .concat(teams.filter((team) => team.id !== selected));
+
+  const handleModal = () => {
+    setModal(!modal);
+  };
+
+  useEffect(() => {
+    console.log(modal);
+  }, [modal]);
 
   return (
     <DropDownContainer>
@@ -37,10 +47,11 @@ export const DropDown = () => {
         </TeamContainer>
       ))}
       {/* 팀 추가 누르면 팝업 띄우기? */}
-      <AddTeamBtn>
+      <AddTeamBtn onClick={handleModal}>
         팀 추가하기
         <Plus />
       </AddTeamBtn>
+      {modal && <AddTeamModal modalClose={handleModal} />}
     </DropDownContainer>
   );
 };
@@ -49,6 +60,7 @@ const DropDownContainer = styled.div`
   position: fixed;
   top: 0;
   left: 0;
+
   display: flex;
   flex-direction: column;
   justify-content: center;

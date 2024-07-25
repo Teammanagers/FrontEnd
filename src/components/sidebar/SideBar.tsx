@@ -20,6 +20,7 @@ import End from '@assets/sidebar/end.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { DropDown } from '@components/sidebar/DropDown.tsx';
+
 export const SideBar = () => {
   const [hover, setHover] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -158,7 +159,7 @@ const SideBarContainer = styled.div`
   top: 0;
   left: 0;
   width: 73px;
-  height: 821px;
+  height: 100%;
   background-color: white;
   display: flex;
   flex-direction: column;
