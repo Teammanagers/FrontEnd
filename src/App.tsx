@@ -8,6 +8,7 @@ import { SharePage, ExtraSharePage } from '@pages/share';
 import { TodoListPage, ExtraTodoListPage } from '@pages/todo-list';
 import ErrorPage from '@pages/error';
 import MainPage from '@pages/main';
+import { ProfilePage } from '@pages/mypage/profile';
 import { SideBar } from '@components/SideBar.tsx';
 
 const App = () => {
@@ -32,6 +33,7 @@ const App = () => {
         {/* mypage */}
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/mypage/:id" element={<ExtraMyPage />} />
+        <Route path="/mypage/profile" element={<ProfilePage />} />
         {/* share page */}
         <Route path="/share" element={<SharePage />} />
         <Route path="/share/:id" element={<ExtraSharePage />} />
