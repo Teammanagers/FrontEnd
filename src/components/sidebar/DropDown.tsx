@@ -1,26 +1,29 @@
 import styled from 'styled-components';
 import TeamManager from '@assets/sidebar/drop-down-logo.svg';
 import Giraffe from '@assets/sidebar/giraffe.svg';
+import Mountain from '@assets/sidebar/mountain.svg';
 import Plus from '@assets/sidebar/plus.svg';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 export const teams = [
   { id: '0', name: 'UMC 6th 팀매니저', logo: <TeamManager /> },
-  { id: '1', name: 'UMC 6th 기린', logo: <Giraffe /> }
+  { id: '1', name: 'UMC 6th 기린', logo: <Giraffe /> },
+  { id: '2', name: 'UMC 산악 동아리', logo: <Mountain /> }
 ];
 
 export const DropDown = () => {
-  const [selected, setSelected] = useState<string | null>(null);
+  const [selected, setSelected] = useState<string>(teams[0].id);
   const [hovered, setHovered] = useState<string | null>(null);
 
-  useEffect(() => {
-    console.log(selected);
-  }, [selected]);
+  // 선택된 팀이 젤 위로 오도록 teams 배열 재정렬
+  const sortedTeams = teams
+    .filter((team) => team.id === selected)
+    .concat(teams.filter((team) => team.id !== selected));
 
   return (
     <DropDownContainer>
-      {/* 나중에 해당 팀 id로 이동해는 로직 추가할 수도 있음 */}
-      {teams.map((team) => (
+      {/* 나중에 해당 팀 id로 이동하는 로직 추가할 수도 있음 */}
+      {sortedTeams.map((team) => (
         <TeamContainer
           key={team.id}
           onClick={() => setSelected(team.id)}
@@ -64,8 +67,8 @@ interface TeamContainerProps {
 const TeamContainer = styled.div<TeamContainerProps>`
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 100%;
+  padding-left: 10px;
+  width: 140px;
   height: 32px;
   background: ${(props) =>
     (props.isSelected && props.theme.colors.mainBlue) ||
