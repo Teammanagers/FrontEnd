@@ -121,6 +121,12 @@ export const ProfilePage = () => {
             </CommentContainer>
           </CommentBox>
         </MainContent>
+<QuitContainer>
+          <QuitButton>
+            <WrongUser />
+            탈퇴하기
+          </QuitButton>
+        </QuitContainer>
       </ContentContainer>
     </ProfileContainer>
   );
@@ -348,4 +354,26 @@ const Comment = styled.div`
   flex-direction: row;
   align-items: center;
   gap: 12px;
+`;
+
+const QuitContainer = styled.div`
+  width: 216px;
+  display: flex;
+  padding-top: 63px;
+  padding-left: 880px;
+`;
+const QuitButton = styled(Button)`
+  width: 100%;
+  height: 48px;
+  border: 1px solid ${(props) => props.theme.colors.red};
+  background-color: white;
+  color: ${(props) => props.theme.colors.red};
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  justify-content: center;
+  padding: 0;
+  border-radius: 8px;
+  cursor: pointer;
 `;
