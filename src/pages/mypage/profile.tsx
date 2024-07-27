@@ -4,6 +4,8 @@ import FirstPage from '@assets/mypage/first-page.svg';
 import Back from '@assets/mypage/back.svg';
 import Move from '@assets/mypage/move.svg';
 import Kakao from '@assets/mypage/kakao.svg';
+import WrongUser from '@assets/mypage/wrong-user.svg';
+import UserImage from '@assets/mypage/user-image.svg';
 import { Button } from '@radix-ui/themes';
 import { useNavigate } from 'react-router-dom';
 
@@ -43,7 +45,9 @@ export const ProfilePage = () => {
             <ProfileDetail>
               <SetProfile>
                 <Profile>
-                  <SetImage></SetImage>
+                  <SetImage>
+                    <UserImage />
+                  </SetImage>
                   <SetInfo>
                     <SetField>
                       <Input
@@ -121,7 +125,7 @@ export const ProfilePage = () => {
             </CommentContainer>
           </CommentBox>
         </MainContent>
-<QuitContainer>
+        <QuitContainer>
           <QuitButton>
             <WrongUser />
             탈퇴하기
@@ -198,7 +202,7 @@ const MainContent = styled.div`
   width: 1123px;
   height: 381px;
   gap: 35px;
-  margin-top: 80px;
+  margin-top: 30px;
 `;
 
 const SetProfileBox = styled.div`
@@ -253,7 +257,7 @@ const SetImage = styled.div`
   width: 150px;
   height: 150px;
   border-radius: 228px;
-  background-color: #846d6d;
+  border: none;
   cursor: pointer;
 `;
 
