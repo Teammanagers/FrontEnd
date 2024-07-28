@@ -16,47 +16,60 @@ export const AddTeamModal: React.FC<AddTeamModalProps> = ({ modalClose }) => {
   };
 
   return (
-    <AddTeamContainer>
-      <TopContainer>
-        <Title>팀 추가하기</Title>
-        {/* svg 컴포넌트에 바로 onClick을 하면 에러가 뜬다 .. 구글링하니 div로 감싸면 안 뜬다고 한다.. */}
-        <div onClick={modalClose}>
-          <CloseBtn />
-        </div>
-      </TopContainer>
-      <MenuContainer
-        onMouseEnter={() => {
-          handleHover(0);
-        }}
-        onMouseLeave={() => {
-          handleHover(null);
-        }}
-        isHovered={hover === 0}
-      >
-        <MenuText>새로운 팀 생성하기</MenuText>
-        <Plus />
-      </MenuContainer>
-      <MenuContainer
-        onMouseEnter={() => {
-          handleHover(1);
-        }}
-        onMouseLeave={() => {
-          handleHover(null);
-        }}
-        isHovered={hover === 1}
-      >
-        <MenuText>다른 팀 참가하기</MenuText>
-        <Search />
-      </MenuContainer>
-    </AddTeamContainer>
+    <ModalBackground>
+      <AddTeamContainer>
+        <TopContainer>
+          <Title>팀 추가하기</Title>
+          {/* svg 컴포넌트에 바로 onClick을 하면 에러가 뜬다 .. 구글링하니 div로 감싸면 안 뜬다고 한다.. */}
+          <div onClick={modalClose}>
+            <CloseBtn />
+          </div>
+        </TopContainer>
+        <MenuContainer
+          onMouseEnter={() => {
+            handleHover(0);
+          }}
+          onMouseLeave={() => {
+            handleHover(null);
+          }}
+          isHovered={hover === 0}
+        >
+          <MenuText>새로운 팀 생성하기</MenuText>
+          <Plus />
+        </MenuContainer>
+        <MenuContainer
+          onMouseEnter={() => {
+            handleHover(1);
+          }}
+          onMouseLeave={() => {
+            handleHover(null);
+          }}
+          isHovered={hover === 1}
+        >
+          <MenuText>다른 팀 참가하기</MenuText>
+          <Search />
+        </MenuContainer>
+      </AddTeamContainer>
+    </ModalBackground>
   );
 };
 
-const AddTeamContainer = styled.div`
-  // 위치는 일단 임시로..
+const ModalBackground = styled.div`
   position: fixed;
-  top: 30%;
-  left: 30%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgb(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const AddTeamContainer = styled.div`
+  position: relative;
+  top: -5%;
+  left: -5%;
 
   display: flex;
   justify-content: center;

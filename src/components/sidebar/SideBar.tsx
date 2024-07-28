@@ -159,7 +159,7 @@ const SideBarContainer = styled.div`
   top: 0;
   left: 0;
   width: 73px;
-  height: 100%;
+  height: 832px;
   background-color: white;
   display: flex;
   flex-direction: column;
