@@ -16,11 +16,6 @@ const EventCalendar = () => {
     setOpen(true);
   };
 
-  // const closedModal = () => {
-  //   setOpen(false);
-  //   setDate(null);
-  // };
-
   return (
     <StyledCalendarContainer>
       <StyledCalendar

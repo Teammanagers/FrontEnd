@@ -19,54 +19,50 @@ const Modal = ({ date, setOpen, open }: ModalProps) => {
   };
 
   return (
-    <Container>
-      <Dialog.Root open={open} onOpenChange={setOpen}>
-        <Dialog.Portal>
-          <DialogOverlay />
-          <DialogContent>
-            <div className="header">
-              <Dialog.Close asChild>
-                <button className="closed-btn-container">
-                  <StyledClosedBtn />
-                </button>
-              </Dialog.Close>
-              <span className="date">
-                {moment(date instanceof Date ? date : null).format(
-                  'YYYY.MM.DD'
-                )}
-              </span>
+    <DialogRoot open={open} onOpenChange={setOpen}>
+      <Dialog.Portal>
+        <DialogOverlay />
+        <DialogContent>
+          <div className="header">
+            <Dialog.Close asChild>
+              <button className="closed-btn-container">
+                <StyledClosedBtn />
+              </button>
+            </Dialog.Close>
+            <span className="date">
+              {moment(date instanceof Date ? date : null).format('YYYY.MM.DD')}
+            </span>
+          </div>
+          <hr />
+          <form onSubmit={handleSubmit}>
+            <input
+              type="text"
+              className="schedule-title"
+              placeholder="일정 제목"
+            />
+            <hr />
+            <div className="participants">
+              <span>참여자</span>
             </div>
             <hr />
-            <form onSubmit={handleSubmit}>
-              <input
-                type="text"
-                className="schedule-title"
-                placeholder="일정 제목"
-              />
-              <hr />
-              <div className="participants">
-                <span>참여자</span>
-              </div>
-              <hr />
-              <textarea
-                className="memo"
-                name="memo"
-                placeholder="메모"
-              ></textarea>
-              <button className="add-schedule-btn" type="submit">
-                일정 추가하기
-              </button>
-            </form>
-          </DialogContent>
-        </Dialog.Portal>
-      </Dialog.Root>
-    </Container>
+            <textarea
+              className="memo"
+              name="memo"
+              placeholder="메모"
+            ></textarea>
+            <button className="add-schedule-btn" type="submit">
+              일정 추가하기
+            </button>
+          </form>
+        </DialogContent>
+      </Dialog.Portal>
+    </DialogRoot>
   );
 };
 
 export default Modal;
 
-const Container = styled.div``;
+const DialogRoot = styled(Dialog.Root)``;
 
 const DialogOverlay = styled(Dialog.Overlay)`
   background-color: rgba(0, 0, 0, 0.1);
@@ -76,8 +72,8 @@ const DialogOverlay = styled(Dialog.Overlay)`
 
 const DialogContent = styled(Dialog.Content)`
   position: fixed;
-  top: 50%;
-  left: 50%;
+  top: 210px;
+  left: 266px;
   display: flex;
   flex-direction: column;
   align-items: center;
