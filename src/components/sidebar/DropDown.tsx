@@ -3,7 +3,7 @@ import TeamManager from '@assets/sidebar/drop-down-logo.svg';
 import Giraffe from '@assets/sidebar/giraffe.svg';
 import Mountain from '@assets/sidebar/mountain.svg';
 import Plus from '@assets/sidebar/plus.svg';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { AddTeamModal } from '@components/sidebar/AddTeamModal.tsx';
 
 export const teams = [
@@ -25,10 +25,6 @@ export const DropDown = () => {
   const handleModal = () => {
     setModal(!modal);
   };
-
-  useEffect(() => {
-    console.log(modal);
-  }, [modal]);
 
   return (
     <DropDownContainer>
@@ -58,8 +54,8 @@ export const DropDown = () => {
 
 const DropDownContainer = styled.div`
   position: fixed;
-  top: 0;
-  left: 0;
+  top: 58px;
+  left: 4px;
 
   display: flex;
   flex-direction: column;

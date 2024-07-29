@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import Logo from '@assets/sidebar/logo.svg';
+import Open from '@assets/sidebar/drop-down-open.svg';
 import Home from '@assets/sidebar/home.svg';
 import HomeClick from '@assets/sidebar/home-click.svg';
 import Bell from '@assets/sidebar/bell.svg';
@@ -23,11 +24,16 @@ import { DropDown } from '@components/sidebar/DropDown.tsx';
 
 export const SideBar = () => {
   const [hover, setHover] = useState<boolean>(false);
+  const [showDropDown, setShowDropDown] = useState<boolean>(false);
   const navigate = useNavigate();
   const location = useLocation();
 
   const handleNavigate = (path: string) => {
     navigate(path);
+  };
+
+  const handleDropDown = () => {
+    setShowDropDown((prev) => !prev);
   };
 
   const isActive = (path: string): boolean => {
@@ -41,10 +47,21 @@ export const SideBar = () => {
       }}
       onMouseLeave={() => {
         setHover(false);
+        setShowDropDown(false);
       }}
     >
-      <DropDown />
-      <LogoImg />
+      <LogoContainer>
+        <LogoImg />
+        {hover && (
+          <DropDownContainer>
+            <LogoText>UMC 6th 팀매니저</LogoText>
+            <Wrapper onClick={handleDropDown}>
+              <Open />
+            </Wrapper>
+          </DropDownContainer>
+        )}
+      </LogoContainer>
+      {showDropDown && <DropDown />}
       <Hr style={{ margin: '11px 0 11px 0' }} />
       <IconContainer
         onClick={() => {
@@ -173,8 +190,44 @@ const SideBarContainer = styled.div`
   }
 `;
 
+const LogoContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+  margin-top: 49px;
+  gap: 19px;
+`;
+
+const DropDownContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 71px;
+  height: 20px;
+  gap: 8px;
+`;
+
+const LogoText = styled.p`
+  font-size: 12px;
+  font-weight: 500;
+  color: ${({ theme }) => theme.colors.black};
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 40px; // 텍스트 최대 너비 설정
+`;
+
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+`;
+
 interface SelectedProps {
-  selected: boolean;
+  selected?: boolean;
   redText?: boolean;
 }
 
@@ -213,7 +266,6 @@ const IconContainer = styled.div<SelectedProps>`
 const LogoImg = styled(Logo)`
   width: 37px;
   height: 37px;
-  margin-top: 49px;
 `;
 
 const Hr = styled.div`
