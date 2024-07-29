@@ -66,18 +66,6 @@ const Container = styled.div`
         color: ${(props) => props.theme.colors.mainBlue};
       }
     }
-
-    .reload {
-      display: flex;
-      align-items: center;
-
-      .latest-date {
-        display: flex;
-        font-size: 10px;
-        font-weight: 500;
-        color: #999999;
-      }
-    }
   }
 `;
 

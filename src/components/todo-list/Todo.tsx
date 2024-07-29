@@ -7,9 +7,11 @@ import TodoMenuIcon from '@assets/todo-list/todo-menu.svg';
 
 interface TodoProps {
   todo: string;
+  pathname: string;
 }
 
-const Todo = ({ todo }: TodoProps) => {
+const Todo = ({ todo, pathname }: TodoProps) => {
+  console.log(pathname);
   const [checked, setChecked] = useState(false);
 
   const handleCheckedChange = () => {
@@ -34,6 +36,7 @@ const Todo = ({ todo }: TodoProps) => {
       </CheckboxWrapper>
 
       {/* 수정 및 삭제 메뉴 */}
+      {/* 투두리스트 페이지에서만 보이도록 */}
       <PopoverRoot>
         <Popover.Anchor asChild className="popover-anchor">
           <Popover.Trigger asChild>
