@@ -68,7 +68,7 @@ const Todos = ({ userInfo }: TodosProps) => {
                   ? todos.map((todo) => {
                       return (
                         <li className="todo">
-                          <Todo todo={todo} pathname={location.pathname} />
+                          <Todo todo={todo} />
                         </li>
                       );
                     })
@@ -98,7 +98,7 @@ const Todos = ({ userInfo }: TodosProps) => {
                   ? todos.map((todo) => {
                       return (
                         <li className="todo">
-                          <Todo todo={todo} pathname={location.pathname} />
+                          <Todo todo={todo} />
                         </li>
                       );
                     })
