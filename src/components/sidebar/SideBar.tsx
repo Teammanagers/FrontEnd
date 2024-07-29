@@ -68,6 +68,7 @@ export const SideBar = () => {
           handleNavigate(`/`);
         }}
         selected={isActive(`/`)}
+        isHovered={hover}
       >
         {isActive(`/`) ? <HomeClick /> : <Home />}
         {hover && <SideBarText selected={isActive(`/`)}>홈</SideBarText>}
@@ -78,6 +79,7 @@ export const SideBar = () => {
           handleNavigate(`/`);
         }}
         selected={isActive(`/`)}
+        isHovered={hover}
       >
         {isActive(`/`) ? <BellClick /> : <Bell />}
         {hover && <SideBarText selected={isActive(`/`)}>알림</SideBarText>}
@@ -87,6 +89,7 @@ export const SideBar = () => {
           handleNavigate(`/todo-list`);
         }}
         selected={isActive(`/todo-list`)}
+        isHovered={hover}
       >
         {isActive(`/todo-list`) ? <ListClick /> : <List />}
         {hover && (
@@ -100,6 +103,7 @@ export const SideBar = () => {
           handleNavigate(`/calendar`);
         }}
         selected={isActive(`/calendar`)}
+        isHovered={hover}
       >
         {isActive(`/calendar`) ? <CalendarClick /> : <Calendar />}
         {hover && (
@@ -112,6 +116,7 @@ export const SideBar = () => {
           navigate(`/memo`);
         }}
         selected={isActive(`/memo`)}
+        isHovered={hover}
       >
         {isActive(`/memo`) ? <MemoClick /> : <Memo />}
         {hover && <SideBarText selected={isActive(`/memo`)}>메모</SideBarText>}
@@ -121,6 +126,7 @@ export const SideBar = () => {
           handleNavigate(`/share`);
         }}
         selected={isActive(`/share`)}
+        isHovered={hover}
       >
         {isActive(`/share`) ? <FileClick /> : <File />}
         {hover && (
@@ -133,6 +139,7 @@ export const SideBar = () => {
           handleNavigate(`/management`);
         }}
         selected={isActive(`/management`)}
+        isHovered={hover}
       >
         {isActive(`/management`) ? <TeamClick /> : <Team />}
         {hover && (
@@ -145,6 +152,7 @@ export const SideBar = () => {
           handleNavigate(`/mypage`);
         }}
         selected={isActive(`/mypage`)}
+        isHovered={hover}
       >
         {isActive(`/mypage`) ? <MyPageClick /> : <MyPage />}
         {hover && (
@@ -157,6 +165,7 @@ export const SideBar = () => {
           handleNavigate(`/management`);
         }}
         selected={isActive(`/management`)}
+        isHovered={hover}
       >
         <End />
         {hover && (
@@ -229,6 +238,7 @@ const Wrapper = styled.div`
 interface SelectedProps {
   selected?: boolean;
   redText?: boolean;
+  isHovered?: boolean;
 }
 
 const SideBarText = styled.p<SelectedProps>`
@@ -254,9 +264,13 @@ const IconContainer = styled.div<SelectedProps>`
   background-color: ${({ selected, theme }) =>
     selected ? theme.colors.background : 'white'};
   display: flex;
-  justify-content: center;
+  justify-content: ${({ isHovered }) => (isHovered ? 'flex-start' : 'center')};
+  padding-left: ${({ isHovered }) => (isHovered ? '19px' : '0')};
+  box-sizing: border-box;
+  overflow: hidden;
   align-items: center;
   cursor: pointer;
+  transition: width 0.3s ease;
 
   &:last-child {
     margin-top: 18px;
