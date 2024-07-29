@@ -3,15 +3,14 @@ import * as Dialog from '@radix-ui/react-dialog';
 import moment from 'moment';
 import { Value } from '../../types/calendar';
 import ClosedBtn from '@assets/calendar/closed-btn.svg';
-// import { Theme } from '@/style/theme';
 
 type ModalProps = {
   date: Value;
-  onClose: () => void;
-  isOpen: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  open: boolean;
 };
 
-const Modal = ({ date, onClose, isOpen }: ModalProps) => {
+const Modal = ({ date, setOpen, open }: ModalProps) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // const target = e.target as HTMLFormElement;
@@ -21,46 +20,44 @@ const Modal = ({ date, onClose, isOpen }: ModalProps) => {
 
   return (
     <Container>
-      <Dialog.Root open={isOpen} onOpenChange={onClose}>
+      <Dialog.Root open={open} onOpenChange={setOpen}>
         <Dialog.Portal>
           <DialogOverlay />
-          <Dialog.Content>
-            <Content>
-              <div className="header">
-                <Dialog.Close asChild>
-                  <button className="closed-btn-container">
-                    <StyledClosedBtn />
-                  </button>
-                </Dialog.Close>
-                <span className="date">
-                  {moment(date instanceof Date ? date : null).format(
-                    'YYYY.MM.DD'
-                  )}
-                </span>
+          <DialogContent>
+            <div className="header">
+              <Dialog.Close asChild>
+                <button className="closed-btn-container">
+                  <StyledClosedBtn />
+                </button>
+              </Dialog.Close>
+              <span className="date">
+                {moment(date instanceof Date ? date : null).format(
+                  'YYYY.MM.DD'
+                )}
+              </span>
+            </div>
+            <hr />
+            <form onSubmit={handleSubmit}>
+              <input
+                type="text"
+                className="schedule-title"
+                placeholder="일정 제목"
+              />
+              <hr />
+              <div className="participants">
+                <span>참여자</span>
               </div>
               <hr />
-              <form onSubmit={handleSubmit}>
-                <input
-                  type="text"
-                  className="schedule-title"
-                  placeholder="일정 제목"
-                />
-                <hr />
-                <div className="participants">
-                  <span>참여자</span>
-                </div>
-                <hr />
-                <textarea
-                  className="memo"
-                  name="memo"
-                  placeholder="메모"
-                ></textarea>
-                <button className="add-schedule-btn" type="submit">
-                  일정 추가하기
-                </button>
-              </form>
-            </Content>
-          </Dialog.Content>
+              <textarea
+                className="memo"
+                name="memo"
+                placeholder="메모"
+              ></textarea>
+              <button className="add-schedule-btn" type="submit">
+                일정 추가하기
+              </button>
+            </form>
+          </DialogContent>
         </Dialog.Portal>
       </Dialog.Root>
     </Container>
@@ -77,7 +74,7 @@ const DialogOverlay = styled(Dialog.Overlay)`
   inset: 0;
 `;
 
-const Content = styled(Dialog.Content)`
+const DialogContent = styled(Dialog.Content)`
   position: fixed;
   top: 50%;
   left: 50%;

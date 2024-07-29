@@ -9,17 +9,17 @@ import { Value } from '../../types/calendar';
 const EventCalendar = () => {
   const today = new Date();
   const [date, setDate] = useState<Value>(today);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [open, setOpen] = useState(false);
 
   const handleDateChange = (newDate: Value) => {
     setDate(newDate);
-    setIsModalOpen(true);
+    setOpen(true);
   };
 
-  const closedModal = () => {
-    setIsModalOpen(false);
-    setDate(null);
-  };
+  // const closedModal = () => {
+  //   setOpen(false);
+  //   setDate(null);
+  // };
 
   return (
     <StyledCalendarContainer>
@@ -39,7 +39,7 @@ const EventCalendar = () => {
         prev2Label={null} // 년도 이동 버튼 숨기기
         minDetail="year" // 10년단위 년도 숨기기
       />
-      {date && <Modal date={date} onClose={closedModal} isOpen={isModalOpen} />}
+      {date && <Modal date={date} setOpen={setOpen} open={open} />}
     </StyledCalendarContainer>
   );
 };
