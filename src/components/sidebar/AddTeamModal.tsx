@@ -2,13 +2,13 @@ import styled from 'styled-components';
 import Close from '@assets/sidebar/close.svg';
 import Plus from '@assets/sidebar/add-new-team.svg';
 import Search from '@assets/sidebar/search.svg';
-import { useState } from 'react';
+import { ButtonHTMLAttributes, useState } from 'react';
 
 interface AddTeamModalProps {
   modalClose: () => void;
 }
 
-export const AddTeamModal: React.FC<AddTeamModalProps> = ({ modalClose }) => {
+export const AddTeamModal = ({ modalClose }: AddTeamModalProps) => {
   const [hover, setHover] = useState<number | null>(null);
 
   const handleHover = (index: number | null) => {
@@ -20,10 +20,7 @@ export const AddTeamModal: React.FC<AddTeamModalProps> = ({ modalClose }) => {
       <AddTeamContainer>
         <TopContainer>
           <Title>팀 추가하기</Title>
-          {/* svg 컴포넌트에 바로 onClick을 하면 에러가 뜬다 .. 구글링하니 div로 감싸면 안 뜬다고 한다.. */}
-          <div onClick={modalClose}>
-            <CloseBtn />
-          </div>
+          <CloseBtn onClick={modalClose} />
         </TopContainer>
         <MenuContainer
           onMouseEnter={() => {
@@ -97,7 +94,7 @@ const Title = styled.h1`
   color: ${(props) => props.theme.colors.black};
 `;
 
-const CloseBtn = styled(Close)`
+const CloseBtn = styled(Close)<ButtonHTMLAttributes<HTMLButtonElement>>`
   margin-bottom: 12px;
   cursor: pointer;
 `;
