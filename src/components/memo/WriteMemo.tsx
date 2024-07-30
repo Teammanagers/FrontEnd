@@ -2,30 +2,63 @@ import styled from 'styled-components';
 import BackButton from '@assets/memo/back-button.svg';
 import AddTag from '@assets/memo/add-tag-icon.svg';
 import { useNavigate } from 'react-router-dom';
-import { ButtonHTMLAttributes } from 'react';
+import { ButtonHTMLAttributes, FormEvent, useEffect, useState } from 'react';
 
 export const WriteMemo = () => {
+  const [title, setTitle] = useState<string>('');
+  const [content, setContent] = useState<string>('');
+  const [titleCount, setTitleCount] = useState<number>(0);
+  const [contentCount, setContentCount] = useState<number>(0);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setTitleCount(title.length);
+  }, [title]);
+
+  useEffect(() => {
+    setContentCount(content.length);
+  }, [content]);
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log('제목: ', title);
+    console.log('본문: ', content);
+  };
 
   return (
     <Container>
       <MemoContainer>
-        <TopContainer>
-          <BackBtn onClick={() => navigate(-1)} />
-          <TitleContainer>
-            <TitleInput placeholder="제목을 입력해주세요" />
-          </TitleContainer>
-          <TagContainer>
-            {/* 태그 추가 버튼, 태그는 3개까지 */}
-            <AddTagBtn>
-              <AddTag />
-            </AddTagBtn>
-          </TagContainer>
-        </TopContainer>
-        <BottomContainer>
-          <ContentText placeholder="내용을 입력해주세요"></ContentText>
-          <SubmitBtn>메모 등록</SubmitBtn>
-        </BottomContainer>
+        <form onSubmit={handleSubmit}>
+          <TopContainer>
+            <BackBtn onClick={() => navigate(-1)} />
+            <TitleContainer>
+              <TitleInput
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                maxLength={50}
+                placeholder="제목을 입력해주세요"
+              />
+              <p>{titleCount}</p>
+            </TitleContainer>
+            <TagContainer>
+              {/* 태그 추가 버튼, 태그는 3개까지 */}
+              <AddTagBtn>
+                <AddTag />
+              </AddTagBtn>
+            </TagContainer>
+          </TopContainer>
+          <BottomContainer>
+            <ContentText
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              maxLength={10000}
+              placeholder="내용을 입력해주세요"
+            />
+            <p>{contentCount}</p>
+            <SubmitBtn>메모 등록</SubmitBtn>
+          </BottomContainer>
+        </form>
       </MemoContainer>
     </Container>
   );
@@ -78,6 +111,7 @@ const TitleContainer = styled.div`
 `;
 
 const TitleInput = styled.input`
+  width: 100%;
   height: 27px;
   font-weight: 700;
   font-size: 18px;
