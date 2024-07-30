@@ -28,7 +28,7 @@ const App = () => {
         <Route path="/management/:id" element={<ExtraManagementPage />} />
         {/* memo page */}
         <Route path="/memo" element={<MemoPage />} />
-        <Route path="/memo/:id" element={<ExtraMemoPage />} />
+        <Route path="/memo/*" element={<ExtraMemoPage />} />
         {/* mypage */}
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/mypage/:id" element={<ExtraMyPage />} />
