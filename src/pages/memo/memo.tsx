@@ -18,9 +18,7 @@ export const MemoPage = () => {
   useEffect(() => {
     setHasMemo((dummyData as MemoProps[]).length > 0);
   }, []);
-  console.log(hasMemo);
 
-  // 메모가 유무에 따라 렌더링
   return <Container>{hasMemo ? <MemoList /> : <AddMemoLarge />}</Container>;
 };
 
