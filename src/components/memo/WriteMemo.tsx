@@ -1,28 +1,52 @@
 import styled from 'styled-components';
 import BackButton from '@assets/memo/back-button.svg';
 import AddTag from '@assets/memo/add-tag-icon.svg';
+import DeleteTag from '@assets/memo/delete-tag-icon.svg';
 import { useNavigate } from 'react-router-dom';
-import { ButtonHTMLAttributes, FormEvent, useEffect, useState } from 'react';
+import {
+  ButtonHTMLAttributes,
+  FormEvent,
+  KeyboardEvent,
+  useState
+} from 'react';
 
 export const WriteMemo = () => {
+  // 제목
   const [title, setTitle] = useState<string>('');
+  // 태그
+  const [tags, setTags] = useState<string[]>([]);
+  const [showTagInput, setShowTagInput] = useState<boolean>(false);
+  const [newTag, setNewTag] = useState<string>('');
+  // 본문
   const [content, setContent] = useState<string>('');
-  const [titleCount, setTitleCount] = useState<number>(0);
-  const [contentCount, setContentCount] = useState<number>(0);
+
   const navigate = useNavigate();
 
-  useEffect(() => {
-    setTitleCount(title.length);
-  }, [title]);
+  const handleAddTag = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      if (newTag.trim() !== '') {
+        setTags([...tags, newTag.trim()]);
+      }
+      setNewTag('');
+      setShowTagInput(false);
+    }
+  };
 
-  useEffect(() => {
-    setContentCount(content.length);
-  }, [content]);
+  const handleAddTagClick = (e: FormEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setShowTagInput(true);
+  };
+
+  const handleTagDelete = (index: number) => {
+    setTags(tags.filter((_, i) => i !== index));
+  };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('제목: ', title);
-    console.log('본문: ', content);
+    console.log('제목: ', title, title.length);
+    console.log('본문: ', content, content.length);
+    console.log('태그: ', tags, tags.length);
+    navigate(`/memo`);
   };
 
   return (
@@ -38,14 +62,31 @@ export const WriteMemo = () => {
                 onChange={(e) => setTitle(e.target.value)}
                 maxLength={50}
                 placeholder="제목을 입력해주세요"
+                autoFocus
               />
-              <p>{titleCount}</p>
             </TitleContainer>
             <TagContainer>
-              {/* 태그 추가 버튼, 태그는 3개까지 */}
-              <AddTagBtn>
-                <AddTag />
-              </AddTagBtn>
+              {tags.map((tag, index) => (
+                <Tag key={index}>
+                  {tag}
+                  <DeleteTagBtn
+                    onClick={() => {
+                      handleTagDelete(index);
+                    }}
+                  />
+                </Tag>
+              ))}
+              {showTagInput ? (
+                <TagInput
+                  value={newTag}
+                  onChange={(e) => setNewTag(e.target.value)}
+                  onKeyPress={handleAddTag}
+                  maxLength={5}
+                  autoFocus
+                />
+              ) : (
+                tags.length < 3 && <AddTagBtn onClick={handleAddTagClick} />
+              )}
             </TagContainer>
           </TopContainer>
           <BottomContainer>
@@ -55,7 +96,6 @@ export const WriteMemo = () => {
               maxLength={10000}
               placeholder="내용을 입력해주세요"
             />
-            <p>{contentCount}</p>
             <SubmitBtn>메모 등록</SubmitBtn>
           </BottomContainer>
         </form>
@@ -126,9 +166,34 @@ const TagContainer = styled.div`
   border-bottom: 0.8px solid ${(props) => props.theme.colors.lightGray};
   display: flex;
   align-items: center;
+  gap: 7px;
 `;
 
-const AddTagBtn = styled.button`
+const Tag = styled.div`
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 6px;
+  border-radius: 3px;
+  background: ${({ theme }) => theme.colors.background};
+  // background: ${({ theme }) => theme.colors.red};
+  color: ${(props) => props.theme.colors.mainBlue};
+  font-size: 9px;
+  font-weight: 500;
+  line-height: 14px;
+`;
+
+const DeleteTagBtn = styled(DeleteTag)<ButtonHTMLAttributes<HTMLButtonElement>>`
+  width: 19px;
+  height: 19px;
+  cursor: pointer;
+`;
+
+const TagInput = styled.input`
+  width: 50px;
+`;
+
+const AddTagBtn = styled(AddTag)<ButtonHTMLAttributes<HTMLButtonElement>>`
   width: 24px;
   height: 24px;
   background: ${({ theme }) => theme.colors.background};
