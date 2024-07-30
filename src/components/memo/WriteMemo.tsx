@@ -1,26 +1,40 @@
 import styled from 'styled-components';
 import BackButton from '@assets/memo/back-button.svg';
+import AddTag from '@assets/memo/add-tag-icon.svg';
 
 export const WriteMemo = () => {
   return (
-    <MemoContainer>
-      <TopContainer>
-        <BackBtn />
-        <TitleContainer>
-          <TitleInput placeholder="제목을 입력해주세요" />
-        </TitleContainer>
-        {/* 태그도 입력받는 형식..... */}
-        <TagContainer>
-          ...태그가 들어갑니당... 아무것도 없을때는 + 버튼
-        </TagContainer>
-      </TopContainer>
-      <BottomContainer>
-        <ContentText placeholder="내용을 입력해주세요"></ContentText>
-        <SubmitBtn>메모 등록</SubmitBtn>
-      </BottomContainer>
-    </MemoContainer>
+    <Container>
+      <MemoContainer>
+        <TopContainer>
+          <BackBtn />
+          <TitleContainer>
+            <TitleInput placeholder="제목을 입력해주세요" />
+          </TitleContainer>
+          <TagContainer>
+            {/* 태그 추가 버튼, 태그는 3개까지 */}
+            <AddTagBtn>
+              <AddTag />
+            </AddTagBtn>
+          </TagContainer>
+        </TopContainer>
+        <BottomContainer>
+          <ContentText placeholder="내용을 입력해주세요"></ContentText>
+          <SubmitBtn>메모 등록</SubmitBtn>
+        </BottomContainer>
+      </MemoContainer>
+    </Container>
   );
 };
+
+const Container = styled.div`
+  width: 1280px;
+  height: 820px;
+  background: ${(props) => props.theme.colors.background};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 const MemoContainer = styled.div`
   width: 1094px;
@@ -74,6 +88,19 @@ const TagContainer = styled.div`
   border-bottom: 0.8px solid ${(props) => props.theme.colors.lightGray};
   display: flex;
   align-items: center;
+`;
+
+const AddTagBtn = styled.button`
+  width: 24px;
+  height: 24px;
+  background: ${({ theme }) => theme.colors.background};
+  border-radius: 3px;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  cursor: pointer;
 `;
 
 const BottomContainer = styled.div`
