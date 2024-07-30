@@ -18,10 +18,16 @@ const Modal = ({ date, setOpen, open }: ModalProps) => {
     // const memo = (target[1] as HTMLTextAreaElement).value;
   };
 
+  const clickAddSchedule = () => {
+    setOpen(false);
+  };
+
   return (
     <DialogRoot open={open} onOpenChange={setOpen}>
       <Dialog.Portal>
         <DialogOverlay />
+        <Dialog.Title />
+        <Dialog.Description />
         <DialogContent>
           <div className="header">
             <Dialog.Close asChild>
@@ -50,7 +56,11 @@ const Modal = ({ date, setOpen, open }: ModalProps) => {
               name="memo"
               placeholder="메모"
             ></textarea>
-            <button className="add-schedule-btn" type="submit">
+            <button
+              className="add-schedule-btn"
+              type="submit"
+              onClick={clickAddSchedule}
+            >
               일정 추가하기
             </button>
           </form>
