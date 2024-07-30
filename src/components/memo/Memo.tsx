@@ -8,17 +8,24 @@ interface Memo {
 export const Memo = ({ memo }: Memo) => {
   const { title, tags, content } = memo;
 
+  // title 최대 20자까지만 보여주고 그 뒤는 ... 처리
+  const showedTitle: string =
+    title.length > 20 ? title.slice(0, 20) + '...' : title;
+
+  const showedContent: string =
+    content.length > 50 ? content.slice(0, 50) + '...' : content;
+
   return (
     <MemoContainer>
       <MemoTitleContainer>
-        <MemoTitle>{title}</MemoTitle>
+        <MemoTitle>{showedTitle}</MemoTitle>
       </MemoTitleContainer>
       <TagContainer>
         {tags.map((tag, id) => (
           <TagBox key={id}>{tag}</TagBox>
         ))}
       </TagContainer>
-      <Content>{content}</Content>
+      <Content>{showedContent}</Content>
     </MemoContainer>
   );
 };
