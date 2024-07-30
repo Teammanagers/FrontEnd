@@ -1,13 +1,17 @@
 import styled from 'styled-components';
 import BackButton from '@assets/memo/back-button.svg';
 import AddTag from '@assets/memo/add-tag-icon.svg';
+import { useNavigate } from 'react-router-dom';
+import { ButtonHTMLAttributes } from 'react';
 
 export const WriteMemo = () => {
+  const navigate = useNavigate();
+
   return (
     <Container>
       <MemoContainer>
         <TopContainer>
-          <BackBtn />
+          <BackBtn onClick={() => navigate(-1)} />
           <TitleContainer>
             <TitleInput placeholder="제목을 입력해주세요" />
           </TitleContainer>
@@ -55,7 +59,7 @@ const TopContainer = styled.div`
   margin-bottom: 19px;
 `;
 
-const BackBtn = styled(BackButton)`
+const BackBtn = styled(BackButton)<ButtonHTMLAttributes<HTMLButtonElement>>`
   width: 36px;
   height: 36px;
   display: flex;
