@@ -3,7 +3,7 @@ import * as Progress from '@radix-ui/react-progress';
 import { useEffect, useState } from 'react';
 
 const TeamProgress = () => {
-  const [progressValue, setProgressValue] = useState(0);
+  const [progressValue, setProgressValue] = useState<number>(0);
 
   useEffect(() => {
     const timer = setTimeout(() => setProgressValue(33), 300);

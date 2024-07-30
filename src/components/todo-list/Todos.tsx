@@ -19,8 +19,8 @@ interface TodosProps {
 const Todos = ({ userInfo }: TodosProps) => {
   const location = useLocation();
   const [todos, setTodos] = useState<string[]>([]);
-  const [inputValue, setInputValue] = useState('');
-  const [isClickAdd, setIsClickAdd] = useState(false);
+  const [inputValue, setInputValue] = useState<string>('');
+  const [isClickAdd, setIsClickAdd] = useState<boolean>(false);
 
   // 투두 추가하기
   const openAddTodo = () => {
@@ -55,8 +55,10 @@ const Todos = ({ userInfo }: TodosProps) => {
               <div className="trigger-container">
                 <strong className="username">{userInfo.username}</strong>
                 <div className="tag-container">
-                  {userInfo.tags.map((tag: string) => (
-                    <span className="tag">{tag}</span>
+                  {userInfo.tags.map((tag: string, index) => (
+                    <span className="tag" key={index}>
+                      {tag}
+                    </span>
                   ))}
                 </div>
               </div>
@@ -65,9 +67,9 @@ const Todos = ({ userInfo }: TodosProps) => {
               <ul>
                 {/* 투두 리스트 */}
                 {todos
-                  ? todos.map((todo) => {
+                  ? todos.map((todo, index) => {
                       return (
-                        <li className="todo">
+                        <li className="todo" key={index}>
                           <Todo todo={todo} />
                         </li>
                       );
@@ -85,8 +87,10 @@ const Todos = ({ userInfo }: TodosProps) => {
               <div className="trigger-container">
                 <strong className="username">{userInfo.username}</strong>
                 <div className="tag-container">
-                  {userInfo.tags.map((tag: string) => (
-                    <span className="tag">{tag}</span>
+                  {userInfo.tags.map((tag: string, index) => (
+                    <span className="tag" key={index}>
+                      {tag}
+                    </span>
                   ))}
                 </div>
               </div>
@@ -95,9 +99,9 @@ const Todos = ({ userInfo }: TodosProps) => {
               <ul>
                 {/* 투두 리스트 */}
                 {todos
-                  ? todos.map((todo) => {
+                  ? todos.map((todo, index) => {
                       return (
-                        <li className="todo">
+                        <li className="todo" key={index}>
                           <Todo todo={todo} />
                         </li>
                       );

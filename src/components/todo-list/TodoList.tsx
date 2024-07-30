@@ -3,13 +3,13 @@ import Todos from './Todos';
 import MockData from '@assets/todo-list/mock-data.json';
 import { UserInfo } from 'src/types/todo-list';
 
-const Mock: UserInfo[] = MockData as UserInfo[];
+const Mock = MockData as UserInfo[];
 
 const TodoList = () => {
   return (
     <Container>
       {Mock.map((userInfo: UserInfo) => (
-        <Todos userInfo={userInfo} />
+        <Todos userInfo={userInfo} key={userInfo.id} />
       ))}
     </Container>
   );

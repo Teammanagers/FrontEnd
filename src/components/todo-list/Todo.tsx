@@ -10,7 +10,7 @@ interface TodoProps {
 }
 
 const Todo = ({ todo }: TodoProps) => {
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState<boolean>(false);
 
   const handleCheckedChange = () => {
     setChecked(!checked);
