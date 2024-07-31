@@ -7,12 +7,16 @@ import Kakao from '@assets/mypage/kakao.svg';
 import WrongUser from '@assets/mypage/wrong-user.svg';
 import { AvatarImage } from '@components/mypage/Avatar';
 import { useNavigate } from 'react-router-dom';
+import { QuitModal } from '@components/mypage/QuitModal';
 
 export const ProfilePage = () => {
   const navigate = useNavigate();
-  const [isHidden, setIsHidden] = useState(false);
+  const [isHidden, setIsHidden] = useState<boolean>(false);
+  const [isQuitModalOpen, setIsQuitModalOpen] = useState<boolean>(false);
 
   const toggleHidden = () => setIsHidden(!isHidden);
+  const openQuitModal = () => setIsQuitModalOpen(true);
+  const closeQuitModal = () => setIsQuitModalOpen(false);
 
   return (
     <ProfileContainer>
@@ -81,17 +85,17 @@ export const ProfilePage = () => {
           </CommentBox>
         </MainContent>
         <QuitContainer>
-          <QuitButton>
+          <QuitButton onClick={openQuitModal}>
             <WrongUser />
             탈퇴하기
           </QuitButton>
         </QuitContainer>
+        <QuitModal isOpen={isQuitModalOpen} onClose={closeQuitModal} />
       </ContentContainer>
     </ProfileContainer>
   );
 };
 
-// 'isHidden' 속성을 포함하는 타입을 정의합니다.
 interface ToggleProps {
   isHidden: boolean;
 }
