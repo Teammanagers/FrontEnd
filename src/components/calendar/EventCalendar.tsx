@@ -19,9 +19,8 @@ const EventCalendar = () => {
     setOpen(true);
   };
 
-  // 6주일 때 height 변화
+  // 매월 몇 주인지 구하기 -> 5,6주일 때 height 변화
   useEffect(() => {
-    // 해당 달 몇 주인지 구하기
     const getWeeksInMonth = (date: Date) => {
       // 해당 달의 첫째 날의 요일
       const firstDay = new Date(
@@ -73,7 +72,7 @@ const EventCalendar = () => {
         // formatMonthYear={(locale: string | undefined, date: Date) =>
         //   moment(date).format('YYYY. MM')
         // } // 네비게이션에서 2023. 12 이렇게 보이도록 설정
-        // 달 넘어갈 때 1일 자동 선택 -> height 변화
+        // 달 넘어갈 때 자동 선택된 값(1일)으로 캘린더 height 변화
         onActiveStartDateChange={({ activeStartDate }) =>
           setDate(activeStartDate)
         }

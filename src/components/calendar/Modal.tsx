@@ -1,14 +1,9 @@
 import styled from 'styled-components';
 import * as Dialog from '@radix-ui/react-dialog';
 import moment from 'moment';
-import { Value } from '../../types/calendar';
+import { ModalProps } from '../../types/calendar';
+import Mock from '@assets/calendar/mock-data.json';
 import ClosedBtn from '@assets/calendar/closed-btn.svg';
-
-type ModalProps = {
-  date: Value;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  open: boolean;
-};
 
 const Modal = ({ date, setOpen, open }: ModalProps) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
