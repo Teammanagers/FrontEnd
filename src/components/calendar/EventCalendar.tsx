@@ -10,7 +10,7 @@ import PrevBtn from '@assets/calendar/prev-btn.svg';
 
 const EventCalendar = () => {
   const today = new Date();
-  const [date, setDate] = useState<Value>(today);
+  const [date, setDate] = useState<Value>(null);
   const [open, setOpen] = useState<boolean>(false);
   const [calendarHeight, setCalendarHeight] = useState<string>('520px');
 
@@ -66,7 +66,6 @@ const EventCalendar = () => {
       <StyledCalendar
         locale="en-US"
         calendarType="gregory" // 일요일 부터 시작
-        value={date}
         onChange={handleDateChange}
         // formatDay={(locale: string | undefined, date: Date) =>
         //   moment(date).format('D')
@@ -74,6 +73,7 @@ const EventCalendar = () => {
         // formatMonthYear={(locale: string | undefined, date: Date) =>
         //   moment(date).format('YYYY. MM')
         // } // 네비게이션에서 2023. 12 이렇게 보이도록 설정
+        // 달 넘어갈 때 1일 자동 선택 -> height 변화
         onActiveStartDateChange={({ activeStartDate }) =>
           setDate(activeStartDate)
         }
