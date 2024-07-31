@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import * as Dialog from '@radix-ui/react-dialog';
 import moment from 'moment';
+import ParticipantsList from './ParticipantsList';
 import { ModalProps } from '../../types/calendar';
-import Mock from '@assets/calendar/mock-data.json';
 import ClosedBtn from '@assets/calendar/closed-btn.svg';
 
 const Modal = ({ date, setOpen, open }: ModalProps) => {
@@ -44,6 +44,7 @@ const Modal = ({ date, setOpen, open }: ModalProps) => {
             <hr />
             <div className="participants">
               <span>참여자</span>
+              <ParticipantsList />
             </div>
             <hr />
             <textarea
@@ -142,12 +143,14 @@ const DialogContent = styled(Dialog.Content)`
     }
 
     .participants {
+      display: flex;
+      align-items: center;
       width: inherit;
       height: 30px;
       margin-bottom: 5px;
 
       span {
-        margin-right: 7px;
+        margin-right: 8px;
         font-size: 11px;
         font-weight: 500;
         color: #999999;
