@@ -5,7 +5,6 @@ import DeleteTag from '@assets/memo/delete-tag-icon.svg';
 import { useNavigate } from 'react-router-dom';
 import {
   ButtonHTMLAttributes,
-  FormEvent,
   MouseEvent,
   KeyboardEvent,
   useState
@@ -57,8 +56,7 @@ export const WriteMemo = () => {
     setNewTag(tags[index]);
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     console.log('제목: ', title, title.length);
     console.log('본문: ', content, content.length);
     console.log('태그: ', tags, tags.length);
@@ -68,74 +66,72 @@ export const WriteMemo = () => {
   return (
     <Container>
       <MemoContainer>
-        <form onSubmit={handleSubmit}>
-          <TopContainer>
-            <BackBtn onClick={() => navigate(-1)} />
-            {/* 제목 */}
-            <TitleContainer>
-              <TitleInput
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                maxLength={50}
-                placeholder="제목을 입력해주세요"
+        <TopContainer>
+          <BackBtn onClick={() => navigate(-1)} />
+          {/* 제목 */}
+          <TitleContainer>
+            <TitleInput
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              maxLength={50}
+              placeholder="제목을 입력해주세요"
+              autoFocus
+            />
+          </TitleContainer>
+
+          {/* 태그 */}
+          <TagContainer>
+            {tags.map((tag, index) => (
+              <Tag key={index} onClick={() => handleEditTag(index)}>
+                {editTagIndex === index ? (
+                  <TagInput
+                    value={newTag}
+                    onChange={(e) => setNewTag(e.target.value)}
+                    onKeyPress={handleTag}
+                    maxLength={5}
+                    autoFocus
+                  />
+                ) : (
+                  <>
+                    <span>{tag}</span>
+                    <DeleteTagBtn onClick={(e) => handleTagDelete(e, index)} />
+                  </>
+                )}
+              </Tag>
+            ))}
+            {showTagInput && editTagIndex === null && (
+              <TagInput
+                value={newTag}
+                onChange={(e) => setNewTag(e.target.value)}
+                onKeyPress={handleTag}
+                maxLength={5}
                 autoFocus
               />
-            </TitleContainer>
+            )}
+            {!showTagInput && editTagIndex === null && tags.length < 3 && (
+              <AddTagBtn
+                onClick={() => {
+                  setShowTagInput(true);
+                  setEditTagIndex(null);
+                }}
+              />
+            )}
+          </TagContainer>
+        </TopContainer>
 
-            {/* 태그 */}
-            <TagContainer>
-              {tags.map((tag, index) => (
-                <Tag key={index} onClick={() => handleEditTag(index)}>
-                  {editTagIndex === index ? (
-                    <TagInput
-                      value={newTag}
-                      onChange={(e) => setNewTag(e.target.value)}
-                      onKeyPress={handleTag}
-                      maxLength={5}
-                      autoFocus
-                    />
-                  ) : (
-                    <>
-                      <span>{tag}</span>
-                      <DeleteTagBtn
-                        onClick={(e) => handleTagDelete(e, index)}
-                      />
-                    </>
-                  )}
-                </Tag>
-              ))}
-              {showTagInput && editTagIndex === null && (
-                <TagInput
-                  value={newTag}
-                  onChange={(e) => setNewTag(e.target.value)}
-                  onKeyPress={handleTag}
-                  maxLength={5}
-                  autoFocus
-                />
-              )}
-              {!showTagInput && editTagIndex === null && tags.length < 3 && (
-                <AddTagBtn
-                  onClick={() => {
-                    setShowTagInput(true);
-                    setEditTagIndex(null);
-                  }}
-                />
-              )}
-            </TagContainer>
-          </TopContainer>
-
-          {/* 내용 */}
-          <BottomContainer>
-            <ContentText
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              maxLength={10000}
-              placeholder="내용을 입력해주세요"
-            />
-            <SubmitBtn>메모 등록</SubmitBtn>
-          </BottomContainer>
-        </form>
+        {/* 내용 */}
+        <BottomContainer>
+          <ContentText
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            maxLength={10000}
+            placeholder="내용을 입력해주세요"
+          />
+          <SubmitBtn type="submit" onClick={handleSubmit}>
+            메모 등록
+          </SubmitBtn>
+        </BottomContainer>
       </MemoContainer>
     </Container>
   );
