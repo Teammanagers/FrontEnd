@@ -1,11 +1,20 @@
+import { useState } from 'react';
 import styled from 'styled-components';
 import * as Dialog from '@radix-ui/react-dialog';
 import moment from 'moment';
 import ParticipantsList from './ParticipantsList';
-import { ModalProps } from '../../types/calendar';
+import { ModalProps, ScheduleInfoType } from '../../types/calendar';
 import ClosedBtn from '@assets/calendar/closed-btn.svg';
+import RemoveTagIcon from '@assets/calendar/remove-tag-icon.svg';
 
-const Modal = ({ date, setOpen, open }: ModalProps) => {
+const AddEventModal = ({ date, setOpen, open }: ModalProps) => {
+  const [scheduleInfo, setScheduleInfo] = useState<ScheduleInfoType>({
+    date: '',
+    title: '',
+    participants: [],
+    content: ''
+  });
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // const target = e.target as HTMLFormElement;
@@ -13,19 +22,31 @@ const Modal = ({ date, setOpen, open }: ModalProps) => {
     // const memo = (target[1] as HTMLTextAreaElement).value;
   };
 
-  const clickAddSchedule = () => {
+  // 모달 닫히면 내용 초기화
+  const handleClosed = () => {
     setOpen(false);
+    setScheduleInfo({
+      date: '',
+      title: '',
+      participants: [],
+      content: ''
+    });
   };
 
   return (
-    <DialogRoot open={open} onOpenChange={setOpen}>
+    <DialogRoot
+      open={open}
+      onOpenChange={(open) => {
+        open ? setOpen(true) : handleClosed();
+      }}
+    >
       <Dialog.Portal>
         <DialogOverlay />
         <Dialog.Title />
         <Dialog.Description />
         <DialogContent>
           <div className="header">
-            <Dialog.Close asChild>
+            <Dialog.Close asChild onClick={handleClosed}>
               <button className="closed-btn-container">
                 <StyledClosedBtn />
               </button>
@@ -43,8 +64,19 @@ const Modal = ({ date, setOpen, open }: ModalProps) => {
             />
             <hr />
             <div className="participants">
-              <span>참여자</span>
-              <ParticipantsList />
+              {scheduleInfo.participants.length > 0 || (
+                <span className="participants-index">참여자</span>
+              )}
+              <ul className="participants-tags">
+                {scheduleInfo.participants.length > 0 &&
+                  scheduleInfo.participants.map((item, index) => (
+                    <li className="participants-tag" key={index}>
+                      <span className="participants-name">{item}</span>
+                      <StyledRemoveTagIcon />
+                    </li>
+                  ))}
+              </ul>
+              <ParticipantsList setScheduleInfo={setScheduleInfo} />
             </div>
             <hr />
             <textarea
@@ -55,7 +87,7 @@ const Modal = ({ date, setOpen, open }: ModalProps) => {
             <button
               className="add-schedule-btn"
               type="submit"
-              onClick={clickAddSchedule}
+              onClick={handleClosed}
             >
               일정 추가하기
             </button>
@@ -66,7 +98,7 @@ const Modal = ({ date, setOpen, open }: ModalProps) => {
   );
 };
 
-export default Modal;
+export default AddEventModal;
 
 const DialogRoot = styled(Dialog.Root)``;
 
@@ -89,6 +121,11 @@ const DialogContent = styled(Dialog.Content)`
   border-radius: 6px;
   box-shadow: 1.52px 3.04px 9.12px 0 rgb(0, 0, 0, 0.08);
   background-color: #ffffff;
+
+  ul,
+  li {
+    all: unset;
+  }
 
   hr {
     width: 320px;
@@ -149,11 +186,33 @@ const DialogContent = styled(Dialog.Content)`
       height: 30px;
       margin-bottom: 5px;
 
-      span {
+      .participants-index {
+        transform: translateY(10%); //세로 가운데 정렬
         margin-right: 8px;
         font-size: 11px;
         font-weight: 500;
         color: #999999;
+      }
+
+      .participants-tags {
+        display: flex;
+
+        .participants-tag {
+          display: flex;
+          align-items: center;
+          height: 24px;
+          padding: 0 6px;
+          border-radius: 3px;
+          margin-right: 6px;
+          background-color: #f9fbff;
+
+          .participants-name {
+            margin-right: 5px;
+            font-size: 9px;
+            font-weight: 500;
+            color: #5c9eff;
+          }
+        }
       }
     }
 
@@ -209,5 +268,9 @@ const DialogContent = styled(Dialog.Content)`
 `;
 
 const StyledClosedBtn = styled(ClosedBtn)`
+  cursor: pointer;
+`;
+
+const StyledRemoveTagIcon = styled(RemoveTagIcon)`
   cursor: pointer;
 `;

@@ -3,13 +3,12 @@ import styled from 'styled-components';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 // import moment from 'moment';
-import Modal from './Modal';
+import AddEventModal from './AddEventModal';
 import { Value } from '../../types/calendar';
 import NextBtn from '@assets/calendar/next-btn.svg';
 import PrevBtn from '@assets/calendar/prev-btn.svg';
 
 const EventCalendar = () => {
-  const today = new Date();
   const [date, setDate] = useState<Value>(null);
   const [open, setOpen] = useState<boolean>(false);
   const [calendarHeight, setCalendarHeight] = useState<string>('520px');
@@ -47,7 +46,7 @@ const EventCalendar = () => {
       }
       // value가 Date, 배열 둘다 아닌 경우
       else {
-        return getWeeksInMonth(today);
+        return getWeeksInMonth(new Date());
       }
     };
 
@@ -83,7 +82,7 @@ const EventCalendar = () => {
         prevLabel={<PrevBtn />}
         minDetail="year" // 10년단위 년도 숨기기
       />
-      {date && <Modal date={date} setOpen={setOpen} open={open} />}
+      {date && <AddEventModal date={date} setOpen={setOpen} open={open} />}
     </StyledCalendarContainer>
   );
 };

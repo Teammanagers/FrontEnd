@@ -2,19 +2,27 @@ import * as Popover from '@radix-ui/react-popover';
 import styled from 'styled-components';
 import MockData from '@assets/calendar/mock-data.json';
 import AddParticipantsBtn from '@assets/calendar/add-participants.svg';
+import { ParticipantsListType } from 'src/types/calendar';
 
 interface MockDataType {
   participants: string[];
 }
-
 const mock = MockData as MockDataType;
 const Mock = mock.participants;
 
-const ParticipantsList = () => {
+const ParticipantsList = ({ setScheduleInfo }: ParticipantsListType) => {
+  const addParticipants = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    const target = e.target as HTMLElement;
+    setScheduleInfo((prev) => ({
+      ...prev,
+      participants: [...prev.participants, target.innerText]
+    }));
+  };
+
   return (
     <PopoverRoot>
       <Popover.Anchor asChild className="popover-anchor">
-        <Popover.Trigger asChild>
+        <Popover.Trigger asChild className="popover-trigger">
           <StyledAddParticipantsBtn />
         </Popover.Trigger>
       </Popover.Anchor>
@@ -23,7 +31,7 @@ const ParticipantsList = () => {
         <PopoverContent>
           <ul className="participants-list">
             {Mock.map((item: string, index) => (
-              <li className="participant" key={index}>
+              <li className="participant" key={index} onClick={addParticipants}>
                 {item}
               </li>
             ))}
@@ -36,10 +44,15 @@ const ParticipantsList = () => {
 
 export default ParticipantsList;
 
-const PopoverRoot = styled(Popover.Root)``;
+const PopoverRoot = styled(Popover.Root)`
+  .popover-trigger {
+    display: flex;
+    align-items: center;
+  }
+`;
 const PopoverContent = styled(Popover.Content)`
   position: relative;
-  top: -25px;
+  top: -23px;
   left: 17px;
 
   ul,
@@ -73,6 +86,9 @@ const PopoverContent = styled(Popover.Content)`
   }
   .participant:last-child {
     margin-bottom: 6px;
+  }
+  .participant:hover {
+    color: #5c9eff;
   }
 `;
 const StyledAddParticipantsBtn = styled(AddParticipantsBtn)`
