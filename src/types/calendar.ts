@@ -15,5 +15,6 @@ export interface ScheduleInfoType {
 }
 
 export interface ParticipantsListType {
+  scheduleInfo: ScheduleInfoType;
   setScheduleInfo: React.Dispatch<React.SetStateAction<ScheduleInfoType>>;
 }

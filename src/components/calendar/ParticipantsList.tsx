@@ -10,7 +10,10 @@ interface MockDataType {
 const mock = MockData as MockDataType;
 const Mock = mock.participants;
 
-const ParticipantsList = ({ setScheduleInfo }: ParticipantsListType) => {
+const ParticipantsList = ({
+  scheduleInfo,
+  setScheduleInfo
+}: ParticipantsListType) => {
   const addParticipants = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
     const target = e.target as HTMLElement;
     setScheduleInfo((prev) => ({
@@ -29,13 +32,17 @@ const ParticipantsList = ({ setScheduleInfo }: ParticipantsListType) => {
 
       <Popover.Portal>
         <PopoverContent>
-          <ul className="participants-list">
+          <div className="participants-list">
             {Mock.map((item: string, index) => (
-              <li className="participant" key={index} onClick={addParticipants}>
+              <Button
+                disabled={scheduleInfo.participants.includes(item)}
+                key={index}
+                onClick={addParticipants}
+              >
                 {item}
-              </li>
+              </Button>
             ))}
-          </ul>
+          </div>
         </PopoverContent>
       </Popover.Portal>
     </PopoverRoot>
@@ -56,8 +63,7 @@ const PopoverContent = styled(Popover.Content)`
   left: 17px;
 
   ul,
-  li,
-  button {
+  li {
     all: unset;
   }
 
@@ -72,25 +78,28 @@ const PopoverContent = styled(Popover.Content)`
     box-shadow: 0px 1.32px 11.84px 0 rgba(0, 0, 0, 0.1);
     background-color: white;
   }
+`;
 
-  .participant {
-    margin-bottom: 10px;
-    font-size: 10px;
-    font-weight: 500;
-    color: #1d1d1d;
-    cursor: pointer;
-  }
+const Button = styled.button`
+  margin-bottom: 10px;
+  font-size: 10px;
+  font-weight: 500;
+  background-color: white;
+  border: none;
+  color: ${(props) => (props.disabled ? '#999999' : '#1d1d1d')};
+  cursor: ${(props) => (props.disabled ? 'auto' : 'pointer')};
 
-  .participant:first-child {
+  &:first-child {
     margin-top: 6px;
   }
-  .participant:last-child {
+  &:last-child {
     margin-bottom: 6px;
   }
-  .participant:hover {
-    color: #5c9eff;
+  &:hover {
+    color: ${(props) => (props.disabled ? '#999999' : '#5c9eff')};
   }
 `;
+
 const StyledAddParticipantsBtn = styled(AddParticipantsBtn)`
   cursor: pointer;
 `;

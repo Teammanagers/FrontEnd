@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import * as Dialog from '@radix-ui/react-dialog';
 import moment from 'moment';
@@ -43,6 +43,10 @@ const AddEventModal = ({ date, setOpen, open }: ModalProps) => {
       content: ''
     });
   };
+
+  useEffect(() => {
+    scheduleInfo.participants.map((_, idx) => console.log(idx));
+  }, [scheduleInfo.participants]);
 
   return (
     <DialogRoot
@@ -92,7 +96,10 @@ const AddEventModal = ({ date, setOpen, open }: ModalProps) => {
                     </li>
                   ))}
               </ul>
-              <ParticipantsList setScheduleInfo={setScheduleInfo} />
+              <ParticipantsList
+                scheduleInfo={scheduleInfo}
+                setScheduleInfo={setScheduleInfo}
+              />
             </div>
             <hr />
             <textarea
