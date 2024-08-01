@@ -15,6 +15,17 @@ const AddEventModal = ({ date, setOpen, open }: ModalProps) => {
     content: ''
   });
 
+  // 참가자 태그 삭제
+  const removeParticipants = (index: number) => {
+    const newParticipants = scheduleInfo.participants.filter(
+      (_, idx) => idx !== index
+    );
+    setScheduleInfo((prev) => ({
+      ...prev,
+      participants: newParticipants
+    }));
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // const target = e.target as HTMLFormElement;
@@ -72,7 +83,12 @@ const AddEventModal = ({ date, setOpen, open }: ModalProps) => {
                   scheduleInfo.participants.map((item, index) => (
                     <li className="participants-tag" key={index}>
                       <span className="participants-name">{item}</span>
-                      <StyledRemoveTagIcon />
+                      <div
+                        className="remove-participant-icon"
+                        onClick={() => removeParticipants(index)}
+                      >
+                        <StyledRemoveTagIcon />
+                      </div>
                     </li>
                   ))}
               </ul>
@@ -211,6 +227,11 @@ const DialogContent = styled(Dialog.Content)`
             font-size: 9px;
             font-weight: 500;
             color: #5c9eff;
+          }
+
+          .remove-participant-icon {
+            display: flex;
+            align-items: center;
           }
         }
       }
