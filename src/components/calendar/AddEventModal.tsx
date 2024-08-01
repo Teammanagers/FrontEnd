@@ -15,6 +15,16 @@ const AddEventModal = ({ date, setOpen, open }: ModalProps) => {
     content: ''
   });
 
+  // 스케줄 내용 입력 받기
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target as HTMLInputElement;
+    setScheduleInfo((prev) => ({ ...prev, title: value }));
+  };
+  const handleTextarea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const { value } = e.target as HTMLTextAreaElement;
+    setScheduleInfo((prev) => ({ ...prev, content: value }));
+  };
+
   // 참가자 태그 삭제
   const removeParticipants = (index: number) => {
     const newParticipants = scheduleInfo.participants.filter(
@@ -26,12 +36,31 @@ const AddEventModal = ({ date, setOpen, open }: ModalProps) => {
     }));
   };
 
+  // 일정 추가하기
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // const target = e.target as HTMLFormElement;
-    // const title = (target[0] as HTMLInputElement).value;
-    // const memo = (target[1] as HTMLTextAreaElement).value;
+    const target = e.target as HTMLFormElement;
+    const eventTitle = (target[0] as HTMLInputElement).value;
+    const memo = (target[1] as HTMLTextAreaElement).value;
+
+    setScheduleInfo((prev) => ({
+      ...prev,
+      date: moment(date instanceof Date ? date : null).format(
+        'YYYY-MM-DD[T]HH:mm:ss.SSS'
+      ),
+      title: eventTitle,
+      participants: scheduleInfo.participants,
+      content: memo
+    }));
   };
+
+  useEffect(() => {
+    // 상태 업데이트 후 모달 닫기
+    if (scheduleInfo.date) {
+      console.log(scheduleInfo);
+      handleClosed();
+    }
+  }, [scheduleInfo]);
 
   // 모달 닫히면 내용 초기화
   const handleClosed = () => {
@@ -43,10 +72,6 @@ const AddEventModal = ({ date, setOpen, open }: ModalProps) => {
       content: ''
     });
   };
-
-  useEffect(() => {
-    scheduleInfo.participants.map((_, idx) => console.log(idx));
-  }, [scheduleInfo.participants]);
 
   return (
     <DialogRoot
@@ -75,7 +100,9 @@ const AddEventModal = ({ date, setOpen, open }: ModalProps) => {
             <input
               type="text"
               className="schedule-title"
+              name="schedule-title"
               placeholder="일정 제목"
+              onChange={handleInput}
             />
             <hr />
             <div className="participants">
@@ -106,14 +133,21 @@ const AddEventModal = ({ date, setOpen, open }: ModalProps) => {
               className="memo"
               name="memo"
               placeholder="메모"
+              onChange={handleTextarea}
             ></textarea>
-            <button
+            <AddScheduleBtn
               className="add-schedule-btn"
               type="submit"
-              onClick={handleClosed}
+              disabled={
+                scheduleInfo.title &&
+                scheduleInfo.participants.length > 0 &&
+                scheduleInfo.content
+                  ? false
+                  : true
+              }
             >
               일정 추가하기
-            </button>
+            </AddScheduleBtn>
           </form>
         </DialogContent>
       </Dialog.Portal>
@@ -261,17 +295,6 @@ const DialogContent = styled(Dialog.Content)`
       font-weight: 400;
       color: #999999;
     }
-
-    .add-schedule-btn {
-      height: 36px;
-      font-size: 12px;
-      font-weight: 700;
-      border: none;
-      border-radius: 3px;
-      color: white;
-      background-color: #5c9eff;
-      cursor: pointer;
-    }
   }
 
   @keyframes overlayShow {
@@ -300,5 +323,16 @@ const StyledClosedBtn = styled(ClosedBtn)`
 `;
 
 const StyledRemoveTagIcon = styled(RemoveTagIcon)`
+  cursor: pointer;
+`;
+
+const AddScheduleBtn = styled.button`
+  height: 36px;
+  font-size: 12px;
+  font-weight: 700;
+  border: none;
+  border-radius: 3px;
+  color: white;
+  background-color: ${(props) => (props.disabled ? '#CCCCCC' : '#5c9eff')};
   cursor: pointer;
 `;
