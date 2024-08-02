@@ -11,12 +11,28 @@ import { QuitModal } from '@components/mypage/QuitModal';
 
 export const ProfilePage = () => {
   const navigate = useNavigate();
-  const [isHidden, setIsHidden] = useState<boolean>(false);
+  const [isHiddenArray, setIsHiddenArray] = useState<boolean[]>(
+    Array(5).fill(false)
+  );
   const [isQuitModalOpen, setIsQuitModalOpen] = useState<boolean>(false);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [name, setName] = useState<string>('홍길동');
+  const [contact, setContact] = useState<string>('010-1234-1234');
+  const [major, setMajor] = useState<string>('한양대 ERICA 경영학부');
 
-  const toggleHidden = () => setIsHidden(!isHidden);
+  const toggleHidden = (index: number) => {
+    setIsHiddenArray((prevState) => {
+      const newState = [...prevState];
+      newState[index] = !newState[index];
+      return newState;
+    });
+  };
   const openQuitModal = () => setIsQuitModalOpen(true);
   const closeQuitModal = () => setIsQuitModalOpen(false);
+
+  const toggleEditMode = () => {
+    setIsEditing((prev) => !prev);
+  };
 
   return (
     <ProfileContainer>
@@ -32,7 +48,9 @@ export const ProfilePage = () => {
           <SetProfileBox>
             <ProfileHeader>
               프로필 설정
-              <ModifyButton>수정</ModifyButton>
+              <ModifyButton onClick={toggleEditMode}>
+                {isEditing ? '수정 완료' : '수정'}
+              </ModifyButton>
             </ProfileHeader>
             <ProfileDetail>
               <SetProfile>
@@ -41,14 +59,30 @@ export const ProfilePage = () => {
                     <AvatarImage />
                   </SetImage>
                   <SetInfo>
-                    {['name', 'contact', 'major'].map((placeholder, index) => (
-                      <SetField key={index}>
-                        <Input
-                          type="text"
-                          placeholder={`${placeholder}을 입력하세요`}
-                        />
-                      </SetField>
-                    ))}
+                    <SetField>
+                      <Input
+                        type="text"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        disabled={!isEditing}
+                      />
+                    </SetField>
+                    <SetField>
+                      <Input
+                        type="text"
+                        value={contact}
+                        onChange={(e) => setContact(e.target.value)}
+                        disabled={!isEditing}
+                      />
+                    </SetField>
+                    <SetField>
+                      <Input
+                        type="text"
+                        value={major}
+                        onChange={(e) => setMajor(e.target.value)}
+                        disabled={!isEditing}
+                      />
+                    </SetField>
                   </SetInfo>
                 </Profile>
                 <SetRole>
@@ -73,11 +107,14 @@ export const ProfilePage = () => {
             <CommentContainer>
               {[...Array(5)].map((_, index) => (
                 <Comment key={index}>
-                  <ToggleText isHidden={isHidden}>
+                  <ToggleText isHidden={isHiddenArray[index]}>
                     PPT를 잘 만들어요!
                   </ToggleText>
-                  <ToggleButton isHidden={isHidden} onClick={toggleHidden}>
-                    {isHidden ? '해제' : '숨기기'}
+                  <ToggleButton
+                    isHidden={isHiddenArray[index]}
+                    onClick={() => toggleHidden(index)}
+                  >
+                    {isHiddenArray[index] ? '해제' : '숨기기'}
                   </ToggleButton>
                 </Comment>
               ))}
@@ -223,8 +260,6 @@ const SetInfo = styled.div`
 `;
 
 const SetField = styled.div`
-  font-size: 15px;
-  font-weight: 500;
   padding: 8px 0;
   display: flex;
   align-items: center;
@@ -232,6 +267,8 @@ const SetField = styled.div`
 `;
 
 const Input = styled.input`
+  font-size: 15px;
+  font-weight: 500;
   width: 90%;
   height: 23px;
   border: none;
