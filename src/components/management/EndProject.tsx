@@ -1,8 +1,16 @@
 import styled from 'styled-components';
 import People from '@assets/management/people.svg';
 import End from '@assets/management/end-icon.svg';
+import { useState } from 'react';
+import { EndProjectModal } from '@components/management/EndProjectModal.tsx';
 
 export const EndProject = () => {
+  const [showModal, setShowModal] = useState<boolean>(false);
+
+  const openModal = () => {
+    setShowModal(true);
+  };
+
   return (
     <EndProjectContainer>
       <PeopleImg />
@@ -11,10 +19,11 @@ export const EndProject = () => {
         프로젝트 종료시, 그동안 고생한 팀원들에게 코멘트를 남길 수 있어요.
       </ContentText>
       <ContentText>이 프로젝트는 내 포트폴리오에 저장돼요. </ContentText>
-      <EndBtn>
+      <EndBtn onClick={openModal}>
         <EndIcon />
         <BtnText>프로젝트 종료</BtnText>
       </EndBtn>
+      {showModal && <EndProjectModal />}
     </EndProjectContainer>
   );
 };
