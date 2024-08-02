@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import People from '@assets/management/people.svg';
 import End from '@assets/management/end-icon.svg';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { EndProjectModal } from '@components/management/EndProjectModal.tsx';
 
 export const EndProject = () => {
@@ -10,6 +10,14 @@ export const EndProject = () => {
   const openModal = () => {
     setShowModal(true);
   };
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
+  useEffect(() => {
+    console.log(showModal);
+  }, [showModal]);
 
   return (
     <EndProjectContainer>
@@ -23,7 +31,7 @@ export const EndProject = () => {
         <EndIcon />
         <BtnText>프로젝트 종료</BtnText>
       </EndBtn>
-      {showModal && <EndProjectModal />}
+      {showModal && <EndProjectModal closeModal={closeModal} />}
     </EndProjectContainer>
   );
 };

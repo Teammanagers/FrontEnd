@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 
-export const EndProjectModal = () => {
+interface ModalStateProps {
+  closeModal: () => void;
+}
+
+export const EndProjectModal = ({ closeModal }: ModalStateProps) => {
   return (
     <ModalBackground>
       <ModalContainer>
@@ -12,7 +16,7 @@ export const EndProjectModal = () => {
         </ContentText>
         <BtnContainer>
           <EndBtn>종료하기</EndBtn>
-          <CancelBtn>취소</CancelBtn>
+          <CancelBtn onClick={closeModal}>취소</CancelBtn>
         </BtnContainer>
       </ModalContainer>
     </ModalBackground>
