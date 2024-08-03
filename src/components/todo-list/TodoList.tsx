@@ -16,12 +16,13 @@ const TodoList = () => {
 };
 
 const Container = styled.div`
+  box-sizing: border-box;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   row-gap: 36px;
   justify-items: center;
   width: 942px;
-  height: 426px;
+  height: 562px;
   padding: 31px 77px;
   overflow: auto;
   background-color: #ffffff;
