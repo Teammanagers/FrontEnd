@@ -287,6 +287,7 @@ const Container = styled.div`
         font-weight: 700;
         color: white;
         background-color: #5c9eff;
+        cursor: pointer;
       }
     }
 
