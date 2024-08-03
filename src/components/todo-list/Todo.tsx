@@ -10,58 +10,96 @@ interface TodoProps {
 }
 
 const Todo = ({ todo }: TodoProps) => {
+  const [newTodo, setNewTodo] = useState<string>(todo);
   const [checked, setChecked] = useState<boolean>(false);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
 
   const handleCheckedChange = () => {
     setChecked(!checked);
   };
 
+  // 수정 시작
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
+  // 수정 중
+  const handleEditInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewTodo(e.target.value);
+  };
+  // 수정 완료
+  const handleEditComplete = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsEditing(false);
+  };
+
   return (
     <>
-      <CheckboxWrapper>
-        <Checkbox.Root
-          className="checkbox-root"
-          checked={checked}
-          onCheckedChange={handleCheckedChange}
-        >
-          {/* 체크박스 아이콘 */}
-          <Checkbox.Indicator className="checkbox-indicator">
-            <CheckedIcon />
-          </Checkbox.Indicator>
-        </Checkbox.Root>
-        {/* 투두 내용 */}
-        <label className="todo-text">{todo}</label>
-      </CheckboxWrapper>
+      {isEditing || (
+        <TodoWrapper>
+          <Checkbox.Root
+            className="checkbox-root"
+            checked={checked}
+            onCheckedChange={handleCheckedChange}
+          >
+            {/* 체크박스 아이콘 */}
+            <Checkbox.Indicator className="checkbox-indicator">
+              <CheckedIcon />
+            </Checkbox.Indicator>
+          </Checkbox.Root>
+          {/* 투두 내용 */}
+          <label className="todo-text">{newTodo}</label>
+        </TodoWrapper>
+      )}
+
+      {/* 수정 */}
+      {isEditing && (
+        <Form onSubmit={handleEditComplete}>
+          <input
+            type="text"
+            value={newTodo}
+            className="edit-input"
+            onChange={handleEditInput}
+          />
+          <button type="submit" className="edit-button">
+            수정
+          </button>
+        </Form>
+      )}
 
       {/* 수정 및 삭제 메뉴 */}
-      <PopoverRoot>
-        <Popover.Anchor asChild className="popover-anchor">
-          <Popover.Trigger asChild>
-            <button className="todo-menu-icon">
-              <StyledTodoMenuIcon />
-            </button>
-          </Popover.Trigger>
-        </Popover.Anchor>
+      {isEditing || (
+        <PopoverRoot>
+          <Popover.Anchor asChild className="popover-anchor">
+            <Popover.Trigger asChild>
+              <button className="todo-menu-icon">
+                <StyledTodoMenuIcon />
+              </button>
+            </Popover.Trigger>
+          </Popover.Anchor>
 
-        <Popover.Portal>
-          <PopoverContent>
-            <button className="modify">수정</button>
-            <button className="delete">삭제</button>
-          </PopoverContent>
-        </Popover.Portal>
-      </PopoverRoot>
+          <Popover.Portal>
+            <PopoverContent>
+              <button className="edit" onClick={handleEditClick}>
+                수정
+              </button>
+              <button className="delete">삭제</button>
+            </PopoverContent>
+          </Popover.Portal>
+        </PopoverRoot>
+      )}
     </>
   );
 };
 
 export default Todo;
 
-const CheckboxWrapper = styled.div`
-  box-sizing: border-box;
+const TodoWrapper = styled.div`
   display: flex;
   align-items: center;
-  width: 318px;
+  min-width: 318px;
   height: 18px;
+  margin-right: 9px;
+  /* background-color: skyblue; */
 
   .checkbox-root {
     width: 16px;
@@ -90,6 +128,42 @@ const CheckboxWrapper = styled.div`
   }
 `;
 
+const Form = styled.form`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 364px;
+
+  .edit-input {
+    width: 306px;
+    height: 30px;
+    border-radius: 4px;
+    border: none;
+    outline: none;
+    padding-left: 9px;
+    margin-right: 9px;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 16px;
+    color: #1d1d1d;
+    background-color: #f0f0f0;
+  }
+
+  .edit-button {
+    width: 49px;
+    height: 25px;
+    border: 0.76px solid #5c9eff;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 15px;
+    text-align: center;
+    color: #5c9eff;
+    background-color: white;
+    cursor: pointer;
+  }
+`;
+
 const PopoverRoot = styled(Popover.Root)``;
 
 const PopoverContent = styled(Popover.Content)`
@@ -110,14 +184,14 @@ const PopoverContent = styled(Popover.Content)`
     all: unset;
   }
 
-  .modify,
+  .edit,
   .delete {
     font-size: 10px;
     font-weight: 400;
     cursor: pointer;
   }
 
-  .modify {
+  .edit {
     color: #1d1d1d;
     margin-bottom: 9px;
   }

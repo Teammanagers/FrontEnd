@@ -96,7 +96,7 @@ const Todos = ({ userInfo }: TodosProps) => {
               </div>
             </AccordionTrigger>
             <AccordionContent>
-              <ul>
+              <ul className="todo-list">
                 {/* 투두 리스트 */}
                 {todos
                   ? todos.map((todo, index) => {
@@ -251,7 +251,6 @@ const Container = styled.div`
     justify-content: center;
     width: 382px;
     height: auto;
-    background-color: skyblue;
     background-color: white;
 
     .add-todo-form {
@@ -308,13 +307,18 @@ const Container = styled.div`
       }
     }
 
+    .todo-list {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
     .todo {
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
       width: 382px;
       height: 30px;
-      padding: 0 18.24px;
       margin-bottom: 10px;
     }
   }
