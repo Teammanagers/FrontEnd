@@ -1,13 +1,13 @@
 import Styled from '../../components/calendar/layout/Layout';
 import EventCalendar from '@components/calendar/EventCalendar';
-import UpcomingEvents from '@components/calendar/UpcomingEvents';
+import UpcomingEventList from '@components/calendar/UpcomingEventList';
 
 export const CalendarPage = () => {
   return (
     <>
       <Styled.Layout>
         <EventCalendar />
-        <UpcomingEvents />
+        <UpcomingEventList />
       </Styled.Layout>
     </>
   );
