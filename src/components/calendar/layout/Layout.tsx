@@ -8,14 +8,6 @@ const Layout = styled.div`
   height: 100vh;
   padding: 100px 0 0 126px;
   background-color: #f9fbff;
-
-  .upcoming-schedule {
-    h2 {
-      margin: 0;
-      font-size: 18px;
-      font-weight: 700px;
-    }
-  }
 `;
 
 export default { Layout };

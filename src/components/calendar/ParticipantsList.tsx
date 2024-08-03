@@ -1,6 +1,6 @@
 import * as Popover from '@radix-ui/react-popover';
 import styled from 'styled-components';
-import MockData from '@assets/calendar/mock-data.json';
+import MockData from '@assets/calendar/participants-list.json';
 import AddParticipantsBtn from '@assets/calendar/add-participants.svg';
 import { ParticipantsListType } from 'src/types/calendar';
 

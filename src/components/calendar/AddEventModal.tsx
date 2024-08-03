@@ -57,7 +57,6 @@ const AddEventModal = ({ date, setOpen, open }: ModalProps) => {
   useEffect(() => {
     // 상태 업데이트 후 모달 닫기
     if (scheduleInfo.date) {
-      console.log(scheduleInfo);
       handleClosed();
     }
   }, [scheduleInfo]);
