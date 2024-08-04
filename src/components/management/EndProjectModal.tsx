@@ -1,10 +1,13 @@
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 interface ModalStateProps {
   closeModal: () => void;
 }
 
 export const EndProjectModal = ({ closeModal }: ModalStateProps) => {
+  const navigate = useNavigate();
+
   return (
     <ModalBackground>
       <ModalContainer>
@@ -15,7 +18,9 @@ export const EndProjectModal = ({ closeModal }: ModalStateProps) => {
           종료한 프로젝트는 마이페이지에서 다시 확인할 수 있습니다
         </ContentText>
         <BtnContainer>
-          <EndBtn>종료하기</EndBtn>
+          <EndBtn onClick={() => navigate(`/management/end/comment`)}>
+            종료하기
+          </EndBtn>
           <CancelBtn onClick={closeModal}>취소</CancelBtn>
         </BtnContainer>
       </ModalContainer>

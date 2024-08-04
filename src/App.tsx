@@ -25,7 +25,7 @@ const App = () => {
         <Route path="/calendar/:id" element={<ExtraCalendarPage />} />
         {/* management page */}
         <Route path="/management" element={<ManagementPage />} />
-        <Route path="/management/:id" element={<ExtraManagementPage />} />
+        <Route path="/management/*" element={<ExtraManagementPage />} />
         {/* memo page */}
         <Route path="/memo" element={<MemoPage />} />
         <Route path="/memo/:id" element={<ExtraMemoPage />} />
