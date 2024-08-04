@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import Add from '@assets/management/add-icon.svg';
 import DefaultProfileImg from '@assets/management/profile-img-default.svg';
+import Upload from '@assets/management/upload-icon.svg';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 
 export const TeamCode = () => {
@@ -13,6 +14,7 @@ export const TeamCode = () => {
       const imgUrl = URL.createObjectURL(file);
       setProfileImg(imgUrl);
     }
+    // 서버 API 연동시 추가 로직 필요
     console.log(file);
   };
 
@@ -27,13 +29,17 @@ export const TeamCode = () => {
 
   return (
     <TeamCodeContainer>
-      <ProfileImg src={profileImg} onClick={handleImgClick} />
-      <input
-        type="file"
-        ref={fileInputRef}
-        accept="image/jpeg, image/jpg, image/png"
-        onChange={handleImgChange}
-      />
+      <ProfileContainer>
+        <ProfileImg src={profileImg} onClick={handleImgClick} />
+        <UploadIcon />
+        <ImgUploadInput
+          type="file"
+          ref={fileInputRef}
+          accept="image/jpeg, image/jpg, image/png"
+          onChange={handleImgChange}
+        />
+      </ProfileContainer>
+
       <TextContainer>
         <TopContainer>
           <TitleBox>
@@ -74,32 +80,48 @@ const TeamCodeContainer = styled.div`
   //background: lightpink;
 `;
 
+const ProfileContainer = styled.div`
+  position: relative;
+  width: 163px;
+  height: 163px;
+  cursor: pointer;
+`;
+
 const ProfileImg = styled.img`
   width: 163px;
   height: 163px;
   border-radius: 38px;
   border: 1px solid ${({ theme }) => theme.colors.mainBlue};
-  cursor: pointer;
+`;
+
+const UploadIcon = styled(Upload)`
+  position: absolute;
+  bottom: -10px;
+  right: -10px;
+`;
+
+const ImgUploadInput = styled.input`
+  display: none;
 `;
 
 const TextContainer = styled.div`
   width: 748px;
   height: 144px;
-  //background: mediumvioletred;
+  background: mediumvioletred;
 `;
 
 const TopContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 23px;
-  //background: gold;
+  background: gold;
 `;
 
 const Box = styled.div`
   height: 65px;
   display: flex;
   flex-direction: column;
-  //background: lightgreen;
+  background: lightgreen;
   border-bottom: 0.76px solid ${({ theme }) => theme.colors.silver};
 `;
 
@@ -152,7 +174,7 @@ const BottomContainer = styled.div`
   width: 630px;
   height: 72px;
   margin-top: 7px;
-  //background: mediumpurple;
+  background: mediumpurple;
 `;
 
 const TagBox = styled(Box)`
