@@ -3,9 +3,11 @@ import Add from '@assets/management/add-icon.svg';
 import DefaultProfileImg from '@assets/management/profile-img-default.svg';
 import Upload from '@assets/management/upload-icon.svg';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import copy from 'copy-to-clipboard';
 
 export const TeamCode = () => {
   const [profileImg, setProfileImg] = useState<string>(DefaultProfileImg);
+  const [copyCode, setCopyCode] = useState<boolean>(true); // 기본값 false
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleImgChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -20,6 +22,12 @@ export const TeamCode = () => {
 
   const handleImgClick = () => {
     fileInputRef.current?.click();
+  };
+
+  const handleCopyCode = () => {
+    copy('X65VRG34'); // 추후에 생성된 팀코드 복사되도록 로직 변경 필요
+    setCopyCode(true);
+    setTimeout(() => setCopyCode(false), 2000);
   };
 
   useEffect(() => {
@@ -46,12 +54,16 @@ export const TeamCode = () => {
             <TitleText>Title</TitleText>
             <Title>UMC 6th 팀매니저</Title>
           </TitleBox>
-          <TeamCodeBox>
-            <TitleText>Team Code</TitleText>
-            <Code>X65VRG34</Code>
-          </TeamCodeBox>
-          {/* 팀 코드 복사하면 버튼 색깔 바뀜 */}
-          <CopyBtn>팀 코드복사</CopyBtn>
+          <CodeContainer>
+            <TeamCodeBox>
+              <TitleText>Team Code</TitleText>
+              <Code>X65VRG34</Code>
+            </TeamCodeBox>
+            {copyCode && <CopyText>팀 코드가 복사되었습니다.</CopyText>}
+          </CodeContainer>
+          <CopyBtn onClick={handleCopyCode} copied={copyCode}>
+            팀 코드복사
+          </CopyBtn>
         </TopContainer>
         <BottomContainer>
           <TagBox>
@@ -147,14 +159,21 @@ const Title = styled.p`
 
 const TeamCodeBox = styled(Box)`
   width: 257px;
+  background: burlywood;
 `;
 
-const CopyBtn = styled.button`
+const CodeContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const CopyBtn = styled.button<{ copied: boolean }>`
   width: 96px;
   height: 36px;
   border-radius: 4px;
   border: none;
-  background: ${({ theme }) => theme.colors.mainBlue};
+  background: ${({ theme, copied }) =>
+    copied ? theme.colors.subBlue : theme.colors.mainBlue};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -164,6 +183,13 @@ const CopyBtn = styled.button`
   font-size: 12px;
   font-weight: 700;
   cursor: pointer;
+`;
+
+const CopyText = styled.p`
+  margin: 0;
+  font-size: 12px;
+  font-weight: 500;
+  color: ${({ theme }) => theme.colors.mainBlue};
 `;
 
 const Code = styled(Title)`
