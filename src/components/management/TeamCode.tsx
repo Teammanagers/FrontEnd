@@ -1,8 +1,17 @@
 import styled from 'styled-components';
 import Add from '@assets/management/add-icon.svg';
+import Delete from '@assets/management/delete-icon.svg';
 import DefaultProfileImg from '@assets/management/profile-img-default.svg';
 import Upload from '@assets/management/upload-icon.svg';
-import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
+import {
+  ButtonHTMLAttributes,
+  ChangeEvent,
+  KeyboardEvent,
+  MouseEvent,
+  useEffect,
+  useRef,
+  useState
+} from 'react';
 import copy from 'copy-to-clipboard';
 
 export const TeamCode = () => {
@@ -59,6 +68,19 @@ export const TeamCode = () => {
   const handleEditTag = (index: number) => {
     setEditTagIndex(index);
     setNewTag(tags[index]);
+    setShowTagInput(true);
+  };
+
+  const handleDeleteTag = (e: MouseEvent, index: number) => {
+    e.stopPropagation();
+    if (index === -1) {
+      setShowTagInput(false);
+    } else {
+      setTags(tags.filter((_, i) => i !== index));
+    }
+    setEditTagIndex(null);
+    setNewTag('');
+    console.log('삭제 버튼 클릭');
   };
 
   useEffect(() => {
@@ -102,14 +124,18 @@ export const TeamCode = () => {
             <Tags>
               {tags.map((tag, index) => (
                 <TagContainer key={index} onClick={() => handleEditTag(index)}>
+                  {/* 태그 수정 */}
                   {editTagIndex === index ? (
-                    <TagInput
-                      value={newTag}
-                      onChange={(e) => setNewTag(e.target.value)}
-                      onKeyDown={handleTag}
-                      maxLength={5}
-                      autoFocus
-                    />
+                    <TagInputContainer>
+                      <TagInput
+                        value={newTag}
+                        onChange={(e) => setNewTag(e.target.value)}
+                        onKeyDown={handleTag}
+                        maxLength={5}
+                        autoFocus
+                      />
+                      <DeleteBtn onClick={(e) => handleDeleteTag(e, index)} />
+                    </TagInputContainer>
                   ) : (
                     <>
                       <span>{tag}</span>
@@ -118,13 +144,17 @@ export const TeamCode = () => {
                 </TagContainer>
               ))}
               {showTagInput && editTagIndex === null && (
-                <TagInput
-                  value={newTag}
-                  onChange={(e) => setNewTag(e.target.value)}
-                  onKeyDown={handleTag}
-                  maxLength={5}
-                  autoFocus
-                />
+                <TagInputContainer>
+                  {/* 태그... 생성 */}
+                  <TagInput
+                    value={newTag}
+                    onChange={(e) => setNewTag(e.target.value)}
+                    onKeyDown={handleTag}
+                    maxLength={5}
+                    autoFocus
+                  />
+                  <DeleteBtn onClick={(e) => handleDeleteTag(e, -1)} />
+                </TagInputContainer>
               )}
               {!showTagInput && editTagIndex === null && tags.length < 3 && (
                 <AddTagBtn
@@ -151,7 +181,6 @@ const TeamCodeContainer = styled.div`
   align-items: center;
   gap: 24px;
   margin-top: 52px;
-  //background: lightpink;
 `;
 
 const ProfileContainer = styled.div`
@@ -288,8 +317,21 @@ const TagContainer = styled.div`
 `;
 
 const TagInput = styled.input`
-  width: 50px;
+  width: 78px;
   height: 30px;
+`;
+
+const DeleteBtn = styled(Delete)<ButtonHTMLAttributes<HTMLButtonElement>>`
+  position: absolute;
+  right: 3px;
+  width: 23px;
+  height: 23px;
+`;
+
+const TagInputContainer = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
 `;
 
 const AddTagBtn = styled.button`
