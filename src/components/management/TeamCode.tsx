@@ -7,7 +7,7 @@ import copy from 'copy-to-clipboard';
 
 export const TeamCode = () => {
   const [profileImg, setProfileImg] = useState<string>(DefaultProfileImg);
-  const [copyCode, setCopyCode] = useState<boolean>(true); // 기본값 false
+  const [copyCode, setCopyCode] = useState<boolean>(false);
 
   // 태그 추가 기능 관련 훅, 나중에 커스텀훅으로 빼기?
   const [tags, setTags] = useState<string[]>([]);
@@ -90,12 +90,12 @@ export const TeamCode = () => {
               <TitleText>Team Code</TitleText>
               <Code>X65VRG34</Code>
             </TeamCodeBox>
-            {copyCode && <CopyText>팀 코드가 복사되었습니다.</CopyText>}
           </CodeContainer>
           <CopyBtn onClick={handleCopyCode} copied={copyCode}>
             팀 코드복사
           </CopyBtn>
         </TopContainer>
+        {copyCode && <CopyText>코드가 복사되었습니다.</CopyText>}
         <BottomContainer>
           <TagBox>
             <TitleText>Tag</TitleText>
@@ -181,21 +181,18 @@ const ImgUploadInput = styled.input`
 const TextContainer = styled.div`
   width: 748px;
   height: 144px;
-  background: mediumvioletred;
 `;
 
 const TopContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 23px;
-  background: gold;
 `;
 
 const Box = styled.div`
   height: 65px;
   display: flex;
   flex-direction: column;
-  background: lightgreen;
   border-bottom: 0.76px solid ${({ theme }) => theme.colors.silver};
 `;
 
@@ -221,7 +218,6 @@ const Title = styled.p`
 
 const TeamCodeBox = styled(Box)`
   width: 257px;
-  background: burlywood;
 `;
 
 const CodeContainer = styled.div`
@@ -248,7 +244,7 @@ const CopyBtn = styled.button<{ copied: boolean }>`
 `;
 
 const CopyText = styled.p`
-  margin: 0;
+  margin: 0 0 0 373px;
   font-size: 12px;
   font-weight: 500;
   color: ${({ theme }) => theme.colors.mainBlue};
@@ -262,7 +258,6 @@ const BottomContainer = styled.div`
   width: 630px;
   height: 72px;
   margin-top: 7px;
-  background: mediumpurple;
 `;
 
 const TagBox = styled(Box)`
@@ -276,7 +271,6 @@ const Tags = styled.div`
   align-items: center;
   margin-top: 3px;
   gap: 12px;
-  //background: forestgreen;
 `;
 
 const TagContainer = styled.div`
