@@ -2,12 +2,19 @@ import styled from 'styled-components';
 import Add from '@assets/management/add-icon.svg';
 import DefaultProfileImg from '@assets/management/profile-img-default.svg';
 import Upload from '@assets/management/upload-icon.svg';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
 import copy from 'copy-to-clipboard';
 
 export const TeamCode = () => {
   const [profileImg, setProfileImg] = useState<string>(DefaultProfileImg);
   const [copyCode, setCopyCode] = useState<boolean>(true); // 기본값 false
+
+  // 태그 추가 기능 관련 훅, 나중에 커스텀훅으로 빼기?
+  const [tags, setTags] = useState<string[]>([]);
+  const [showTagInput, setShowTagInput] = useState<boolean>(false);
+  const [newTag, setNewTag] = useState<string>('');
+  const [editTagIndex, setEditTagIndex] = useState<number | null>(null);
+
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const handleImgChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -28,6 +35,30 @@ export const TeamCode = () => {
     copy('X65VRG34'); // 추후에 생성된 팀코드 복사되도록 로직 변경 필요
     setCopyCode(true);
     setTimeout(() => setCopyCode(false), 2000);
+  };
+
+  const handleTag = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      if (newTag.trim() !== '') {
+        if (editTagIndex !== null) {
+          // 태그 수정
+          const updatedTags = [...tags];
+          updatedTags[editTagIndex] = newTag.trim();
+          setTags(updatedTags);
+          setEditTagIndex(null);
+        } else {
+          // 새 태그 추가
+          setTags([...tags, newTag.trim()]);
+        }
+        setNewTag('');
+        setShowTagInput(false);
+      }
+    }
+  };
+
+  const handleEditTag = (index: number) => {
+    setEditTagIndex(index);
+    setNewTag(tags[index]);
   };
 
   useEffect(() => {
@@ -69,11 +100,42 @@ export const TeamCode = () => {
           <TagBox>
             <TitleText>Tag</TitleText>
             <Tags>
-              <TagContainer>기획자</TagContainer>
-              <TagContainer>기획자</TagContainer>
-              <AddTagBtn>
-                <Add />
-              </AddTagBtn>
+              {tags.map((tag, index) => (
+                <TagContainer key={index} onClick={() => handleEditTag(index)}>
+                  {editTagIndex === index ? (
+                    <TagInput
+                      value={newTag}
+                      onChange={(e) => setNewTag(e.target.value)}
+                      onKeyDown={handleTag}
+                      maxLength={5}
+                      autoFocus
+                    />
+                  ) : (
+                    <>
+                      <span>{tag}</span>
+                    </>
+                  )}
+                </TagContainer>
+              ))}
+              {showTagInput && editTagIndex === null && (
+                <TagInput
+                  value={newTag}
+                  onChange={(e) => setNewTag(e.target.value)}
+                  onKeyDown={handleTag}
+                  maxLength={5}
+                  autoFocus
+                />
+              )}
+              {!showTagInput && editTagIndex === null && tags.length < 3 && (
+                <AddTagBtn
+                  onClick={() => {
+                    setShowTagInput(true);
+                    setEditTagIndex(null);
+                  }}
+                >
+                  <Add />
+                </AddTagBtn>
+              )}
             </Tags>
           </TagBox>
         </BottomContainer>
@@ -228,6 +290,12 @@ const TagContainer = styled.div`
   font-size: 13px;
   font-weight: 500;
   color: ${({ theme }) => theme.colors.mainBlue};
+  cursor: pointer;
+`;
+
+const TagInput = styled.input`
+  width: 50px;
+  height: 30px;
 `;
 
 const AddTagBtn = styled.button`
