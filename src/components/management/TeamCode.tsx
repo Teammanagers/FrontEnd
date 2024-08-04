@@ -1,21 +1,39 @@
 import styled from 'styled-components';
 import Add from '@assets/management/add-icon.svg';
 import DefaultProfileImg from '@assets/management/profile-img-default.svg';
-import { useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 
 export const TeamCode = () => {
   const [profileImg, setProfileImg] = useState<string>(DefaultProfileImg);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleImgChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files[0];
-    const imgUrl = URL.createObjectURL(file);
-    setProfileImg(imgUrl);
+  const handleImgChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const imgUrl = URL.createObjectURL(file);
+      setProfileImg(imgUrl);
+    }
+    console.log(file);
   };
+
+  const handleImgClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  useEffect(() => {
+    console.log('현재이미지:', profileImg);
+    console.log(fileInputRef);
+  }, [profileImg, fileInputRef]);
+
   return (
     <TeamCodeContainer>
-      {/* 사진 업로드 기능 필요 */}
-      <ProfileImg src={profileImg} />
-      <input type="file" onChange={handleImgChange} />
+      <ProfileImg src={profileImg} onClick={handleImgClick} />
+      <input
+        type="file"
+        ref={fileInputRef}
+        accept="image/jpeg, image/jpg, image/png"
+        onChange={handleImgChange}
+      />
       <TextContainer>
         <TopContainer>
           <TitleBox>
@@ -61,6 +79,7 @@ const ProfileImg = styled.img`
   height: 163px;
   border-radius: 38px;
   border: 1px solid ${({ theme }) => theme.colors.mainBlue};
+  cursor: pointer;
 `;
 
 const TextContainer = styled.div`
