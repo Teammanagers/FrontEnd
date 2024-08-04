@@ -229,7 +229,7 @@ const TitleBox = styled(Box)`
   width: 350px;
 `;
 
-const TitleText = styled.h1`
+export const TitleText = styled.h1`
   font-size: 15px;
   font-weight: 700;
   line-height: 22.5px;
