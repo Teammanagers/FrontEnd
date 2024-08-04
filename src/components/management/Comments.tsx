@@ -18,7 +18,7 @@ export const Comments = () => {
         <CommentInputBox />
       </CommentsList>
       <BtnContainer>
-        <RadomBtn>임의로 작성</RadomBtn>
+        <RandomBtn>임의로 작성</RandomBtn>
         <DoneBtn>작성 완료</DoneBtn>
       </BtnContainer>
     </Container>
@@ -62,7 +62,19 @@ const CommentsList = styled.div`
   height: 458px;
   gap: 19px;
   margin-top: 16px;
+
   overflow-y: scroll;
+  &::-webkit-scrollbar {
+    width: 9px;
+    height: 182px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: ${({ theme }) => theme.colors.lightGray};
+    border-radius: 76px;
+  }
+  &::-webkit-scrollbar-thumb:active {
+    background: ${({ theme }) => theme.colors.darkGray};
+  }
 `;
 
 const BtnContainer = styled.div`
@@ -84,7 +96,7 @@ const Btn = styled.button`
   cursor: pointer;
 `;
 
-const RadomBtn = styled(Btn)`
+const RandomBtn = styled(Btn)`
   background: white;
   border: 1px solid ${({ theme }) => theme.colors.mainBlue};
   color: ${({ theme }) => theme.colors.mainBlue};
