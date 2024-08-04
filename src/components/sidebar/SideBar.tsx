@@ -164,7 +164,6 @@ export const SideBar = () => {
           //   추후에 path 수정이 필요할 수 있음
           handleNavigate(`/management`);
         }}
-        selected={isActive(`/management`)}
         isHovered={hover}
       >
         <End />
