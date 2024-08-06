@@ -8,24 +8,19 @@ interface Memo {
 export const Memo = ({ memo }: Memo) => {
   const { title, tags, content } = memo;
 
-  // title 최대 20자까지만 보여주고 그 뒤는 ... 처리
-  const showedTitle: string =
-    title.length > 20 ? title.slice(0, 20) + '...' : title;
-
-  const showedContent: string =
-    content.length > 50 ? content.slice(0, 50) + '...' : content;
-
   return (
     <MemoContainer>
       <MemoTitleContainer>
-        <MemoTitle>{showedTitle}</MemoTitle>
+        <MemoTitle length={title.length}>{title}</MemoTitle>
       </MemoTitleContainer>
       <TagContainer>
         {tags.map((tag, id) => (
           <TagBox key={id}>{tag}</TagBox>
         ))}
       </TagContainer>
-      <Content>{showedContent}</Content>
+      <MemoContentContainer>
+        <Content length={content.length}>{content}</Content>
+      </MemoContentContainer>
     </MemoContainer>
   );
 };
@@ -47,13 +42,17 @@ const MemoTitleContainer = styled.div`
   align-items: center;
   width: 314px;
   height: 21px;
-  margin-top: 9px;
 `;
 
-const MemoTitle = styled.h1`
-  font-size: 13px;
+const MemoTitle = styled.h1<{ length: number }>`
+  font-size: 14px;
   font-weight: 500;
-  line-height: 20px;
+  line-height: 21px;
+  color: ${({ theme }) => theme.colors.black};
+  white-space: nowrap;
+  max-width: ${({ length }) => (length > 20 ? `{length}ch` : length)};
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const TagContainer = styled.div`
@@ -79,11 +78,19 @@ const TagBox = styled.div`
   line-height: 14px;
 `;
 
-const Content = styled.div`
+const MemoContentContainer = styled.div`
   width: 314px;
   height: 115px;
+`;
+
+const Content = styled.p<{ length: number }>`
   font-size: 10px;
   line-height: 15px;
   font-weight: 400;
   color: ${(props) => props.theme.colors.black};
+  margin: 0;
+  white-space: nowrap;
+  max-width: ${({ length }) => (length > 50 ? `{length}ch` : length)};
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
