@@ -1,10 +1,17 @@
 import styled from 'styled-components';
 import AddMemoIcon from '@assets/memo/add-memo.svg';
 import PlusIcon from '@assets/memo/plus.svg';
+import { useNavigate } from 'react-router-dom';
 
 export const AddMemoSmall = () => {
+  const navigate = useNavigate();
+
   return (
-    <MemoContainer>
+    <MemoContainer
+      onClick={() => {
+        navigate(`/memo/write`);
+      }}
+    >
       <AddMemo />
       <MemoTextContainer>
         <MemoText>메모 추가하기</MemoText>
