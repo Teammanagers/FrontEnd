@@ -12,21 +12,26 @@ const generateTimeOptions = (): string[] => {
   return options;
 };
 
-interface TimeSlot {
+export interface TimeSlot {
   start: string;
   end: string;
 }
 
-export const TimeSelector = () => {
-  const [times, setTimes] = useState<TimeSlot[]>([]);
-  const [showDropdown, setShowDropdown] = useState<boolean[]>([]);
+interface TimeSelectorProps {
+  day: string;
+  onChange: (day: string, times: TimeSlot[]) => void;
+}
 
+export const TimeSelector = ({ day, onChange }: TimeSelectorProps) => {
+  const [times, setTimes] = useState<TimeSlot[]>([]);
   const timeOptions = generateTimeOptions();
 
   const handleAddTime = () => {
     if (times.length < 3) {
-      setTimes([...times, { start: '00:00', end: '00:00' }]);
-      setShowDropdown([...showDropdown, false]);
+      const newTimes = [...times, { start: '00:00', end: '00:00' }];
+      setTimes(newTimes);
+      // setShowDropdown([...showDropdown, false]);
+      onChange(day, newTimes);
     }
   };
 
@@ -36,14 +41,16 @@ export const TimeSelector = () => {
     value: string
   ) => {
     const newTimes = times.map((time, i) =>
+      // 변경할 시간의 index와 현재반복중인 시간의 i 비교 -> 일치할 때 특정 시간 슬롯 업데이트
       i === index ? { ...time, [type]: value } : time
     );
     setTimes(newTimes);
+    onChange(day, newTimes);
   };
 
   return (
     <DayContainer>
-      <DayText>Monday</DayText>
+      <DayText>{day}</DayText>
       <TimeContainer>
         {times.map((time, index) => (
           <TimeSelectorContainer key={index}>
@@ -81,7 +88,7 @@ const DayContainer = styled.div`
   height: 28px;
   display: flex;
   align-items: center;
-  background: greenyellow;
+  //background: greenyellow;
 `;
 
 const DayText = styled.p`
