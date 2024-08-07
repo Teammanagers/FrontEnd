@@ -1,10 +1,16 @@
 import AddMemo from '@assets/memo/add-memo.svg';
 import Plus from '@assets/memo/plus.svg';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 export const AddMemoLarge = () => {
+  const navigate = useNavigate();
   return (
-    <MemoContainer>
+    <MemoContainer
+      onClick={() => {
+        navigate(`/memo/write`);
+      }}
+    >
       <AddMemo />
       <MemoTextContainer>
         <MemoText>화면을 클릭하여 팀과 공유할 메모를 남길 수 있습니다</MemoText>

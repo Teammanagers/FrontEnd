@@ -1,25 +1,25 @@
 import styled from 'styled-components';
-// import { AddMemoLarge } from '@components/memo/AddMemoLarge.tsx';
-// import { WriteMemo } from '@components/memo/WriteMemo.tsx';
+import { AddMemoLarge } from '@components/memo/AddMemoLarge.tsx';
 import { MemoList } from '@components/memo/MemoList.tsx';
-// import { AddMemoSmall } from '@components/memo/AddMemoSmall.tsx';
-// import { Memo } from '@components/memo/Memo.tsx';
+import dummyData from '@assets/memo/dummy-data.json';
+import { useEffect, useState } from 'react';
+
+export interface MemoProps {
+  id: number;
+  title: string;
+  tags: string[];
+  content: string;
+}
 
 export const MemoPage = () => {
-  return (
-    <Container>
-      {/* 메모가 하나도 없으면 */}
-      {/*<AddMemoLarge />*/}
+  const [hasMemo, setHasMemo] = useState<boolean>(false);
 
-      {/*  메모가 하나라도 존재하면  */}
-      {/*<AddMemoSmall />*/}
-      {/*<Memo />*/}
-      <MemoList />
+  // 메모가 있는지 확인
+  useEffect(() => {
+    setHasMemo((dummyData as MemoProps[]).length > 0);
+  }, []);
 
-      {/* 메모 작성 */}
-      {/*<WriteMemo />*/}
-    </Container>
-  );
+  return <Container>{hasMemo ? <MemoList /> : <AddMemoLarge />}</Container>;
 };
 
 const Container = styled.div`
@@ -29,5 +29,4 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  //gap: 24px;
 `;
