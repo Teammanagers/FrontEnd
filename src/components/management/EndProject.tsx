@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import People from '@assets/management/people.svg';
 import End from '@assets/management/end-icon.svg';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { EndProjectModal } from '@components/management/EndProjectModal.tsx';
 
 export const EndProject = () => {
@@ -15,10 +15,6 @@ export const EndProject = () => {
     setShowModal(false);
   };
 
-  useEffect(() => {
-    console.log(showModal);
-  }, [showModal]);
-
   return (
     <EndProjectContainer>
       <PeopleImg />
@@ -26,7 +22,7 @@ export const EndProject = () => {
       <ContentText>
         프로젝트 종료시, 그동안 고생한 팀원들에게 코멘트를 남길 수 있어요.
       </ContentText>
-      <ContentText>이 프로젝트는 내 포트폴리오에 저장돼요. </ContentText>
+      <ContentText>이 프로젝트는 내 포트폴리오에 저장돼요.</ContentText>
       <EndBtn onClick={openModal}>
         <EndIcon />
         <BtnText>프로젝트 종료</BtnText>
