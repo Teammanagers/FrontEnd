@@ -46,7 +46,12 @@ export const MyPage = () => {
               프로필 수정
               <MoveIcon />
             </MenuItem>
-            <MenuItem id="portfolio">
+            <MenuItem
+              id="portfolio"
+              onClick={() => {
+                handleNavigate(`/mypage/portfolio`);
+              }}
+            >
               <Portfolio />
               포트폴리오
               <MoveIcon />
