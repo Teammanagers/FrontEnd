@@ -8,7 +8,7 @@ import {
   ChangeEvent,
   KeyboardEvent,
   MouseEvent,
-  useEffect,
+  // useEffect,
   useRef,
   useState
 } from 'react';
@@ -83,10 +83,10 @@ export const TeamCode = () => {
     console.log('삭제 버튼 클릭');
   };
 
-  useEffect(() => {
-    console.log('현재이미지:', profileImg);
-    console.log(fileInputRef);
-  }, [profileImg, fileInputRef]);
+  // useEffect(() => {
+  //   console.log('현재이미지:', profileImg);
+  //   console.log(fileInputRef);
+  // }, [profileImg, fileInputRef]);
 
   return (
     <TeamCodeContainer>

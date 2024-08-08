@@ -1,16 +1,12 @@
 import styled from 'styled-components';
-import { TitleText } from '@components/management/TeamCode.tsx';
-import { Member } from '@components/management/Member.tsx';
+import { TitleText } from '@components/management/team-code/TeamCode.tsx';
+import { Member } from '@components/management/member/Member.tsx';
 
 export const Members = () => {
   return (
     <MembersContainer>
       <TitleText>Member</TitleText>
       <MemberContainer>
-        <Member />
-        <Member />
-        <Member />
-        <Member />
         <Member />
       </MemberContainer>
     </MembersContainer>
@@ -23,6 +19,7 @@ const MembersContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 22px;
+  background: lightgreen;
 `;
 
 const MemberContainer = styled.div`

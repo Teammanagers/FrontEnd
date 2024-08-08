@@ -1,7 +1,7 @@
 import {
   TimeSelector,
   TimeSlot
-} from '@components/management/TimeSelector.tsx';
+} from '@components/management/schedule/TimeSelector.tsx';
 import Reset from '@assets/management/reset.svg';
 import Submit from '@assets/management/submit.svg';
 import styled from 'styled-components';
@@ -21,7 +21,10 @@ export const AddSchedule = () => {
     setWeeklyTimes((prev) => ({ ...prev, [day]: times }));
   };
 
-  console.log(weeklyTimes);
+  const handleSubmit = () => {
+    // 서버에 요청 보내는 로직 추가해야함
+    console.log(weeklyTimes);
+  };
 
   return (
     <Container>
@@ -41,7 +44,7 @@ export const AddSchedule = () => {
         </ResetBtn>
         <SubmitBtn>
           <Submit />
-          <SubmitBtnText>등록</SubmitBtnText>
+          <SubmitBtnText onClick={handleSubmit}>등록</SubmitBtnText>
         </SubmitBtn>
       </ButtonContainer>
     </Container>

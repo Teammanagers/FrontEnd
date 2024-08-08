@@ -91,7 +91,7 @@ const DayContainer = styled.div`
   //background: greenyellow;
 `;
 
-const DayText = styled.p`
+export const DayText = styled.p`
   width: 70px;
   font-size: 13px;
   font-weight: 500;
