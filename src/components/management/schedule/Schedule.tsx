@@ -60,13 +60,14 @@ export const Schedule = () => {
               </Person>
             );
           })}
-          <AddBtnContainer ref={addBtnRef} onClick={handleAddBtnClick}>
-            <AddBtn />
-          </AddBtnContainer>
+          {selectedPeople.length < 10 && (
+            <AddBtnContainer ref={addBtnRef} onClick={handleAddBtnClick}>
+              <AddBtn />
+            </AddBtnContainer>
+          )}
           {isOpened && (
             <DropDownContainer
               style={{
-                position: 'absolute',
                 top: `${dropDownPosition.top}px`,
                 left: `${dropDownPosition.left}px`
               }}
