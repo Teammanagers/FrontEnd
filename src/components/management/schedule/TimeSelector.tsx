@@ -45,7 +45,7 @@ export const TimeSelector = ({
     value: string
   ) => {
     const newTimes = times.map((time, i) =>
-      // 변경할 시간의 index와 현재반복중인 시간의 i 비교 -> 일치할 때 특정 시간 슬롯 업데이트
+      // 변경할 시간의 index와 현재 반복 중인 시간의 i 비교 -> 일치할 때 특정 시간 슬롯 업데이트
       i === index ? { ...time, [type]: value } : time
     );
     setTimes(newTimes);
@@ -96,7 +96,6 @@ const DayContainer = styled.div`
   height: 28px;
   display: flex;
   align-items: center;
-  //background: greenyellow;
 `;
 
 const DayText = styled.p`

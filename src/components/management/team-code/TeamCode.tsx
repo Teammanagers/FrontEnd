@@ -47,11 +47,6 @@ export const TeamCode = () => {
     setTimeout(() => setCopyCode(false), 2000);
   };
 
-  // useEffect(() => {
-  //   console.log('현재이미지:', profileImg);
-  //   console.log(fileInputRef);
-  // }, [profileImg, fileInputRef]);
-
   return (
     <TeamCodeContainer>
       <ProfileContainer>
@@ -113,7 +108,7 @@ export const TeamCode = () => {
               ))}
               {showTagInput && editTagIndex === null && (
                 <TagInputContainer>
-                  {/* 태그... 생성 */}
+                  {/* 태그 생성 */}
                   <TagInput
                     value={newTag}
                     onChange={(e) => setNewTag(e.target.value)}

@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import { useState } from 'react';
 
 interface DayTimeSlots {
-  // 요일: 값
+  // 요일: 값(TimeSlot[] 형태)
   [key: string]: TimeSlot[];
 }
 

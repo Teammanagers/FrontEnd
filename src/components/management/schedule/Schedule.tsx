@@ -41,8 +41,6 @@ export const Schedule = ({ onAddSchedule }: ScheduleProps) => {
       const position = addBtnRef.current.getBoundingClientRect(); // top, left 값을 가져옴
       setDropDownPosition({ top: position.top, left: position.left });
     }
-    console.log(addBtnRef);
-    console.log(dropDownPosition);
   }, [isOpened, selectedPeople]);
 
   return (
