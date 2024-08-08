@@ -91,7 +91,7 @@ const DayContainer = styled.div`
   //background: greenyellow;
 `;
 
-export const DayText = styled.p`
+const DayText = styled.p`
   width: 70px;
   font-size: 13px;
   font-weight: 500;
@@ -124,7 +124,7 @@ const TimeDropDown = styled.select`
   font-size: 14px;
 `;
 
-const SwungDash = styled.span`
+export const SwungDash = styled.span`
   font-size: 14px;
   color: ${({ theme }) => theme.colors.black};
 `;
