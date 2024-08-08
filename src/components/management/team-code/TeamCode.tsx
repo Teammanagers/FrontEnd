@@ -3,15 +3,7 @@ import Add from '@assets/management/add-icon.svg';
 import Delete from '@assets/management/delete-icon.svg';
 import DefaultProfileImg from '@assets/management/profile-img-default.svg';
 import Upload from '@assets/management/upload-icon.svg';
-import {
-  ButtonHTMLAttributes,
-  ChangeEvent,
-  KeyboardEvent,
-  MouseEvent,
-  // useEffect,
-  useRef,
-  useState
-} from 'react';
+import { ButtonHTMLAttributes, ChangeEvent, useRef, useState } from 'react';
 import copy from 'copy-to-clipboard';
 import { useTags } from '@hooks/useTags.ts';
 
@@ -278,7 +270,7 @@ const Tags = styled.div`
   gap: 12px;
 `;
 
-const TagContainer = styled.div`
+export const TagContainer = styled.div`
   width: 58px;
   height: 30px;
   border-radius: 5px;
@@ -292,19 +284,21 @@ const TagContainer = styled.div`
   cursor: pointer;
 `;
 
-const TagInput = styled.input`
+export const TagInput = styled.input`
   width: 78px;
   height: 30px;
 `;
 
-const DeleteBtn = styled(Delete)<ButtonHTMLAttributes<HTMLButtonElement>>`
+export const DeleteBtn = styled(Delete)<
+  ButtonHTMLAttributes<HTMLButtonElement>
+>`
   position: absolute;
   right: 3px;
   width: 23px;
   height: 23px;
 `;
 
-const TagInputContainer = styled.div`
+export const TagInputContainer = styled.div`
   position: relative;
   display: flex;
   align-items: center;

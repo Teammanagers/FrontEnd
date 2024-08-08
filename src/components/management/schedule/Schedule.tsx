@@ -87,14 +87,12 @@ const Container = styled.div`
   justify-content: space-between;
   width: 934px;
   margin-top: 17px;
-  background: lightpink;
 `;
 
 const ScheduleContainer = styled.div`
   height: 57px;
   display: flex;
   flex-direction: column;
-  background: lightcoral;
 `;
 
 const PeopleContainer = styled.div`
@@ -103,7 +101,6 @@ const PeopleContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
-  background: mediumpurple;
 `;
 
 const ContentText = styled.p`
@@ -134,7 +131,6 @@ const Name = styled.span`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  //background: forestgreen;
 `;
 
 const DeleteBtn = styled(Delete)<ButtonHTMLAttributes<HTMLButtonElement>>`
