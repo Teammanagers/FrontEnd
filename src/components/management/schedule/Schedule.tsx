@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import Add from '@assets/management/add-button.svg';
 import Delete from '@assets/management/delete-icon.svg';
 import { TitleText } from '@components/management/team-code/TeamCode.tsx';
-import { ButtonHTMLAttributes, useState } from 'react';
+import { ButtonHTMLAttributes, useEffect, useRef, useState } from 'react';
 import {
   people,
   PeopleDropDown
@@ -11,6 +11,11 @@ import {
 export const Schedule = () => {
   const [isOpened, setIsOpened] = useState<boolean>(false);
   const [selectedPeople, setSelectedPeople] = useState<string[]>([]);
+  const [dropDownPosition, setDropDownPosition] = useState<{
+    top: number;
+    left: number;
+  }>({ top: 0, left: 0 });
+  const addBtnRef = useRef<HTMLDivElement>(null);
 
   const handleAddPerson = (personId: string) => {
     if (!selectedPeople.includes(personId)) {
@@ -26,6 +31,15 @@ export const Schedule = () => {
   const handleDeleteBtnClick = (personId: string) => {
     setSelectedPeople(selectedPeople.filter((id) => id !== personId));
   };
+
+  useEffect(() => {
+    if (isOpened && addBtnRef.current) {
+      const position = addBtnRef.current.getBoundingClientRect(); // top, left 값을 가져옴
+      setDropDownPosition({ top: position.top, left: position.left });
+    }
+    console.log(addBtnRef);
+    console.log(dropDownPosition);
+  }, [isOpened, selectedPeople]);
 
   return (
     <Container>
@@ -46,8 +60,20 @@ export const Schedule = () => {
               </Person>
             );
           })}
-          <AddBtn onClick={handleAddBtnClick} />
-          {isOpened && <PeopleDropDown onAddPerson={handleAddPerson} />}
+          <AddBtnContainer ref={addBtnRef} onClick={handleAddBtnClick}>
+            <AddBtn />
+          </AddBtnContainer>
+          {isOpened && (
+            <DropDownContainer
+              style={{
+                position: 'absolute',
+                top: `${dropDownPosition.top}px`,
+                left: `${dropDownPosition.left}px`
+              }}
+            >
+              <PeopleDropDown onAddPerson={handleAddPerson} />
+            </DropDownContainer>
+          )}
         </PeopleContainer>
       </ScheduleContainer>
       <SubmitBtn>내 스케줄 등록</SubmitBtn>
@@ -115,8 +141,18 @@ const DeleteBtn = styled(Delete)<ButtonHTMLAttributes<HTMLButtonElement>>`
   cursor: pointer;
 `;
 
+const AddBtnContainer = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+`;
+
 const AddBtn = styled(Add)<ButtonHTMLAttributes<HTMLButtonElement>>`
   cursor: pointer;
+`;
+
+const DropDownContainer = styled.div`
+  position: absolute;
 `;
 
 const SubmitBtn = styled.button`
