@@ -14,10 +14,10 @@ interface UpcomingEventProps {
 }
 
 const UpcomingEvent = ({ event }: UpcomingEventProps) => {
-  const [alarm, setAlarm] = useState<boolean>(false);
+  const [isAlarm, setIsAlarm] = useState<boolean>(false);
 
-  const handleAlarm = () => {
-    setAlarm(!alarm);
+  const handleSetAlarm = () => {
+    setIsAlarm(!isAlarm);
   };
 
   return (
@@ -30,13 +30,13 @@ const UpcomingEvent = ({ event }: UpcomingEventProps) => {
       </div>
 
       <button
-        className={alarm ? 'alarm-sent' : 'alarm-active'}
-        onClick={handleAlarm}
+        className={isAlarm ? 'alarm-sent' : 'alarm-active'}
+        onClick={handleSetAlarm}
       >
         <div className="remind-alert-icon">
           <RemindAlertIcon />
         </div>
-        <span>{alarm ? '알림 설정 완료' : '리마인드 알림'}</span>
+        <span>{isAlarm ? '알림 설정 완료' : '리마인드 알림'}</span>
       </button>
     </UpcomingEventWrapper>
   );

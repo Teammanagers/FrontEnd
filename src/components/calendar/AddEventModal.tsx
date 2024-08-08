@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import * as Dialog from '@radix-ui/react-dialog';
 import moment from 'moment';
@@ -54,14 +54,7 @@ const AddEventModal = ({ date, setOpen, open }: ModalProps) => {
     }));
   };
 
-  useEffect(() => {
-    // 상태 업데이트 후 모달 닫기
-    if (scheduleInfo.date) {
-      handleClosed();
-    }
-  }, [scheduleInfo]);
-
-  // 모달 닫히면 내용 초기화
+  // 상태 업데이트 후 모달 닫기
   const handleClosed = () => {
     setOpen(false);
     setScheduleInfo({
@@ -73,84 +66,90 @@ const AddEventModal = ({ date, setOpen, open }: ModalProps) => {
   };
 
   return (
-    <DialogRoot
-      open={open}
-      onOpenChange={(open) => {
-        open ? setOpen(true) : handleClosed();
-      }}
-    >
-      <Dialog.Portal>
-        <DialogOverlay />
-        <Dialog.Title />
-        <Dialog.Description />
-        <DialogContent>
-          <div className="header">
-            <Dialog.Close asChild onClick={handleClosed}>
-              <button className="closed-btn-container">
-                <StyledClosedBtn />
-              </button>
-            </Dialog.Close>
-            <span className="date">
-              {moment(date instanceof Date ? date : null).format('YYYY.MM.DD')}
-            </span>
-          </div>
-          <hr />
-          <form onSubmit={handleSubmit}>
-            <input
-              type="text"
-              className="schedule-title"
-              name="schedule-title"
-              placeholder="일정 제목"
-              onChange={handleInput}
-            />
-            <hr />
-            <div className="participants">
-              {scheduleInfo.participants.length > 0 || (
-                <span className="participants-index">참여자</span>
-              )}
-              <ul className="participants-tags">
-                {scheduleInfo.participants.length > 0 &&
-                  scheduleInfo.participants.map((item, index) => (
-                    <li className="participants-tag" key={index}>
-                      <span className="participants-name">{item}</span>
-                      <div
-                        className="remove-participant-icon"
-                        onClick={() => removeParticipants(index)}
-                      >
-                        <StyledRemoveTagIcon />
-                      </div>
-                    </li>
-                  ))}
-              </ul>
-              <ParticipantsList
-                scheduleInfo={scheduleInfo}
-                setScheduleInfo={setScheduleInfo}
-              />
-            </div>
-            <hr />
-            <textarea
-              className="memo"
-              name="memo"
-              placeholder="메모"
-              onChange={handleTextarea}
-            ></textarea>
-            <AddScheduleBtn
-              className="add-schedule-btn"
-              type="submit"
-              disabled={
-                scheduleInfo.title &&
-                scheduleInfo.participants.length > 0 &&
-                scheduleInfo.content
-                  ? false
-                  : true
-              }
-            >
-              일정 추가하기
-            </AddScheduleBtn>
-          </form>
-        </DialogContent>
-      </Dialog.Portal>
-    </DialogRoot>
+    <>
+      {open && (
+        <DialogRoot
+          open={open}
+          onOpenChange={(open) => {
+            open ? setOpen(true) : handleClosed();
+          }}
+        >
+          <Dialog.Portal>
+            <DialogOverlay />
+            <Dialog.Title />
+            <Dialog.Description />
+            <DialogContent>
+              <div className="header">
+                <Dialog.Close asChild onClick={handleClosed}>
+                  <button className="closed-btn-container">
+                    <StyledClosedBtn />
+                  </button>
+                </Dialog.Close>
+                <span className="date">
+                  {moment(date instanceof Date ? date : null).format(
+                    'YYYY.MM.DD'
+                  )}
+                </span>
+              </div>
+              <hr />
+              <form onSubmit={handleSubmit}>
+                <input
+                  type="text"
+                  className="schedule-title"
+                  name="schedule-title"
+                  placeholder="일정 제목"
+                  onChange={handleInput}
+                />
+                <hr />
+                <div className="participants">
+                  {scheduleInfo.participants.length > 0 || (
+                    <span className="participants-index">참여자</span>
+                  )}
+                  <ul className="participants-tags">
+                    {scheduleInfo.participants.length > 0 &&
+                      scheduleInfo.participants.map((item, index) => (
+                        <li className="participants-tag" key={index}>
+                          <span className="participants-name">{item}</span>
+                          <div
+                            className="remove-participant-icon"
+                            onClick={() => removeParticipants(index)}
+                          >
+                            <StyledRemoveTagIcon />
+                          </div>
+                        </li>
+                      ))}
+                  </ul>
+                  <ParticipantsList
+                    scheduleInfo={scheduleInfo}
+                    setScheduleInfo={setScheduleInfo}
+                  />
+                </div>
+                <hr />
+                <textarea
+                  className="memo"
+                  name="memo"
+                  placeholder="메모"
+                  onChange={handleTextarea}
+                ></textarea>
+                <AddScheduleBtn
+                  className="add-schedule-btn"
+                  type="submit"
+                  disabled={
+                    scheduleInfo.title &&
+                    scheduleInfo.participants.length > 0 &&
+                    scheduleInfo.content
+                      ? false
+                      : true
+                  }
+                >
+                  일정 추가하기
+                </AddScheduleBtn>
+              </form>
+            </DialogContent>
+          </Dialog.Portal>
+        </DialogRoot>
+      )}
+    </>
   );
 };
 
