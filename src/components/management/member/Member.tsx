@@ -1,17 +1,66 @@
 import styled from 'styled-components';
 import DefaultProfileImg from '@assets/management/profile-img-default.svg';
 import Add from '@assets/management/add-icon.svg';
+import { useTags } from '@hooks/useTags.ts';
+import {
+  TagInputContainer,
+  DeleteBtn
+} from '@components/management/team-code/TeamCode.tsx';
 
 export const Member = () => {
+  const {
+    tags,
+    showTagInput,
+    newTag,
+    editTagIndex,
+    handleAddTag,
+    handleEditTag,
+    startEditingTag,
+    handleDeleteTag,
+    setShowTagInput,
+    setNewTag
+  } = useTags();
+
   return (
     <MemberContainer>
       <ProfileImg />
       <NameContainer>
         <NameText>이름</NameText>
-        <TagBox>기획자</TagBox>
-        <AddBtn>
-          <AddIcon />
-        </AddBtn>
+        {tags.map((tag, index) => (
+          <TagBox key={index} onClick={() => startEditingTag(index)}>
+            {editTagIndex === index ? (
+              <TagInputContainer>
+                <TagInput
+                  value={newTag}
+                  onChange={(e) => setNewTag(e.target.value)}
+                  onKeyDown={(e) => handleEditTag(e, index)}
+                  maxLength={5}
+                  autoFocus
+                />
+                <DeleteBtn onClick={(e) => handleDeleteTag(e, index)} />
+              </TagInputContainer>
+            ) : (
+              <span>{tag}</span>
+            )}
+          </TagBox>
+        ))}
+        {showTagInput && editTagIndex === null && (
+          <TagInputContainer>
+            <TagInput
+              value={newTag}
+              onChange={(e) => setNewTag(e.target.value)}
+              onKeyDown={handleAddTag}
+              maxLength={5}
+              autoFocus
+            />
+            <DeleteBtn onClick={(e) => handleDeleteTag(e, -1)} />
+          </TagInputContainer>
+        )}
+        {!showTagInput && editTagIndex === null && tags.length < 3 && (
+          <AddBtn onClick={() => setShowTagInput(true)}>
+            <AddIcon />
+          </AddBtn>
+        )}
       </NameContainer>
     </MemberContainer>
   );
@@ -22,7 +71,6 @@ const MemberContainer = styled.div`
   height: 42px;
   display: flex;
   align-items: center;
-  //background: lightgreen;
 `;
 
 const ProfileImg = styled(DefaultProfileImg)`
@@ -63,7 +111,9 @@ const AboutTagBox = styled.div`
 
 const TagBox = styled(AboutTagBox)`
   width: 37px;
+  height: 24px;
   margin-right: 13px;
+  padding: 0;
 `;
 
 const AddBtn = styled(AboutTagBox)`
@@ -74,4 +124,9 @@ const AddBtn = styled(AboutTagBox)`
 const AddIcon = styled(Add)`
   width: 19px;
   height: 19px;
+`;
+
+const TagInput = styled.input`
+  width: 50px;
+  height: 24px;
 `;

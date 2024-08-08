@@ -8,6 +8,9 @@ export const Members = () => {
       <TitleText>Member</TitleText>
       <MemberContainer>
         <Member />
+        <Member />
+        <Member />
+        <Member />
       </MemberContainer>
     </MembersContainer>
   );
@@ -19,7 +22,6 @@ const MembersContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 22px;
-  background: lightgreen;
 `;
 
 const MemberContainer = styled.div`
