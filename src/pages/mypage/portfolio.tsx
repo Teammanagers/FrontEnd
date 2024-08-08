@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import Back from '@assets/mypage/back.svg';
 import Move from '@assets/mypage/move.svg';
-import { useTags } from '@hooks/useTags';
+import { useTags, TagSection } from '@hooks/useTags';
 
 interface Portfolio {
   title: string;
@@ -13,7 +13,6 @@ interface Portfolio {
 export const PortfolioPage = () => {
   const navigate = useNavigate();
 
-  // 포트폴리오 리스트 상태: 포트폴리오 객체 배열
   const [portfolios, setPortfolios] = useState<Portfolio[]>([
     { title: 'UMC', period: '2023.12~2024.02' }
   ]);
@@ -22,29 +21,13 @@ export const PortfolioPage = () => {
     null
   );
 
-  // 포트폴리오 클릭 핸들러: 클릭된 포트폴리오 객체를 선택
   const handlePortfolioClick = (portfolio: Portfolio) => {
     setSelectedPortfolio(portfolio);
   };
 
-  // useTags 커스텀 훅 사용
-  const {
-    tags,
-    newTag,
-    editTagIndex,
-    showTagInput,
-    setNewTag,
-    handleTagKeyDown,
-    handleEditTag,
-    handleDeleteTag,
-    addTag,
-    TagContainer,
-    TagInputContainer,
-    TagInput,
-    DeleteBtn,
-    AddTagBtn,
-    Tags
-  } = useTags();
+  const useTagsCategory = useTags();
+  const useTagsMember = useTags();
+  const useTagsRole = useTags();
 
   return (
     <PortfolioContainer>
@@ -57,7 +40,7 @@ export const PortfolioPage = () => {
         </Header>
 
         <MainContent>
-          {portfolios.length === 0 ? ( // 포트폴리오가 아예 없는 경우
+          {portfolios.length === 0 ? (
             <>
               <NoPortfolioPage>
                 <NoPortfolioMessage>
@@ -89,7 +72,7 @@ export const PortfolioPage = () => {
                 ))}
               </PortfolioMenu>
               <ViewPortfolio>
-                {selectedPortfolio ? ( // 포트폴리오가 선택된 경우
+                {selectedPortfolio ? (
                   <>
                     <ProjectInfo>
                       <ProjectTitle>{selectedPortfolio.title}</ProjectTitle>
@@ -97,153 +80,23 @@ export const PortfolioPage = () => {
                     </ProjectInfo>
                     <MainInfo>
                       <ProjectTags>
-                        <ProjectBox>
-                          <TagsTitle>프로젝트 카테고리</TagsTitle>
-                          <Tags>
-                            {tags.map((tag, index) => (
-                              <TagContainer
-                                key={index}
-                                onClick={() => handleEditTag(index)}
-                              >
-                                {editTagIndex === index ? (
-                                  <TagInputContainer>
-                                    <TagInput
-                                      value={newTag}
-                                      onChange={(e) =>
-                                        setNewTag(e.target.value)
-                                      }
-                                      onKeyDown={handleTagKeyDown}
-                                      maxLength={5}
-                                      autoFocus
-                                    />
-                                    <DeleteBtn
-                                      onClick={(e) => handleDeleteTag(e, index)}
-                                    />
-                                  </TagInputContainer>
-                                ) : (
-                                  <span>{tag}</span>
-                                )}
-                              </TagContainer>
-                            ))}
-                            {showTagInput && editTagIndex === null && (
-                              <TagInputContainer>
-                                <TagInput
-                                  value={newTag}
-                                  onChange={(e) => setNewTag(e.target.value)}
-                                  onKeyDown={handleTagKeyDown}
-                                  maxLength={5}
-                                  autoFocus
-                                />
-                                <DeleteBtn
-                                  onClick={(e) => handleDeleteTag(e, -1)}
-                                />
-                              </TagInputContainer>
-                            )}
-                            {!showTagInput && tags.length < 3 && (
-                              <AddTagBtn onClick={addTag} />
-                            )}
-                          </Tags>
-                        </ProjectBox>
-                        <ProjectBox>
-                          <TagsTitle>프로젝트 멤버</TagsTitle>
-                          <Tags>
-                            {tags.map((tag, index) => (
-                              <TagContainer
-                                key={index}
-                                onClick={() => handleEditTag(index)}
-                              >
-                                {editTagIndex === index ? (
-                                  <TagInputContainer>
-                                    <TagInput
-                                      value={newTag}
-                                      onChange={(e) =>
-                                        setNewTag(e.target.value)
-                                      }
-                                      onKeyDown={handleTagKeyDown}
-                                      maxLength={5}
-                                      autoFocus
-                                    />
-                                    <DeleteBtn
-                                      onClick={(e) => handleDeleteTag(e, index)}
-                                    />
-                                  </TagInputContainer>
-                                ) : (
-                                  <span>{tag}</span>
-                                )}
-                              </TagContainer>
-                            ))}
-                            {showTagInput && editTagIndex === null && (
-                              <TagInputContainer>
-                                <TagInput
-                                  value={newTag}
-                                  onChange={(e) => setNewTag(e.target.value)}
-                                  onKeyDown={handleTagKeyDown}
-                                  maxLength={5}
-                                  autoFocus
-                                />
-                                <DeleteBtn
-                                  onClick={(e) => handleDeleteTag(e, -1)}
-                                />
-                              </TagInputContainer>
-                            )}
-                            {!showTagInput && tags.length < 3 && (
-                              <AddTagBtn onClick={addTag} />
-                            )}
-                          </Tags>
-                        </ProjectBox>
-                        <ProjectBox>
-                          <TagsTitle>나의 역할</TagsTitle>
-                          <Tags>
-                            {tags.map((tag, index) => (
-                              <TagContainer
-                                key={index}
-                                onClick={() => handleEditTag(index)}
-                              >
-                                {editTagIndex === index ? (
-                                  <TagInputContainer>
-                                    <TagInput
-                                      value={newTag}
-                                      onChange={(e) =>
-                                        setNewTag(e.target.value)
-                                      }
-                                      onKeyDown={handleTagKeyDown}
-                                      maxLength={5}
-                                      autoFocus
-                                    />
-                                    <DeleteBtn
-                                      onClick={(e) => handleDeleteTag(e, index)}
-                                    />
-                                  </TagInputContainer>
-                                ) : (
-                                  <span>{tag}</span>
-                                )}
-                              </TagContainer>
-                            ))}
-                            {showTagInput && editTagIndex === null && (
-                              <TagInputContainer>
-                                <TagInput
-                                  value={newTag}
-                                  onChange={(e) => setNewTag(e.target.value)}
-                                  onKeyDown={handleTagKeyDown}
-                                  maxLength={5}
-                                  autoFocus
-                                />
-                                <DeleteBtn
-                                  onClick={(e) => handleDeleteTag(e, -1)}
-                                />
-                              </TagInputContainer>
-                            )}
-                            {!showTagInput && tags.length < 3 && (
-                              <AddTagBtn onClick={addTag} />
-                            )}
-                          </Tags>
-                        </ProjectBox>
+                        <TagSection
+                          title="프로젝트 카테고리"
+                          useTagsHook={useTagsCategory}
+                        />
+                        <TagSection
+                          title="프로젝트 멤버"
+                          useTagsHook={useTagsMember}
+                        />
+                        <TagSection
+                          title="나의 역할"
+                          useTagsHook={useTagsRole}
+                        />
                       </ProjectTags>
                       <SharedFiles></SharedFiles>
                     </MainInfo>
                   </>
                 ) : (
-                  // 포트폴리오는 있지만 아무것도 선택하지 않은 경우
                   <SelectPortfolioMessage>
                     프로젝트를 클릭해 확인할 수 있습니다.
                   </SelectPortfolioMessage>
@@ -257,7 +110,6 @@ export const PortfolioPage = () => {
   );
 };
 
-// 스타일 컴포넌트 정의
 const PortfolioContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.background};
   width: 100%;
@@ -423,18 +275,4 @@ const ProjectTags = styled.div`
 const SharedFiles = styled.div`
   display: flex;
   flex-direction: column;
-`;
-
-const ProjectBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 65px;
-  gap: 7px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.silver};
-`;
-
-const TagsTitle = styled.div`
-  font-size: 12px;
-  font-weight: 700;
-  color: ${({ theme }) => theme.colors.black};
 `;
