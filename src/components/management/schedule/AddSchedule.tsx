@@ -18,11 +18,31 @@ interface AddScheduleProps {
 
 export const AddSchedule = ({ onSubmit }: AddScheduleProps) => {
   // 요일별로 시간 지정
-  const [weeklyTimes, setWeeklyTimes] = useState<DayTimeSlots>({});
+  const [weeklyTimes, setWeeklyTimes] = useState<DayTimeSlots>({
+    Monday: [],
+    Tuesday: [],
+    Wednesday: [],
+    Thursday: [],
+    Friday: [],
+    Saturday: [],
+    Sunday: []
+  });
 
   // 특정 요일의 시간 업데이트 함수
   const handleTimeChange = (day: string, times: TimeSlot[]) => {
     setWeeklyTimes((prev) => ({ ...prev, [day]: times }));
+  };
+
+  const handleReset = () => {
+    setWeeklyTimes({
+      Monday: [],
+      Tuesday: [],
+      Wednesday: [],
+      Thursday: [],
+      Friday: [],
+      Saturday: [],
+      Sunday: []
+    });
   };
 
   const handleSubmit = () => {
@@ -34,22 +54,50 @@ export const AddSchedule = ({ onSubmit }: AddScheduleProps) => {
   return (
     <Container>
       <AddScheduleContainer>
-        <TimeSelector day={'Monday'} onChange={handleTimeChange} />
-        <TimeSelector day={'Tuesday'} onChange={handleTimeChange} />
-        <TimeSelector day={'Wednesday'} onChange={handleTimeChange} />
-        <TimeSelector day={'Thursday'} onChange={handleTimeChange} />
-        <TimeSelector day={'Friday'} onChange={handleTimeChange} />
-        <TimeSelector day={'Saturday'} onChange={handleTimeChange} />
-        <TimeSelector day={'Sunday'} onChange={handleTimeChange} />
+        <TimeSelector
+          day={'Monday'}
+          times={weeklyTimes.Monday}
+          onChange={handleTimeChange}
+        />
+        <TimeSelector
+          day={'Tuesday'}
+          times={weeklyTimes.Tuesday}
+          onChange={handleTimeChange}
+        />
+        <TimeSelector
+          day={'Wednesday'}
+          times={weeklyTimes.Wednesday}
+          onChange={handleTimeChange}
+        />
+        <TimeSelector
+          day={'Thursday'}
+          times={weeklyTimes.Thursday}
+          onChange={handleTimeChange}
+        />
+        <TimeSelector
+          day={'Friday'}
+          times={weeklyTimes.Friday}
+          onChange={handleTimeChange}
+        />
+        <TimeSelector
+          day={'Saturday'}
+          times={weeklyTimes.Saturday}
+          onChange={handleTimeChange}
+        />
+        <TimeSelector
+          day={'Sunday'}
+          times={weeklyTimes.Sunday}
+          onChange={handleTimeChange}
+        />
       </AddScheduleContainer>
       <ButtonContainer>
-        <ResetBtn>
+        <ResetBtn onClick={handleReset}>
           <Reset />
           <ResetBtnText>초기화</ResetBtnText>
         </ResetBtn>
-        <SubmitBtn>
+        <SubmitBtn onClick={handleSubmit}>
           <Submit />
-          <SubmitBtnText onClick={handleSubmit}>등록</SubmitBtnText>
+          <SubmitBtnText>등록</SubmitBtnText>
         </SubmitBtn>
       </ButtonContainer>
     </Container>

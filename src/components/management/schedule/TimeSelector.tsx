@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { ButtonHTMLAttributes, useState } from 'react';
+import { ButtonHTMLAttributes, useEffect, useState } from 'react';
 import Add from '@assets/management/add-button.svg';
 
 const generateTimeOptions = (): string[] => {
@@ -19,18 +19,22 @@ export interface TimeSlot {
 
 interface TimeSelectorProps {
   day: string;
+  times: TimeSlot[];
   onChange: (day: string, times: TimeSlot[]) => void;
 }
 
-export const TimeSelector = ({ day, onChange }: TimeSelectorProps) => {
-  const [times, setTimes] = useState<TimeSlot[]>([]);
+export const TimeSelector = ({
+  day,
+  times: initialTimes,
+  onChange
+}: TimeSelectorProps) => {
+  const [times, setTimes] = useState<TimeSlot[]>(initialTimes);
   const timeOptions = generateTimeOptions();
 
   const handleAddTime = () => {
     if (times.length < 3) {
       const newTimes = [...times, { start: '00:00', end: '00:00' }];
       setTimes(newTimes);
-      // setShowDropdown([...showDropdown, false]);
       onChange(day, newTimes);
     }
   };
@@ -47,6 +51,10 @@ export const TimeSelector = ({ day, onChange }: TimeSelectorProps) => {
     setTimes(newTimes);
     onChange(day, newTimes);
   };
+
+  useEffect(() => {
+    setTimes(initialTimes);
+  }, [initialTimes]);
 
   return (
     <DayContainer>
