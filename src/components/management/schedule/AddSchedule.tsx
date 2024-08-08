@@ -12,7 +12,11 @@ interface DayTimeSlots {
   [key: string]: TimeSlot[];
 }
 
-export const AddSchedule = () => {
+interface AddScheduleProps {
+  onSubmit: () => void;
+}
+
+export const AddSchedule = ({ onSubmit }: AddScheduleProps) => {
   // 요일별로 시간 지정
   const [weeklyTimes, setWeeklyTimes] = useState<DayTimeSlots>({});
 
@@ -22,6 +26,7 @@ export const AddSchedule = () => {
   };
 
   const handleSubmit = () => {
+    onSubmit();
     // 서버에 요청 보내는 로직 추가해야함
     console.log(weeklyTimes);
   };
@@ -58,7 +63,6 @@ const Container = styled.div`
   flex-direction: column;
   margin-top: 23px;
   background: white;
-  //background: burlywood;
 `;
 
 const AddScheduleContainer = styled.div`
@@ -68,7 +72,6 @@ const AddScheduleContainer = styled.div`
   align-items: center;
   gap: 11px;
   margin-top: 11px;
-  //background: forestgreen;
 `;
 
 const ButtonContainer = styled.div`
@@ -77,7 +80,6 @@ const ButtonContainer = styled.div`
   padding-right: 19px;
   gap: 10px;
   margin-top: 8px;
-  //background: lightskyblue;
 `;
 
 const Btn = styled.button`

@@ -8,7 +8,11 @@ import {
   PeopleDropDown
 } from '@components/management/schedule/PeopleDropDown.tsx';
 
-export const Schedule = () => {
+interface ScheduleProps {
+  onAddSchedule: () => void;
+}
+
+export const Schedule = ({ onAddSchedule }: ScheduleProps) => {
   const [isOpened, setIsOpened] = useState<boolean>(false);
   const [selectedPeople, setSelectedPeople] = useState<string[]>([]);
   const [dropDownPosition, setDropDownPosition] = useState<{
@@ -77,7 +81,7 @@ export const Schedule = () => {
           )}
         </PeopleContainer>
       </ScheduleContainer>
-      <SubmitBtn>내 스케줄 등록</SubmitBtn>
+      <SubmitBtn onClick={onAddSchedule}>내 스케줄 등록</SubmitBtn>
     </Container>
   );
 };
