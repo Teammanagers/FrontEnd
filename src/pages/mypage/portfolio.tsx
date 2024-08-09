@@ -13,9 +13,7 @@ interface Portfolio {
 export const PortfolioPage = () => {
   const navigate = useNavigate();
 
-  const [portfolios, setPortfolios] = useState<Portfolio[]>([
-    { title: 'UMC', period: '2023.12~2024.02' }
-  ]);
+  const portfolios = [{ title: 'UMC', period: '2023.12~2024.02' }];
 
   const [selectedPortfolio, setSelectedPortfolio] = useState<Portfolio | null>(
     null
@@ -112,7 +110,6 @@ export const PortfolioPage = () => {
     </PortfolioContainer>
   );
 };
-
 const PortfolioContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.background};
   width: 100%;
