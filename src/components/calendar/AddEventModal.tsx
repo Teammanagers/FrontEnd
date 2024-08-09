@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import * as Dialog from '@radix-ui/react-dialog';
 import moment from 'moment';
@@ -8,6 +9,7 @@ import ClosedBtn from '@assets/calendar/closed-btn.svg';
 import RemoveTagIcon from '@assets/calendar/remove-tag-icon.svg';
 
 const AddEventModal = ({ date, setOpen, open }: ModalProps) => {
+  const location = useLocation();
   const [scheduleInfo, setScheduleInfo] = useState<ScheduleInfoType>({
     date: '',
     title: '',
@@ -78,7 +80,9 @@ const AddEventModal = ({ date, setOpen, open }: ModalProps) => {
             <DialogOverlay />
             <Dialog.Title />
             <Dialog.Description />
-            <DialogContent>
+            <DialogContent
+              isCalendarPage={location?.pathname.startsWith('/calendar')}
+            >
               <div className="header">
                 <Dialog.Close asChild onClick={handleClosed}>
                   <button className="closed-btn-container">
@@ -161,12 +165,22 @@ const DialogOverlay = styled(Dialog.Overlay)`
   background-color: rgba(0, 0, 0, 0.1);
   position: fixed;
   inset: 0;
+  animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+
+  @keyframes overlayShow {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 `;
 
-const DialogContent = styled(Dialog.Content)`
+const DialogContent = styled(Dialog.Content)<{ isCalendarPage: boolean }>`
   position: fixed;
-  top: 210px;
-  left: 266px;
+  top: ${(props) => (props.isCalendarPage ? '237px' : '285px')};
+  left: 255px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -176,6 +190,7 @@ const DialogContent = styled(Dialog.Content)`
   border-radius: 6px;
   box-shadow: 1.52px 3.04px 9.12px 0 rgb(0, 0, 0, 0.08);
   background-color: #ffffff;
+  animation: contentShow 500ms cubic-bezier(0.16, 1, 0.3, 1);
 
   ul,
   li {
@@ -295,23 +310,14 @@ const DialogContent = styled(Dialog.Content)`
     }
   }
 
-  @keyframes overlayShow {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-
   @keyframes contentShow {
     from {
       opacity: 0;
-      transform: translate(-50%, -48%) scale(0.96);
+      transform: translate(-7%, 7%) scale(0.96);
     }
     to {
       opacity: 1;
-      transform: translate(-50%, -50%) scale(1);
+      /* transform: translate(-50%, -50%) scale(1); */
     }
   }
 `;

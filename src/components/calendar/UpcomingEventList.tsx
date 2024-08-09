@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import MockData from '@assets/calendar/upcoming-events.json';
-import UpcomingEvent from '@components/UpcomingEvent';
+import UpcomingEvent from '@components/calendar/UpcomingEvent';
 
 type UpcomingEventType = {
   calendarId: number;
