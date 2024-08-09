@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import Back from '@assets/mypage/back.svg';
 import Move from '@assets/mypage/move.svg';
-import { useTags, TagSection } from '@hooks/useTags';
+import { useTags, TagSection } from '@hooks/mypage/useTags';
 
 interface Portfolio {
   title: string;
