@@ -31,6 +31,7 @@ const Notice = () => {
 
   const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
+    if (inputValue.length >= 10) console.log('글자수 넘어감');
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -73,6 +74,7 @@ const Notice = () => {
                     type="text"
                     value={inputValue}
                     placeholder="공지 내용을 입력해주세요"
+                    maxLength={49}
                     onChange={handleInput}
                   />
                   <button type="submit">
