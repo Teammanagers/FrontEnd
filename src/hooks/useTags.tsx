@@ -193,11 +193,11 @@ export const TagSection: React.FC<TagSectionProps> = ({
 };
 
 const ProjectBox = styled.div`
-  margin-bottom: 20px;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.silver};
 `;
 
 const TagsTitle = styled.h4`
-  margin-bottom: 8px;
-  font-size: 16px;
-  font-weight: 600;
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
 `;
