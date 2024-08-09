@@ -99,7 +99,7 @@ const Wrapper = styled.div`
   width: 908px;
   height: 74px;
   padding-left: 19px;
-  margin: 0 30px 24px 0;
+  margin-right: 30px;
   border: 1px solid #ddebff;
   border-radius: 7px;
   color: black;

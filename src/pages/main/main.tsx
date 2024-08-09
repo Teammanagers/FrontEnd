@@ -1,5 +1,8 @@
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Notice from '@components/main/Notice';
+import NavigateBtn from '@assets/main/navigate-btn.svg';
+import EventCalendar from '@components/calendar/EventCalendar';
 
 const MainPage = () => {
   const handleCopyClipBoard = (copyCode: string) => {
@@ -21,6 +24,22 @@ const MainPage = () => {
           </button>
         </TeamCodeCopy>
       </header>
+
+      <Main>
+        <div className="calendar">
+          <Link to={'/calendar'}>
+            <h2>캘린더 </h2>
+            <NavigateBtn />
+          </Link>
+          <EventCalendar />
+        </div>
+        <div className="todo-list">
+          <Link to={'/todo-list'}>
+            <h2>투두리스트</h2>
+            <NavigateBtn />
+          </Link>
+        </div>
+      </Main>
     </Layout>
   );
 };
@@ -36,6 +55,7 @@ const Layout = styled.div`
 
   header {
     display: flex;
+    margin-bottom: 24px;
   }
 `;
 
@@ -73,5 +93,33 @@ const TeamCodeCopy = styled.div`
     &:active {
       background-color: ${(props) => props.theme.colors.subBlue};
     }
+  }
+`;
+
+const Main = styled.div`
+  display: flex;
+
+  a,
+  h2 {
+    all: unset;
+  }
+
+  h2 {
+    margin-right: 12px;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 36px;
+    color: #1d1d1d;
+  }
+
+  a {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    cursor: pointer;
+  }
+
+  .calendar {
+    margin-right: 30px;
   }
 `;
