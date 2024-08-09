@@ -17,6 +17,7 @@
     "@fontsource/roboto": "^5.0.13",
     "@radix-ui/react-dialog": "^1.1.1",
     "@radix-ui/react-popover": "^1.1.1",
+    "@radix-ui/react-primitive": "^2.0.0",
     "@tanstack/react-query": "^5.50.1",
     "moment": "^2.30.1",
     "react": "^18.3.1",
