@@ -4,8 +4,8 @@ import FirstPage from '@assets/mypage/first-page.svg';
 import Back from '@assets/mypage/back.svg';
 import Move from '@assets/mypage/move.svg';
 import Kakao from '@assets/mypage/kakao.svg';
+import UserImage from '@assets/mypage/user-image.svg';
 import WrongUser from '@assets/mypage/wrong-user.svg';
-import { AvatarImage } from '@components/mypage/Avatar';
 import { useNavigate } from 'react-router-dom';
 import { QuitModal } from '@components/mypage/QuitModal';
 
@@ -19,6 +19,15 @@ export const ProfilePage = () => {
   const [name, setName] = useState<string>('홍길동');
   const [contact, setContact] = useState<string>('010-1234-1234');
   const [major, setMajor] = useState<string>('한양대 ERICA 경영학부');
+  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+
+  const onChangeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setUploadedImage(imageUrl);
+    }
+  };
 
   const toggleHidden = (index: number) => {
     setIsHiddenArray((prevState) => {
@@ -56,7 +65,17 @@ export const ProfilePage = () => {
               <SetProfile>
                 <Profile>
                   <SetImage>
-                    <AvatarImage />
+                    {uploadedImage ? (
+                      <ProfileImage
+                        src={uploadedImage}
+                        alt="업로드된 프로필 이미지"
+                      />
+                    ) : (
+                      <DefaultProfileImageWrapper>
+                        <UserImage />
+                      </DefaultProfileImageWrapper>
+                    )}
+                    <FileInput type="file" onChange={onChangeImage} />
                   </SetImage>
                   <SetInfo>
                     <SetField>
@@ -244,13 +263,6 @@ const Profile = styled.div`
   gap: 19px;
 `;
 
-const SetImage = styled.div`
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  cursor: pointer;
-`;
-
 const SetInfo = styled.div`
   width: 367px;
   height: 155px;
@@ -356,4 +368,32 @@ const QuitButton = styled.button`
   gap: 12px;
   border-radius: 8px;
   cursor: pointer;
+`;
+
+const SetImage = styled.div`
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  cursor: pointer;
+`;
+
+const DefaultProfileImageWrapper = styled.div`
+  width: 150px;
+  height: 150px;
+  svg {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+  }
+`;
+
+const ProfileImage = styled.img`
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+`;
+
+const FileInput = styled.input`
+  display: none;
 `;
