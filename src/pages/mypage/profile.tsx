@@ -127,7 +127,7 @@ export const ProfilePage = () => {
               {[...Array(5)].map((_, index) => (
                 <Comment key={index}>
                   <ToggleText isHidden={isHiddenArray[index]}>
-                    PPT를 잘 만들어요!
+                    {isHiddenArray[index] ? '가려졌어요' : 'PPT를 잘 만들어요!'}
                   </ToggleText>
                   <ToggleButton
                     isHidden={isHiddenArray[index]}
@@ -174,7 +174,8 @@ const ToggleButton = styled.button<ToggleProps>`
 const ToggleText = styled.div<ToggleProps>`
   width: 444px;
   border-radius: 4px;
-  background-color: ${({ isHidden }) => (isHidden ? '#D3D3D3' : 'white')};
+  background-color: ${({ isHidden, theme }) =>
+    isHidden ? theme.colors.darkGray : 'white'};
   border: 1px solid ${({ theme }) => theme.colors.lightGray};
   color: ${({ isHidden, theme }) =>
     isHidden ? theme.colors.lightGray : theme.colors.black};
