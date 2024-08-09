@@ -164,7 +164,7 @@ const DialogContent = styled(Dialog.Content)`
   border-radius: 9px;
   background-color: white;
   box-sizing: border-box;
-  animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  animation: contentShow 400ms cubic-bezier(0.16, 1, 0.3, 1);
 
   ul,
   li,
