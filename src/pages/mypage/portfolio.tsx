@@ -93,7 +93,10 @@ export const PortfolioPage = () => {
                           useTagsHook={useTagsRole}
                         />
                       </ProjectTags>
-                      <SharedFiles></SharedFiles>
+                      <SharedFiles>
+                        <SharedBoxTitle>공유했던 파일</SharedBoxTitle>
+                        <SharedBox></SharedBox>
+                      </SharedFiles>
                     </MainInfo>
                   </>
                 ) : (
@@ -268,6 +271,7 @@ const ProjectPeriod = styled.div`
 const ProjectTags = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: space-around;
   height: 231px;
   gap: 18px;
 `;
@@ -275,4 +279,18 @@ const ProjectTags = styled.div`
 const SharedFiles = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 12px;
+`;
+
+const SharedBoxTitle = styled.div`
+  height: 18px;
+  font-size: 12px;
+  font-weight: 700;
+  color: ${({ theme }) => theme.colors.black};
+`;
+
+const SharedBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 `;
