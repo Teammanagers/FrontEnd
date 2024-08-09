@@ -1,19 +1,47 @@
-import { useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
+import moment from 'moment';
 import styled from 'styled-components';
 import * as Dialog from '@radix-ui/react-dialog';
-import LouderSpeaker from '@assets/main/loud-speaker.svg';
+import MockData from '@assets/main/mock-data.json';
+import LouderSpeakerIcon from '@assets/main/loud-speaker.svg';
+import PublishNoticeIcon from '@assets/main/publish-notice.svg';
+
+type NoticeListType = {
+  noticeId: number;
+  content: string;
+  createdAt: string;
+}[];
+
+interface MockType {
+  code: number;
+  message: string;
+  result: { noticeList: NoticeListType };
+}
+
+const mock = MockData as MockType;
+const Mock = mock.result.noticeList;
 
 const Notice = () => {
   const [open, setOpen] = useState<boolean>(false);
+  const [inputValue, setInputValue] = useState<string>('');
 
-  const handleClosed = () => {
-    setOpen(false);
+  // const handleClosed = () => {
+  //   setOpen(false);
+  // };
+
+  const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setInputValue('');
   };
 
   return (
     <>
       <Wrapper>
-        <StyledLoudSpeaker />
+        <StyledLoudSpeakerIcon />
         <h2> UMC 6th 팀 매니저 공지입니다</h2>
 
         <Dialog.Root
@@ -30,10 +58,26 @@ const Notice = () => {
             {open && (
               <DialogContent>
                 <DialogTitle>공지사항</DialogTitle>
-                <ul></ul>
-                <form action="">
-                  <input type="text" />
-                  <button type="submit"></button>
+                <ul>
+                  {Mock.map((item) => (
+                    <li key={item.noticeId}>
+                      <h3>{item.content}</h3>
+                      <span>
+                        {moment(item.createdAt).format('YYYY.MM.DD hh:mm')}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+                <form onSubmit={handleSubmit}>
+                  <input
+                    type="text"
+                    value={inputValue}
+                    placeholder="공지 내용을 입력해주세요"
+                    onChange={handleInput}
+                  />
+                  <button type="submit">
+                    <PublishNoticeIcon />
+                  </button>
                 </form>
               </DialogContent>
             )}
@@ -83,6 +127,7 @@ const DialogTrigger = styled(Dialog.Trigger)`
   color: ${(props) => props.theme.colors.mainBlue};
   background-color: white;
   cursor: pointer;
+  outline: none;
 `;
 
 const DialogOverlay = styled(Dialog.Overlay)`
@@ -102,17 +147,124 @@ const DialogOverlay = styled(Dialog.Overlay)`
 `;
 
 const DialogContent = styled(Dialog.Content)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 534px;
   height: 558px;
-  padding: 24px 18px;
+  padding-top: 24px;
   border: 1px solid #ddebff;
   border-radius: 9px;
   background-color: white;
+  box-sizing: border-box;
   animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
+
+  ul,
+  li,
+  h3 {
+    all: unset;
+    box-sizing: border-box;
+  }
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 98%;
+    height: 397px;
+    margin-bottom: 18px;
+    gap: 18px;
+    overflow: auto;
+
+    &::-webkit-scrollbar {
+      width: 10px;
+      background-color: white;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      width: 3px;
+      background-color: #f0f0f0;
+      border: 3px solid white;
+      border-radius: 76px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: inset 0px 0px 5px white;
+    }
+  }
+
+  li {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 498px;
+    min-height: auto;
+    padding: 9px 12px 7px 12px;
+    border: 1px solid ${(props) => props.theme.colors.subLightBlue};
+    border-radius: 6px;
+
+    & h3 {
+      font-size: 15px;
+      font-weight: 700;
+      line-height: 22.5px;
+      color: #1d1d1d;
+    }
+
+    & span {
+      font-size: 10px;
+      font-weight: 400;
+      text-align: right;
+      line-height: 15px;
+      color: #5a5a5a;
+    }
+  }
+
+  form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 498px;
+    height: 50px;
+    border: 1px solid #f0f0f0;
+    border-radius: 5px;
+
+    & input {
+      width: 420px;
+      height: 32px;
+      margin-right: 6px;
+      font-size: 11px;
+      font-weight: 400;
+      line-height: 15.4px;
+      border: none;
+      color: #1d1d1d;
+      background-color: white;
+      outline: none;
+    }
+    & input::placeholder {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 16.8px;
+      color: #5a5a5a;
+    }
+
+    & button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 48px;
+      height: 32px;
+      border: none;
+      border-radius: 4px;
+      background-color: ${(props) => props.theme.colors.mainBlue};
+      cursor: pointer;
+    }
+  }
 
   @keyframes contentShow {
     from {
@@ -135,6 +287,6 @@ const DialogTitle = styled(Dialog.Title)`
   color: #1d1d1d;
 `;
 
-const StyledLoudSpeaker = styled(LouderSpeaker)`
+const StyledLoudSpeakerIcon = styled(LouderSpeakerIcon)`
   margin-right: 24px;
 `;
