@@ -1,0 +1,22 @@
+{
+  "code": 200,
+  "message": "성공입니다.",
+  "result": {
+    "comingCalendarList": [
+      {
+        "calendarId": 4,
+        "title": "메인 디자인 완성",
+        "status": "COMPLETED",
+        "isAlarm": true,
+        "date": "2024-07-21T06:19:35.071Z"
+      },
+      {
+        "calendarId": 5,
+        "title": "서버 명세서 완료",
+        "status": "PROCEEDING",
+        "isAlarm": false,
+        "date": "2024-07-21T06:19:35.071Z"
+      }
+    ]
+  }
+}
