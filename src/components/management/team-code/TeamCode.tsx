@@ -31,6 +31,7 @@ export const TeamCode = () => {
     const file = e.target.files?.[0];
     if (file) {
       const imgUrl = URL.createObjectURL(file);
+
       setProfileImg(imgUrl);
     }
     // 서버 API 연동시 추가 로직 필요
@@ -97,7 +98,7 @@ export const TeamCode = () => {
                         maxLength={5}
                         autoFocus
                       />
-                      <DeleteBtn onClick={(e) => handleDeleteTag(e, index)} />
+                      <DeleteBtn onClick={() => handleDeleteTag(index)} />
                     </TagInputContainer>
                   ) : (
                     <>
@@ -116,7 +117,7 @@ export const TeamCode = () => {
                     maxLength={5}
                     autoFocus
                   />
-                  <DeleteBtn onClick={(e) => handleDeleteTag(e, -1)} />
+                  <DeleteBtn onClick={() => handleDeleteTag(-1)} />
                 </TagInputContainer>
               )}
               {!showTagInput && editTagIndex === null && tags.length < 3 && (

@@ -1,4 +1,4 @@
-import { KeyboardEvent, MouseEvent, useState } from 'react';
+import { KeyboardEvent, useState } from 'react';
 
 export const useTags = () => {
   const [tags, setTags] = useState<string[]>([]); // 태그 업데이트
@@ -31,17 +31,16 @@ export const useTags = () => {
     setShowTagInput(true);
   };
 
-  const handleDeleteTag = (e: MouseEvent, index: number) => {
-    e.stopPropagation();
+  const handleDeleteTag = (index: number) => {
     if (index === -1) {
-      setShowTagInput(false);
+      setShowTagInput(() => {
+        return false;
+      });
     } else {
       setTags(tags.filter((_, i) => i !== index));
     }
     setEditTagIndex(null);
     setNewTag('');
-
-    console.log('태그 삭제!');
   };
 
   return {
