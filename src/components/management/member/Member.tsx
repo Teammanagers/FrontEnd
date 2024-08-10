@@ -37,7 +37,7 @@ export const Member = () => {
                   maxLength={5}
                   autoFocus
                 />
-                <DeleteBtn onClick={(e) => handleDeleteTag(e, index)} />
+                <DeleteBtn onClick={() => handleDeleteTag(index)} />
               </TagInputContainer>
             ) : (
               <span>{tag}</span>
@@ -53,7 +53,7 @@ export const Member = () => {
               maxLength={5}
               autoFocus
             />
-            <DeleteBtn onClick={(e) => handleDeleteTag(e, -1)} />
+            <DeleteBtn onClick={() => handleDeleteTag(-1)} />
           </TagInputContainer>
         )}
         {!showTagInput && editTagIndex === null && tags.length < 3 && (
