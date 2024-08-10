@@ -7,7 +7,7 @@ import { MyPage, ExtraMyPage } from '@pages/mypage';
 import { SharePage, ExtraSharePage } from '@pages/share';
 import { TodoListPage, ExtraTodoListPage } from '@pages/todo-list';
 import ErrorPage from '@pages/error';
-import MainPage from '@pages/main';
+import MainPage from '@pages/main/main';
 import { SideBar } from '@components/SideBar.tsx';
 
 const App = () => {
