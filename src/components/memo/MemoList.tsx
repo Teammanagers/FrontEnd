@@ -10,14 +10,21 @@ export interface MemoProps {
 }
 export const MemoList = () => {
   return (
-    <MemoContainer>
-      <AddMemoSmall />
-      {(dummyData as MemoProps[]).map((memo) => (
-        <Memo memo={memo} key={memo.id} />
-      ))}
-    </MemoContainer>
+    <MemoListContainer>
+      <MemoContainer>
+        <AddMemoSmall />
+        {(dummyData as MemoProps[]).map((memo) => (
+          <Memo memo={memo} key={memo.id} />
+        ))}
+      </MemoContainer>
+    </MemoListContainer>
   );
 };
+
+const MemoListContainer = styled.div`
+  width: 1098px;
+  height: 649px;
+`;
 
 const MemoContainer = styled.div`
   display: grid;

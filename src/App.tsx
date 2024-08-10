@@ -7,7 +7,7 @@ import { MyPage, ExtraMyPage } from '@pages/mypage';
 import { SharePage, ExtraSharePage } from '@pages/share';
 import { TodoListPage, ExtraTodoListPage } from '@pages/todo-list';
 import ErrorPage from '@pages/error';
-import MainPage from '@pages/main';
+import MainPage from '@pages/main/main';
 import { SideBar } from '@components/sidebar/SideBar.tsx';
 
 const App = () => {
@@ -25,10 +25,10 @@ const App = () => {
         <Route path="/calendar/:id" element={<ExtraCalendarPage />} />
         {/* management page */}
         <Route path="/management" element={<ManagementPage />} />
-        <Route path="/management/:id" element={<ExtraManagementPage />} />
+        <Route path="/management/*" element={<ExtraManagementPage />} />
         {/* memo page */}
         <Route path="/memo" element={<MemoPage />} />
-        <Route path="/memo/:id" element={<ExtraMemoPage />} />
+        <Route path="/memo/*" element={<ExtraMemoPage />} />
         {/* mypage */}
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/mypage/:id" element={<ExtraMyPage />} />
