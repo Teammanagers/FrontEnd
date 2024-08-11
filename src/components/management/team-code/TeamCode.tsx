@@ -120,7 +120,7 @@ export const TeamCode = () => {
                   <DeleteBtn onClick={() => handleDeleteTag(-1)} />
                 </TagInputContainer>
               )}
-              {!showTagInput && editTagIndex === null && tags.length < 3 && (
+              {!showTagInput && tags.length < 3 && (
                 <AddTagBtn
                   onClick={() => {
                     setShowTagInput(true);
