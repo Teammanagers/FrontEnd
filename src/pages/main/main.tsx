@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Notice from '@components/main/Notice';
 import NavigateBtn from '@assets/main/navigate-btn.svg';
 import EventCalendar from '@components/calendar/EventCalendar';
+import TodoList from '@components/todo-list/TodoList';
 
 const MainPage = () => {
   const handleCopyClipBoard = (copyCode: string) => {
@@ -38,6 +39,7 @@ const MainPage = () => {
             <h2>투두리스트</h2>
             <NavigateBtn />
           </Link>
+          <TodoList />
         </div>
       </Main>
     </Layout>

@@ -99,7 +99,6 @@ const TodoWrapper = styled.div`
   min-width: 318px;
   height: 18px;
   margin-right: 9px;
-  /* background-color: skyblue; */
 
   .checkbox-root {
     width: 16px;

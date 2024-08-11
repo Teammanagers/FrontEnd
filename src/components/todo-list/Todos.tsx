@@ -252,6 +252,7 @@ const Container = styled.div`
     width: 382px;
     height: auto;
     background-color: white;
+    box-sizing: border-box;
 
     .add-todo-form {
       display: flex;
