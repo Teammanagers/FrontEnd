@@ -7,33 +7,52 @@ const Mock = MockData as UserInfo[];
 
 const TodoList = () => {
   return (
-    <Container>
-      {Mock.map((userInfo: UserInfo) => (
-        <Todos userInfo={userInfo} key={userInfo.id} />
-      ))}
-    </Container>
+    <Wrapper>
+      <Container>
+        {Mock.map((userInfo: UserInfo) => (
+          <Todos userInfo={userInfo} key={userInfo.id} />
+        ))}
+      </Container>
+    </Wrapper>
   );
 };
+
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 942px;
+  height: 562px;
+  padding: 32px 0;
+  background-color: white;
+  box-sizing: border-box;
+`;
 
 const Container = styled.div`
   box-sizing: border-box;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  column-gap: 10px;
   row-gap: 36px;
   justify-items: center;
-  width: 942px;
-  height: 562px;
-  padding: 31px 77px;
+  width: 880px;
+  height: 498px;
   overflow: auto;
   background-color: #ffffff;
 
+  ul {
+    all: unset;
+  }
+
   &::-webkit-scrollbar {
-    width: 9px;
+    width: 12px;
     background-color: white;
   }
 
   &::-webkit-scrollbar-thumb {
+    width: 10px;
     background-color: #f0f0f0;
+    border: 3px solid white;
     border-radius: 76px;
   }
 
@@ -41,10 +60,6 @@ const Container = styled.div`
     background-color: white;
     border-radius: 10px;
     box-shadow: inset 0px 0px 5px white;
-  }
-
-  ul {
-    all: unset;
   }
 `;
 
