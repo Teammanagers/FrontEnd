@@ -56,7 +56,7 @@ export const Member = () => {
             <DeleteBtn onClick={() => handleDeleteTag(-1)} />
           </TagInputContainer>
         )}
-        {!showTagInput && editTagIndex === null && tags.length < 3 && (
+        {!showTagInput && tags.length < 3 && (
           <AddBtn onClick={() => setShowTagInput(true)}>
             <AddIcon />
           </AddBtn>
