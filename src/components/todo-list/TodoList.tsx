@@ -40,13 +40,10 @@ const Container = styled.div<{ isTodoPage: boolean }>`
   column-gap: 24px;
   row-gap: ${(props) => (props.isTodoPage ? '36px' : '16px')};
   justify-items: center;
-  /* width: 880px;
-  height: 498px; */
   width: ${(props) => (props.isTodoPage ? '820px' : '400px')};
   height: ${(props) => (props.isTodoPage ? '498px' : '468px')};
   overflow: auto;
   background-color: #ffffff;
-  /* background-color: salmon; */
 
   ul {
     all: unset;
