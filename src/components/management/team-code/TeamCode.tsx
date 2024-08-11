@@ -3,13 +3,23 @@ import Add from '@assets/management/add-icon.svg';
 import Delete from '@assets/management/delete-icon.svg';
 import DefaultProfileImg from '@assets/management/profile-img-default.svg';
 import Upload from '@assets/management/upload-icon.svg';
-import { ButtonHTMLAttributes, ChangeEvent, useRef, useState } from 'react';
+import Edit from '@assets/management/edit-icon.svg';
+import {
+  ButtonHTMLAttributes,
+  ChangeEvent,
+  KeyboardEvent,
+  useRef,
+  useState
+} from 'react';
 import copy from 'copy-to-clipboard';
 import { useTags } from '@hooks/useTags.ts';
 
 export const TeamCode = () => {
   const [profileImg, setProfileImg] = useState<string>(DefaultProfileImg);
   const [copyCode, setCopyCode] = useState<boolean>(false);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [teamName, setTeamName] = useState<string>('UMC 6th 팀매니저');
+  const [isHovered, setIsHovered] = useState<boolean>(false);
 
   const {
     tags,
@@ -42,6 +52,20 @@ export const TeamCode = () => {
     fileInputRef.current?.click();
   };
 
+  const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setTeamName(e.target.value);
+  };
+
+  const handleNameKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      setIsEditing(false);
+    }
+  };
+
+  const handleNameClick = () => {
+    setIsEditing(true);
+  };
+
   const handleCopyCode = () => {
     copy('X65VRG34'); // 추후에 생성된 팀코드 복사되도록 로직 변경 필요
     setCopyCode(true);
@@ -65,7 +89,27 @@ export const TeamCode = () => {
         <TopContainer>
           <TitleBox>
             <TitleText>Title</TitleText>
-            <Title>UMC 6th 팀매니저</Title>
+            {isEditing ? (
+              <NameInput
+                value={teamName}
+                onChange={handleNameChange}
+                onKeyDown={handleNameKeyDown}
+                maxLength={30}
+                autoFocus
+              />
+            ) : (
+              <TitleWrapper
+                onMouseEnter={() => {
+                  setIsHovered(true);
+                }}
+                onMouseLeave={() => {
+                  setIsHovered(false);
+                }}
+              >
+                <Title>{teamName}</Title>
+                <EditIcon onClick={handleNameClick} hover={isHovered} />
+              </TitleWrapper>
+            )}
           </TitleBox>
           <CodeContainer>
             <TeamCodeBox>
@@ -190,7 +234,14 @@ const Box = styled.div`
 `;
 
 const TitleBox = styled(Box)`
+  display: flex;
   width: 350px;
+`;
+
+const TitleWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `;
 
 export const TitleText = styled.h1`
@@ -201,12 +252,25 @@ export const TitleText = styled.h1`
   margin: 0;
 `;
 
+const NameInput = styled.input`
+  height: 38px;
+`;
+
 const Title = styled.p`
   font-size: 15px;
   font-weight: 500;
   line-height: 22.5px;
   color: ${({ theme }) => theme.colors.black};
   margin-top: 11px;
+`;
+
+const EditIcon = styled(Edit)<
+  ButtonHTMLAttributes<HTMLButtonElement> & { hover: boolean }
+>`
+  display: ${({ hover }) => (hover ? 'visible' : 'none')};
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
 `;
 
 const TeamCodeBox = styled(Box)`
