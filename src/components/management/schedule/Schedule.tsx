@@ -10,9 +10,10 @@ import {
 
 interface ScheduleProps {
   onAddSchedule: () => void;
+  isSubmitted: boolean;
 }
 
-export const Schedule = ({ onAddSchedule }: ScheduleProps) => {
+export const Schedule = ({ onAddSchedule, isSubmitted }: ScheduleProps) => {
   const [isOpened, setIsOpened] = useState<boolean>(false);
   const [selectedPeople, setSelectedPeople] = useState<string[]>([]);
   const [dropDownPosition, setDropDownPosition] = useState<{
@@ -34,6 +35,10 @@ export const Schedule = ({ onAddSchedule }: ScheduleProps) => {
 
   const handleDeleteBtnClick = (personId: string) => {
     setSelectedPeople(selectedPeople.filter((id) => id !== personId));
+  };
+
+  const handleSubmit = () => {
+    onAddSchedule();
   };
 
   useEffect(() => {
@@ -79,7 +84,9 @@ export const Schedule = ({ onAddSchedule }: ScheduleProps) => {
           )}
         </PeopleContainer>
       </ScheduleContainer>
-      <SubmitBtn onClick={onAddSchedule}>내 스케줄 등록</SubmitBtn>
+      <SubmitBtn onClick={handleSubmit} isSubmitted={isSubmitted}>
+        {isSubmitted ? '스케줄 수정' : '내 스케줄 등록'}
+      </SubmitBtn>
     </Container>
   );
 };
@@ -154,14 +161,17 @@ const DropDownContainer = styled.div`
   position: absolute;
 `;
 
-const SubmitBtn = styled.button`
+const SubmitBtn = styled.button<{ isSubmitted: boolean }>`
   width: 96px;
   height: 36px;
   border-radius: 4px;
-  border: none;
-  background: ${({ theme }) => theme.colors.mainBlue};
+  border: ${({ theme, isSubmitted }) =>
+    isSubmitted ? `1px solid ${theme.colors.mainBlue}` : 'none'};
+  background: ${({ theme, isSubmitted }) =>
+    isSubmitted ? 'white' : theme.colors.mainBlue};
   margin-top: 13px;
-  color: white;
+  color: ${({ theme, isSubmitted }) =>
+    isSubmitted ? theme.colors.mainBlue : 'white'};
   font-size: 12px;
   font-weight: 700;
   cursor: pointer;

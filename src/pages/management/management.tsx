@@ -8,8 +8,16 @@ import { ShowSchedule } from '@components/management/schedule/ShowSchedule.tsx';
 
 export const ManagementPage = () => {
   const [showAddSchedule, setShowAddSchedule] = useState<boolean>(false);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
-  const handleScheduleSubmit = () => {
+  const handleAddSchedule = () => {
+    setShowAddSchedule(true);
+  };
+
+  const handleScheduleSubmit = (isAdded: boolean) => {
+    if (isAdded) {
+      setIsSubmitted(true);
+    }
     setShowAddSchedule(false);
   };
 
@@ -19,7 +27,10 @@ export const ManagementPage = () => {
       <Members />
       {!showAddSchedule ? (
         <>
-          <Schedule onAddSchedule={() => setShowAddSchedule(true)} />
+          <Schedule
+            onAddSchedule={handleAddSchedule}
+            isSubmitted={isSubmitted}
+          />
           <ShowSchedule />
         </>
       ) : (

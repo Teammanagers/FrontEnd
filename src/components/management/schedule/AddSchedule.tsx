@@ -13,7 +13,7 @@ interface DayTimeSlots {
 }
 
 interface AddScheduleProps {
-  onSubmit: () => void;
+  onSubmit: (isAdded: boolean) => void;
 }
 
 export const AddSchedule = ({ onSubmit }: AddScheduleProps) => {
@@ -46,7 +46,14 @@ export const AddSchedule = ({ onSubmit }: AddScheduleProps) => {
   };
 
   const handleSubmit = () => {
-    onSubmit();
+    const isEmpty = Object.values(weeklyTimes).every(
+      (times) => times.length === 0
+    );
+    if (isEmpty) {
+      onSubmit(false);
+      return;
+    }
+    onSubmit(true);
     // 서버에 요청 보내는 로직 추가해야함
     console.log(weeklyTimes);
   };
