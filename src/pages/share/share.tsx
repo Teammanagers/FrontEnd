@@ -47,10 +47,8 @@ export const SharePage = () => {
       type: 'DOCX',
       author: '박영희'
     };
-    setTimeout(() => {
-      setFiles([...files, newFile]);
-      setIsUploading(false);
-    }, 1000);
+    setFiles([...files, newFile]);
+    setIsUploading(false);
   };
 
   const handleFileSelect = (id: number) => {
