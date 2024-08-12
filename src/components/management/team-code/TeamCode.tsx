@@ -8,6 +8,7 @@ import {
   ButtonHTMLAttributes,
   ChangeEvent,
   KeyboardEvent,
+  useEffect,
   useRef,
   useState
 } from 'react';
@@ -15,7 +16,7 @@ import copy from 'copy-to-clipboard';
 import { useTags } from '@hooks/useTags.ts';
 
 export const TeamCode = () => {
-  const [profileImg, setProfileImg] = useState<string>(DefaultProfileImg);
+  const [profileImage, setProfileImage] = useState<string | null>(null);
   const [copyCode, setCopyCode] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [teamName, setTeamName] = useState<string>('UMC 6th 팀매니저');
@@ -41,8 +42,7 @@ export const TeamCode = () => {
     const file = e.target.files?.[0];
     if (file) {
       const imgUrl = URL.createObjectURL(file);
-
-      setProfileImg(imgUrl);
+      setProfileImage(imgUrl);
     }
     // 서버 API 연동시 추가 로직 필요
     console.log(file);
@@ -72,10 +72,16 @@ export const TeamCode = () => {
     setTimeout(() => setCopyCode(false), 2000);
   };
 
+  useEffect(() => {
+    console.log(profileImage);
+    console.log(typeof profileImage);
+    console.log(fileInputRef);
+  }, []);
+
   return (
     <TeamCodeContainer>
-      <ProfileContainer>
-        <ProfileImg src={profileImg} onClick={handleImgClick} />
+      <ProfileContainer onClick={handleImgClick}>
+        {profileImage ? <ProfileImg src={profileImage} /> : <DefaultImg />}
         <UploadIcon />
         <ImgUploadInput
           type="file"
@@ -202,6 +208,14 @@ const ProfileImg = styled.img`
   width: 163px;
   height: 163px;
   border-radius: 38px;
+  border: 1px solid ${({ theme }) => theme.colors.mainBlue};
+`;
+
+const DefaultImg = styled(DefaultProfileImg)`
+  width: 163px;
+  height: 163px;
+  border-radius: 38px;
+  background-color: white;
   border: 1px solid ${({ theme }) => theme.colors.mainBlue};
 `;
 
