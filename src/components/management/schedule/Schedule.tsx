@@ -15,7 +15,9 @@ interface ScheduleProps {
 
 export const Schedule = ({ onAddSchedule, isSubmitted }: ScheduleProps) => {
   const [isOpened, setIsOpened] = useState<boolean>(false);
-  const [selectedPeople, setSelectedPeople] = useState<string[]>([]);
+  const [selectedPeople, setSelectedPeople] = useState<string[]>(
+    people.map((person) => person.id)
+  );
   const [dropDownPosition, setDropDownPosition] = useState<{
     top: number;
     left: number;
@@ -79,7 +81,10 @@ export const Schedule = ({ onAddSchedule, isSubmitted }: ScheduleProps) => {
                 left: `${dropDownPosition.left}px`
               }}
             >
-              <PeopleDropDown onAddPerson={handleAddPerson} />
+              <PeopleDropDown
+                onAddPerson={handleAddPerson}
+                selectedPeople={selectedPeople}
+              />
             </DropDownContainer>
           )}
         </PeopleContainer>

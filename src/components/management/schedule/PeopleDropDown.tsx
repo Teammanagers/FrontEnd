@@ -16,9 +16,13 @@ export const people = [
 
 interface PeopleDropDownProps {
   onAddPerson: (personId: string) => void;
+  selectedPeople: string[];
 }
 
-export const PeopleDropDown = ({ onAddPerson }: PeopleDropDownProps) => {
+export const PeopleDropDown = ({
+  onAddPerson,
+  selectedPeople
+}: PeopleDropDownProps) => {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
   return (
@@ -33,9 +37,13 @@ export const PeopleDropDown = ({ onAddPerson }: PeopleDropDownProps) => {
           }}
           onClick={() => onAddPerson(person.id)}
           key={person.id}
-          hover={hoveredId === person.id}
         >
-          <Name hover={hoveredId === person.id}>{person.name}</Name>
+          <Name
+            hover={hoveredId === person.id}
+            isSelected={selectedPeople.includes(person.id)}
+          >
+            {person.name}
+          </Name>
         </NameContainer>
       ))}
     </DropDownContainer>
@@ -55,7 +63,7 @@ const DropDownContainer = styled.div`
   background: white;
 `;
 
-const NameContainer = styled.div<{ hover: boolean }>`
+const NameContainer = styled.div`
   width: 90px;
   height: 24px;
   display: flex;
@@ -64,13 +72,16 @@ const NameContainer = styled.div<{ hover: boolean }>`
   cursor: pointer;
 `;
 
-const Name = styled.span<{ hover: boolean }>`
+const Name = styled.span<{ hover: boolean; isSelected: boolean }>`
   white-space: nowrap;
   overflow: hidden;
   line-height: 14px;
   text-align: left;
   font-size: 12px;
-  // 이미 추가된 팀원이 디폴트, 추가 안된 팀원은 검정, 마우스호버시 파랑
-  color: ${({ theme, hover }) =>
-    hover ? theme.colors.mainBlue : theme.colors.gray};
+  color: ${({ theme, hover, isSelected }) =>
+    hover
+      ? theme.colors.mainBlue
+      : isSelected
+        ? theme.colors.gray
+        : theme.colors.black};
 `;
