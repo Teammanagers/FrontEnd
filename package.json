@@ -5,9 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build:app": "tsc -b tsconfig.app.json",
-    "build:node": "tsc -b tsconfig.node.json",
-    "build": "npm run build:app && npm run build:node && vite build",
+    "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
     "lint:fix": "eslint 'src/**/*.{js,jsx,ts,tsx}' --fix",
@@ -19,9 +17,10 @@
     "@tanstack/react-query": "^5.50.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-lazy-load-image-component": "^1.6.2",
     "react-router-dom": "^6.24.1",
     "styled-components": "^6.1.11",
-    "swiper": "^11.1.4",
+    "swiper": "^11.1.8",
     "zustand": "^4.5.4"
   },
   "devDependencies": {

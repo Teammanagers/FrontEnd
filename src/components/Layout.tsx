@@ -9,10 +9,13 @@ type LayoutProps = {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const location = useLocation();
   const isLoginPath = location.pathname.startsWith('/login');
+  const isSignupPath = location.pathname.startsWith('/signup');
+
+  const isExceptSideBarPage = isLoginPath || isSignupPath;
 
   return (
     <>
-      {!isLoginPath && <SideBar />}
+      {/* {!isExceptSideBarPage && <SideBar />} */}
       {children}
     </>
   );

@@ -1,17 +1,23 @@
 import { useState, useEffect } from 'react';
 
-const useLogoFadeIn = (duration: number) => {
-  const [isLogoFadeInActivate, setIsLogoFadeInActivate] = useState(true);
+const useLogoFadeIn = (delay: number) => {
+  const [isLogoFadeInActivate, setIsLogoFadeInActivate] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLogoFadeInActivate(false);
-    }, duration);
+    const hasLogoFadedIn = sessionStorage.getItem('hasLogoFadedIn');
 
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [duration]);
+    if (!hasLogoFadedIn) {
+      setIsLogoFadeInActivate(true);
+      const timer = setTimeout(() => {
+        setIsLogoFadeInActivate(false);
+        sessionStorage.setItem('hasLogoFadedIn', 'true');
+      }, delay);
+
+      return () => clearTimeout(timer);
+    } else {
+      setIsLogoFadeInActivate(false);
+    }
+  }, [delay]);
 
   return isLogoFadeInActivate;
 };

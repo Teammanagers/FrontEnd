@@ -1,14 +1,16 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { CalendarPage, ExtraCalendarPage } from '@pages/calendar';
-import { LoginPage, ExtraLoginPage } from '@pages/login';
+import { LoginPage, LoginCompletePage } from '@pages/login';
 import { ManagementPage, ExtraManagementPage } from '@pages/management';
 import { MemoPage, ExtraMemoPage } from '@pages/memo';
 import { MyPage, ExtraMyPage } from '@pages/mypage';
 import { SharePage, ExtraSharePage } from '@pages/share';
 import { TodoListPage, ExtraTodoListPage } from '@pages/todo-list';
+import { CreateTeamPage, JoinTeamPage, TeamPage } from '@pages/team';
 import ErrorPage from '@pages/error';
 import MainPage from '@pages/main';
 import Layout from '@components/Layout';
+import { SignupPage } from '@pages/signup/signup';
 
 const App = () => {
   return (
@@ -19,7 +21,12 @@ const App = () => {
           <Route path="/" element={<MainPage />} />
           {/* login page */}
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/login/:id" element={<ExtraLoginPage />} />
+          <Route path="/login-complete" element={<LoginCompletePage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          {/* team page */}
+          <Route path="/team" element={<TeamPage />} />
+          <Route path="/team/create" element={<CreateTeamPage />} />
+          <Route path="/team/join" element={<JoinTeamPage />} />
           {/* calendar page */}
           <Route path="/calendar" element={<CalendarPage />} />
           <Route path="/calendar/:id" element={<ExtraCalendarPage />} />

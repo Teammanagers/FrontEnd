@@ -13,6 +13,8 @@ export const LoginPage = () => {
   const isLogoFadeInActivate = useLogoFadeIn(3000);
 
   return (
-    <Wrapper>{isLogoFadeInActivate ? <LogoFadeIn /> : <OnBoarding />}</Wrapper>
+    <Wrapper>
+      {isLogoFadeInActivate ? <LogoFadeIn /> : <OnBoarding type="signin" />}
+    </Wrapper>
   );
 };
