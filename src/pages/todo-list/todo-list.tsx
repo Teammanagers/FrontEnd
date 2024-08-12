@@ -1,3 +1,12 @@
+import { Layout } from '@components/todo-list/layout/Layout';
+import TeamProgress from '@components/todo-list/TeamProgress';
+import TodoList from '@components/todo-list/TodoList';
+
 export const TodoListPage = () => {
-  return <>TodoList 페이지입니다.</>;
+  return (
+    <Layout>
+      <TeamProgress />
+      <TodoList />
+    </Layout>
+  );
 };

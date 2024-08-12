@@ -1,3 +1,12 @@
+import { Route, Routes } from 'react-router-dom';
+import { EndProject } from '@components/management/end-project/EndProject.tsx';
+import { Comments } from '@components/management/end-project/Comments.tsx';
+
 export const ExtraManagementPage = () => {
-  return <>ExtraManagement 페이지입니다.</>;
+  return (
+    <Routes>
+      <Route path="end" element={<EndProject />} />
+      <Route path="end/comment" element={<Comments />} />
+    </Routes>
+  );
 };
