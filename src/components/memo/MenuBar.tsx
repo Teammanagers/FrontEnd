@@ -1,10 +1,25 @@
 import styled from 'styled-components';
+import { useState } from 'react';
+import { DeleteMemoModal } from '@components/memo/DeleteMemoModal.tsx';
 
 export const MenuBar = () => {
+  const [isOpenedModal, setIsOpenedModal] = useState<boolean>(false);
+
+  const handleModal = () => {
+    setIsOpenedModal(true);
+  };
+
+  const closeModal = () => {
+    setIsOpenedModal(false);
+  };
+
   return (
     <Container>
       <Btn>수정</Btn>
-      <Btn style={{ color: 'red' }}>삭제</Btn>
+      <Btn style={{ color: 'red' }} onClick={handleModal}>
+        삭제
+      </Btn>
+      {isOpenedModal && <DeleteMemoModal onClose={closeModal} />}
     </Container>
   );
 };

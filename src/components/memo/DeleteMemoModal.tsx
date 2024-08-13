@@ -1,18 +1,31 @@
 import styled from 'styled-components';
 
-export const DeleteMemoModal = () => {
+interface DeleteMemoModalProps {
+  onClose: () => void;
+}
+
+export const DeleteMemoModal = ({ onClose }: DeleteMemoModalProps) => {
   return (
-    <>
+    <Container>
       <ModalContainer>
         <ModalText>&#39;제목&#39; 메모를 삭제하시겠습니까?</ModalText>
         <ButtonContainer>
-          <KeepBtn>유지</KeepBtn>
+          <KeepBtn onClick={onClose}>유지</KeepBtn>
           <DeleteBtn>삭제</DeleteBtn>
         </ButtonContainer>
       </ModalContainer>
-    </>
+    </Container>
   );
 };
+
+const Container = styled.div`
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+`;
 
 const ModalContainer = styled.div`
   display: flex;
@@ -25,6 +38,9 @@ const ModalContainer = styled.div`
   border-radius: 8px;
   box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.1);
   gap: 24px;
+  position: absolute;
+  top: 342px;
+  left: 490px;
 `;
 
 const ModalText = styled.div`
