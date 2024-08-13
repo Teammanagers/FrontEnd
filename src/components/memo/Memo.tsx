@@ -66,8 +66,7 @@ const MemoContainer = styled.div`
   height: 200px;
   border-radius: 6px;
   gap: 9px;
-  //background: white;
-  background: #006edc;
+  background: white;
 `;
 
 const MemoTitleContainer = styled.div`
@@ -77,7 +76,6 @@ const MemoTitleContainer = styled.div`
   width: 314px;
   height: 21px;
   position: relative;
-  background: #76baff;
 `;
 
 const MenuBarContainer = styled.div`
@@ -96,7 +94,7 @@ const MemoTitle = styled.h1<{ length: number }>`
   line-height: 21px;
   color: ${({ theme }) => theme.colors.black};
   white-space: nowrap;
-  max-width: ${({ length }) => (length > 20 ? `{length}ch` : length)};
+  max-width: ${({ length }) => (length > 20 ? '35ch' : length)};
   overflow: hidden;
   text-overflow: ellipsis;
 `;
