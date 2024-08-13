@@ -1,9 +1,17 @@
 import styled from 'styled-components';
 import { useState } from 'react';
 import { DeleteMemoModal } from '@components/memo/DeleteMemoModal.tsx';
+import { useNavigate } from 'react-router-dom';
 
 export const MenuBar = () => {
   const [isOpenedModal, setIsOpenedModal] = useState<boolean>(false);
+  const navigate = useNavigate();
+
+  const handleEdit = () => {
+    // 메모 수정 페이지로 이동하는 로직
+    const id = '123'; // 메모아이디
+    navigate(`/memo/write/${id}`);
+  };
 
   const handleModal = () => {
     setIsOpenedModal(true);
@@ -15,7 +23,7 @@ export const MenuBar = () => {
 
   return (
     <Container>
-      <Btn>수정</Btn>
+      <Btn onClick={handleEdit}>수정</Btn>
       <Btn style={{ color: 'red' }} onClick={handleModal}>
         삭제
       </Btn>
