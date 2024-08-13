@@ -1,5 +1,8 @@
 import styled from 'styled-components';
 import { MemoProps } from '@components/memo/MemoList.tsx';
+import MenuIcon from '@assets/memo/menu-icon.svg';
+import { ButtonHTMLAttributes, useEffect, useRef, useState } from 'react';
+import { MenuBar } from '@components/memo/MenuBar.tsx';
 
 interface Memo {
   memo: MemoProps;
@@ -7,11 +10,40 @@ interface Memo {
 
 export const Memo = ({ memo }: Memo) => {
   const { title, tags, content } = memo;
+  const [isOpenedMenu, setIsOpenedMenu] = useState<boolean>(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  const handleMenuBar = () => {
+    setIsOpenedMenu((prev) => !prev);
+  };
+
+  useEffect(() => {
+    const handleOutSideClick = (e: MouseEvent) => {
+      if (
+        isOpenedMenu &&
+        menuRef.current &&
+        !menuRef.current.contains(e.target as Node)
+      ) {
+        setIsOpenedMenu(false);
+      }
+    };
+    document.addEventListener('mousedown', handleOutSideClick);
+
+    return () => {
+      document.removeEventListener('mousedown', handleOutSideClick);
+    };
+  }, [isOpenedMenu]);
 
   return (
     <MemoContainer>
       <MemoTitleContainer>
         <MemoTitle length={title.length}>{title}</MemoTitle>
+        <MenuBtn onClick={handleMenuBar} />
+        {isOpenedMenu && (
+          <MenuBarContainer ref={menuRef}>
+            <MenuBar />
+          </MenuBarContainer>
+        )}
       </MemoTitleContainer>
       <TagContainer>
         {tags.map((tag, id) => (
@@ -34,14 +66,28 @@ const MemoContainer = styled.div`
   height: 200px;
   border-radius: 6px;
   gap: 9px;
-  background: white;
+  //background: white;
+  background: #006edc;
 `;
 
 const MemoTitleContainer = styled.div`
   display: flex;
+  justify-content: space-between;
   align-items: center;
   width: 314px;
   height: 21px;
+  position: relative;
+  background: #76baff;
+`;
+
+const MenuBarContainer = styled.div`
+  position: absolute;
+  top: 1.5px;
+  right: 0;
+`;
+
+const MenuBtn = styled(MenuIcon)<ButtonHTMLAttributes<HTMLButtonElement>>`
+  cursor: pointer;
 `;
 
 const MemoTitle = styled.h1<{ length: number }>`
