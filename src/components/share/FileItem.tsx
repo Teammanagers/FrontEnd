@@ -2,44 +2,53 @@ import React from 'react';
 import styled from 'styled-components';
 import Ppt from '@assets/mypage/ppt.svg';
 import Dot from '@assets/mypage/dot.svg';
-import Feedback from '@assets/mypage/feedback.svg';
+import SelectedFeedback from '@assets/mypage/selected-feedback.svg';
+import DefaultFeedback from '@assets/share/default-feedback.svg';
 import { FileProps } from './FileProps';
 
 interface FileItemProps {
   file: FileProps;
   onFileSelect: (id: number) => void;
+  isSelected: boolean;
 }
 
-export const FileItem: React.FC<FileItemProps> = ({ file, onFileSelect }) => {
+export const FileItem: React.FC<FileItemProps> = ({
+  file,
+  onFileSelect,
+  isSelected
+}) => {
   return (
-    <FileInfoBox onClick={() => onFileSelect(file.id)}>
+    <FileInfoBox onClick={() => onFileSelect(file.id)} isSelected={isSelected}>
       <FileInfo>
         <FileImage>
           <Ppt />
         </FileImage>
         <FileDetails>
-          <FileName>{file.name}</FileName>
+          <FileName>
+            {file.name}.{file.type}
+          </FileName>
           <FileProperties>
             {file.size} <Dot /> {file.date}
           </FileProperties>
         </FileDetails>
         <TagAuthor>{file.author}</TagAuthor>
       </FileInfo>
-      <StartFeedback>
-        <Feedback />
+      <StartFeedback isSelected={isSelected}>
+        {isSelected ? <SelectedFeedback /> : <DefaultFeedback />}
         <ButtonText>피드백</ButtonText>
       </StartFeedback>
     </FileInfoBox>
   );
 };
 
-const FileInfoBox = styled.div`
+const FileInfoBox = styled.div<{ isSelected: boolean }>`
   display: flex;
   flex-direction: row;
   gap: 18px;
   width: 486px;
   height: 66px;
   cursor: pointer;
+  background-color: white;
 `;
 
 const FileInfo = styled.div`
@@ -99,17 +108,23 @@ const TagAuthor = styled.div`
   align-self: center;
 `;
 
-const StartFeedback = styled.div`
+const StartFeedback = styled.div<{ isSelected: boolean }>`
+  display: flex;
   width: 78px;
   border-radius: 6px;
-  border: 0.76px solid ${({ theme }) => theme.colors.lightGray};
   padding: 10px;
-  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 6px;
   cursor: pointer;
+  background-color: ${({ isSelected, theme }) =>
+    isSelected ? theme.colors.background : 'white'};
+  color: ${({ isSelected, theme }) =>
+    isSelected ? theme.colors.black : theme.colors.darkGray};
+  border: 0.76px solid
+    ${({ isSelected, theme }) =>
+      isSelected ? theme.colors.mainBlue : theme.colors.lightGray};
 `;
 
 const ButtonText = styled.div`
