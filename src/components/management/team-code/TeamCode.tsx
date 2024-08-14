@@ -69,8 +69,18 @@ export const TeamCode = () => {
   const handleCopyCode = () => {
     copy('X65VRG34'); // 추후에 생성된 팀코드 복사되도록 로직 변경 필요
     setCopyCode(true);
-    setTimeout(() => setCopyCode(false), 2000);
+    setTimeout(() => setCopyCode(false), 800);
   };
+
+  useEffect(() => {
+    if (copyCode) {
+      const timer = setTimeout(() => {
+        setCopyCode(false);
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [copyCode]);
 
   useEffect(() => {
     console.log(profileImage);
