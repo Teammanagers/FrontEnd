@@ -107,6 +107,7 @@ const ScheduleContainer = styled.div`
   height: 57px;
   display: flex;
   flex-direction: column;
+  gap: 10px;
 `;
 
 const PeopleContainer = styled.div`
