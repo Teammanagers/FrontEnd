@@ -2,6 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { FileMenuContainer } from '@components/share/FileMenuContainer';
 import { FeedbackSection } from '@components/share/FeedbackSection';
+import { FileItem } from '@components/share/FileItem';
 
 interface FileItem {
   id: number;
@@ -13,22 +14,22 @@ interface FileItem {
   feedback?: string[];
 }
 
-export const Share = () => {
+export const SharePage = () => {
   const [files, setFiles] = useState<FileItem[]>([
     {
       id: 1,
-      name: '프로젝트 계획서.pdf',
+      name: '프로젝트 계획서',
       date: '2023-08-12',
       size: '2.4 MB',
-      type: 'PDF',
+      type: 'pdf',
       author: '홍길동'
     },
     {
       id: 2,
-      name: '디자인 초안.pptx',
+      name: '디자인 초안',
       date: '2023-08-10',
       size: '3.1 MB',
-      type: 'PPTX',
+      type: 'pptx',
       author: '김철수'
     }
   ]);
@@ -42,7 +43,7 @@ export const Share = () => {
       name: `파일 ${files.length + 1}`,
       date: new Date().toISOString().split('T')[0],
       size: '1.5 MB',
-      type: 'DOCX',
+      type: 'docx',
       author: '박영희'
     };
     setFiles([...files, newFile]);
@@ -60,6 +61,7 @@ export const Share = () => {
           files={files}
           onFileSelect={handleFileSelect}
           onFileAdd={handleFileAdd}
+          selectedFileId={selectedFileId}
         />
         <FeedbackContainer>
           <FeedbackSection
@@ -93,6 +95,7 @@ const ContentContainer = styled.div`
 `;
 
 const FeedbackContainer = styled.div`
+  box-sizing: border-box;
   background-color: white;
   width: 535px;
   height: 631px;
