@@ -194,6 +194,9 @@ const TitleField = styled.div`
   font-size: 18px;
   font-weight: 700;
   color: ${({ theme }) => theme.colors.black};
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const Properties = styled.div`
