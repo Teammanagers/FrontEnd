@@ -53,7 +53,9 @@ export const TeamCode = () => {
   };
 
   const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setTeamName(e.target.value);
+    if (e.target.value.length <= 30) {
+      setTeamName(e.target.value);
+    }
   };
 
   const handleNameKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -110,7 +112,6 @@ export const TeamCode = () => {
                 value={teamName}
                 onChange={handleNameChange}
                 onKeyDown={handleNameKeyDown}
-                maxLength={30}
                 autoFocus
               />
             ) : (
@@ -153,7 +154,11 @@ export const TeamCode = () => {
                     <TagInputContainer>
                       <TagInput
                         value={newTag}
-                        onChange={(e) => setNewTag(e.target.value)}
+                        onChange={(e) => {
+                          if (e.target.value.length <= 5) {
+                            setNewTag(e.target.value);
+                          }
+                        }}
                         onKeyDown={(e) => handleEditTag(e, index)}
                         maxLength={5}
                         autoFocus
@@ -172,9 +177,12 @@ export const TeamCode = () => {
                   {/* 태그 생성 */}
                   <TagInput
                     value={newTag}
-                    onChange={(e) => setNewTag(e.target.value)}
+                    onChange={(e) => {
+                      if (e.target.value.length <= 5) {
+                        setNewTag(e.target.value);
+                      }
+                    }}
                     onKeyDown={handleAddTag}
-                    maxLength={5}
                     autoFocus
                   />
                   <DeleteBtn onClick={() => handleDeleteTag(-1)} />
