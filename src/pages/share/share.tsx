@@ -37,15 +37,7 @@ export const SharePage = () => {
   const [selectedFileId, setSelectedFileId] = useState<number | null>(null);
   const [isUploading, setIsUploading] = useState<boolean>(false);
 
-  const handleFileAdd = () => {
-    const newFile: FileItem = {
-      id: files.length + 1,
-      name: `파일 ${files.length + 1}`,
-      date: new Date().toISOString().split('T')[0],
-      size: '1.5 MB',
-      type: 'docx',
-      author: '박영희'
-    };
+  const handleFileAdd = (newFile: FileItem) => {
     setFiles([...files, newFile]);
     setIsUploading(false);
   };
