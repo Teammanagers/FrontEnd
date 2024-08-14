@@ -32,7 +32,11 @@ export const Member = () => {
               <TagInputContainer>
                 <TagInput
                   value={newTag}
-                  onChange={(e) => setNewTag(e.target.value)}
+                  onChange={(e) => {
+                    if (e.target.value.length <= 5) {
+                      setNewTag(e.target.value);
+                    }
+                  }}
                   onKeyDown={(e) => handleEditTag(e, index)}
                   maxLength={5}
                   autoFocus
@@ -48,7 +52,11 @@ export const Member = () => {
           <TagInputContainer>
             <TagInput
               value={newTag}
-              onChange={(e) => setNewTag(e.target.value)}
+              onChange={(e) => {
+                if (e.target.value.length <= 5) {
+                  setNewTag(e.target.value);
+                }
+              }}
               onKeyDown={handleAddTag}
               maxLength={5}
               autoFocus
@@ -56,7 +64,7 @@ export const Member = () => {
             <DeleteBtn onClick={() => handleDeleteTag(-1)} />
           </TagInputContainer>
         )}
-        {!showTagInput && editTagIndex === null && tags.length < 3 && (
+        {!showTagInput && tags.length < 3 && (
           <AddBtn onClick={() => setShowTagInput(true)}>
             <AddIcon />
           </AddBtn>
@@ -110,7 +118,7 @@ const AboutTagBox = styled.div`
 `;
 
 const TagBox = styled(AboutTagBox)`
-  width: 37px;
+  width: 40px;
   height: 24px;
   margin-right: 13px;
   padding: 0;
