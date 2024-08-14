@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import Ppt from '@assets/mypage/ppt.svg';
 import Dot from '@assets/mypage/dot.svg';
 import SelectedFeedback from '@assets/mypage/selected-feedback.svg';
 import DefaultFeedback from '@assets/share/default-feedback.svg';
+import Ppt from '@assets/mypage/ppt.svg';
 import { FileProps } from './FileProps';
 
 interface FileItemProps {
@@ -17,23 +17,32 @@ export const FileItem: React.FC<FileItemProps> = ({
   onFileSelect,
   isSelected
 }) => {
+  const getFileIcon = (fileType: string) => {
+    switch (fileType.toLowerCase()) {
+      case 'ppt':
+      case 'pptx':
+        return <Ppt />;
+      default:
+        return <Ppt />; // 문서, 이미지 파일 추가되면 수정할 예정
+    }
+  };
+
   return (
-    <FileInfoBox onClick={() => onFileSelect(file.id)} isSelected={isSelected}>
-      <FileInfo>
-        <FileImage>
-          <Ppt />
-        </FileImage>
+    <FileInfoBox isSelected={isSelected}>
+      <FileInfo title={file.name}>
+        <FileImage>{getFileIcon(file.type)}</FileImage>
         <FileDetails>
-          <FileName>
-            {file.name}.{file.type}
-          </FileName>
+          <FileName>{file.name}</FileName>
           <FileProperties>
             {file.size} <Dot /> {file.date}
           </FileProperties>
         </FileDetails>
         <TagAuthor>{file.author}</TagAuthor>
       </FileInfo>
-      <StartFeedback isSelected={isSelected}>
+      <StartFeedback
+        onClick={() => onFileSelect(file.id)}
+        isSelected={isSelected}
+      >
         {isSelected ? <SelectedFeedback /> : <DefaultFeedback />}
         <ButtonText>피드백</ButtonText>
       </StartFeedback>
@@ -47,7 +56,6 @@ const FileInfoBox = styled.div<{ isSelected: boolean }>`
   gap: 18px;
   width: 486px;
   height: 66px;
-  cursor: pointer;
   background-color: white;
 `;
 
@@ -59,6 +67,7 @@ const FileInfo = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  cursor: pointer;
 `;
 
 const FileImage = styled.div`
@@ -79,6 +88,9 @@ const FileName = styled.div`
   font-size: 12px;
   font-weight: 400;
   color: ${({ theme }) => theme.colors.black};
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const FileProperties = styled.div`
