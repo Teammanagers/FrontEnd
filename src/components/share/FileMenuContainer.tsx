@@ -9,12 +9,14 @@ interface FileMenuContainerProps {
   files: FileProps[];
   onFileSelect: (id: number) => void;
   onFileAdd: () => void;
+  selectedFileId: number | null;
 }
 
 export const FileMenuContainer: React.FC<FileMenuContainerProps> = ({
   files,
   onFileSelect,
-  onFileAdd
+  onFileAdd,
+  selectedFileId
 }) => {
   return (
     <Container>
@@ -33,7 +35,12 @@ export const FileMenuContainer: React.FC<FileMenuContainerProps> = ({
       ) : (
         <>
           {files.map((file) => (
-            <FileItem key={file.id} file={file} onFileSelect={onFileSelect} />
+            <FileItem
+              key={file.id}
+              file={file}
+              onFileSelect={onFileSelect}
+              isSelected={file.id === selectedFileId}
+            />
           ))}
           <AddFileButton onClick={onFileAdd}>
             <AddText>파일 추가하기</AddText>
@@ -45,7 +52,6 @@ export const FileMenuContainer: React.FC<FileMenuContainerProps> = ({
   );
 };
 
-// Styled Components
 const Container = styled.div`
   box-sizing: border-box;
   background-color: white;
