@@ -3,17 +3,12 @@ import styled from 'styled-components';
 import Todos from './Todos';
 import { UserInfo } from 'src/types/todo-list';
 import MockData from '@assets/todo-list/mock-data.json';
-import { createTeam, getTeam } from '@apis/test';
 
 const Mock = MockData as UserInfo[];
 
 const TodoList = () => {
   const location = useLocation();
 
-  const Test = async () => {
-    const response = await getTeam();
-    console.log(response);
-  };
   return (
     <Wrapper isTodoPage={location?.pathname.startsWith('/todo-list')}>
       <Container isTodoPage={location?.pathname.startsWith('/todo-list')}>
@@ -21,7 +16,6 @@ const TodoList = () => {
           <Todos userInfo={userInfo} key={userInfo.id} />
         ))}
       </Container>
-      <button onClick={Test}>api 불러오기</button>
     </Wrapper>
   );
 };

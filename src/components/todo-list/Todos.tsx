@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useState } from 'react';
+import { ChangeEvent, FC, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import * as Accordion from '@radix-ui/react-accordion';
@@ -11,6 +11,9 @@ import {
 } from '../../types/todo-list';
 import ChevronDownIcon from '@assets/todo-list/chevron-down.svg';
 import AddTodoIcon from '@assets/todo-list/add-todo.svg';
+
+import { createTodo } from '@apis/todo-list';
+import { teamId } from '../../constant/index';
 
 interface TodosProps {
   userInfo: UserInfo;
@@ -37,12 +40,16 @@ const Todos = ({ userInfo }: TodosProps) => {
     setInputValue(e.target.value);
   };
 
-  const handleAddTodoSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleAddTodoSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setInputValue('');
     const target = e.target as HTMLFormElement;
     const value = (target[0] as HTMLInputElement).value;
-    if (value) setTodos((prev) => [...prev, value]);
+    if (value) {
+      setTodos((prev) => [...prev, value]);
+      const response = await createTodo(teamId, value);
+      console.log(response);
+    }
   };
 
   return (

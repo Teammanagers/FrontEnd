@@ -2,13 +2,17 @@ import styled from 'styled-components';
 import * as Progress from '@radix-ui/react-progress';
 import { useEffect, useState } from 'react';
 
-const TeamProgress = () => {
+interface TeamProgressProps {
+  progress: number;
+}
+
+const TeamProgress = ({ progress }: TeamProgressProps) => {
   const [progressValue, setProgressValue] = useState<number>(0);
 
   useEffect(() => {
-    const timer = setTimeout(() => setProgressValue(33), 300);
+    const timer = setTimeout(() => setProgressValue(progress), 300);
     return () => clearTimeout(timer);
-  }, [progressValue]);
+  }, []);
 
   return (
     <Container>
