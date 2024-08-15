@@ -42,9 +42,6 @@ const Notice = () => {
   return (
     <>
       <Wrapper>
-        <StyledLoudSpeakerIcon />
-        <h2> UMC 6th 팀 매니저 공지입니다</h2>
-
         <Dialog.Root
           open={open}
           //   onOpenChange={() => {
@@ -52,7 +49,12 @@ const Notice = () => {
           //   }}
           onOpenChange={setOpen}
         >
-          <DialogTrigger>공지 수정</DialogTrigger>
+          <DialogTrigger>
+            <StyledLoudSpeakerIcon />
+            <h2> UMC 6th 팀 매니저 공지입니다</h2>
+
+            <button>공지 수정</button>
+          </DialogTrigger>
           <Dialog.Portal>
             <DialogOverlay />
 
@@ -92,7 +94,9 @@ const Notice = () => {
 
 export default Notice;
 
-const Wrapper = styled.div`
+const Wrapper = styled.div``;
+
+const DialogTrigger = styled(Dialog.Trigger)`
   box-sizing: border-box;
   display: flex;
   align-items: center;
@@ -104,6 +108,7 @@ const Wrapper = styled.div`
   border-radius: 7px;
   color: black;
   background-color: white;
+  cursor: pointer;
 
   & h2 {
     all: unset;
@@ -117,20 +122,20 @@ const Wrapper = styled.div`
     color: #1d1d1d;
     margin-right: 36px;
   }
-`;
 
-const DialogTrigger = styled(Dialog.Trigger)`
-  width: 96px;
-  height: 36px;
-  border: 1px solid ${(props) => props.theme.colors.mainBlue};
-  border-radius: 4px;
-  font-size: 12px;
-  font-weight: 700;
-  line-height: 18px;
-  color: ${(props) => props.theme.colors.mainBlue};
-  background-color: white;
-  cursor: pointer;
-  outline: none;
+  button {
+    width: 96px;
+    height: 36px;
+    border: 1px solid ${(props) => props.theme.colors.mainBlue};
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 18px;
+    color: ${(props) => props.theme.colors.mainBlue};
+    background-color: white;
+    cursor: pointer;
+    outline: none;
+  }
 `;
 
 const DialogOverlay = styled(Dialog.Overlay)`

@@ -51,16 +51,11 @@ const ParticipantsList = ({
 
 export default ParticipantsList;
 
-const PopoverRoot = styled(Popover.Root)`
-  .popover-trigger {
-    display: flex;
-    align-items: center;
-  }
-`;
+const PopoverRoot = styled(Popover.Root)``;
 const PopoverContent = styled(Popover.Content)`
   position: relative;
   top: -23px;
-  left: 17px;
+  left: 15px;
 
   ul,
   li {
@@ -100,6 +95,11 @@ const Button = styled.button`
   }
 `;
 
-const StyledAddParticipantsBtn = styled(AddParticipantsBtn)`
+const StyledAddParticipantsBtn = styled(AddParticipantsBtn)<{}>`
+  position: sticky;
+  top: 0;
+  right: 5px;
+  width: 24px;
+  height: 24px;
   cursor: pointer;
 `;

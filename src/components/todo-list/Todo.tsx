@@ -121,6 +121,7 @@ const TodoWrapper = styled.div`
   }
 
   .todo-text {
+    max-width: 296px;
     font-size: 12px;
     font-weight: 500;
     color: #1d1d1d;
