@@ -1,2 +1,2 @@
 export { LoginPage } from './login';
-export { ExtraLoginPage } from './extra';
+export { LoginCompletePage } from './complete';
