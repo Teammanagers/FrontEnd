@@ -13,7 +13,9 @@ import {
   ShareTeamPage
 } from '@pages/team';
 import ErrorPage from '@pages/error';
-import MainPage from '@pages/main';
+import { ProfilePage } from '@pages/mypage/profile';
+import { PortfolioPage } from '@pages/mypage/portfolio';
+import MainPage from '@pages/main/main';
 import Layout from '@components/Layout';
 import { SignupPage } from '@pages/signup/signup';
 
@@ -38,13 +40,15 @@ const App = () => {
           <Route path="/calendar/:id" element={<ExtraCalendarPage />} />
           {/* management page */}
           <Route path="/management" element={<ManagementPage />} />
-          <Route path="/management/:id" element={<ExtraManagementPage />} />
+          <Route path="/management/*" element={<ExtraManagementPage />} />
           {/* memo page */}
           <Route path="/memo" element={<MemoPage />} />
-          <Route path="/memo/:id" element={<ExtraMemoPage />} />
+          <Route path="/memo/*" element={<ExtraMemoPage />} />
           {/* mypage */}
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/mypage/:id" element={<ExtraMyPage />} />
+          <Route path="/mypage/profile" element={<ProfilePage />} />
+          <Route path="/mypage/portfolio" element={<PortfolioPage />} />
           {/* share page */}
           <Route path="/share" element={<SharePage />} />
           <Route path="/share/:id" element={<ExtraSharePage />} />
