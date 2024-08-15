@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router-dom';
-import { SideBar } from '@components/SideBar/SideBar';
+import { SideBar } from '@components/sidebar/SideBar';
 import { ReactNode } from 'react';
 
 type LayoutProps = {
