@@ -36,12 +36,22 @@ export const MyPage = () => {
             <TodoListBox>todoList 컴포넌트</TodoListBox>
           </TodoListContainer>
           <MenuContainer>
-            <MenuItem id="profile">
+            <MenuItem
+              id="profile"
+              onClick={() => {
+                handleNavigate(`/mypage/profile`);
+              }}
+            >
               <Profile />
               프로필 수정
               <MoveIcon />
             </MenuItem>
-            <MenuItem id="portfolio">
+            <MenuItem
+              id="portfolio"
+              onClick={() => {
+                handleNavigate(`/mypage/portfolio`);
+              }}
+            >
               <Portfolio />
               포트폴리오
               <MoveIcon />

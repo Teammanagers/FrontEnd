@@ -11,6 +11,12 @@ export const Members = () => {
         <Member />
         <Member />
         <Member />
+        <Member />
+        <Member />
+        <Member />
+        <Member />
+        <Member />
+        <Member />
       </MemberContainer>
     </MembersContainer>
   );
@@ -29,4 +35,6 @@ const MemberContainer = styled.div`
   grid-template-columns: repeat(2, 1fr);
   gap: 12px;
   margin-top: 10px;
+  overflow-y: scroll;
+  overflow-x: hidden;
 `;

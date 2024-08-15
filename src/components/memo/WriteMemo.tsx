@@ -1,60 +1,33 @@
 import styled from 'styled-components';
 import BackButton from '@assets/memo/back-button.svg';
 import AddTag from '@assets/memo/add-tag-icon.svg';
-import DeleteTag from '@assets/memo/delete-tag-icon.svg';
-import { useNavigate } from 'react-router-dom';
 import {
-  ButtonHTMLAttributes,
-  MouseEvent,
-  KeyboardEvent,
-  useState
-} from 'react';
+  DeleteBtn,
+  TagInputContainer
+} from '@components/management/team-code/TeamCode.tsx';
+import { useNavigate } from 'react-router-dom';
+import { ButtonHTMLAttributes, useState } from 'react';
+import { useTags } from '@hooks/useTags.ts';
 
 export const WriteMemo = () => {
-  // 제목
   const [title, setTitle] = useState<string>('');
-
-  // 태그
-  const [tags, setTags] = useState<string[]>([]);
-  const [showTagInput, setShowTagInput] = useState<boolean>(false);
-  const [newTag, setNewTag] = useState<string>('');
-  const [editTagIndex, setEditTagIndex] = useState<number | null>(null);
-
-  // 본문
   const [content, setContent] = useState<string>('');
 
+  const {
+    tags,
+    showTagInput,
+    newTag,
+    editTagIndex,
+    handleAddTag,
+    handleEditTag,
+    startEditingTag,
+    handleDeleteTag,
+    setShowTagInput,
+    setEditTagIndex,
+    setNewTag
+  } = useTags();
+
   const navigate = useNavigate();
-
-  const handleTag = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      if (newTag.trim() !== '') {
-        if (editTagIndex !== null) {
-          // 태그 수정
-          const updatedTags = [...tags];
-          updatedTags[editTagIndex] = newTag.trim();
-          setTags(updatedTags);
-          setEditTagIndex(null);
-        } else {
-          // 새 태그 추가
-          setTags([...tags, newTag.trim()]);
-        }
-        setNewTag('');
-        setShowTagInput(false);
-      }
-    }
-  };
-
-  // 태그 삭제
-  const handleTagDelete = (e: MouseEvent, index: number) => {
-    e.stopPropagation(); // 이벤트 전파 중단
-    setTags(tags.filter((_, i) => i !== index));
-  };
-
-  // 태그 수정 활성화
-  const handleEditTag = (index: number) => {
-    setEditTagIndex(index);
-    setNewTag(tags[index]);
-  };
 
   const handleSubmit = () => {
     console.log('제목: ', title, title.length);
@@ -83,39 +56,52 @@ export const WriteMemo = () => {
           {/* 태그 */}
           <TagContainer>
             {tags.map((tag, index) => (
-              <Tag key={index} onClick={() => handleEditTag(index)}>
+              <Tag key={index} onClick={() => startEditingTag(index)}>
+                {/* 태그 수정 */}
                 {editTagIndex === index ? (
-                  <TagInput
-                    value={newTag}
-                    onChange={(e) => setNewTag(e.target.value)}
-                    onKeyPress={handleTag}
-                    maxLength={5}
-                    autoFocus
-                  />
+                  <TagInputContainer>
+                    <TagInput
+                      value={newTag}
+                      onChange={(e) => setNewTag(e.target.value)}
+                      onKeyDown={(e) => handleEditTag(e, index)}
+                      maxLength={5}
+                      autoFocus
+                    />
+                    <DeleteBtn onClick={() => handleDeleteTag(index)} />
+                  </TagInputContainer>
                 ) : (
                   <>
                     <span>{tag}</span>
-                    <DeleteTagBtn onClick={(e) => handleTagDelete(e, index)} />
                   </>
                 )}
               </Tag>
             ))}
             {showTagInput && editTagIndex === null && (
-              <TagInput
-                value={newTag}
-                onChange={(e) => setNewTag(e.target.value)}
-                onKeyPress={handleTag}
-                maxLength={5}
-                autoFocus
-              />
+              <TagInputContainer>
+                {/* 태그 생성 */}
+                <TagInput
+                  value={newTag}
+                  onChange={(e) => setNewTag(e.target.value)}
+                  onKeyDown={handleAddTag}
+                  maxLength={5}
+                  autoFocus
+                />
+                <DeleteBtn
+                  onClick={() => {
+                    handleDeleteTag(-1);
+                  }}
+                />
+              </TagInputContainer>
             )}
-            {!showTagInput && editTagIndex === null && tags.length < 3 && (
+            {!showTagInput && tags.length < 3 && (
               <AddTagBtn
                 onClick={() => {
                   setShowTagInput(true);
                   setEditTagIndex(null);
                 }}
-              />
+              >
+                <AddTag />
+              </AddTagBtn>
             )}
           </TagContainer>
         </TopContainer>
@@ -216,17 +202,11 @@ const Tag = styled.div`
   cursor: pointer;
 `;
 
-const DeleteTagBtn = styled(DeleteTag)<ButtonHTMLAttributes<HTMLButtonElement>>`
-  width: 19px;
-  height: 19px;
-  cursor: pointer;
-`;
-
 const TagInput = styled.input`
   width: 50px;
 `;
 
-const AddTagBtn = styled(AddTag)<ButtonHTMLAttributes<HTMLButtonElement>>`
+const AddTagBtn = styled.div`
   width: 24px;
   height: 24px;
   background: ${({ theme }) => theme.colors.background};

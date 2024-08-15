@@ -3,13 +3,24 @@ import Add from '@assets/management/add-icon.svg';
 import Delete from '@assets/management/delete-icon.svg';
 import DefaultProfileImg from '@assets/management/profile-img-default.svg';
 import Upload from '@assets/management/upload-icon.svg';
-import { ButtonHTMLAttributes, ChangeEvent, useRef, useState } from 'react';
+import Edit from '@assets/management/edit-icon.svg';
+import {
+  ButtonHTMLAttributes,
+  ChangeEvent,
+  KeyboardEvent,
+  useEffect,
+  useRef,
+  useState
+} from 'react';
 import copy from 'copy-to-clipboard';
 import { useTags } from '@hooks/useTags.ts';
 
 export const TeamCode = () => {
-  const [profileImg, setProfileImg] = useState<string>(DefaultProfileImg);
+  const [profileImage, setProfileImage] = useState<string | null>(null);
   const [copyCode, setCopyCode] = useState<boolean>(false);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [teamName, setTeamName] = useState<string>('UMC 6th 팀매니저');
+  const [isHovered, setIsHovered] = useState<boolean>(false);
 
   const {
     tags,
@@ -31,8 +42,7 @@ export const TeamCode = () => {
     const file = e.target.files?.[0];
     if (file) {
       const imgUrl = URL.createObjectURL(file);
-
-      setProfileImg(imgUrl);
+      setProfileImage(imgUrl);
     }
     // 서버 API 연동시 추가 로직 필요
     console.log(file);
@@ -42,16 +52,48 @@ export const TeamCode = () => {
     fileInputRef.current?.click();
   };
 
+  const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value.length <= 30) {
+      setTeamName(e.target.value);
+    }
+  };
+
+  const handleNameKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      setIsEditing(false);
+    }
+  };
+
+  const handleNameClick = () => {
+    setIsEditing(true);
+  };
+
   const handleCopyCode = () => {
     copy('X65VRG34'); // 추후에 생성된 팀코드 복사되도록 로직 변경 필요
     setCopyCode(true);
-    setTimeout(() => setCopyCode(false), 2000);
+    setTimeout(() => setCopyCode(false), 800);
   };
+
+  useEffect(() => {
+    if (copyCode) {
+      const timer = setTimeout(() => {
+        setCopyCode(false);
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [copyCode]);
+
+  useEffect(() => {
+    console.log(profileImage);
+    console.log(typeof profileImage);
+    console.log(fileInputRef);
+  }, []);
 
   return (
     <TeamCodeContainer>
-      <ProfileContainer>
-        <ProfileImg src={profileImg} onClick={handleImgClick} />
+      <ProfileContainer onClick={handleImgClick}>
+        {profileImage ? <ProfileImg src={profileImage} /> : <DefaultImg />}
         <UploadIcon />
         <ImgUploadInput
           type="file"
@@ -65,7 +107,26 @@ export const TeamCode = () => {
         <TopContainer>
           <TitleBox>
             <TitleText>Title</TitleText>
-            <Title>UMC 6th 팀매니저</Title>
+            {isEditing ? (
+              <NameInput
+                value={teamName}
+                onChange={handleNameChange}
+                onKeyDown={handleNameKeyDown}
+                autoFocus
+              />
+            ) : (
+              <TitleWrapper
+                onMouseEnter={() => {
+                  setIsHovered(true);
+                }}
+                onMouseLeave={() => {
+                  setIsHovered(false);
+                }}
+              >
+                <Title>{teamName}</Title>
+                <EditIcon onClick={handleNameClick} hover={isHovered} />
+              </TitleWrapper>
+            )}
           </TitleBox>
           <CodeContainer>
             <TeamCodeBox>
@@ -93,7 +154,11 @@ export const TeamCode = () => {
                     <TagInputContainer>
                       <TagInput
                         value={newTag}
-                        onChange={(e) => setNewTag(e.target.value)}
+                        onChange={(e) => {
+                          if (e.target.value.length <= 5) {
+                            setNewTag(e.target.value);
+                          }
+                        }}
                         onKeyDown={(e) => handleEditTag(e, index)}
                         maxLength={5}
                         autoFocus
@@ -112,15 +177,18 @@ export const TeamCode = () => {
                   {/* 태그 생성 */}
                   <TagInput
                     value={newTag}
-                    onChange={(e) => setNewTag(e.target.value)}
+                    onChange={(e) => {
+                      if (e.target.value.length <= 5) {
+                        setNewTag(e.target.value);
+                      }
+                    }}
                     onKeyDown={handleAddTag}
-                    maxLength={5}
                     autoFocus
                   />
                   <DeleteBtn onClick={() => handleDeleteTag(-1)} />
                 </TagInputContainer>
               )}
-              {!showTagInput && editTagIndex === null && tags.length < 3 && (
+              {!showTagInput && tags.length < 3 && (
                 <AddTagBtn
                   onClick={() => {
                     setShowTagInput(true);
@@ -161,6 +229,14 @@ const ProfileImg = styled.img`
   border: 1px solid ${({ theme }) => theme.colors.mainBlue};
 `;
 
+const DefaultImg = styled(DefaultProfileImg)`
+  width: 163px;
+  height: 163px;
+  border-radius: 38px;
+  background-color: white;
+  border: 1px solid ${({ theme }) => theme.colors.mainBlue};
+`;
+
 const UploadIcon = styled(Upload)`
   position: absolute;
   bottom: -10px;
@@ -190,7 +266,14 @@ const Box = styled.div`
 `;
 
 const TitleBox = styled(Box)`
+  display: flex;
   width: 350px;
+`;
+
+const TitleWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `;
 
 export const TitleText = styled.h1`
@@ -201,12 +284,25 @@ export const TitleText = styled.h1`
   margin: 0;
 `;
 
+const NameInput = styled.input`
+  height: 38px;
+`;
+
 const Title = styled.p`
   font-size: 15px;
   font-weight: 500;
   line-height: 22.5px;
   color: ${({ theme }) => theme.colors.black};
   margin-top: 11px;
+`;
+
+const EditIcon = styled(Edit)<
+  ButtonHTMLAttributes<HTMLButtonElement> & { hover: boolean }
+>`
+  display: ${({ hover }) => (hover ? 'visible' : 'none')};
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
 `;
 
 const TeamCodeBox = styled(Box)`

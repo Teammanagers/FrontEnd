@@ -5,6 +5,7 @@ export const ExtraMemoPage = () => {
   return (
     <Routes>
       <Route path="write" element={<WriteMemo />} />
+      <Route path="write/:id" element={<WriteMemo />} />
     </Routes>
   );
 };

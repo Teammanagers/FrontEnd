@@ -1,4 +1,4 @@
-import { KeyboardEvent, useState } from 'react';
+import { KeyboardEvent, useEffect, useState } from 'react';
 
 export const useTags = () => {
   const [tags, setTags] = useState<string[]>([]); // 태그 업데이트
@@ -32,16 +32,19 @@ export const useTags = () => {
   };
 
   const handleDeleteTag = (index: number) => {
-    if (index === -1) {
-      setShowTagInput(() => {
-        return false;
-      });
-    } else {
-      setTags(tags.filter((_, i) => i !== index));
-    }
-    setEditTagIndex(null);
-    setNewTag('');
+    setTags((prevTags) => {
+      const updatedTags = prevTags.filter((_, i) => i !== index);
+      setEditTagIndex(null);
+      setNewTag('');
+      return updatedTags;
+    });
   };
+
+  useEffect(() => {
+    if (tags.length < 3) {
+      setShowTagInput(false);
+    }
+  }, [tags]);
 
   return {
     tags,
