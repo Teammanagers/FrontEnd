@@ -1,15 +1,15 @@
 import styled from 'styled-components';
-import { MemoProps } from '@components/memo/MemoList.tsx';
 import MenuIcon from '@assets/memo/menu-icon.svg';
 import { ButtonHTMLAttributes, useEffect, useRef, useState } from 'react';
 import { MenuBar } from '@components/memo/MenuBar.tsx';
+import { MemoProps, TagProps } from '../../types/memo.ts';
 
-interface Memo {
-  memo: MemoProps;
+interface Memo extends MemoProps {
+  memoId: number;
 }
 
-export const Memo = ({ memo }: Memo) => {
-  const { title, tags, content } = memo;
+export const Memo = ({ memo }: { memo: Memo }) => {
+  const { title, tagList, content } = memo;
   const [isOpenedMenu, setIsOpenedMenu] = useState<boolean>(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -46,8 +46,8 @@ export const Memo = ({ memo }: Memo) => {
         )}
       </MemoTitleContainer>
       <TagContainer>
-        {tags.map((tag, id) => (
-          <TagBox key={id}>{tag}</TagBox>
+        {tagList.map((tag: TagProps) => (
+          <TagBox key={tag.tagId}>{tag.name}</TagBox>
         ))}
       </TagContainer>
       <MemoContentContainer>
