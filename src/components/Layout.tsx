@@ -10,12 +10,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const location = useLocation();
   const isLoginPath = location.pathname.startsWith('/login');
   const isSignupPath = location.pathname.startsWith('/signup');
+  const isTeamPath = location.pathname.startsWith('/team');
 
-  const isExceptSideBarPage = isLoginPath || isSignupPath;
+  const isExceptSideBarPage = isLoginPath || isSignupPath || isTeamPath;
 
   return (
     <>
-      {/* {!isExceptSideBarPage && <SideBar />} */}
+      {!isExceptSideBarPage && <SideBar />}
       {children}
     </>
   );

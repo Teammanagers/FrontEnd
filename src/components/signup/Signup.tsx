@@ -66,7 +66,6 @@ const Signup = () => {
 
 export default Signup;
 
-// Styled Components
 const ArrowContainer = styled.div`
   display: flex;
   justify-content: flex-start;

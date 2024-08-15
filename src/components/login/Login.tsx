@@ -43,7 +43,6 @@ const Login = () => {
 
 export default Login;
 
-// 텍스트 및 버튼 컨테이너 스타일
 const OnBoardingTextDiv = styled.div`
   margin-top: 110px;
   text-align: center;
@@ -68,7 +67,6 @@ const OnBoardingTextDiv = styled.div`
   }
 `;
 
-// 공통 버튼 스타일
 const Button = styled.button<{
   backgroundColor: string;
   textColor?: string;
@@ -83,13 +81,12 @@ const Button = styled.button<{
   align-items: center;
   justify-content: center;
   gap: 18px;
-  margin-top: 9px; /* 모든 버튼에 동일한 마진 적용 */
+  margin-top: 9px;
   cursor: pointer;
   background-color: ${({ backgroundColor }) => backgroundColor};
   color: ${({ textColor }) => textColor || '#000'};
 `;
 
-// 버튼 텍스트 스타일
 const ButtonText = styled.span`
   font-weight: 700;
   font-size: 18px;

@@ -44,7 +44,7 @@ const Wrapper = styled.div`
     65.36px 20.52px 41.04px 0px #0000000d,
     117.04px 36.48px 48.64px 0px #00000003,
     182.4px 57px 53.2px 0px #00000000;
-  position: relative; /* 동그란 버튼의 위치 조정을 위한 설정 */
+  position: relative;
 `;
 
 // 이미지 슬라이더 Wrapper 스타일
@@ -53,7 +53,7 @@ const OnBoardingImagesWrapper = styled.div`
   height: 100%;
   border-radius: 24px 0px 0px 24px;
   overflow: hidden;
-  position: relative; /* 네비게이션 버튼 위치 조정을 위한 설정 */
+  position: relative;
 `;
 
 // 슬라이더 이미지 스타일

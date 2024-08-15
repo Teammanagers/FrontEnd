@@ -145,7 +145,7 @@ const SideBarContainer = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  transition: width 0.3s ease; // 화면 효과 부드럽게 전환
+  transition: width 0.3s ease;
 
   &:hover {
     width: 158px;

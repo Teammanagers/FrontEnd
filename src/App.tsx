@@ -6,7 +6,12 @@ import { MemoPage, ExtraMemoPage } from '@pages/memo';
 import { MyPage, ExtraMyPage } from '@pages/mypage';
 import { SharePage, ExtraSharePage } from '@pages/share';
 import { TodoListPage, ExtraTodoListPage } from '@pages/todo-list';
-import { CreateTeamPage, JoinTeamPage, TeamPage } from '@pages/team';
+import {
+  CreateTeamPage,
+  JoinTeamPage,
+  TeamPage,
+  ShareTeamPage
+} from '@pages/team';
 import ErrorPage from '@pages/error';
 import MainPage from '@pages/main';
 import Layout from '@components/Layout';
@@ -27,6 +32,7 @@ const App = () => {
           <Route path="/team" element={<TeamPage />} />
           <Route path="/team/create" element={<CreateTeamPage />} />
           <Route path="/team/join" element={<JoinTeamPage />} />
+          <Route path="/team/share" element={<ShareTeamPage />} />
           {/* calendar page */}
           <Route path="/calendar" element={<CalendarPage />} />
           <Route path="/calendar/:id" element={<ExtraCalendarPage />} />

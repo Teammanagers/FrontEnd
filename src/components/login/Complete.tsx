@@ -37,7 +37,6 @@ const Complete = () => {
 
 export default Complete;
 
-// Styled Components
 const CompleteContainer = styled.div`
   display: grid;
   place-content: center;
