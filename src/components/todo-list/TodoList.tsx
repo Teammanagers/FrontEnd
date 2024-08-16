@@ -1,19 +1,18 @@
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import Todos from './Todos';
+import { useTodoStore } from '@store/todoStore';
 import { UserInfo } from 'src/types/todo-list';
-import MockData from '@assets/todo-list/mock-data.json';
-
-const Mock = MockData as UserInfo[];
 
 const TodoList = () => {
   const location = useLocation();
+  const teamTodoList = useTodoStore((state) => state.teamTodoList);
 
   return (
-    <Wrapper isTodoPage={location?.pathname.startsWith('/todo-list')}>
-      <Container isTodoPage={location?.pathname.startsWith('/todo-list')}>
-        {Mock.map((userInfo: UserInfo) => (
-          <Todos userInfo={userInfo} key={userInfo.id} />
+    <Wrapper isTodoPage={location.pathname.startsWith('/todo-list')}>
+      <Container isTodoPage={location.pathname.startsWith('/todo-list')}>
+        {teamTodoList.map((userInfo: UserInfo) => (
+          <Todos userInfo={userInfo} key={userInfo.teamManageId} />
         ))}
       </Container>
     </Wrapper>

@@ -8,8 +8,9 @@ import { useTodoStore } from '../../store/todoStore';
 import { teamId } from '../../constant/index';
 
 export const TodoListPage = () => {
-  const progress = useTodoStore((state) => state.progress);
-  const { setTeamTodos } = useTodoStore((state) => ({
+  const { progress, teamTodoList, setTeamTodos } = useTodoStore((state) => ({
+    progress: state.progress,
+    teamTodoList: state.teamTodoList,
     setTeamTodos: state.setTeamTodos
   }));
 
@@ -19,12 +20,12 @@ export const TodoListPage = () => {
   // });
   // console.log(teamTodos?.data.result);
 
+  //투두 변동생길 때마다 리렌더링
   useEffect(() => {
     const fetchTeamTodos = async () => {
       try {
         const response = await getTeamTodos(teamId);
         const data = response?.data.result;
-        console.log(data);
         setTeamTodos({
           progress: data.progress,
           teamTodoList: data.teamTodoList
@@ -35,7 +36,7 @@ export const TodoListPage = () => {
     };
 
     fetchTeamTodos();
-  }, []);
+  }, [teamTodoList]);
 
   // useEffect(() => {
   //   if (teamTodos) setProgress(teamTodos?.data.result.progress);

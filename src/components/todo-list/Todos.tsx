@@ -1,9 +1,10 @@
-import { ChangeEvent, FC, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { ChangeEvent, FC, useState } from 'react';
+// import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import * as Accordion from '@radix-ui/react-accordion';
 import classNames from 'classnames';
 import Todo from './Todo';
+import { useTodoStore } from '@store/todoStore';
 import { UserInfo } from 'src/types/todo-list';
 import {
   AccordionContentProps,
@@ -12,7 +13,7 @@ import {
 import ChevronDownIcon from '@assets/todo-list/chevron-down.svg';
 import AddTodoIcon from '@assets/todo-list/add-todo.svg';
 
-import { createTodo } from '@apis/todo-list';
+import { createTodo, getTeamTodos } from '@apis/todo-list';
 import { teamId } from '../../constant/index';
 
 interface TodosProps {
@@ -20,10 +21,11 @@ interface TodosProps {
 }
 
 const Todos = ({ userInfo }: TodosProps) => {
-  const location = useLocation();
-  const [todos, setTodos] = useState<string[]>([]);
+  // const location = useLocation();
   const [inputValue, setInputValue] = useState<string>('');
   const [isClickAdd, setIsClickAdd] = useState<boolean>(false);
+  const setTeamTodos = useTodoStore((state) => state.setTeamTodos);
+  console.log(userInfo);
 
   // 투두 추가하기
   const openAddTodo = () => {
@@ -40,40 +42,54 @@ const Todos = ({ userInfo }: TodosProps) => {
     setInputValue(e.target.value);
   };
 
-  const handleAddTodoSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  // 투두 생성
+  const handleAddTodoSubmit = async (
+    teamManageId: number,
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
     e.preventDefault();
     setInputValue('');
     const target = e.target as HTMLFormElement;
     const value = (target[0] as HTMLInputElement).value;
-    if (value) {
-      setTodos((prev) => [...prev, value]);
-      const response = await createTodo(teamId, value);
-      console.log(response);
+
+    try {
+      // 투두 생성 요청
+      createTodo(teamManageId, value);
+      // 팀 투두 다시 받아오기
+      const response = await getTeamTodos(teamId);
+      const data = response?.data.result;
+      // 팀 투두 변동사항 업데이트
+      setTeamTodos({
+        progress: data.progress,
+        teamTodoList: data.teamTodoList
+      });
+    } catch (error) {
+      console.error(error);
     }
   };
 
   return (
     <Container>
       {/* 마이페이지일 때 */}
-      {location.pathname.startsWith('/mypage') ? (
+      {/* {location.pathname.startsWith('/mypage') ? (
         <Accordion.Root type="single" className="accordion-root" collapsible>
           <Accordion.Item value="item-1" className="accordion-item">
             <AccordionTrigger onClick={closedTodo}>
               <div className="trigger-container">
-                <strong className="username">{userInfo.username}</strong>
+                <strong className="username">{userInfo.name}</strong>
                 <div className="tag-container">
-                  {userInfo.tags.map((tag: string, index) => (
-                    <span className="tag" key={index}>
-                      {tag}
+                  {userInfo.roleTagList.map((tag) => (
+                    <span className="tag" key={tag.tagId}>
+                      {tag.name}
                     </span>
                   ))}
                 </div>
               </div>
             </AccordionTrigger>
             <AccordionContent>
-              <ul>
-                {/* 투두 리스트 */}
-                {todos
+              <ul> */}
+      {/* 투두 리스트 */}
+      {/* {todos
                   ? todos.map((todo, index) => {
                       return (
                         <li className="todo" key={index}>
@@ -85,66 +101,65 @@ const Todos = ({ userInfo }: TodosProps) => {
               </ul>
             </AccordionContent>
           </Accordion.Item>
-        </Accordion.Root>
-      ) : (
-        // 투두 or 메인 페이지일 때
-        <Accordion.Root type="single" className="accordion-root" collapsible>
-          <Accordion.Item value="item-1" className="accordion-item">
-            <AccordionTrigger onClick={closedTodo}>
-              <div className="trigger-container">
-                <strong className="username">{userInfo.username}</strong>
-                <div className="tag-container">
-                  {userInfo.tags.map((tag: string, index) => (
-                    <span className="tag" key={index}>
-                      {tag}
-                    </span>
-                  ))}
-                </div>
+        </Accordion.Root> */}
+      {/* ) : ( */}
+      {/* 투두 or 메인 페이지일 때 */}
+      <Accordion.Root type="single" className="accordion-root" collapsible>
+        <Accordion.Item value="item-1" className="accordion-item">
+          <AccordionTrigger onClick={closedTodo}>
+            <div className="trigger-container">
+              <strong className="username">{userInfo.name}</strong>
+              <div className="tag-container">
+                {userInfo.roleTagList.map((tag) => (
+                  <span className="tag" key={tag.tagId}>
+                    {tag.name}
+                  </span>
+                ))}
               </div>
-            </AccordionTrigger>
-            <AccordionContent>
-              <ul className="todo-list">
-                {/* 투두 리스트 */}
-                {todos
-                  ? todos.map((todo, index) => {
-                      return (
-                        <li className="todo" key={index}>
-                          <Todo todo={todo} />
-                        </li>
-                      );
-                    })
-                  : null}
-              </ul>
+            </div>
+          </AccordionTrigger>
+          <AccordionContent>
+            <ul className="todo-list">
+              {/* 투두 리스트 */}
+              {userInfo
+                ? userInfo.todoList.map((todo) => {
+                    return (
+                      <li className="todo" key={todo.todoId}>
+                        <Todo todo={todo.title} />
+                      </li>
+                    );
+                  })
+                : null}
+            </ul>
 
-              {/* 투두 추가하기 눌럿을 때 */}
-              {isClickAdd ? (
-                <form className="add-todo-form" onSubmit={handleAddTodoSubmit}>
-                  <input
-                    value={inputValue}
-                    onChange={handleAddTodoInput}
-                    type="text"
-                    maxLength={30}
-                    placeholder="할 일을 입력해주세요"
-                    className="todo-input"
-                  />
-                  <button type="submit" className="add-btn">
-                    등록
-                  </button>
-                </form>
-              ) : (
-                <button
-                  type="button"
-                  className="add-todo"
-                  onClick={openAddTodo}
-                >
-                  <strong>투두 추가하기</strong>
-                  <StyledAddTodoIcon />
+            {/* 투두 추가하기 눌럿을 때 */}
+            {isClickAdd ? (
+              <form
+                className="add-todo-form"
+                onSubmit={(e) => handleAddTodoSubmit(userInfo.teamManageId, e)}
+              >
+                <input
+                  value={inputValue}
+                  onChange={handleAddTodoInput}
+                  type="text"
+                  maxLength={30}
+                  placeholder="할 일을 입력해주세요"
+                  className="todo-input"
+                />
+                <button type="submit" className="add-btn">
+                  등록
                 </button>
-              )}
-            </AccordionContent>
-          </Accordion.Item>
-        </Accordion.Root>
-      )}
+              </form>
+            ) : (
+              <button type="button" className="add-todo" onClick={openAddTodo}>
+                <strong>투두 추가하기</strong>
+                <StyledAddTodoIcon />
+              </button>
+            )}
+          </AccordionContent>
+        </Accordion.Item>
+      </Accordion.Root>
+      {/* )} */}
     </Container>
   );
 };

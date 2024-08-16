@@ -13,5 +13,6 @@ export interface AccordionContentProps
 export interface UserInfo {
   teamManageId: number;
   name: string;
-  roleTagList: { tagId: number; name: string; todoList: string[] }[];
+  roleTagList: { tagId: number; name: string }[];
+  todoList: { todoId: number; title: string; status: string }[];
 }

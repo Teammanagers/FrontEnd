@@ -3,9 +3,7 @@ import { UserInfo } from 'src/types/todo-list';
 
 type TodoState = {
   progress: number;
-  teamTodos: {
-    teamTodoList: UserInfo[];
-  };
+  teamTodoList: UserInfo[];
 };
 
 type TodoAction = {
@@ -14,14 +12,11 @@ type TodoAction = {
 
 export const useTodoStore = create<TodoState & TodoAction>()((set) => ({
   progress: 0,
-  teamTodos: {
-    teamTodoList: []
-  },
+  teamTodoList: [],
+
   setTeamTodos: (data) =>
     set(() => ({
       progress: data.progress,
-      teamTodos: {
-        teamTodoList: data.teamTodoList
-      }
+      teamTodoList: data.teamTodoList
     }))
 }));
