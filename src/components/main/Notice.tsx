@@ -1,10 +1,11 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import moment from 'moment';
 import styled from 'styled-components';
 import * as Dialog from '@radix-ui/react-dialog';
-import MockData from '@assets/main/mock-data.json';
+import { teamId } from '../../constant/index';
 import LouderSpeakerIcon from '@assets/main/loud-speaker.svg';
 import PublishNoticeIcon from '@assets/main/publish-notice.svg';
+import { createNotice, getNoticeList, getNoticeRecent } from '@apis/main';
 
 type NoticeListType = {
   noticeId: number;
@@ -12,16 +13,9 @@ type NoticeListType = {
   createdAt: string;
 }[];
 
-interface MockType {
-  code: number;
-  message: string;
-  result: { noticeList: NoticeListType };
-}
-
-const mock = MockData as MockType;
-const Mock = mock.result.noticeList;
-
 const Notice = () => {
+  const [noticeRecent, setNoticeRecent] = useState<string>('');
+  const [noticeList, setNoticeList] = useState<NoticeListType>([]);
   const [open, setOpen] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>('');
 
@@ -34,10 +28,27 @@ const Notice = () => {
     if (inputValue.length >= 10) console.log('글자수 넘어감');
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  //공지 생성
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setInputValue('');
+    const target = e.target as HTMLFormElement;
+    const value = (target[0] as HTMLInputElement).value;
+    await createNotice(teamId, value);
   };
+
+  // 공지  받아오기
+  useEffect(() => {
+    const fetchNoticeList = async () => {
+      const res = await getNoticeRecent(teamId);
+      setNoticeRecent(res.data.result.recentNotice.content);
+
+      const response = await getNoticeList(teamId);
+      setNoticeList(response.data.result.noticeList.reverse());
+    };
+
+    fetchNoticeList();
+  }, []);
 
   return (
     <>
@@ -51,8 +62,7 @@ const Notice = () => {
         >
           <DialogTrigger>
             <StyledLoudSpeakerIcon />
-            <h2> UMC 6th 팀 매니저 공지입니다</h2>
-
+            {noticeRecent && <h2>{noticeRecent}</h2>}
             <button>공지 수정</button>
           </DialogTrigger>
           <Dialog.Portal>
@@ -62,11 +72,11 @@ const Notice = () => {
               <DialogContent>
                 <DialogTitle>공지사항</DialogTitle>
                 <ul>
-                  {Mock.map((item) => (
-                    <li key={item.noticeId}>
-                      <h3>{item.content}</h3>
+                  {noticeList.map((notice) => (
+                    <li key={notice.noticeId}>
+                      <h3>{notice.content}</h3>
                       <span>
-                        {moment(item.createdAt).format('YYYY.MM.DD hh:mm')}
+                        {moment(notice.createdAt).format('YYYY.MM.DD hh:mm')}
                       </span>
                     </li>
                   ))}
