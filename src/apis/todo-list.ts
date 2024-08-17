@@ -32,3 +32,10 @@ export const deleteTodo = async (todoId: number, todo: string) => {
   });
   return response;
 };
+
+export const sendAwakeAlarm = async (teamId: number, todoId: number) => {
+  const response = await instance.post(`/api/team/${teamId}/alarm/${todoId}`, {
+    alarmType: 'TODO_AWAKE'
+  });
+  return response;
+};

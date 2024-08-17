@@ -4,7 +4,12 @@ import * as Checkbox from '@radix-ui/react-checkbox';
 import * as Popover from '@radix-ui/react-popover';
 import CheckedIcon from '@assets/todo-list/checked.svg';
 import TodoMenuIcon from '@assets/todo-list/todo-menu.svg';
-import { deleteTodo, setTodoCheck, updateTodo } from '@apis/todo-list';
+import {
+  deleteTodo,
+  sendAwakeAlarm,
+  setTodoCheck,
+  updateTodo
+} from '@apis/todo-list';
 import { teamId } from '../../constant/index';
 import { useTodoStore } from '@store/todoStore';
 import { syncTodos } from '@utils/todoUtils';
@@ -74,7 +79,9 @@ const Todo = ({ todo, teamManageId }: TodoProps) => {
     todo.status === 'PROCEEDING' ? setChecked(false) : setChecked(true);
   }, []);
 
+  // 깨우기 알람 설정
   const handleAwake = async () => {
+    await sendAwakeAlarm(teamId, todo.todoId);
     setIsAwakeActive(false);
     setTimeout(() => {
       setIsAwakeActive(true);
