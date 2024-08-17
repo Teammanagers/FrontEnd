@@ -15,6 +15,7 @@ import AddTodoIcon from '@assets/todo-list/add-todo.svg';
 
 import { createTodo, getTeamTodos } from '@apis/todo-list';
 import { teamId } from '../../constant/index';
+import { syncTodos } from '@utils/todoUtils';
 
 interface TodosProps {
   userInfo: UserInfo;
@@ -25,6 +26,7 @@ const Todos = ({ userInfo }: TodosProps) => {
   const [inputValue, setInputValue] = useState<string>('');
   const [isClickAdd, setIsClickAdd] = useState<boolean>(false);
   const setTeamTodos = useTodoStore((state) => state.setTeamTodos);
+  console.log(userInfo);
 
   // 투두 추가하기
   const openAddTodo = () => {
@@ -53,12 +55,9 @@ const Todos = ({ userInfo }: TodosProps) => {
 
     try {
       // 투두 생성 요청
-      createTodo(teamManageId, value);
-      // 팀 투두 다시 받아오기
-      const response = await getTeamTodos(teamId);
-      const data = response?.data.result;
+      await createTodo(teamManageId, value);
       // 팀 투두 변동사항 업데이트
-      setTeamTodos(data.teamTodoList);
+      await syncTodos({ teamId, setTeamTodos });
     } catch (error) {
       console.error(error);
     }

@@ -43,17 +43,26 @@ const Todo = ({ todo }: TodoProps) => {
     e.preventDefault();
     const target = e.target as HTMLFormElement;
     const value = (target[0] as HTMLInputElement).value;
-    // 수정 api 요청
-    updateTodo(todo.todoId, value);
-    // 팀 투두 변동사항 업데이트
-    syncTodos({ teamId, setTeamTodos });
-
     setIsEditing(false);
+
+    try {
+      // 수정 api 요청
+      await updateTodo(todo.todoId, value);
+      // 팀 투두 변동사항 업데이트
+      await syncTodos({ teamId, setTeamTodos });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   // 삭제
-  const handleDelete = () => {
-    deleteTodo(todo.todoId, newTodo);
+  const handleDelete = async () => {
+    try {
+      await deleteTodo(todo.todoId, newTodo);
+      await syncTodos({ teamId, setTeamTodos });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
