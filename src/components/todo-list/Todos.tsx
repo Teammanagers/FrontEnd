@@ -125,7 +125,7 @@ const Todos = ({ userInfo }: TodosProps) => {
                 ? userInfo.todoList.map((todo) => {
                     return (
                       <li className="todo" key={todo.todoId}>
-                        <Todo todo={todo.title} />
+                        <Todo todo={todo} />
                       </li>
                     );
                   })

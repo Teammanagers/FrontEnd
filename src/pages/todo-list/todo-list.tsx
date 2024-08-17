@@ -26,6 +26,7 @@ export const TodoListPage = () => {
       try {
         const response = await getTeamTodos(teamId);
         const data = response?.data.result;
+        console.log(data);
         setTeamTodos({
           progress: data.progress,
           teamTodoList: data.teamTodoList
@@ -36,7 +37,7 @@ export const TodoListPage = () => {
     };
 
     fetchTeamTodos();
-  }, [teamTodoList]);
+  }, []);
 
   // useEffect(() => {
   //   if (teamTodos) setProgress(teamTodos?.data.result.progress);

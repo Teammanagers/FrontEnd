@@ -4,13 +4,18 @@ import * as Checkbox from '@radix-ui/react-checkbox';
 import * as Popover from '@radix-ui/react-popover';
 import CheckedIcon from '@assets/todo-list/checked.svg';
 import TodoMenuIcon from '@assets/todo-list/todo-menu.svg';
+import { updateTodo } from '@apis/todo-list';
 
 interface TodoProps {
-  todo: string;
+  todo: {
+    todoId: number;
+    title: string;
+    status: string;
+  };
 }
 
 const Todo = ({ todo }: TodoProps) => {
-  const [newTodo, setNewTodo] = useState<string>(todo);
+  const [newTodo, setNewTodo] = useState<string>(todo.title);
   const [checked, setChecked] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
@@ -27,8 +32,11 @@ const Todo = ({ todo }: TodoProps) => {
     setNewTodo(e.target.value);
   };
   // 수정 완료
-  const handleEditComplete = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleEditComplete = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const target = e.target as HTMLFormElement;
+    const value = (target[0] as HTMLInputElement).value;
+    updateTodo(todo.todoId, value);
     setIsEditing(false);
   };
 

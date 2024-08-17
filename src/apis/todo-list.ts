@@ -5,8 +5,15 @@ export const getTeamTodos = async (teamId: number) => {
   return response;
 };
 
-export const createTodo = async (teamId: number, todo: string) => {
-  const response = await instance.post(`/api/team/${teamId}/todo`, {
+export const createTodo = async (teamManageId: number, todo: string) => {
+  const response = await instance.post(`/api/team/${teamManageId}/todo`, {
+    title: todo
+  });
+  return response;
+};
+
+export const updateTodo = async (todoId: number, todo: string) => {
+  const response = await instance.patch(`/api/todo/${todoId}`, {
     title: todo
   });
   return response;
