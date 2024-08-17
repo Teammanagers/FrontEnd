@@ -58,10 +58,7 @@ const Todos = ({ userInfo }: TodosProps) => {
       const response = await getTeamTodos(teamId);
       const data = response?.data.result;
       // 팀 투두 변동사항 업데이트
-      setTeamTodos({
-        progress: data.progress,
-        teamTodoList: data.teamTodoList
-      });
+      setTeamTodos(data.teamTodoList);
     } catch (error) {
       console.error(error);
     }

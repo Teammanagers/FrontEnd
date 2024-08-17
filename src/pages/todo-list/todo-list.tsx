@@ -8,8 +8,8 @@ import { useTodoStore } from '../../store/todoStore';
 import { teamId } from '../../constant/index';
 
 export const TodoListPage = () => {
-  // const { teamTodoList } = useTodoStore();
-  const { setTeamTodos } = useTodoStore((state) => ({
+  const { teamTodoList, setTeamTodos } = useTodoStore((state) => ({
+    teamTodoList: state.teamTodoList,
     setTeamTodos: state.setTeamTodos
   }));
   const [progressValue, setProgressValue] = useState<number>(0);
@@ -26,17 +26,19 @@ export const TodoListPage = () => {
       try {
         const response = await getTeamTodos(teamId);
         const data = response?.data.result;
+
         setProgressValue(data?.progress);
-        setTeamTodos({
-          progress: data.progress,
-          teamTodoList: data.teamTodoList
-        });
+        setTeamTodos(data.teamTodoList);
       } catch (error) {
         console.error(error);
       }
     };
-
     fetchTeamTodos();
+
+    const unsubscribe = useTodoStore.subscribe((state) => state.teamTodoList);
+
+    // 컴포넌트 언마운트 시 구독 해제
+    return () => unsubscribe();
   }, []);
 
   // useEffect(() => {

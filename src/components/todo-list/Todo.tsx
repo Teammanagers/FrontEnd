@@ -5,6 +5,9 @@ import * as Popover from '@radix-ui/react-popover';
 import CheckedIcon from '@assets/todo-list/checked.svg';
 import TodoMenuIcon from '@assets/todo-list/todo-menu.svg';
 import { deleteTodo, setTodoCheck, updateTodo } from '@apis/todo-list';
+import { teamId } from '../../constant/index';
+import { useTodoStore } from '@store/todoStore';
+import { syncTodos } from '@utils/todoUtils';
 
 interface TodoProps {
   todo: {
@@ -15,10 +18,10 @@ interface TodoProps {
 }
 
 const Todo = ({ todo }: TodoProps) => {
+  const setTeamTodos = useTodoStore((state) => state.setTeamTodos);
   const [newTodo, setNewTodo] = useState<string>(todo.title);
   const [checked, setChecked] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  console.log(todo);
 
   const handleCheckedChange = () => {
     // 체크 UI
@@ -40,7 +43,11 @@ const Todo = ({ todo }: TodoProps) => {
     e.preventDefault();
     const target = e.target as HTMLFormElement;
     const value = (target[0] as HTMLInputElement).value;
+    // 수정 api 요청
     updateTodo(todo.todoId, value);
+    // 팀 투두 변동사항 업데이트
+    syncTodos({ teamId, setTeamTodos });
+
     setIsEditing(false);
   };
 
