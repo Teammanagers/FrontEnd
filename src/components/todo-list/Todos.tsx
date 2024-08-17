@@ -29,8 +29,6 @@ const Todos = ({ userInfo }: TodosProps) => {
     ownerTeamManageId: state.ownerTeamManageId,
     setTeamTodos: state.setTeamTodos
   }));
-  console.log(userInfo);
-
   // 투두 추가하기
   const openAddTodo = () => {
     setIsClickAdd(true);
@@ -139,7 +137,13 @@ const Todos = ({ userInfo }: TodosProps) => {
             </ul>
 
             {/* 투두 추가하기 눌럿을 때 */}
-            {isClickAdd ? (
+            {ownerTeamManageId !==
+            userInfo.teamManageId ? null : !isClickAdd ? (
+              <button type="button" className="add-todo" onClick={openAddTodo}>
+                <strong>투두 추가하기</strong>
+                <StyledAddTodoIcon />
+              </button>
+            ) : (
               <form
                 className="add-todo-form"
                 onSubmit={(e) => handleAddTodoSubmit(userInfo.teamManageId, e)}
@@ -156,11 +160,6 @@ const Todos = ({ userInfo }: TodosProps) => {
                   등록
                 </button>
               </form>
-            ) : (
-              <button type="button" className="add-todo" onClick={openAddTodo}>
-                <strong>투두 추가하기</strong>
-                <StyledAddTodoIcon />
-              </button>
             )}
           </AccordionContent>
         </Accordion.Item>

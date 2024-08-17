@@ -34,10 +34,18 @@ const Todo = ({ todo, teamManageId }: TodoProps) => {
   const [isAwakeActive, setIsAwakeActive] = useState<boolean>(true);
 
   const handleCheckedChange = () => {
-    // 체크 UI
-    setChecked(!checked);
-    // api요청
-    setTodoCheck(todo.todoId);
+    // 내가 팀장일 때
+    if (ownerTeamManageId === 1) {
+      // 체크 UI 및 api 요청
+      setChecked(!checked);
+      setTodoCheck(todo.todoId);
+    } else {
+      // 내가 팀장이 아닐 때는 내 투두만 체크 가능
+      if (teamManageId === ownerTeamManageId) {
+        setChecked(!checked);
+        setTodoCheck(todo.todoId);
+      }
+    }
   };
 
   // 수정 시작
@@ -250,6 +258,11 @@ const PopoverContent = styled(Popover.Content)`
   border-radius: 3px;
   box-shadow: 0 1.52px 9.12px 0 rgba(0, 0, 0, 0.1);
   background-color: white;
+
+  button {
+    border: none;
+    background-color: white;
+  }
 
   .edit,
   .delete {
