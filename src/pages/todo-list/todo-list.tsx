@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 // import { useQuery } from '@tanstack/react-query';
 import { Layout } from '@components/todo-list/layout/Layout';
 import TeamProgress from '@components/todo-list/TeamProgress';
@@ -8,11 +8,11 @@ import { useTodoStore } from '../../store/todoStore';
 import { teamId } from '../../constant/index';
 
 export const TodoListPage = () => {
-  const { progress, teamTodoList, setTeamTodos } = useTodoStore((state) => ({
-    progress: state.progress,
-    teamTodoList: state.teamTodoList,
+  const { teamTodoList } = useTodoStore();
+  const { setTeamTodos } = useTodoStore((state) => ({
     setTeamTodos: state.setTeamTodos
   }));
+  const [progressValue, setProgressValue] = useState<number | null>(null);
 
   // const { data: teamTodos } = useQuery({
   //   queryKey: ['teamTodos'],
@@ -26,7 +26,7 @@ export const TodoListPage = () => {
       try {
         const response = await getTeamTodos(teamId);
         const data = response?.data.result;
-        console.log(data);
+        setProgressValue(data?.progress);
         setTeamTodos({
           progress: data.progress,
           teamTodoList: data.teamTodoList
@@ -45,7 +45,12 @@ export const TodoListPage = () => {
 
   return (
     <Layout>
-      <TeamProgress progress={progress} />
+      {progressValue && (
+        <TeamProgress
+          progressValue={progressValue}
+          setProgressValue={setProgressValue}
+        />
+      )}
       <TodoList />
     </Layout>
   );

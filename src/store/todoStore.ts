@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { UserInfo } from 'src/types/todo-list';
 
 type TodoState = {
-  progress: number;
+  // progress: number;
   teamTodoList: UserInfo[];
 };
 
@@ -11,7 +11,7 @@ type TodoAction = {
 };
 
 export const useTodoStore = create<TodoState & TodoAction>()((set) => ({
-  progress: 0,
+  // progress: 0,
   teamTodoList: [],
 
   setTeamTodos: (data) =>

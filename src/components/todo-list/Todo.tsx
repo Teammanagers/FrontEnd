@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import * as Checkbox from '@radix-ui/react-checkbox';
 import * as Popover from '@radix-ui/react-popover';
 import CheckedIcon from '@assets/todo-list/checked.svg';
 import TodoMenuIcon from '@assets/todo-list/todo-menu.svg';
-import { updateTodo } from '@apis/todo-list';
+import { deleteTodo, setTodoCheck, updateTodo } from '@apis/todo-list';
 
 interface TodoProps {
   todo: {
@@ -18,9 +18,13 @@ const Todo = ({ todo }: TodoProps) => {
   const [newTodo, setNewTodo] = useState<string>(todo.title);
   const [checked, setChecked] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  console.log(todo);
 
   const handleCheckedChange = () => {
+    // 체크 UI
     setChecked(!checked);
+    // api요청
+    setTodoCheck(todo.todoId);
   };
 
   // 수정 시작
@@ -39,6 +43,15 @@ const Todo = ({ todo }: TodoProps) => {
     updateTodo(todo.todoId, value);
     setIsEditing(false);
   };
+
+  // 삭제
+  const handleDelete = () => {
+    deleteTodo(todo.todoId, newTodo);
+  };
+
+  useEffect(() => {
+    todo.status === 'PROCEEDING' ? setChecked(false) : setChecked(true);
+  }, []);
 
   return (
     <>
@@ -90,7 +103,9 @@ const Todo = ({ todo }: TodoProps) => {
               <button className="edit" onClick={handleEditClick}>
                 수정
               </button>
-              <button className="delete">삭제</button>
+              <button className="delete" onClick={handleDelete}>
+                삭제
+              </button>
             </PopoverContent>
           </Popover.Portal>
         </PopoverRoot>

@@ -25,7 +25,6 @@ const Todos = ({ userInfo }: TodosProps) => {
   const [inputValue, setInputValue] = useState<string>('');
   const [isClickAdd, setIsClickAdd] = useState<boolean>(false);
   const setTeamTodos = useTodoStore((state) => state.setTeamTodos);
-  console.log(userInfo);
 
   // 투두 추가하기
   const openAddTodo = () => {

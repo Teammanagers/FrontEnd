@@ -18,3 +18,17 @@ export const updateTodo = async (todoId: number, todo: string) => {
   });
   return response;
 };
+
+export const setTodoCheck = async (todoId: number) => {
+  const response = await instance.patch(`/api/todo/${todoId}/state`);
+  return response;
+};
+
+export const deleteTodo = async (todoId: number, todo: string) => {
+  const response = await instance.delete(`/api/todo/${todoId}`, {
+    data: {
+      title: todo
+    }
+  });
+  return response;
+};
