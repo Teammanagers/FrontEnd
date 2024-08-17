@@ -26,3 +26,14 @@ export const createMemo = async (
     throw err;
   }
 };
+
+// 메모 삭제
+export const deleteMemo = async (memoId: number) => {
+  try {
+    await Axios.delete(`/api/memo/${memoId}`);
+    console.log('메모 삭제');
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
