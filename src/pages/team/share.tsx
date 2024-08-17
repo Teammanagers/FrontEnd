@@ -1,15 +1,32 @@
 import React, { useState } from 'react';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
 import styled from 'styled-components';
 import TeamContainer from '@components/team/TeamContainer';
+import { useLocation } from 'react-router-dom';
+import { useCreatePassword } from '@hooks/team/useCreatePassword';
+import CopyToClipboard from 'react-copy-to-clipboard';
 
 export const ShareTeamPage: React.FC = () => {
-  const [teamCode] = useState('X65VRG34');
+  const location = useLocation();
+  const { teamCode, teamId } = location.state as {
+    teamCode: string;
+    teamId: number;
+  }; // TypeScript 사용 시 타입 명시
   const [password, setPassword] = useState('');
   const [isCopied, setIsCopied] = useState(false);
+  const [isPasswordError, setIsPasswordError] = useState<string | null>(null);
+  const createPasswordMutation = useCreatePassword(teamId);
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
+    const newPassword = e.target.value;
+
+    if (/^[a-zA-Z0-9]*$/.test(newPassword) && newPassword.length <= 6) {
+      setPassword(newPassword);
+      setIsPasswordError(null);
+    } else {
+      setIsPasswordError(
+        '비밀번호는 영어와 숫자 조합으로 최대 6자까지 입력 가능합니다.'
+      );
+    }
   };
 
   const handleCopy = () => {
@@ -17,6 +34,12 @@ export const ShareTeamPage: React.FC = () => {
     setTimeout(() => {
       setIsCopied(false);
     }, 2000);
+  };
+
+  const handleSubmit = () => {
+    if (password && !isPasswordError) {
+      createPasswordMutation.mutate({ teamId, password });
+    }
   };
 
   return (
@@ -39,8 +62,14 @@ export const ShareTeamPage: React.FC = () => {
           value={password}
           onChange={handlePasswordChange}
         />
+        {isPasswordError && <ErrorText>{isPasswordError}</ErrorText>}
       </PasswordContainer>
-      <NextButton>워크 스페이스로 이동</NextButton>
+      <NextButton
+        disabled={!password || !!isPasswordError}
+        onClick={handleSubmit}
+      >
+        워크 스페이스로 이동
+      </NextButton>
     </TeamContainer>
   );
 };
@@ -51,6 +80,7 @@ const Label = styled.label`
   color: #1d1d1d;
   margin-bottom: 4px;
 `;
+
 const CodeContainer = styled.div`
   width: 647px;
   height: 76px;
@@ -58,6 +88,7 @@ const CodeContainer = styled.div`
   margin-left: 372px;
   margin-bottom: 20px;
 `;
+
 const Code = styled.span`
   width: 536px;
   flex: 1;
@@ -71,6 +102,7 @@ const Code = styled.span`
   font-weight: 700;
   font-size: 15px;
 `;
+
 const CopyButton = styled.button`
   background-color: #007bff;
   color: white;
@@ -84,10 +116,12 @@ const CopyButton = styled.button`
   height: 36px;
   margin: auto auto auto 16px;
 `;
+
 const CopiedMessage = styled.span`
   color: #5c9eff;
   font-size: 12px;
 `;
+
 const PasswordContainer = styled.div`
   width: 498px;
   height: 76px;
@@ -95,6 +129,7 @@ const PasswordContainer = styled.div`
   margin-left: 372px;
   margin-bottom: 20px;
 `;
+
 const PasswordInput = styled.input`
   width: 498px;
   padding: 13px 18px;
@@ -107,19 +142,28 @@ const PasswordInput = styled.input`
   font-weight: 500;
   font-size: 15px;
 `;
+
 const NextButton = styled.button`
   margin-left: 372px;
   margin-top: 48px;
-  width: 498px;
+  width: 536px;
   height: 48px;
   background-color: #5c9eff;
   color: white;
   border: none;
   border-radius: 4px;
-  padding: 10px 15px;
+  font-weight: 700;
+  font-size: 15px;
   cursor: pointer;
 
-  &:hover {
-    background-color: #bbb;
+  &:disabled {
+    background-color: #d6d6d6;
   }
+`;
+
+const ErrorText = styled.span`
+  color: #ff0000; /* 빨간색으로 에러 강조 */
+  font-size: 12px;
+  margin-top: 8px;
+  display: block;
 `;
