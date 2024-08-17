@@ -13,7 +13,7 @@ import {
 import ChevronDownIcon from '@assets/todo-list/chevron-down.svg';
 import AddTodoIcon from '@assets/todo-list/add-todo.svg';
 
-import { createTodo, getTeamTodos } from '@apis/todo-list';
+import { createTodo } from '@apis/todo-list';
 import { teamId } from '../../constant/index';
 import { syncTodos } from '@utils/todoUtils';
 
@@ -25,7 +25,10 @@ const Todos = ({ userInfo }: TodosProps) => {
   // const location = useLocation();
   const [inputValue, setInputValue] = useState<string>('');
   const [isClickAdd, setIsClickAdd] = useState<boolean>(false);
-  const setTeamTodos = useTodoStore((state) => state.setTeamTodos);
+  const { ownerTeamManageId, setTeamTodos } = useTodoStore((state) => ({
+    ownerTeamManageId: state.ownerTeamManageId,
+    setTeamTodos: state.setTeamTodos
+  }));
   console.log(userInfo);
 
   // 투두 추가하기
@@ -101,7 +104,12 @@ const Todos = ({ userInfo }: TodosProps) => {
       {/* 투두 or 메인 페이지일 때 */}
       <Accordion.Root type="single" className="accordion-root" collapsible>
         <Accordion.Item value="item-1" className="accordion-item">
-          <AccordionTrigger onClick={closedTodo}>
+          <AccordionTrigger
+            className={
+              userInfo.teamManageId === ownerTeamManageId ? `owner-ui` : ''
+            }
+            onClick={closedTodo}
+          >
             <div className="trigger-container">
               <strong className="username">{userInfo.name}</strong>
               <div className="tag-container">
@@ -120,7 +128,10 @@ const Todos = ({ userInfo }: TodosProps) => {
                 ? userInfo.todoList.map((todo) => {
                     return (
                       <li className="todo" key={todo.todoId}>
-                        <Todo todo={todo} />
+                        <Todo
+                          todo={todo}
+                          teamManageId={userInfo.teamManageId}
+                        />
                       </li>
                     );
                   })
@@ -166,7 +177,7 @@ const AccordionTrigger: FC<AccordionTriggerProps> = ({
 }) => (
   <Accordion.Header className="accordion-header">
     <Accordion.Trigger
-      className={classNames('accordion-trigger', className)}
+      className={classNames(`accordion-trigger`, className)}
       {...props}
     >
       {children}
@@ -198,7 +209,6 @@ const Container = styled.div`
     box-sizing: border-box;
   }
 
-  button,
   h3,
   ul,
   p {
@@ -301,6 +311,7 @@ const Container = styled.div`
         align-items: center;
         width: 50px;
         height: 25px;
+        border: none;
         border-radius: 3px;
         font-size: 10px;
         font-weight: 700;
@@ -316,6 +327,7 @@ const Container = styled.div`
       align-items: center;
       width: 100%;
       height: 36px;
+      border: none;
       background-color: white;
       cursor: pointer;
 
@@ -343,7 +355,7 @@ const Container = styled.div`
     }
   }
 
-  .accordion-trigger:focus-within {
+  .owner-ui {
     border: 1px solid #5c9eff;
   }
 

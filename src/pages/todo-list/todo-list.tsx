@@ -8,11 +8,11 @@ import { useTodoStore } from '../../store/todoStore';
 import { teamId } from '../../constant/index';
 
 export const TodoListPage = () => {
-  const { setTeamTodos } = useTodoStore((state) => ({
+  const { setOwnerId, setTeamTodos } = useTodoStore((state) => ({
+    setOwnerId: state.setOwnerId,
     setTeamTodos: state.setTeamTodos
   }));
   const [progressValue, setProgressValue] = useState<number>(0);
-
   // const { data: teamTodos } = useQuery({
   //   queryKey: ['teamTodos'],
   //   queryFn: () => getTeamTodos(teamId)
@@ -25,8 +25,8 @@ export const TodoListPage = () => {
       try {
         const response = await getTeamTodos(teamId);
         const data = response?.data.result;
-
         setProgressValue(data?.progress);
+        setOwnerId(data.ownerTeamManageId);
         setTeamTodos(data.teamTodoList);
       } catch (error) {
         console.error(error);
