@@ -7,8 +7,6 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useEffect } from 'react';
 
-const KAKAO_REST_API_KEY = '03716e97eb5bf6be767426f8deb2c40a';
-const KAKAO_REDIRECT_URI = 'http://localhost:8080/login/oauth2/code/kakao';
 const Login = () => {
   const navigate = useNavigate();
   const handleClickButton = () => {
@@ -16,7 +14,7 @@ const Login = () => {
   };
 
   const handleKakaoButtonClick = () => {
-    const url = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${KAKAO_REST_API_KEY}&redirect_uri=${KAKAO_REDIRECT_URI}`;
+    const url = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${import.meta.env.KAKAO_REST_API_KEY}&redirect_uri=${import.meta.env.KAKAO_REDIRECT_URI}`;
 
     const name = 'oauthLogin';
     const width = 500;
@@ -39,7 +37,7 @@ const Login = () => {
         const code = event.data.code;
 
         const tokenResponse = await axios.post(
-          `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${KAKAO_REST_API_KEY}&redirect_uri=${KAKAO_REDIRECT_URI}&code=${code}&client_secret=${KAKAO_CLIENT_SECRET}`
+          `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${import.meta.env.KAKAO_REST_API_KEY}&redirect_uri=${import.meta.env.KAKAO_REDIRECT_URI}&code=${code}&client_secret=${KAKAO_CLIENT_SECRET}`
         );
 
         const accessToken = tokenResponse.data.access_token;
