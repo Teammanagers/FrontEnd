@@ -22,6 +22,7 @@ const Todos = ({ userInfo }: TodosProps) => {
     ownerTeamManageId: state.ownerTeamManageId,
     setTeamTodos: state.setTeamTodos
   }));
+  console.log(ownerTeamManageId);
   // 투두 추가하기
   const openAddTodo = () => {
     setIsClickAdd(true);

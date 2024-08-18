@@ -13,17 +13,11 @@ import {
 import { teamId } from '../../constant/index';
 import { useTodoStore } from '@store/todoStore';
 import { syncTodos } from '@utils/todoUtils';
-
-interface TodoProps {
-  todo: {
-    todoId: number;
-    title: string;
-    status: string;
-  };
-  teamManageId: number;
-}
+import { TodoProps } from 'src/types/todo-list';
+import { useLocation } from 'react-router-dom';
 
 const Todo = ({ todo, teamManageId }: TodoProps) => {
+  const location = useLocation();
   const { ownerTeamManageId, setTeamTodos } = useTodoStore((state) => ({
     ownerTeamManageId: state.ownerTeamManageId,
     setTeamTodos: state.setTeamTodos
@@ -33,9 +27,13 @@ const Todo = ({ todo, teamManageId }: TodoProps) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isAwakeActive, setIsAwakeActive] = useState<boolean>(true);
 
+  const renderPopover =
+    (!isEditing && ownerTeamManageId === teamManageId) ||
+    location.pathname.startsWith('/mypage');
+
   const handleCheckedChange = () => {
-    // 내가 팀장일 때
-    if (ownerTeamManageId === 1) {
+    // 내가 팀장일 때 or 마이 페이지 투두일 때
+    if (ownerTeamManageId === 1 || location.pathname.startsWith('/mypage')) {
       // 체크 UI 및 api 요청
       setChecked(!checked);
       setTodoCheck(todo.todoId);
@@ -131,19 +129,23 @@ const Todo = ({ todo, teamManageId }: TodoProps) => {
       )}
 
       {/* 수정 및 삭제 메뉴 */}
-      {/* 사용자가 아닐 때 */}
-      {ownerTeamManageId !== teamManageId && (
-        <AwakeButton disabled={!isAwakeActive} onClick={handleAwake}>
-          깨우기
-        </AwakeButton>
-      )}
+      {/* 사용자가 아닐 때  && 마이페이지에는 적용 X */}
+      {ownerTeamManageId !== teamManageId &&
+        !location.pathname.startsWith('/mypage') && (
+          <AwakeButton disabled={!isAwakeActive} onClick={handleAwake}>
+            깨우기
+          </AwakeButton>
+        )}
 
-      {/* 사용자일 때 */}
-      {!isEditing && ownerTeamManageId === teamManageId && (
+      {/* 사용자일 때 or 마이페이지일 때*/}
+      {renderPopover && (
         <Popover.Root>
           <Popover.Anchor asChild className="popover-anchor">
             <PopoverTrigger asChild>
-              <button className="todo-menu-icon">
+              <button
+                className="todo-menu-icon"
+                disabled={location.pathname.startsWith('/mypage')}
+              >
                 <StyledTodoMenuIcon />
               </button>
             </PopoverTrigger>
@@ -243,6 +245,10 @@ const Form = styled.form`
 const PopoverTrigger = styled(Popover.Trigger)`
   border: none;
   background-color: white;
+
+  & svg {
+    fill: ${(props) => (props.disabled ? 'blue' : 'black')};
+  }
 `;
 
 const PopoverContent = styled(Popover.Content)`
@@ -295,4 +301,7 @@ const AwakeButton = styled.button<{ disabled: boolean }>`
 
 const StyledTodoMenuIcon = styled(TodoMenuIcon)`
   cursor: pointer;
+  /* background-color: white;
+  color: white;
+  fill: white; */
 `;

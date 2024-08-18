@@ -49,9 +49,11 @@ export const MyPage = () => {
         <MainContent>
           <TodoListContainer>
             {/* <TodoListBox>todoList 컴포넌트</TodoListBox> */}
-            {myTodos.map((myTodos: MyTodoList, index) => (
-              <MyTodos myTodos={myTodos} key={index} />
-            ))}
+            <Wrapper>
+              {myTodos.map((myTodos: MyTodoList, index) => (
+                <MyTodos myTodos={myTodos} key={index} />
+              ))}
+            </Wrapper>
           </TodoListContainer>
           <MenuContainer>
             <MenuItem
@@ -150,14 +152,38 @@ const MainContent = styled.div`
 `;
 
 const TodoListContainer = styled.div`
+  display: flex;
+  justify-content: center;
   width: 442px;
   height: 328px;
   background-color: #fff;
   border: 1px solid ${(props) => props.theme.colors.subLightBlue};
   border-radius: 9px;
-  padding-left: 18px;
-  padding-top: 18px;
+  padding: 19px 0;
   box-sizing: border-box;
+`;
+
+const Wrapper = styled.div`
+  width: 407px;
+  overflow: auto;
+
+  &::-webkit-scrollbar {
+    width: 12px;
+    background-color: white;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    width: 10px;
+    background-color: #f0f0f0;
+    border: 2px solid white;
+    border-radius: 76px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: inset 0px 0px 5px white;
+  }
 `;
 
 // const TodoListBox = styled.div`

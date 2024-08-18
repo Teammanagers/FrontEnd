@@ -23,3 +23,12 @@ export interface MyTodoList {
   teamTagList: { tagId: number; name: string }[];
   todoList: { todoId: number; title: string; status: string }[];
 }
+
+export interface TodoProps {
+  todo: {
+    todoId: number;
+    title: string;
+    status: string;
+  };
+  teamManageId: number;
+}
