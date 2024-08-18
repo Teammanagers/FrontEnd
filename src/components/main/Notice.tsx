@@ -7,16 +7,14 @@ import LouderSpeakerIcon from '@assets/main/loud-speaker.svg';
 import PublishNoticeIcon from '@assets/main/publish-notice.svg';
 import { createNotice, getNoticeList, getNoticeRecent } from '@apis/main';
 import { NoticeListType } from 'src/types/matin';
+import { useTodoStore } from '@store/todoStore';
 
 const Notice = () => {
+  const ownerTeamManageId = useTodoStore((state) => state.ownerTeamManageId);
   const [noticeRecent, setNoticeRecent] = useState<string>('');
   const [noticeList, setNoticeList] = useState<NoticeListType>([]);
   const [open, setOpen] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>('');
-
-  // const handleClosed = () => {
-  //   setOpen(false);
-  // };
 
   const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -50,22 +48,16 @@ const Notice = () => {
     };
 
     fetchNotice();
-  }, []);
+  }, [noticeList]);
 
   return (
     <>
       <Wrapper>
-        <Dialog.Root
-          open={open}
-          //   onOpenChange={() => {
-          //     open ? setOpen(true) : handleClosed();
-          //   }}
-          onOpenChange={setOpen}
-        >
+        <Dialog.Root open={open} onOpenChange={setOpen}>
           <DialogTrigger>
             <StyledLoudSpeakerIcon />
-            {noticeRecent && <h2>{noticeRecent}</h2>}
-            <button>공지 수정</button>
+            <h2>{noticeRecent}</h2>
+            {ownerTeamManageId === 1 && <button>공지 수정</button>}
           </DialogTrigger>
           <Dialog.Portal>
             <DialogOverlay />
@@ -83,18 +75,20 @@ const Notice = () => {
                     </li>
                   ))}
                 </ul>
-                <form onSubmit={handleSubmit}>
-                  <input
-                    type="text"
-                    value={inputValue}
-                    placeholder="공지 내용을 입력해주세요"
-                    maxLength={50}
-                    onChange={handleInput}
-                  />
-                  <button type="submit">
-                    <PublishNoticeIcon />
-                  </button>
-                </form>
+                {ownerTeamManageId === 1 && (
+                  <form onSubmit={handleSubmit}>
+                    <input
+                      type="text"
+                      value={inputValue}
+                      placeholder="공지 내용을 입력해주세요"
+                      maxLength={50}
+                      onChange={handleInput}
+                    />
+                    <button type="submit">
+                      <PublishNoticeIcon />
+                    </button>
+                  </form>
+                )}
               </DialogContent>
             )}
           </Dialog.Portal>
@@ -118,6 +112,7 @@ const DialogTrigger = styled(Dialog.Trigger)`
   margin-right: 30px;
   border: 1px solid #ddebff;
   border-radius: 7px;
+  outline: none;
   color: black;
   background-color: white;
   cursor: pointer;
