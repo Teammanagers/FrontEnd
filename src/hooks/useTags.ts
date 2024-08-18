@@ -5,7 +5,6 @@ export const useTags = () => {
   const [showTagInput, setShowTagInput] = useState<boolean>(false); // 태그 입력 인풋창 보여줄지
   const [newTag, setNewTag] = useState<string>(''); // 새로운 태그 입력값
   const [editTagIndex, setEditTagIndex] = useState<number | null>(null); // 태그 수정시 인덱스값
-
   const handleAddTag = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && newTag.trim() !== '') {
       setTags([...tags, newTag.trim()]);
@@ -55,6 +54,7 @@ export const useTags = () => {
     handleEditTag,
     startEditingTag,
     handleDeleteTag,
+    setTags,
     setShowTagInput,
     setEditTagIndex,
     setNewTag

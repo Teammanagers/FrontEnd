@@ -14,12 +14,20 @@ import {
 } from 'react';
 import copy from 'copy-to-clipboard';
 import { useTags } from '@hooks/useTags.ts';
+import { TeamData } from '../../../types/team.ts';
 
-export const TeamCode = () => {
+interface TeamCodeProps extends TeamData {
+  imageUrl?: string;
+  teamCode?: string;
+  tagList?: string[];
+  refreshTeamData: () => void;
+}
+
+export const TeamCode = ({ teamCode, title, tagList }: TeamCodeProps) => {
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [copyCode, setCopyCode] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [teamName, setTeamName] = useState<string>('UMC 6th 팀매니저');
+  const [teamName, setTeamName] = useState<string>(title || '');
   const [isHovered, setIsHovered] = useState<boolean>(false);
 
   const {
@@ -31,10 +39,15 @@ export const TeamCode = () => {
     handleEditTag,
     startEditingTag,
     handleDeleteTag,
+    setTags,
     setShowTagInput,
     setEditTagIndex,
     setNewTag
   } = useTags();
+
+  useEffect(() => {
+    setTags(tagList ?? []); // tagList가 undefined인 경우에 빈배열로
+  }, [tagList]);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -69,9 +82,10 @@ export const TeamCode = () => {
   };
 
   const handleCopyCode = () => {
-    copy('X65VRG34'); // 추후에 생성된 팀코드 복사되도록 로직 변경 필요
+    if (teamCode) {
+      copy(teamCode); // 추후에 생성된 팀코드 복사되도록 로직 변경 필요
+    }
     setCopyCode(true);
-    setTimeout(() => setCopyCode(false), 800);
   };
 
   useEffect(() => {
@@ -83,12 +97,6 @@ export const TeamCode = () => {
       return () => clearTimeout(timer);
     }
   }, [copyCode]);
-
-  useEffect(() => {
-    console.log(profileImage);
-    console.log(typeof profileImage);
-    console.log(fileInputRef);
-  }, []);
 
   return (
     <TeamCodeContainer>
@@ -123,7 +131,7 @@ export const TeamCode = () => {
                   setIsHovered(false);
                 }}
               >
-                <Title>{teamName}</Title>
+                <Title>{title}</Title>
                 <EditIcon onClick={handleNameClick} hover={isHovered} />
               </TitleWrapper>
             )}
@@ -131,7 +139,7 @@ export const TeamCode = () => {
           <CodeContainer>
             <TeamCodeBox>
               <TitleText>Team Code</TitleText>
-              <Code>X65VRG34</Code>
+              <Code>{teamCode}</Code>
             </TeamCodeBox>
           </CodeContainer>
           <CopyBtn onClick={handleCopyCode} copied={copyCode}>
