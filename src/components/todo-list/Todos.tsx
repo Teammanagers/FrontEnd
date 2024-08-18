@@ -374,6 +374,10 @@ const Container = styled.div`
     transition: transform 500ms ease;
   }
 
+  .accordion-trigger {
+    cursor: pointer;
+  }
+
   .accordion-trigger[data-state='open'] > .chevrondown-icon {
     transform: rotate(180deg);
   }

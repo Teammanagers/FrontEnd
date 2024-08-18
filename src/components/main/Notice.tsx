@@ -35,19 +35,26 @@ const Notice = () => {
     const target = e.target as HTMLFormElement;
     const value = (target[0] as HTMLInputElement).value;
     await createNotice(teamId, value);
+    fetchNoticeList();
+  };
+
+  const fetchNoticeList = async () => {
+    const response = await getNoticeList(teamId);
+    setNoticeList(response.data.result.noticeList.reverse());
   };
 
   // 공지  받아오기
   useEffect(() => {
-    const fetchNoticeList = async () => {
+    const fetchNotice = async () => {
+      // 최신 공지
       const res = await getNoticeRecent(teamId);
       setNoticeRecent(res.data.result.recentNotice.content);
 
-      const response = await getNoticeList(teamId);
-      setNoticeList(response.data.result.noticeList.reverse());
+      // 공지 리스트
+      fetchNoticeList();
     };
 
-    fetchNoticeList();
+    fetchNotice();
   }, []);
 
   return (
@@ -86,7 +93,7 @@ const Notice = () => {
                     type="text"
                     value={inputValue}
                     placeholder="공지 내용을 입력해주세요"
-                    maxLength={49}
+                    maxLength={50}
                     onChange={handleInput}
                   />
                   <button type="submit">
