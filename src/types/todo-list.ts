@@ -16,3 +16,10 @@ export interface UserInfo {
   roleTagList: { tagId: number; name: string }[];
   todoList: { todoId: number; title: string; status: string }[];
 }
+
+export interface MyTodoList {
+  teamId: number;
+  title: string;
+  teamTagList: { tagId: number; name: string }[];
+  todoList: { todoId: number; title: string; status: string }[];
+}

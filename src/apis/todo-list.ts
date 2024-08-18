@@ -1,5 +1,10 @@
 import { instance } from './instance';
 
+export const getMyTodos = async () => {
+  const response = await instance.get(`/api/member/todo`);
+  return response;
+};
+
 export const getTeamTodos = async (teamId: number) => {
   const response = await instance.get(`/api/team/${teamId}/todo`);
   return response;

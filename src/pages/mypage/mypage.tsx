@@ -6,14 +6,29 @@ import Headset from '@assets/mypage/headset.svg';
 import Speaker from '@assets/mypage/speaker.svg';
 import Exclamation from '@assets/mypage/exclamation.svg';
 
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getMyTodos } from '@apis/todo-list';
+import { MyTodoList } from 'src/types/todo-list';
+import MyTodos from '@components/todo-list/MyTodos';
 
 export const MyPage = () => {
   const navigate = useNavigate();
+  const [myTodos, setMyTodos] = useState<MyTodoList[]>([]);
 
   const handleNavigate = (path: string) => {
     navigate(path);
   };
+
+  // 내 투두리스트
+  useEffect(() => {
+    const fetchMyTodos = async () => {
+      const response = await getMyTodos();
+      setMyTodos(response.data.result.myTodoListDtos);
+      console.log(myTodos);
+    };
+    fetchMyTodos();
+  }, []);
 
   return (
     <MyPageContainer>
@@ -33,7 +48,10 @@ export const MyPage = () => {
         </SubHeader>
         <MainContent>
           <TodoListContainer>
-            <TodoListBox>todoList 컴포넌트</TodoListBox>
+            {/* <TodoListBox>todoList 컴포넌트</TodoListBox> */}
+            {myTodos.map((myTodos: MyTodoList, index) => (
+              <MyTodos myTodos={myTodos} key={index} />
+            ))}
           </TodoListContainer>
           <MenuContainer>
             <MenuItem
@@ -142,12 +160,12 @@ const TodoListContainer = styled.div`
   box-sizing: border-box;
 `;
 
-const TodoListBox = styled.div`
-  width: 372px;
-  height: 282px;
-  border: 1px solid ${(props) => props.theme.colors.lightGray};
-  border-radius: 10px;
-`;
+// const TodoListBox = styled.div`
+//   width: 372px;
+//   height: 282px;
+//   border: 1px solid ${(props) => props.theme.colors.lightGray};
+//   border-radius: 10px;
+// `;
 
 const MenuContainer = styled.div`
   width: 442px;

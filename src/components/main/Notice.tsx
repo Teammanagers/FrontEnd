@@ -6,12 +6,7 @@ import { teamId } from '../../constant/index';
 import LouderSpeakerIcon from '@assets/main/loud-speaker.svg';
 import PublishNoticeIcon from '@assets/main/publish-notice.svg';
 import { createNotice, getNoticeList, getNoticeRecent } from '@apis/main';
-
-type NoticeListType = {
-  noticeId: number;
-  content: string;
-  createdAt: string;
-}[];
+import { NoticeListType } from 'src/types/matin';
 
 const Notice = () => {
   const [noticeRecent, setNoticeRecent] = useState<string>('');
