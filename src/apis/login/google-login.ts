@@ -6,9 +6,9 @@ export const googleLogin = async (code) => {
       `https://oauth2.googleapis.com/token`,
       {
         code,
-        client_id: import.meta.env.GOOGLE_CLIENT_ID,
-        client_secret: import.meta.env.GOOGLE_CLIENT_SECRET,
-        redirect_uri: import.meta.env.GOOGLE_REDIRECT_URI,
+        client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+        client_secret: import.meta.env.VITE_GOOGLE_CLIENT_SECRET,
+        redirect_uri: import.meta.env.VITE_GOOGLE_REDIRECT_URI,
         grant_type: 'authorization_code'
       }
     );

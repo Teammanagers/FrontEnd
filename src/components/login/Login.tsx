@@ -14,7 +14,7 @@ const Login = () => {
   };
 
   const handleKakaoButtonClick = () => {
-    const url = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${import.meta.env.KAKAO_REST_API_KEY}&redirect_uri=${import.meta.env.KAKAO_REDIRECT_URI}`;
+    const url = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${import.meta.env.VITE_KAKAO_REST_API_KEY}&redirect_uri=${import.meta.env.VITE_KAKAO_REDIRECT_URI}`;
 
     const name = 'oauthLogin';
     const width = 500;
@@ -37,7 +37,7 @@ const Login = () => {
         const code = event.data.code;
 
         const tokenResponse = await axios.post(
-          `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${import.meta.env.KAKAO_REST_API_KEY}&redirect_uri=${import.meta.env.KAKAO_REDIRECT_URI}&code=${code}&client_secret=${KAKAO_CLIENT_SECRET}`
+          `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${import.meta.env.VITE_KAKAO_REST_API_KEY}&redirect_uri=${import.meta.env.VITE_KAKAO_REDIRECT_URI}&code=${code}&client_secret=${VITE_KAKAO_CLIENT_SECRET}`
         );
 
         const accessToken = tokenResponse.data.access_token;
