@@ -8,6 +8,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { ButtonHTMLAttributes, useState } from 'react';
 import { useTags } from '@hooks/useTags.ts';
+import { createMemo } from '@apis/memo.ts';
 
 export const WriteMemo = () => {
   const [title, setTitle] = useState<string>('');
@@ -29,11 +30,15 @@ export const WriteMemo = () => {
 
   const navigate = useNavigate();
 
-  const handleSubmit = () => {
-    console.log('제목: ', title, title.length);
-    console.log('본문: ', content, content.length);
-    console.log('태그: ', tags, tags.length);
-    navigate(`/memo`);
+  const handleSubmit = async () => {
+    try {
+      const createMemoResult = await createMemo(1, title, tags, content);
+      console.log('메모: ', createMemoResult);
+      navigate(`/memo`);
+      console.log(title, tags, content);
+    } catch (error) {
+      console.error('메모 생성 오류: ', error);
+    }
   };
 
   return (
