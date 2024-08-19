@@ -1,21 +1,52 @@
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import * as Checkbox from '@radix-ui/react-checkbox';
 import * as Popover from '@radix-ui/react-popover';
 import CheckedIcon from '@assets/todo-list/checked.svg';
 import TodoMenuIcon from '@assets/todo-list/todo-menu.svg';
+import {
+  deleteTodo,
+  sendAwakeAlarm,
+  setTodoCheck,
+  updateTodo
+} from '@apis/todo-list';
+import { teamId } from '../../constant/index';
+import { useTodoStore } from '@store/todoStore';
+import { syncTodos } from '@utils/todoUtils';
+import { TodoProps } from 'src/types/todo-list';
+import { useLocation } from 'react-router-dom';
+import { useIdStore } from '@store/idStore';
 
-interface TodoProps {
-  todo: string;
-}
-
-const Todo = ({ todo }: TodoProps) => {
-  const [newTodo, setNewTodo] = useState<string>(todo);
+const Todo = ({ todo, teamManageId }: TodoProps) => {
+  const location = useLocation();
+  const { setTeamTodos } = useTodoStore((state) => ({
+    setTeamTodos: state.setTeamTodos
+  }));
+  const { ownerTeamManageId, leaderTeamManageId } = useIdStore((state) => ({
+    ownerTeamManageId: state.ownerTeamManageId,
+    leaderTeamManageId: state.leaderTeamManageId
+  }));
+  const [newTodo, setNewTodo] = useState<string>(todo.title);
   const [checked, setChecked] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [isAwakeActive, setIsAwakeActive] = useState<boolean>(true);
 
   const handleCheckedChange = () => {
-    setChecked(!checked);
+    // 내가 팀장일 때 or 마이 페이지 투두일 때
+    if (
+      ownerTeamManageId === leaderTeamManageId ||
+      location.pathname.startsWith('/mypage')
+    ) {
+      // 체크 UI 및 api 요청
+      setChecked(!checked);
+      setTodoCheck(todo.todoId);
+    } else {
+      // 내가 팀장이 아닐 때는 내 투두만 체크 가능
+      if (ownerTeamManageId === teamManageId) {
+        setChecked(!checked);
+        setTodoCheck(todo.todoId);
+      }
+    }
   };
 
   // 수정 시작
@@ -27,15 +58,49 @@ const Todo = ({ todo }: TodoProps) => {
     setNewTodo(e.target.value);
   };
   // 수정 완료
-  const handleEditComplete = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleEditComplete = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const target = e.target as HTMLFormElement;
+    const value = (target[0] as HTMLInputElement).value;
     setIsEditing(false);
+
+    try {
+      // 수정 api 요청
+      await updateTodo(todo.todoId, value);
+      // 팀 투두 변동사항 업데이트
+      await syncTodos({ teamId, setTeamTodos });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // 삭제
+  const handleDelete = async () => {
+    try {
+      await deleteTodo(todo.todoId, newTodo);
+      await syncTodos({ teamId, setTeamTodos });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    todo.status === 'PROCEEDING' ? setChecked(false) : setChecked(true);
+  }, []);
+
+  // 깨우기 알람 설정
+  const handleAwake = async () => {
+    await sendAwakeAlarm(teamId, todo.todoId);
+    setIsAwakeActive(false);
+    setTimeout(() => {
+      setIsAwakeActive(true);
+    }, 5000);
   };
 
   return (
     <>
       {isEditing || (
-        <TodoWrapper>
+        <TodoWrapper isowner={ownerTeamManageId === teamManageId}>
           <Checkbox.Root
             className="checkbox-root"
             checked={checked}
@@ -67,14 +132,26 @@ const Todo = ({ todo }: TodoProps) => {
       )}
 
       {/* 수정 및 삭제 메뉴 */}
-      {isEditing || (
-        <PopoverRoot>
+      {/* 사용자가 아닐 때  && 마이페이지에는 적용 X */}
+      {ownerTeamManageId !== teamManageId &&
+        !location.pathname.startsWith('/mypage') && (
+          <AwakeButton disabled={!isAwakeActive} onClick={handleAwake}>
+            깨우기
+          </AwakeButton>
+        )}
+
+      {/* 사용자일 때 */}
+      {!isEditing && ownerTeamManageId === teamManageId && (
+        <Popover.Root>
           <Popover.Anchor asChild className="popover-anchor">
-            <Popover.Trigger asChild>
-              <button className="todo-menu-icon">
+            <PopoverTrigger asChild>
+              <button
+                className="todo-menu-icon"
+                disabled={location.pathname.startsWith('/mypage')}
+              >
                 <StyledTodoMenuIcon />
               </button>
-            </Popover.Trigger>
+            </PopoverTrigger>
           </Popover.Anchor>
 
           <Popover.Portal>
@@ -82,10 +159,12 @@ const Todo = ({ todo }: TodoProps) => {
               <button className="edit" onClick={handleEditClick}>
                 수정
               </button>
-              <button className="delete">삭제</button>
+              <button className="delete" onClick={handleDelete}>
+                삭제
+              </button>
             </PopoverContent>
           </Popover.Portal>
-        </PopoverRoot>
+        </Popover.Root>
       )}
     </>
   );
@@ -93,19 +172,21 @@ const Todo = ({ todo }: TodoProps) => {
 
 export default Todo;
 
-const TodoWrapper = styled.div`
+const TodoWrapper = styled.div<{ isowner: boolean }>`
   display: flex;
   align-items: center;
-  min-width: 318px;
+  min-width: ${(props) => (props.isowner ? '318px' : '291px')};
   height: 18px;
   margin-right: 9px;
 
   .checkbox-root {
     width: 16px;
     height: 16px;
+    padding: 0;
     border: 0.76px solid #5a5a5a;
     border-radius: 1.52px;
     margin-right: 6px;
+    background-color: white;
   }
 
   .checkbox-root[data-state='checked'] {
@@ -121,6 +202,7 @@ const TodoWrapper = styled.div`
   }
 
   .todo-text {
+    max-width: 296px;
     font-size: 12px;
     font-weight: 500;
     color: #1d1d1d;
@@ -163,7 +245,14 @@ const Form = styled.form`
   }
 `;
 
-const PopoverRoot = styled(Popover.Root)``;
+const PopoverTrigger = styled(Popover.Trigger)`
+  border: none;
+  background-color: white;
+
+  & svg {
+    fill: ${(props) => (props.disabled ? 'blue' : 'black')};
+  }
+`;
 
 const PopoverContent = styled(Popover.Content)`
   position: fixed;
@@ -180,7 +269,8 @@ const PopoverContent = styled(Popover.Content)`
   background-color: white;
 
   button {
-    all: unset;
+    border: none;
+    background-color: white;
   }
 
   .edit,
@@ -199,6 +289,22 @@ const PopoverContent = styled(Popover.Content)`
   }
 `;
 
+const AwakeButton = styled.button<{ disabled: boolean }>`
+  width: 48px;
+  height: 24px;
+  border: 1px solid ${(props) => (props.disabled ? '#5C9EFF' : 'white')};
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 14px;
+  color: ${(props) => (props.disabled ? '#5C9EFF' : 'white')};
+  background-color: ${(props) => (props.disabled ? 'white' : '#5C9EFF')};
+  cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
+`;
+
 const StyledTodoMenuIcon = styled(TodoMenuIcon)`
   cursor: pointer;
+  /* background-color: white;
+  color: white;
+  fill: white; */
 `;
