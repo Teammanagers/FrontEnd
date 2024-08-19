@@ -1,6 +1,11 @@
 export type ValuePiece = Date | null;
 export type Value = ValuePiece | [ValuePiece, ValuePiece];
 
+export interface TeamMemberType {
+  teamManageId: number;
+  name: string;
+}
+
 export type ModalProps = {
   date: Value;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -10,7 +15,10 @@ export type ModalProps = {
 export interface ScheduleInfoType {
   date: string; // ISO 8601 형식의 문자열
   title: string;
-  participants: string[];
+  participants: {
+    teamManageId: number;
+    name: string;
+  }[];
   content: string;
 }
 

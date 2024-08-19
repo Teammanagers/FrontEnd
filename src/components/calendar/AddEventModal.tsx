@@ -28,9 +28,9 @@ const AddEventModal = ({ date, setOpen, open }: ModalProps) => {
   };
 
   // 참가자 태그 삭제
-  const removeParticipants = (index: number) => {
+  const removeParticipants = (teamManageId: number) => {
     const newParticipants = scheduleInfo.participants.filter(
-      (_, idx) => idx !== index
+      (v) => v.teamManageId !== teamManageId
     );
     setScheduleInfo((prev) => ({
       ...prev,
@@ -112,12 +112,19 @@ const AddEventModal = ({ date, setOpen, open }: ModalProps) => {
                   )}
                   <ul className="participants-tags">
                     {scheduleInfo.participants.length > 0 &&
-                      scheduleInfo.participants.map((item, index) => (
-                        <li className="participants-tag" key={index}>
-                          <span className="participants-name">{item}</span>
+                      scheduleInfo.participants.map((member) => (
+                        <li
+                          className="participants-tag"
+                          key={member.teamManageId}
+                        >
+                          <span className="participants-name">
+                            {member.name}
+                          </span>
                           <div
                             className="remove-participant-icon"
-                            onClick={() => removeParticipants(index)}
+                            onClick={() =>
+                              removeParticipants(member.teamManageId)
+                            }
                           >
                             <StyledRemoveTagIcon />
                           </div>
@@ -277,6 +284,7 @@ const DialogContent = styled(Dialog.Content)<{
           display: flex;
           align-items: center;
           min-width: 55px;
+          width: auto;
           height: 24px;
           padding: 0 6px;
           border-radius: 3px;

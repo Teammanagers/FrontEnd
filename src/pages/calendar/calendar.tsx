@@ -1,14 +1,25 @@
-import Styled from '../../components/calendar/layout/Layout';
+import styled from 'styled-components';
 import EventCalendar from '@components/calendar/EventCalendar';
 import UpcomingEventList from '@components/calendar/UpcomingEventList';
 
 export const CalendarPage = () => {
   return (
     <>
-      <Styled.Layout>
+      <Layout>
         <EventCalendar />
         <UpcomingEventList />
-      </Styled.Layout>
+      </Layout>
     </>
   );
 };
+
+const Layout = styled.div`
+  box-sizing: border-box;
+  display: flex;
+  justify-content: flex-start;
+  z-index: -2;
+  width: 100vw;
+  height: 100vh;
+  padding: 100px 0 0 126px;
+  background-color: #f9fbff;
+`;

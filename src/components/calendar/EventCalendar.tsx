@@ -4,19 +4,34 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 // import moment from 'moment';
 import AddEventModal from './AddEventModal';
+import { useMemberStore } from '@store/memberStore';
 import { Value } from '../../types/calendar';
 import NextBtn from '@assets/calendar/next-btn.svg';
 import PrevBtn from '@assets/calendar/prev-btn.svg';
+import { teamId } from '../../constant/index';
+import { getTeamMember } from '@apis/calendar';
 
 const EventCalendar = () => {
+  4;
+  const setTeamMember = useMemberStore((state) => state.setTeamMember);
   const [date, setDate] = useState<Value>(null);
   const [open, setOpen] = useState<boolean>(false);
   const [calendarHeight, setCalendarHeight] = useState<string>('520px');
+  // console.log(new Date().toISOString());
 
   const handleDateChange = (newDate: Value) => {
     setDate(newDate);
     setOpen(true);
   };
+
+  useEffect(() => {
+    const fetchMember = async () => {
+      const response = await getTeamMember(teamId);
+      setTeamMember(response.data.result.teamMember);
+    };
+
+    fetchMember();
+  }, []);
 
   // 매월 몇 주인지 구하기 -> 5,6주일 때 height 변화
   useEffect(() => {
