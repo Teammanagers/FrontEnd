@@ -9,7 +9,6 @@ const ParticipantsList = ({
   setScheduleInfo
 }: ParticipantsListType) => {
   const teamMember = useMemberStore((state) => state.teamMember);
-  console.log(teamMember);
 
   const addParticipants = (name: string, teamManageId: number) => {
     setScheduleInfo((prev) => ({

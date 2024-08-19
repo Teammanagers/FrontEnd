@@ -17,8 +17,10 @@ const EventCalendar = () => {
   const [date, setDate] = useState<Value>(null);
   const [open, setOpen] = useState<boolean>(false);
   const [calendarHeight, setCalendarHeight] = useState<string>('520px');
-  // console.log(new Date().toISOString());
 
+  useEffect(() => {
+    // console.log(date.toISOString());
+  }, [date]);
   const handleDateChange = (newDate: Value) => {
     setDate(newDate);
     setOpen(true);
@@ -97,7 +99,9 @@ const EventCalendar = () => {
         prevLabel={<PrevBtn />}
         minDetail="year" // 10년단위 년도 숨기기
       />
-      {date && <AddEventModal date={date} setOpen={setOpen} open={open} />}
+      {date && (
+        <AddEventModal selectedDate={date} setOpen={setOpen} open={open} />
+      )}
     </StyledCalendarContainer>
   );
 };

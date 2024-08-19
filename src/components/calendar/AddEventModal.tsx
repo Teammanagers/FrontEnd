@@ -7,8 +7,10 @@ import ParticipantsList from './ParticipantsList';
 import { ModalProps, ScheduleInfoType } from '../../types/calendar';
 import ClosedBtn from '@assets/calendar/closed-btn.svg';
 import RemoveTagIcon from '@assets/calendar/remove-tag-icon.svg';
+import { createCalendarEvent } from '@apis/calendar';
+import { teamId } from '../../constant/index';
 
-const AddEventModal = ({ date, setOpen, open }: ModalProps) => {
+const AddEventModal = ({ selectedDate, setOpen, open }: ModalProps) => {
   const location = useLocation();
   const [scheduleInfo, setScheduleInfo] = useState<ScheduleInfoType>({
     date: '',
@@ -39,21 +41,30 @@ const AddEventModal = ({ date, setOpen, open }: ModalProps) => {
   };
 
   // 일정 추가하기
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const target = e.target as HTMLFormElement;
+
     const eventTitle = (target[0] as HTMLInputElement).value;
+    const newParticipants = scheduleInfo.participants.map(
+      (v) => v.teamManageId
+    );
     const memo = (target[1] as HTMLTextAreaElement).value;
 
-    setScheduleInfo((prev) => ({
-      ...prev,
-      date: moment(date instanceof Date ? date : null).format(
-        'YYYY-MM-DD[T]HH:mm:ss.SSS'
+    const event = {
+      date: moment(selectedDate instanceof Date ? selectedDate : null).format(
+        'YYYY-MM-DDTHH:mm:ss.SSS[Z]'
       ),
       title: eventTitle,
-      participants: scheduleInfo.participants,
+      participants: newParticipants,
       content: memo
-    }));
+    };
+
+    try {
+      await createCalendarEvent(teamId, event);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   // 상태 업데이트 후 모달 닫기
@@ -91,9 +102,9 @@ const AddEventModal = ({ date, setOpen, open }: ModalProps) => {
                   </button>
                 </Dialog.Close>
                 <span className="date">
-                  {moment(date instanceof Date ? date : null).format(
-                    'YYYY.MM.DD'
-                  )}
+                  {moment(
+                    selectedDate instanceof Date ? selectedDate : null
+                  ).format('YYYY.MM.DD')}
                 </span>
               </div>
               <hr />

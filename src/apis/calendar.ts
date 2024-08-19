@@ -1,5 +1,5 @@
 import { instance } from './instance';
-import { ScheduleInfoType } from 'src/types/calendar';
+import { CreateEventProps } from 'src/types/calendar';
 
 export const getTeamMember = async (teamId: number) => {
   const response = await instance.get(`/api/team/${teamId}/member`);
@@ -8,11 +8,9 @@ export const getTeamMember = async (teamId: number) => {
 
 export const createCalendarEvent = async (
   teamId: number,
-  schedule: ScheduleInfoType
+  event: CreateEventProps
 ) => {
-  const response = await instance.post(`/api/team/${teamId}/calendar`, {
-    schedule
-  });
+  const response = await instance.post(`/api/team/${teamId}/calendar`, event);
   return response;
 };
 

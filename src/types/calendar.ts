@@ -7,19 +7,26 @@ export interface TeamMemberType {
 }
 
 export type ModalProps = {
-  date: Value;
+  selectedDate: Value;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   open: boolean;
 };
 
-export interface ScheduleInfoType {
-  date: string; // ISO 8601 형식의 문자열
+interface BaseEventype {
+  date: string | null; // ISO 8601 형식의 문자열
   title: string;
+  content: string;
+}
+
+export interface CreateEventProps extends BaseEventype {
+  participants: number[];
+}
+
+export interface ScheduleInfoType extends BaseEventype {
   participants: {
     teamManageId: number;
     name: string;
   }[];
-  content: string;
 }
 
 export interface ParticipantsListType {
