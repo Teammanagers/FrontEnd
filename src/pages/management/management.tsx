@@ -36,8 +36,8 @@ export const ManagementPage = () => {
 
     const newTags = response.teamTagList?.map((tag) => tag.name) || [];
     setTags(newTags);
-    console.log(typeof newTags);
-    console.log(newTags);
+    // console.log(typeof newTags);
+    // console.log(newTags);
   };
 
   useEffect(() => {
@@ -48,6 +48,12 @@ export const ManagementPage = () => {
     await fetchTeamData();
   };
 
+  const handleTeamNameChange = (newName: string) => {
+    if (teamData) {
+      setTeamData((prevData) => ({ ...prevData, title: newName }));
+    }
+  };
+
   return (
     <Container>
       <TeamCode
@@ -55,6 +61,7 @@ export const ManagementPage = () => {
         teamCode={teamData?.teamCode}
         title={teamData?.title}
         tagList={tags}
+        onTeamNameChange={handleTeamNameChange}
         refreshTeamData={refreshTeamData}
       />
       <Members />

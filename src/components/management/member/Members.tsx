@@ -12,7 +12,7 @@ export const Members = () => {
     try {
       const response = await getMembers(1);
       setMembers(Array.isArray(response) ? response : []);
-      console.log(response);
+      // console.log(response);
     } catch (error) {
       console.error('Error fetching members:', error);
     }
@@ -20,7 +20,7 @@ export const Members = () => {
 
   useEffect(() => {
     fetchMembers();
-    console.log(members);
+    // console.log(members);
   }, []);
 
   const refreshMembers = async () => {

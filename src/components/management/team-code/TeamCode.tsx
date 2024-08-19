@@ -15,15 +15,23 @@ import {
 import copy from 'copy-to-clipboard';
 import { useTags } from '@hooks/useTags.ts';
 import { TeamData } from '../../../types/team.ts';
+import { updateProfile } from '@apis/management-team.ts';
 
 interface TeamCodeProps extends TeamData {
   imageUrl?: string;
   teamCode?: string;
   tagList?: string[];
+  onTeamNameChange: (newName: string) => void;
   refreshTeamData: () => void;
 }
 
-export const TeamCode = ({ teamCode, title, tagList }: TeamCodeProps) => {
+export const TeamCode = ({
+  teamCode,
+  title,
+  tagList,
+  onTeamNameChange,
+  refreshTeamData
+}: TeamCodeProps) => {
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [copyCode, setCopyCode] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -44,10 +52,6 @@ export const TeamCode = ({ teamCode, title, tagList }: TeamCodeProps) => {
     setEditTagIndex,
     setNewTag
   } = useTags();
-
-  useEffect(() => {
-    setTags(tagList ?? []); // tagList가 undefined인 경우에 빈배열로
-  }, [tagList]);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -71,9 +75,21 @@ export const TeamCode = ({ teamCode, title, tagList }: TeamCodeProps) => {
     }
   };
 
-  const handleNameKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+  const handleNameKeyDown = async (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       setIsEditing(false);
+      try {
+        // 팀 이름 수정
+        await updateProfile(
+          1,
+          teamName,
+          fileInputRef.current?.files?.[0] || null
+        );
+        onTeamNameChange(teamName);
+        refreshTeamData();
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
@@ -87,6 +103,10 @@ export const TeamCode = ({ teamCode, title, tagList }: TeamCodeProps) => {
     }
     setCopyCode(true);
   };
+
+  useEffect(() => {
+    setTags(tagList ?? []); // tagList가 undefined인 경우에 빈배열로
+  }, [tagList]);
 
   useEffect(() => {
     if (copyCode) {
