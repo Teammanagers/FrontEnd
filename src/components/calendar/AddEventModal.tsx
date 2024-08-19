@@ -82,6 +82,7 @@ const AddEventModal = ({ date, setOpen, open }: ModalProps) => {
             <Dialog.Description />
             <DialogContent
               isCalendarPage={location?.pathname.startsWith('/calendar')}
+              isAddParticipants={scheduleInfo.participants.length > 0}
             >
               <div className="header">
                 <Dialog.Close asChild onClick={handleClosed}>
@@ -122,11 +123,11 @@ const AddEventModal = ({ date, setOpen, open }: ModalProps) => {
                           </div>
                         </li>
                       ))}
+                    <ParticipantsList
+                      scheduleInfo={scheduleInfo}
+                      setScheduleInfo={setScheduleInfo}
+                    />
                   </ul>
-                  <ParticipantsList
-                    scheduleInfo={scheduleInfo}
-                    setScheduleInfo={setScheduleInfo}
-                  />
                 </div>
                 <hr />
                 <textarea
@@ -177,7 +178,10 @@ const DialogOverlay = styled(Dialog.Overlay)`
   }
 `;
 
-const DialogContent = styled(Dialog.Content)<{ isCalendarPage: boolean }>`
+const DialogContent = styled(Dialog.Content)<{
+  isCalendarPage: boolean;
+  isAddParticipants: boolean;
+}>`
   position: fixed;
   top: ${(props) => (props.isCalendarPage ? '237px' : '285px')};
   left: 255px;
@@ -251,10 +255,12 @@ const DialogContent = styled(Dialog.Content)<{ isCalendarPage: boolean }>`
 
     .participants {
       display: flex;
-      align-items: center;
+      align-items: ${(props) =>
+        props.isAddParticipants ? 'flex-start' : 'center'};
       width: inherit;
       height: 30px;
       margin-bottom: 5px;
+      overflow: auto;
 
       .participants-index {
         transform: translateY(10%); //세로 가운데 정렬
@@ -270,6 +276,7 @@ const DialogContent = styled(Dialog.Content)<{ isCalendarPage: boolean }>`
         .participants-tag {
           display: flex;
           align-items: center;
+          min-width: 55px;
           height: 24px;
           padding: 0 6px;
           border-radius: 3px;
@@ -289,6 +296,17 @@ const DialogContent = styled(Dialog.Content)<{ isCalendarPage: boolean }>`
           }
         }
       }
+
+      &::-webkit-scrollbar {
+        height: 1px;
+        background-color: white;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        width: 3px;
+        background-color: ${(props) => props.theme.colors.mainBlue};
+        border-radius: 76px;
+      }
     }
 
     .memo {
@@ -302,6 +320,17 @@ const DialogContent = styled(Dialog.Content)<{ isCalendarPage: boolean }>`
       background-color: white;
       outline: none;
       resize: none;
+
+      &::-webkit-scrollbar {
+        width: 3px;
+        background-color: white;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        width: 3px;
+        background-color: #dddddd;
+        border-radius: 76px;
+      }
     }
     .memo::placeholder {
       font-size: 11px;
