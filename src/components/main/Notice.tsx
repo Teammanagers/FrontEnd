@@ -7,10 +7,13 @@ import LouderSpeakerIcon from '@assets/main/loud-speaker.svg';
 import PublishNoticeIcon from '@assets/main/publish-notice.svg';
 import { createNotice, getNoticeList, getNoticeRecent } from '@apis/main';
 import { NoticeListType } from 'src/types/matin';
-import { useTodoStore } from '@store/todoStore';
+import { useIdStore } from '@store/idStore';
 
 const Notice = () => {
-  const ownerTeamManageId = useTodoStore((state) => state.ownerTeamManageId);
+  const { ownerTeamManageId, leaderTeamManageId } = useIdStore((state) => ({
+    ownerTeamManageId: state.ownerTeamManageId,
+    leaderTeamManageId: state.leaderTeamManageId
+  }));
   const [noticeRecent, setNoticeRecent] = useState<string>('');
   const [noticeList, setNoticeList] = useState<NoticeListType>([]);
   const [open, setOpen] = useState<boolean>(false);
@@ -43,7 +46,7 @@ const Notice = () => {
       const res = await getNoticeRecent(teamId);
       setNoticeRecent(res.data.result.recentNotice.content);
 
-      // 공지 리스트
+      // 공지 리스트 받아오기
       fetchNoticeList();
     };
 
@@ -57,7 +60,9 @@ const Notice = () => {
           <DialogTrigger>
             <StyledLoudSpeakerIcon />
             <h2>{noticeRecent}</h2>
-            {ownerTeamManageId === 1 && <button>공지 수정</button>}
+            {ownerTeamManageId === leaderTeamManageId && (
+              <button>공지 수정</button>
+            )}
           </DialogTrigger>
           <Dialog.Portal>
             <DialogOverlay />
@@ -75,7 +80,7 @@ const Notice = () => {
                     </li>
                   ))}
                 </ul>
-                {ownerTeamManageId === 1 && (
+                {ownerTeamManageId === leaderTeamManageId && (
                   <form onSubmit={handleSubmit}>
                     <input
                       type="text"

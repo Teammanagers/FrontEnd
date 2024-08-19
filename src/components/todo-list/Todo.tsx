@@ -15,12 +15,16 @@ import { useTodoStore } from '@store/todoStore';
 import { syncTodos } from '@utils/todoUtils';
 import { TodoProps } from 'src/types/todo-list';
 import { useLocation } from 'react-router-dom';
+import { useIdStore } from '@store/idStore';
 
 const Todo = ({ todo, teamManageId }: TodoProps) => {
   const location = useLocation();
-  const { ownerTeamManageId, setTeamTodos } = useTodoStore((state) => ({
-    ownerTeamManageId: state.ownerTeamManageId,
+  const { setTeamTodos } = useTodoStore((state) => ({
     setTeamTodos: state.setTeamTodos
+  }));
+  const { ownerTeamManageId, leaderTeamManageId } = useIdStore((state) => ({
+    ownerTeamManageId: state.ownerTeamManageId,
+    leaderTeamManageId: state.leaderTeamManageId
   }));
   const [newTodo, setNewTodo] = useState<string>(todo.title);
   const [checked, setChecked] = useState<boolean>(false);
@@ -33,13 +37,16 @@ const Todo = ({ todo, teamManageId }: TodoProps) => {
 
   const handleCheckedChange = () => {
     // 내가 팀장일 때 or 마이 페이지 투두일 때
-    if (ownerTeamManageId === 1 || location.pathname.startsWith('/mypage')) {
+    if (
+      ownerTeamManageId === leaderTeamManageId ||
+      location.pathname.startsWith('/mypage')
+    ) {
       // 체크 UI 및 api 요청
       setChecked(!checked);
       setTodoCheck(todo.todoId);
     } else {
       // 내가 팀장이 아닐 때는 내 투두만 체크 가능
-      if (teamManageId === ownerTeamManageId) {
+      if (ownerTeamManageId === teamManageId) {
         setChecked(!checked);
         setTodoCheck(todo.todoId);
       }

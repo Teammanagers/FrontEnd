@@ -48,7 +48,6 @@ export const MyPage = () => {
         </SubHeader>
         <MainContent>
           <TodoListContainer>
-            {/* <TodoListBox>todoList 컴포넌트</TodoListBox> */}
             <Wrapper>
               {myTodos.map((myTodos: MyTodoList, index) => (
                 <MyTodos myTodos={myTodos} key={index} />
@@ -185,13 +184,6 @@ const Wrapper = styled.div`
     box-shadow: inset 0px 0px 5px white;
   }
 `;
-
-// const TodoListBox = styled.div`
-//   width: 372px;
-//   height: 282px;
-//   border: 1px solid ${(props) => props.theme.colors.lightGray};
-//   border-radius: 10px;
-// `;
 
 const MenuContainer = styled.div`
   width: 442px;

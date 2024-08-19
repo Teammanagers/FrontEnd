@@ -7,7 +7,6 @@ import { UserInfo } from 'src/types/todo-list';
 const TodoList = () => {
   const location = useLocation();
   const teamTodoList = useTodoStore((state) => state.teamTodoList);
-  console.log(teamTodoList);
 
   return (
     <Wrapper isTodoPage={location.pathname.startsWith('/todo-list')}>

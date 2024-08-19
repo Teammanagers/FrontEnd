@@ -3,14 +3,16 @@ import * as Accordion from '@radix-ui/react-accordion';
 import { AccordionTrigger, AccordionContent } from './AccordionComponents';
 import Todo from './Todo';
 import { Container } from './layout/StyledTodos';
+import { useLocation } from 'react-router-dom';
 
 interface MyTodosProps {
   myTodos: MyTodoList;
 }
 
 const MyTodos = ({ myTodos }: MyTodosProps) => {
+  const location = useLocation();
   return (
-    <Container>
+    <Container ismypage={location.pathname.startsWith('/mypage')}>
       <Accordion.Root type="single" className="accordion-root" collapsible>
         <Accordion.Item value="item-1" className="accordion-item">
           <AccordionTrigger>

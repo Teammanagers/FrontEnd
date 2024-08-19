@@ -1,8 +1,10 @@
 import styled from 'styled-components';
 import AddTodoIcon from '@assets/todo-list/add-todo.svg';
 
-export const Container = styled.div`
+export const Container = styled.div<{ ismypage: boolean }>`
   width: 382px;
+  margin-bottom: ${(props) => (props.ismypage ? '16px' : '')};
+
   * {
     box-sizing: border-box;
   }

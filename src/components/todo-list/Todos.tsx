@@ -1,5 +1,5 @@
 import { ChangeEvent, useState } from 'react';
-// import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useTodoStore } from '@store/todoStore';
 import * as Accordion from '@radix-ui/react-accordion';
 import { AccordionTrigger, AccordionContent } from './AccordionComponents';
@@ -9,20 +9,24 @@ import { createTodo } from '@apis/todo-list';
 import { syncTodos } from '@utils/todoUtils';
 import { teamId } from '../../constant/index';
 import { Container, StyledAddTodoIcon } from './layout/StyledTodos';
+import { useIdStore } from '@store/idStore';
 
 interface TodosProps {
   userInfo: UserInfo;
 }
 
 const Todos = ({ userInfo }: TodosProps) => {
-  // const location = useLocation();
+  const location = useLocation();
   const [inputValue, setInputValue] = useState<string>('');
   const [isClickAdd, setIsClickAdd] = useState<boolean>(false);
-  const { ownerTeamManageId, setTeamTodos } = useTodoStore((state) => ({
-    ownerTeamManageId: state.ownerTeamManageId,
+  const { setTeamTodos } = useTodoStore((state) => ({
     setTeamTodos: state.setTeamTodos
   }));
-  console.log(ownerTeamManageId);
+  const { ownerTeamManageId, leaderTeamManageId } = useIdStore((state) => ({
+    ownerTeamManageId: state.ownerTeamManageId,
+    leaderTeamManageId: state.leaderTeamManageId
+  }));
+
   // 투두 추가하기
   const openAddTodo = () => {
     setIsClickAdd(true);
@@ -59,8 +63,8 @@ const Todos = ({ userInfo }: TodosProps) => {
   };
 
   return (
-    <Container>
-      {/* 투두 or 메인 페이지일 때 */}
+    // 투두 or 메인 페이지일 때
+    <Container ismypage={location.pathname.startsWith('mypage')}>
       <Accordion.Root type="single" className="accordion-root" collapsible>
         <Accordion.Item value="item-1" className="accordion-item">
           <AccordionTrigger
@@ -97,31 +101,39 @@ const Todos = ({ userInfo }: TodosProps) => {
                 : null}
             </ul>
 
-            {/* 투두 추가하기 눌럿을 때 */}
-            {ownerTeamManageId !==
-            userInfo.teamManageId ? null : !isClickAdd ? (
-              <button type="button" className="add-todo" onClick={openAddTodo}>
-                <strong>투두 추가하기</strong>
-                <StyledAddTodoIcon />
-              </button>
-            ) : (
-              <form
-                className="add-todo-form"
-                onSubmit={(e) => handleAddTodoSubmit(userInfo.teamManageId, e)}
-              >
-                <input
-                  value={inputValue}
-                  onChange={handleAddTodoInput}
-                  type="text"
-                  maxLength={30}
-                  placeholder="할 일을 입력해주세요"
-                  className="todo-input"
-                />
-                <button type="submit" className="add-btn">
-                  등록
+            {/* 나 === 팀장 or 나 === 사용자일 때 투두 추가하기 활성화 */}
+            {ownerTeamManageId === leaderTeamManageId ||
+            ownerTeamManageId === userInfo.teamManageId ? (
+              !isClickAdd ? (
+                <button
+                  type="button"
+                  className="add-todo"
+                  onClick={openAddTodo}
+                >
+                  <strong>투두 추가하기</strong>
+                  <StyledAddTodoIcon />
                 </button>
-              </form>
-            )}
+              ) : (
+                <form
+                  className="add-todo-form"
+                  onSubmit={(e) =>
+                    handleAddTodoSubmit(userInfo.teamManageId, e)
+                  }
+                >
+                  <input
+                    value={inputValue}
+                    onChange={handleAddTodoInput}
+                    type="text"
+                    maxLength={30}
+                    placeholder="할 일을 입력해주세요"
+                    className="todo-input"
+                  />
+                  <button type="submit" className="add-btn">
+                    등록
+                  </button>
+                </form>
+              )
+            ) : null}
           </AccordionContent>
         </Accordion.Item>
       </Accordion.Root>

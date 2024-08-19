@@ -32,3 +32,9 @@ export interface TodoProps {
   };
   teamManageId: number;
 }
+
+export interface SetIdProps {
+  ownerTeamManageId: number;
+  progerss: number;
+  teamTodoList: UserInfo[];
+}
