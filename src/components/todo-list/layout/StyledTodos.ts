@@ -147,8 +147,9 @@ export const Container = styled.div<{ ismypage: boolean }>`
 
     .todo {
       display: flex;
-      justify-content: center;
+      /* justify-content: center; */
       align-items: center;
+      padding: 0 18px;
       width: 382px;
       height: 30px;
       margin-bottom: 10px;

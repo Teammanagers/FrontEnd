@@ -25,7 +25,6 @@ export const MyPage = () => {
     const fetchMyTodos = async () => {
       const response = await getMyTodos();
       setMyTodos(response.data.result.myTodoListDtos);
-      console.log(myTodos);
     };
     fetchMyTodos();
   }, []);

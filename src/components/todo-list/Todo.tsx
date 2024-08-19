@@ -31,10 +31,6 @@ const Todo = ({ todo, teamManageId }: TodoProps) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isAwakeActive, setIsAwakeActive] = useState<boolean>(true);
 
-  const renderPopover =
-    (!isEditing && ownerTeamManageId === teamManageId) ||
-    location.pathname.startsWith('/mypage');
-
   const handleCheckedChange = () => {
     // 내가 팀장일 때 or 마이 페이지 투두일 때
     if (
@@ -104,7 +100,7 @@ const Todo = ({ todo, teamManageId }: TodoProps) => {
   return (
     <>
       {isEditing || (
-        <TodoWrapper>
+        <TodoWrapper isowner={ownerTeamManageId === teamManageId}>
           <Checkbox.Root
             className="checkbox-root"
             checked={checked}
@@ -144,8 +140,8 @@ const Todo = ({ todo, teamManageId }: TodoProps) => {
           </AwakeButton>
         )}
 
-      {/* 사용자일 때 or 마이페이지일 때*/}
-      {renderPopover && (
+      {/* 사용자일 때 */}
+      {!isEditing && ownerTeamManageId === teamManageId && (
         <Popover.Root>
           <Popover.Anchor asChild className="popover-anchor">
             <PopoverTrigger asChild>
@@ -176,10 +172,10 @@ const Todo = ({ todo, teamManageId }: TodoProps) => {
 
 export default Todo;
 
-const TodoWrapper = styled.div`
+const TodoWrapper = styled.div<{ isowner: boolean }>`
   display: flex;
   align-items: center;
-  min-width: 318px;
+  min-width: ${(props) => (props.isowner ? '318px' : '291px')};
   height: 18px;
   margin-right: 9px;
 
