@@ -55,6 +55,7 @@ export const useTags = () => {
     handleEditTag,
     startEditingTag,
     handleDeleteTag,
+    setTags,
     setShowTagInput,
     setEditTagIndex,
     setNewTag

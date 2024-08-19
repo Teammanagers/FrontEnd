@@ -13,13 +13,14 @@ export const MenuBar = ({ memoId }: MenuBarProps) => {
   const navigate = useNavigate();
 
   const handleEdit = () => {
-    navigate(`/memo/write/${memoId}`);
+    navigate(`/memo/edit/${memoId}`);
   };
 
   const handleDelete = async () => {
     try {
       await deleteMemo(memoId);
       setIsOpenedModal(false);
+      navigate(`/memo`);
     } catch (error) {
       console.error(error);
     }
