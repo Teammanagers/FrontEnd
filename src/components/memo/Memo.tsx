@@ -9,7 +9,7 @@ interface Memo extends MemoProps {
 }
 
 export const Memo = ({ memo }: { memo: Memo }) => {
-  const { title, tagList, content } = memo;
+  const { title, tagList, content, memoId } = memo;
   const [isOpenedMenu, setIsOpenedMenu] = useState<boolean>(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -41,7 +41,7 @@ export const Memo = ({ memo }: { memo: Memo }) => {
         <MenuBtn onClick={handleMenuBar} />
         {isOpenedMenu && (
           <MenuBarContainer ref={menuRef}>
-            <MenuBar />
+            <MenuBar memoId={memoId} />
           </MenuBarContainer>
         )}
       </MemoTitleContainer>
