@@ -1,3 +1,12 @@
+import { Routes, Route } from 'react-router-dom';
+import { WriteMemo } from '@components/memo/WriteMemo.tsx';
+import { EditMemo } from '@components/memo/EditMemo.tsx';
+
 export const ExtraMemoPage = () => {
-  return <>ExtraMemo 페이지입니다.</>;
+  return (
+    <Routes>
+      <Route path="write" element={<WriteMemo />} />
+      <Route path="edit/:memoId" element={<EditMemo />} />
+    </Routes>
+  );
 };
