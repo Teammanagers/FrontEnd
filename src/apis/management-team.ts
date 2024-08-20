@@ -58,20 +58,20 @@ export const updateProfile = async (
   }
 };
 
-// export const updateProfile = async (
-//   teamId: number,
-//   title: string,
-//   imageUrl: string
-// ) => {
-//   try {
-//     const response = await Axios.patch(`/api/team/${teamId}`, {
-//       title: title,
-//       imageUrl: imageUrl
-//     });
-//     console.log(response.data);
-//     return response.data;
-//   } catch (error) {
-//     console.error(error);
-//     throw error;
-//   }
-// };
+// 팀 태그 수정
+export const updateTag = async (
+  teamId: number,
+  tagId: number,
+  name: string
+) => {
+  try {
+    const response = await Axios.patch(`/api/team/${teamId}/tag/${tagId}`, {
+      name: name
+    });
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};

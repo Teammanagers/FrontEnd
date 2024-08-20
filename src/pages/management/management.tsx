@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { ShowSchedule } from '@components/management/schedule/ShowSchedule.tsx';
 import { NoSchedule } from '@components/management/schedule/NoSchedule.tsx';
 import { getTeamData } from '@apis/management-team.ts';
-import { TeamData } from '../../types/team.ts';
+import { TeamData, TeamTag } from '../../types/team.ts';
 
 export const ManagementPage = () => {
   const [showAddSchedule, setShowAddSchedule] = useState<boolean>(false);
@@ -15,7 +15,7 @@ export const ManagementPage = () => {
   const [schedules, setSchedules] = useState<number[]>([]); // 스케줄 조회, 현재는 임시
 
   const [teamData, setTeamData] = useState<TeamData | null>(null);
-  const [tags, setTags] = useState<string[]>([]);
+  const [tags, setTags] = useState<TeamTag[]>([]);
 
   const handleAddSchedule = () => {
     setShowAddSchedule(true);
@@ -33,7 +33,8 @@ export const ManagementPage = () => {
     const response = await getTeamData(1);
     setTeamData(response);
 
-    const newTags = response.teamTagList?.map((tag) => tag.name) || [];
+    // const newTags = response.teamTagList?.map((tag) => tag.name) || [];
+    const newTags = response.teamTagList || [];
     setTags(newTags);
     // console.log(typeof newTags);
     // console.log(newTags);
@@ -42,7 +43,7 @@ export const ManagementPage = () => {
   useEffect(() => {
     fetchTeamData();
   }, []);
-  // console.log(teamData);
+  console.log(teamData);
 
   const refreshTeamData = async () => {
     await fetchTeamData();

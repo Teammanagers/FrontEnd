@@ -14,14 +14,14 @@ import {
 } from 'react';
 import copy from 'copy-to-clipboard';
 import { useTags } from '@hooks/useTags.ts';
-import { TeamData } from '../../../types/team.ts';
-import { updateProfile } from '@apis/management-team.ts';
+import { TeamData, TeamTag } from '../../../types/team.ts';
+import { updateProfile, updateTag } from '@apis/management-team.ts';
 
 interface TeamCodeProps extends TeamData {
   imageUrl?: string;
   teamCode?: string;
   title: string;
-  tagList?: string[];
+  tagList?: TeamTag[];
   onTeamNameChange: (newName: string) => void;
   refreshTeamData: () => void;
 }
@@ -42,6 +42,16 @@ export const TeamCode = ({
   const [teamName, setTeamName] = useState<string>(title || '');
   const [isHovered, setIsHovered] = useState<boolean>(false);
 
+  // 태그 수정 시 호출됨
+  const handleTagUpdate = async (tagId: number, newName: string) => {
+    try {
+      await updateTag(1, tagId, newName);
+      refreshTeamData();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const {
     tags,
     showTagInput,
@@ -55,7 +65,7 @@ export const TeamCode = ({
     setShowTagInput,
     setEditTagIndex,
     setNewTag
-  } = useTags();
+  } = useTags({ initialTags: tagList || [], onEditTag: handleTagUpdate });
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -213,7 +223,7 @@ export const TeamCode = ({
                     </TagInputContainer>
                   ) : (
                     <>
-                      <span>{tag}</span>
+                      <span>{tag.name}</span>
                     </>
                   )}
                 </TagContainer>
