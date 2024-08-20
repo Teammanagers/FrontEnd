@@ -1,5 +1,5 @@
 import { KeyboardEvent, useEffect, useState } from 'react';
-import { TeamTag } from '../types/team.ts';
+import { TeamTag } from '../types/management.ts';
 
 interface TagsProps {
   initialTags?: TeamTag[];

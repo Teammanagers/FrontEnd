@@ -6,8 +6,8 @@ import { AddSchedule } from '@components/management/schedule/AddSchedule.tsx';
 import { useEffect, useState } from 'react';
 import { ShowSchedule } from '@components/management/schedule/ShowSchedule.tsx';
 import { NoSchedule } from '@components/management/schedule/NoSchedule.tsx';
-import { getTeamData } from '@apis/management-team.ts';
-import { TeamData, TeamTag } from '../../types/team.ts';
+import { getTeamData } from '@apis/management.ts';
+import { TeamData, TeamTag } from '../../types/management.ts';
 
 export const ManagementPage = () => {
   const [showAddSchedule, setShowAddSchedule] = useState<boolean>(false);

@@ -1,5 +1,5 @@
 import { Axios } from '@apis/Axios.ts';
-import { TeamData } from '../types/team.ts';
+import { TeamData } from '../types/management.ts';
 import { MemberTypes } from '../types/member.ts';
 
 // 팀 조회

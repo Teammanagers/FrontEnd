@@ -13,8 +13,8 @@ import {
 } from 'react';
 import copy from 'copy-to-clipboard';
 import { useTags } from '@hooks/useTags.ts';
-import { TeamData, TeamTag } from '../../../types/team.ts';
-import { updateProfile, updateTag } from '@apis/management-team.ts';
+import { TeamData, TeamTag } from '../../../types/management.ts';
+import { updateProfile, updateTag } from '@apis/management.ts';
 
 interface TeamCodeProps extends TeamData {
   imageUrl?: string;

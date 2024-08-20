@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { TitleText } from '@components/management/team-code/TeamCode.tsx';
 import { Member } from '@components/management/member/Member.tsx';
 import { useEffect, useState } from 'react';
-import { getMembers } from '@apis/management-team.ts';
+import { getMembers } from '@apis/management.ts';
 import { MemberTypes } from '../../../types/member.ts';
 
 export const Members = () => {
