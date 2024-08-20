@@ -2,21 +2,20 @@ import styled from 'styled-components';
 
 interface DeleteMemoModalProps {
   onClose: () => void;
+  onDelete: () => void;
 }
 
-export const DeleteMemoModal = ({ onClose }: DeleteMemoModalProps) => {
-  const handleDelete = () => {
-    // 메모 삭제 api 연결
-    console.log('메모 삭제!');
-  };
-
+export const DeleteMemoModal = ({
+  onClose,
+  onDelete
+}: DeleteMemoModalProps) => {
   return (
     <Container>
       <ModalContainer>
         <ModalText>&#39;제목&#39; 메모를 삭제하시겠습니까?</ModalText>
         <ButtonContainer>
           <KeepBtn onClick={onClose}>유지</KeepBtn>
-          <DeleteBtn onClick={handleDelete}>삭제</DeleteBtn>
+          <DeleteBtn onClick={onDelete}>삭제</DeleteBtn>
         </ButtonContainer>
       </ModalContainer>
     </Container>

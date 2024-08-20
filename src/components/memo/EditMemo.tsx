@@ -5,14 +5,17 @@ import {
   DeleteBtn,
   TagInputContainer
 } from '@components/management/team-code/TeamCode.tsx';
-import { useNavigate } from 'react-router-dom';
-import { ButtonHTMLAttributes, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { ButtonHTMLAttributes, useEffect, useState } from 'react';
 import { useTags } from '@hooks/useTags.ts';
-import { createMemo } from '@apis/memo.ts';
+import { deleteMemo, getMemoById, updateMemo } from '@apis/memo.ts';
+import { DeleteMemoModal } from '@components/memo/DeleteMemoModal.tsx';
 
-export const WriteMemo = () => {
+export const EditMemo = () => {
+  const { memoId } = useParams<{ memoId: string }>(); // useParams는 string 형태만 받아올 수 있음..
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
+  const [isOpenedModal, setIsOpenedModal] = useState<boolean>(false);
 
   const {
     tags,
@@ -23,6 +26,7 @@ export const WriteMemo = () => {
     handleEditTag,
     startEditingTag,
     handleDeleteTag,
+    setTags,
     setShowTagInput,
     setEditTagIndex,
     setNewTag
@@ -30,14 +34,50 @@ export const WriteMemo = () => {
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const fetchMemo = async () => {
+      if (memoId) {
+        try {
+          const response = await getMemoById(Number(memoId));
+          const memo = response.result.memo;
+          setTitle(memo.title);
+          setContent(memo.content);
+          setTags(memo.tagList.map((tag: { name: string }) => tag.name));
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    };
+    fetchMemo();
+  }, []);
+
+  const handleDelete = async () => {
+    try {
+      await deleteMemo(Number(memoId));
+      setIsOpenedModal(false);
+      navigate(`/memo`);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleModal = () => {
+    setIsOpenedModal(true);
+  };
+
+  const closeModal = () => {
+    setIsOpenedModal(false);
+  };
+
+  // 수정한 메모 등록
   const handleSubmit = async () => {
     try {
-      const createMemoResult = await createMemo(1, title, tags, content);
-      console.log('메모: ', createMemoResult);
+      if (memoId) {
+        await updateMemo(Number(memoId), title, tags, content);
+      }
       navigate(`/memo`);
-      console.log(title, tags, content);
     } catch (error) {
-      console.error('메모 생성 오류: ', error);
+      console.error(error);
     }
   };
 
@@ -119,9 +159,17 @@ export const WriteMemo = () => {
             maxLength={10000}
             placeholder="내용을 입력해주세요"
           />
-          <SubmitBtn type="submit" onClick={handleSubmit}>
-            메모 등록
-          </SubmitBtn>
+          <ButtonContainer>
+            <DeleteButton type="submit" onClick={handleModal}>
+              메모 삭제
+            </DeleteButton>
+            {isOpenedModal && (
+              <DeleteMemoModal onClose={closeModal} onDelete={handleDelete} />
+            )}
+            <EditButton type="submit" onClick={handleSubmit}>
+              메모 수정
+            </EditButton>
+          </ButtonContainer>
         </BottomContainer>
       </MemoContainer>
     </Container>
@@ -237,16 +285,31 @@ const ContentText = styled.textarea`
   line-height: 23px;
 `;
 
-const SubmitBtn = styled.button`
+const ButtonContainer = styled.div`
+  display: flex;
+  gap: 19px;
+  margin-top: 19px;
+  justify-content: flex-end;
+`;
+
+const Btn = styled.button`
   width: 157px;
   height: 36px;
-  margin: 19px 0 0 auto;
-  background: ${(props) => props.theme.colors.mainBlue};
   border-radius: 3px;
   border: none;
-  color: white;
   font-weight: 700;
   font-size: 12px;
   line-height: 18px;
   cursor: pointer;
+`;
+
+const DeleteButton = styled(Btn)`
+  border: 1px solid ${({ theme }) => theme.colors.red};
+  color: ${({ theme }) => theme.colors.red};
+  background: white;
+`;
+
+const EditButton = styled(Btn)`
+  background: ${({ theme }) => theme.colors.mainBlue};
+  color: white;
 `;

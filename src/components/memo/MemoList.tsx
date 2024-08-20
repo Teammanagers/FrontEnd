@@ -1,20 +1,31 @@
 import { AddMemoSmall } from '@components/memo/AddMemoSmall.tsx';
 import { Memo } from '@components/memo/Memo.tsx';
-import dummyData from '@assets/memo/dummy-data.json';
 import styled from 'styled-components';
-export interface MemoProps {
-  id: number;
-  title: string;
-  tags: string[];
-  content: string;
-}
+import { useEffect, useState } from 'react';
+import { getMemos } from '@apis/memo.ts';
+import { MemoProps } from '../../types/memo.ts';
+
 export const MemoList = () => {
+  const [memos, setMemos] = useState<MemoProps[]>([]);
+
+  useEffect(() => {
+    const fetchMemos = async () => {
+      try {
+        const response = await getMemos(1);
+        setMemos(response.result.memoList);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchMemos();
+  }, [memos]);
+
   return (
     <MemoListContainer>
       <MemoContainer>
         <AddMemoSmall />
-        {(dummyData as MemoProps[]).map((memo) => (
-          <Memo memo={memo} key={memo.id} />
+        {memos.map((memo: MemoProps) => (
+          <Memo memo={memo} key={memo.memoId} />
         ))}
       </MemoContainer>
     </MemoListContainer>
