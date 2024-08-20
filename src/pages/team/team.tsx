@@ -3,9 +3,21 @@ import styled from 'styled-components';
 import TeamLogo from '@assets/team/logo.svg';
 import CreateTeam from '@assets/team/create-team.svg';
 import { useNavigate } from 'react-router-dom';
+import { useGetTeamById } from '@hooks/team/useGetTeamById';
+import { TeamInfo, TeamTagList } from 'src/types/team';
+import { useEmptyTeamIdRedirect } from '@hooks/team/\buseEmptyTeamIdRedirect';
 
 export const TeamPage = () => {
   const navigate = useNavigate();
+  const { teamId } = useEmptyTeamIdRedirect();
+
+  const { data, isLoading, isError } = useGetTeamById(Number(teamId));
+
+  if (isLoading || isError || !data) {
+    return null;
+  }
+
+  const { team } = data.result as TeamInfo;
 
   const handleClickJoinButton = () => {
     navigate('/team/join');
@@ -20,12 +32,19 @@ export const TeamPage = () => {
       <TeamIndexContainer>
         <SelectTeamComponent>
           <TeamLogoComponent withBorder>
-            <TeamLogo />
+            {team ? (
+              <img style={{ objectFit: 'cover' }} src={team.imageUrl} />
+            ) : (
+              <TeamLogo />
+            )}
           </TeamLogoComponent>
-          <TeamTitleComponent>UMC 6th 팀매니저</TeamTitleComponent>
+          <TeamTitleComponent>{team.title}</TeamTitleComponent>
           <TeamTagContainer>
-            <TeamTagComponent>UMC</TeamTagComponent>
-            <TeamTagComponent>데모데이</TeamTagComponent>
+            {team.teamTagList.map((tag: TeamTagList) => {
+              return (
+                <TeamTagComponent key={tag.tagId}>{tag.name}</TeamTagComponent>
+              );
+            })}
           </TeamTagContainer>
         </SelectTeamComponent>
         <SelectTeamComponent onClick={handleClickCreateButton}>
@@ -67,6 +86,13 @@ const TeamLogoComponent = styled.div<{ withBorder?: boolean }>`
   background-color: #ffffff;
   border: ${(props) =>
     props.withBorder ? '0.76px solid #5c9eff' : '0.76px solid #F0F0F0'};
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 100%;
+  }
 `;
 
 const TeamTitleComponent = styled.p`
