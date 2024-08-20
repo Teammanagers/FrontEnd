@@ -7,7 +7,12 @@ import {
   DeleteBtn
 } from '@components/management/team-code/TeamCode.tsx';
 
-export const Member = () => {
+interface MemberProps {
+  name: string;
+  refreshMembers: () => void;
+}
+
+export const Member = ({ name }: MemberProps) => {
   const {
     tags,
     showTagInput,
@@ -25,7 +30,7 @@ export const Member = () => {
     <MemberContainer>
       <ProfileImg />
       <NameContainer>
-        <NameText>이름</NameText>
+        <NameText>{name}</NameText>
         {tags.map((tag, index) => (
           <TagBox key={index} onClick={() => startEditingTag(index)}>
             {editTagIndex === index ? (
@@ -44,7 +49,7 @@ export const Member = () => {
                 <DeleteBtn onClick={() => handleDeleteTag(index)} />
               </TagInputContainer>
             ) : (
-              <span>{tag}</span>
+              <span>{tag.name}</span>
             )}
           </TagBox>
         ))}
