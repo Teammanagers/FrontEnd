@@ -1,24 +1,19 @@
 import * as Popover from '@radix-ui/react-popover';
 import styled from 'styled-components';
-import MockData from '@assets/calendar/participants-list.json';
+import { useMemberStore } from '@store/memberStore';
+import { ParticipantsListType, TeamMemberType } from 'src/types/calendar';
 import AddParticipantsBtn from '@assets/calendar/add-participants.svg';
-import { ParticipantsListType } from 'src/types/calendar';
-
-interface MockDataType {
-  participants: string[];
-}
-const mock = MockData as MockDataType;
-const Mock = mock.participants;
 
 const ParticipantsList = ({
   scheduleInfo,
   setScheduleInfo
 }: ParticipantsListType) => {
-  const addParticipants = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
-    const target = e.target as HTMLElement;
+  const teamMember = useMemberStore((state) => state.teamMember);
+
+  const addParticipants = (name: string, teamManageId: number) => {
     setScheduleInfo((prev) => ({
       ...prev,
-      participants: [...prev.participants, target.innerText]
+      participants: [...prev.participants, { teamManageId, name }]
     }));
   };
 
@@ -33,13 +28,17 @@ const ParticipantsList = ({
       <Popover.Portal>
         <PopoverContent>
           <div className="participants-list">
-            {Mock.map((item: string, index) => (
+            {teamMember.map((member: TeamMemberType) => (
               <Button
-                disabled={scheduleInfo.participants.includes(item)}
-                key={index}
-                onClick={addParticipants}
+                disabled={scheduleInfo.participants
+                  .map((v) => v.teamManageId)
+                  .includes(member.teamManageId)}
+                key={member.teamManageId}
+                onClick={() =>
+                  addParticipants(member.name, member.teamManageId)
+                }
               >
-                {item}
+                {member.name}
               </Button>
             ))}
           </div>
