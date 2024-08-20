@@ -159,16 +159,17 @@ export const SideBar = () => {
           <SideBarText selected={isActive(`/mypage`)}>마이페이지</SideBarText>
         )}
       </IconContainer>
+      {/* 팀원, 팀장에 따라 종료 페이지 다르게 */}
       <IconContainer
         onClick={() => {
-          //   추후에 path 수정이 필요할 수 있음
-          handleNavigate(`/management`);
+          handleNavigate(`/management/end`);
         }}
         isHovered={hover}
+        red
       >
         <End />
         {hover && (
-          <SideBarText selected={isActive(`/management`)} redText>
+          <SideBarText selected={isActive(`/management/end`)} red>
             프로젝트
             <br />
             종료
@@ -237,7 +238,7 @@ const Wrapper = styled.div`
 
 interface SelectedProps {
   selected?: boolean;
-  redText?: boolean;
+  red?: boolean;
   isHovered?: boolean;
 }
 
@@ -251,8 +252,8 @@ const SideBarText = styled.p<SelectedProps>`
   white-space: nowrap;
   overflow: hidden;
 
-  ${({ redText, theme }) =>
-    redText &&
+  ${({ red, theme }) =>
+    red &&
     `
     color: ${theme.colors.red};
   `}
@@ -261,8 +262,12 @@ const SideBarText = styled.p<SelectedProps>`
 const IconContainer = styled.div<SelectedProps>`
   width: 100%;
   height: 51px;
-  background-color: ${({ selected, theme }) =>
-    selected ? theme.colors.background : 'white'};
+  background-color: ${({ selected, theme, red }) =>
+    selected
+      ? red
+        ? '#FFE9E9'
+        : theme.colors.background
+      : 'white'}; // 왜 안될까..
   display: flex;
   justify-content: ${({ isHovered }) => (isHovered ? 'flex-start' : 'center')};
   padding-left: ${({ isHovered }) => (isHovered ? '19px' : '0')};
