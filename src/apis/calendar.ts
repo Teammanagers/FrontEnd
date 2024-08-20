@@ -14,9 +14,12 @@ export const createCalendarEvent = async (
   return response;
 };
 
-export const getCalendarEvent = async (teamManageId: number, month: number) => {
+export const getCalendarEvent = async (
+  teamId: number,
+  month: number | null
+) => {
   const response = await instance.get(
-    `/api/team/${teamManageId}/calendar?month=${month}`
+    `/api/team/${teamId}/calendar?month=${month}`
   );
   return response;
 };

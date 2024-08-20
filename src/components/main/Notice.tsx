@@ -37,21 +37,14 @@ const Notice = () => {
   const fetchNoticeList = async () => {
     const response = await getNoticeList(teamId);
     setNoticeList(response.data.result.noticeList.reverse());
+    const res = await getNoticeRecent(teamId);
+    setNoticeRecent(res.data.result.recentNotice.content);
   };
 
   // 공지  받아오기
   useEffect(() => {
-    const fetchNotice = async () => {
-      // 최신 공지
-      const res = await getNoticeRecent(teamId);
-      setNoticeRecent(res.data.result.recentNotice.content);
-
-      // 공지 리스트 받아오기
-      fetchNoticeList();
-    };
-
-    fetchNotice();
-  }, [noticeList]);
+    fetchNoticeList();
+  }, []);
 
   return (
     <>
