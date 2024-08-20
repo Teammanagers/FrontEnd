@@ -3,14 +3,16 @@ import { TeamTag } from '../types/management.ts';
 
 interface TagsProps {
   initialTags?: TeamTag[];
-  onEditTag?: (tagId: number, newName: string) => void;
-  onCreateTag?: (name: string) => void;
+  onEditTeamTag?: (tagId: number, newName: string) => void;
+  onCreateRoleTag?: (name: string) => void;
+  onEditRoleTag?: (tagId: number, newName: string) => void;
 }
 
 export const useTags = ({
   initialTags = [],
-  onEditTag,
-  onCreateTag
+  onEditTeamTag,
+  onCreateRoleTag,
+  onEditRoleTag
 }: TagsProps) => {
   const [tags, setTags] = useState<TeamTag[]>(initialTags); // 태그 업데이트
   const [showTagInput, setShowTagInput] = useState<boolean>(false); // 태그 입력 인풋창 보여줄지
@@ -19,8 +21,8 @@ export const useTags = ({
 
   const handleAddTag = async (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && newTag.trim() !== '') {
-      if (onCreateTag) {
-        await onCreateTag(newTag.trim());
+      if (onCreateRoleTag) {
+        await onCreateRoleTag(newTag.trim());
       }
       setTags([...tags, { tagId: Date.now(), name: newTag.trim() }]);
       setNewTag('');
@@ -28,7 +30,10 @@ export const useTags = ({
     }
   };
 
-  const handleEditTag = (e: KeyboardEvent<HTMLInputElement>, index: number) => {
+  const handleEditTag = async (
+    e: KeyboardEvent<HTMLInputElement>,
+    index: number
+  ) => {
     if (e.key === 'Enter' && newTag.trim() !== '') {
       const updatedTags = [...tags];
       const tagId = updatedTags[index].tagId; // 기존 태그의 ID를 유지
@@ -38,8 +43,13 @@ export const useTags = ({
       setNewTag('');
       setShowTagInput(false);
 
-      if (tagId !== undefined && onEditTag) {
-        onEditTag(tagId, newTag.trim()); // 태그 업데이트 함수 호출
+      // 팀 태그와 역할 태그에 따라 다른 콜백 호출
+      if (tagId !== undefined) {
+        if (onEditTeamTag) {
+          await onEditTeamTag(tagId, newTag.trim());
+        } else if (onEditRoleTag) {
+          await onEditRoleTag(tagId, newTag.trim());
+        }
       }
     }
   };

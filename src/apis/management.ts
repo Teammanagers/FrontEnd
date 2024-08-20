@@ -88,3 +88,24 @@ export const createRoleTag = async (teamManageId: number, name: string) => {
     throw error;
   }
 };
+
+// 역할 태그 수정
+export const updateRoleTag = async (
+  teamManageId: number,
+  tagId: number,
+  name: string
+) => {
+  try {
+    const response = await Axios.patch(
+      `/api/management/${teamManageId}/role/${tagId}`,
+      {
+        name: name
+      }
+    );
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};

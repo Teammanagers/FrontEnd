@@ -59,7 +59,7 @@ export const TeamCode = ({
     startEditingTag,
     setTags,
     setNewTag
-  } = useTags({ initialTags: tagList || [], onEditTag: handleTagUpdate });
+  } = useTags({ initialTags: tagList || [], onEditTeamTag: handleTagUpdate });
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
