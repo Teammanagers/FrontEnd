@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import Add from '@assets/management/add-icon.svg';
 import Delete from '@assets/management/delete-icon.svg';
 import DefaultProfileImg from '@assets/management/profile-img-default.svg';
 import Upload from '@assets/management/upload-icon.svg';
@@ -54,16 +53,11 @@ export const TeamCode = ({
 
   const {
     tags,
-    showTagInput,
     newTag,
     editTagIndex,
-    handleAddTag,
     handleEditTag,
     startEditingTag,
-    handleDeleteTag,
     setTags,
-    setShowTagInput,
-    setEditTagIndex,
     setNewTag
   } = useTags({ initialTags: tagList || [], onEditTag: handleTagUpdate });
 
@@ -219,7 +213,6 @@ export const TeamCode = ({
                         maxLength={5}
                         autoFocus
                       />
-                      <DeleteBtn onClick={() => handleDeleteTag(index)} />
                     </TagInputContainer>
                   ) : (
                     <>
@@ -228,32 +221,6 @@ export const TeamCode = ({
                   )}
                 </TagContainer>
               ))}
-              {showTagInput && editTagIndex === null && (
-                <TagInputContainer>
-                  {/* 태그 생성 */}
-                  <TagInput
-                    value={newTag}
-                    onChange={(e) => {
-                      if (e.target.value.length <= 5) {
-                        setNewTag(e.target.value);
-                      }
-                    }}
-                    onKeyDown={handleAddTag}
-                    autoFocus
-                  />
-                  <DeleteBtn onClick={() => handleDeleteTag(-1)} />
-                </TagInputContainer>
-              )}
-              {!showTagInput && tags.length < 3 && (
-                <AddTagBtn
-                  onClick={() => {
-                    setShowTagInput(true);
-                    setEditTagIndex(null);
-                  }}
-                >
-                  <Add />
-                </AddTagBtn>
-              )}
             </Tags>
           </TagBox>
         </BottomContainer>
@@ -450,17 +417,4 @@ export const TagInputContainer = styled.div`
   position: relative;
   display: flex;
   align-items: center;
-`;
-
-const AddTagBtn = styled.button`
-  width: 30px;
-  height: 30px;
-  border-radius: 5px;
-  border: none;
-  background: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0;
-  cursor: pointer;
 `;
