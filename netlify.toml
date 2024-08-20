@@ -1,6 +1,6 @@
 [[redirects]]
   from = "/api/*"
-  to = "/api/:splat"
+  to = "https://dev.teammanagers.kr/api/:splat"
   status = 200
 
 [[redirects]]
