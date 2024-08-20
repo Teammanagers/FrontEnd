@@ -20,6 +20,7 @@ import { updateProfile } from '@apis/management-team.ts';
 interface TeamCodeProps extends TeamData {
   imageUrl?: string;
   teamCode?: string;
+  title: string;
   tagList?: string[];
   onTeamNameChange: (newName: string) => void;
   refreshTeamData: () => void;
@@ -28,11 +29,14 @@ interface TeamCodeProps extends TeamData {
 export const TeamCode = ({
   teamCode,
   title,
+  imageUrl,
   tagList,
   onTeamNameChange,
   refreshTeamData
 }: TeamCodeProps) => {
-  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [profileImage, setProfileImage] = useState<string | null>(
+    imageUrl || null
+  );
   const [copyCode, setCopyCode] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [teamName, setTeamName] = useState<string>(title || '');
@@ -55,11 +59,21 @@ export const TeamCode = ({
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleImgChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleImgChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const imgUrl = URL.createObjectURL(file);
-      setProfileImage(imgUrl);
+      try {
+        const response = await updateProfile(1, title, file);
+
+        if (response?.result?.team?.imageUrl) {
+          setProfileImage(response.result.team.imageUrl);
+        }
+        refreshTeamData();
+      } catch (error) {
+        console.error(error);
+      }
+      // const imgUrl = URL.createObjectURL(file);
+      // setProfileImage(imgUrl);
     }
     // 서버 API 연동시 추가 로직 필요
     console.log(file);
@@ -103,6 +117,10 @@ export const TeamCode = ({
     }
     setCopyCode(true);
   };
+
+  useEffect(() => {
+    setProfileImage(imageUrl || null); // 상위 컴포넌트에서 받은 imageUrl로 초기화
+  }, [imageUrl]);
 
   useEffect(() => {
     setTags(tagList ?? []); // tagList가 undefined인 경우에 빈배열로

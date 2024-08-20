@@ -32,17 +32,17 @@ export const ManagementPage = () => {
   const fetchTeamData = async () => {
     const response = await getTeamData(1);
     setTeamData(response);
-    console.log(response);
 
     const newTags = response.teamTagList?.map((tag) => tag.name) || [];
     setTags(newTags);
     // console.log(typeof newTags);
     // console.log(newTags);
   };
-
+  //
   useEffect(() => {
     fetchTeamData();
   }, []);
+  // console.log(teamData);
 
   const refreshTeamData = async () => {
     await fetchTeamData();
@@ -59,7 +59,7 @@ export const ManagementPage = () => {
       <TeamCode
         imageUrl={teamData?.imageUrl}
         teamCode={teamData?.teamCode}
-        title={teamData?.title}
+        title={teamData?.title || ''}
         tagList={tags}
         onTeamNameChange={handleTeamNameChange}
         refreshTeamData={refreshTeamData}
