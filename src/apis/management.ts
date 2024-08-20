@@ -1,4 +1,4 @@
-import { Axios } from '@apis/Axios.ts';
+import { Axios } from '@apis/axios.ts';
 import { TeamData } from '../types/management.ts';
 import { MemberTypes } from '../types/member.ts';
 
@@ -14,9 +14,20 @@ export const getTeamData = async (teamId: number): Promise<TeamData> => {
 };
 
 // 팀 멤버 조회
-export const getMembers = async (teamId: number): Promise<MemberTypes> => {
+// export const getMembers = async (teamId: number): Promise<MemberTypes> => {
+//   try {
+//     const response = await Axios.get(`/api/team/${teamId}/member`);
+//     return response.data.result.teamMember;
+//   } catch (error) {
+//     console.error(error);
+//     throw error;
+//   }
+// };
+
+// 팀 멤버 조회 (역할태그 포함)
+export const getMembers = async (teamId: number) => {
   try {
-    const response = await Axios.get(`/api/team/${teamId}/member`);
+    const response = await Axios.get(`/api/team/${teamId}/member/detail`);
     return response.data.result.teamMember;
   } catch (error) {
     console.error(error);

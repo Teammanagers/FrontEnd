@@ -12,7 +12,7 @@ export const Members = () => {
     try {
       const response = await getMembers(1);
       setMembers(Array.isArray(response) ? response : []);
-      // console.log(response);
+      console.log(response);
     } catch (error) {
       console.error('Error fetching members:', error);
     }
@@ -34,8 +34,9 @@ export const Members = () => {
         {members.length > 0 ? (
           members.map((member) => (
             <Member
-              key={member.memberId}
+              key={member.teamManageId}
               name={member.name}
+              roleList={member.roleList}
               refreshMembers={refreshMembers}
             />
           ))
