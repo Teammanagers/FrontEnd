@@ -45,13 +45,7 @@ const Notice = () => {
         <StyledLoudSpeakerIcon />
         <h2> UMC 6th 팀 매니저 공지입니다</h2>
 
-        <Dialog.Root
-          open={open}
-          //   onOpenChange={() => {
-          //     open ? setOpen(true) : handleClosed();
-          //   }}
-          onOpenChange={setOpen}
-        >
+        <Dialog.Root open={open}>
           <DialogTrigger>공지 수정</DialogTrigger>
           <Dialog.Portal>
             <DialogOverlay />

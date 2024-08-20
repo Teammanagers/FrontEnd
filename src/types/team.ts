@@ -42,3 +42,16 @@ export interface GetTeamResponse {
     };
   };
 }
+
+export interface GetTeamByCodeResponse {
+  code: string;
+  isSuccess: boolean;
+  message: string;
+  result: TeamInfo;
+}
+
+export interface ValidatePasswordResponse {
+  teamId: number;
+  teamCode: string;
+  password: string;
+}

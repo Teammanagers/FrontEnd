@@ -1,16 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import TeamContainer from '@components/team/TeamContainer';
-import { useLocation } from 'react-router-dom';
 import { useCreatePassword } from '@hooks/team/useCreatePassword';
 import CopyToClipboard from 'react-copy-to-clipboard';
+import { useEmptyTeamIdRedirect } from '@hooks/team/\buseEmptyTeamIdRedirect';
 
 export const ShareTeamPage: React.FC = () => {
-  const location = useLocation();
-  const { teamCode, teamId } = location.state as {
-    teamCode: string;
-    teamId: number;
-  }; // TypeScript 사용 시 타입 명시
+  const { teamCode, teamId } = useEmptyTeamIdRedirect();
   const [password, setPassword] = useState('');
   const [isCopied, setIsCopied] = useState(false);
   const [isPasswordError, setIsPasswordError] = useState<string | null>(null);

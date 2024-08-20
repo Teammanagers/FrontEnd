@@ -2,16 +2,15 @@ import TeamContainer from '@components/team/TeamContainer';
 import styled from 'styled-components';
 import TeamLogo from '@assets/team/logo.svg';
 import CreateTeam from '@assets/team/create-team.svg';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useGetTeamById } from '@hooks/team/useGetTeamById';
 import { TeamInfo, TeamTagList } from 'src/types/team';
+import { useEmptyTeamIdRedirect } from '@hooks/team/\buseEmptyTeamIdRedirect';
 
 export const TeamPage = () => {
-  const location = useLocation();
   const navigate = useNavigate();
-  const { teamId } = location.state as {
-    teamId: number;
-  };
+  const { teamId } = useEmptyTeamIdRedirect();
+
   const { data, isLoading, isError } = useGetTeamById(Number(teamId));
 
   if (isLoading || isError || !data) {
