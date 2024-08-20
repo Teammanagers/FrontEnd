@@ -1,6 +1,6 @@
 import OnBoarding from '@components/login/OnBoarding';
 import LogoFadeIn from '@components/login/LogoFadeIn';
-import useLogoFadeIn from '@hooks/useLogoFadeIn';
+import { useLogoFadeIn } from '@hooks/useLogoFadeIn';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`

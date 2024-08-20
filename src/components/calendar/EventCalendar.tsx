@@ -2,14 +2,20 @@ import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-// import moment from 'moment';
+import moment from 'moment';
 import AddEventModal from './AddEventModal';
-import { Value } from '../../types/calendar';
+import { useMemberStore } from '@store/memberStore';
+import { EventType, Value } from '../../types/calendar';
 import NextBtn from '@assets/calendar/next-btn.svg';
 import PrevBtn from '@assets/calendar/prev-btn.svg';
+import { teamId } from '../../constant/index';
+import { getCalendarEvent, getTeamMember } from '@apis/calendar';
 
 const EventCalendar = () => {
+  const setTeamMember = useMemberStore((state) => state.setTeamMember);
   const [date, setDate] = useState<Value>(null);
+  const [month, setMonth] = useState<number | null>(null);
+  const [eventList, setEventList] = useState<EventType[]>([]);
   const [open, setOpen] = useState<boolean>(false);
   const [calendarHeight, setCalendarHeight] = useState<string>('520px');
 
@@ -17,6 +23,38 @@ const EventCalendar = () => {
     setDate(newDate);
     setOpen(true);
   };
+
+  // 멤버 불러오기
+  useEffect(() => {
+    const fetchMember = async () => {
+      const response = await getTeamMember(teamId);
+      setTeamMember(response.data.result.teamMember);
+    };
+
+    fetchMember();
+  }, []);
+
+  // 월 업데이트
+  const updateMonth = (activeStartDate: Date | null) => {
+    setDate(activeStartDate);
+    if (activeStartDate) {
+      setMonth(activeStartDate?.getMonth() + 1);
+    }
+  };
+  useEffect(() => {
+    // 현재 날짜 기준으로 초기 월 설정
+    updateMonth(new Date());
+  }, []);
+
+  // 월 스케쥴 가져오기
+  const fetchCalendarEvent = async () => {
+    const response = await getCalendarEvent(teamId, month);
+    setEventList(response.data.result.calendarListOfMonth);
+    console.log(eventList);
+  };
+  useEffect(() => {
+    if (month) fetchCalendarEvent();
+  }, [month]);
 
   // 매월 몇 주인지 구하기 -> 5,6주일 때 height 변화
   useEffect(() => {
@@ -71,9 +109,26 @@ const EventCalendar = () => {
         // formatMonthYear={(locale: string | undefined, date: Date) =>
         //   moment(date).format('YYYY. MM')
         // } // 네비게이션에서 2023. 12 이렇게 보이도록 설정
+
+        // 일정 있는 날짜에 점 추가
+        tileContent={({ date }) => {
+          if (
+            eventList.find(
+              (v) =>
+                v.date ===
+                moment(date instanceof Date ? date : null).format('YYYY-MM-DD')
+            )
+          ) {
+            return (
+              <>
+                <Dot />
+              </>
+            );
+          }
+        }}
         // 달 넘어갈 때 자동 선택된 값(1일)으로 캘린더 height 변화
         onActiveStartDateChange={({ activeStartDate }) =>
-          setDate(activeStartDate)
+          updateMonth(activeStartDate)
         }
         showNeighboringMonth={true} // 전달, 다음달 날짜 숨기기
         next2Label={null} // 년도 이동 버튼 숨기기
@@ -82,7 +137,9 @@ const EventCalendar = () => {
         prevLabel={<PrevBtn />}
         minDetail="year" // 10년단위 년도 숨기기
       />
-      {date && <AddEventModal date={date} setOpen={setOpen} open={open} />}
+      {date && (
+        <AddEventModal selectedDate={date} setOpen={setOpen} open={open} />
+      )}
     </StyledCalendarContainer>
   );
 };
@@ -186,6 +243,10 @@ const StyledCalendarContainer = styled.div<{ height: string }>`
       column-gap: 18px;
     }
 
+    .react-calendar__month-view__days__day {
+      position: relative;
+    }
+
     .react-calendar__month-view__days__day abbr {
       display: flex;
       justify-content: center;
@@ -248,3 +309,14 @@ const StyledCalendarContainer = styled.div<{ height: string }>`
 `;
 
 const StyledCalendar = styled(Calendar)``;
+
+const Dot = styled.div`
+  position: absolute;
+  bottom: 15%;
+  left: 50%;
+  transform: translate(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: ${(props) => props.theme.colors.mainBlue};
+`;
