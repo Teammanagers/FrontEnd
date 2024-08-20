@@ -10,19 +10,33 @@ import PrevBtn from '@assets/calendar/prev-btn.svg';
 import { teamId } from '../../constant/index';
 import { useMemberStore } from '@store/memberStore';
 import { getCalendarEvent, getTeamMember } from '@apis/calendar';
+import EventPopover from './EventPopover';
 
 const EventCalendar = () => {
   const setTeamMember = useMemberStore((state) => state.setTeamMember);
   const [date, setDate] = useState<Value>(null);
   const [month, setMonth] = useState<number | null>(null);
   const [eventList, setEventList] = useState<EventType[]>([]);
-  const [open, setOpen] = useState<boolean>(false);
+  const [isScheduleExist, setIsScheduleExist] = useState<boolean>(false);
   const [calendarHeight, setCalendarHeight] = useState<string>('520px');
 
+  console.log(eventList);
+
+  // 날짜 업데이트
   const handleDateChange = (newDate: Value) => {
     setDate(newDate);
-    setOpen(true);
   };
+
+  // 일정 있는지 여부 업데이트
+  useEffect(() => {
+    if (date) {
+      const formattedDate = moment(date instanceof Date ? date : null).format(
+        'YYYY-MM-DD'
+      );
+      const hasSchedule = eventList.some((v) => v.date === formattedDate);
+      setIsScheduleExist(hasSchedule);
+    }
+  }, [date, eventList]);
 
   // 멤버 불러오기
   useEffect(() => {
@@ -42,8 +56,10 @@ const EventCalendar = () => {
     }
   };
   useEffect(() => {
+    setDate(null);
     // 현재 날짜 기준으로 초기 월 설정
     updateMonth(new Date());
+    console.log(null);
   }, []);
 
   // 월 스케쥴 가져오기
@@ -110,21 +126,21 @@ const EventCalendar = () => {
         //   moment(date).format('YYYY. MM')
         // } // 네비게이션에서 2023. 12 이렇게 보이도록 설정
 
-        // 일정 있는 날짜에 점 추가
+        // 일정 있는 날짜에 점 추가 및 팝업 마운트
         tileContent={({ date }) => {
-          if (
-            eventList.find(
-              (v) =>
-                v.date ===
-                moment(date instanceof Date ? date : null).format('YYYY-MM-DD')
-            )
-          ) {
+          const filteredEventList = eventList.filter(
+            (event: EventType) =>
+              event.date === moment(date).format('YYYY-MM-DD')
+          );
+          if (filteredEventList.length > 0) {
             return (
               <>
                 <Dot />
+                <EventPopover date={date} eventList={filteredEventList} />
               </>
             );
           }
+          return null;
         }}
         // 달 넘어갈 때 자동 선택된 값(1일)으로 캘린더 height 변화
         onActiveStartDateChange={({ activeStartDate }) =>
@@ -137,9 +153,20 @@ const EventCalendar = () => {
         prevLabel={<PrevBtn />}
         minDetail="year" // 10년단위 년도 숨기기
       />
-      {date && (
-        <AddEventModal selectedDate={date} setOpen={setOpen} open={open} />
-      )}
+      {/* {date && isScheduleExist ? (
+        <ul>
+          {eventList.map((event: EventType) => {
+            if (
+              event.date ===
+              moment(date instanceof Date ? date : null).format('YYYY-MM-DD')
+            ) {
+              return <EventPopover event={event} />;
+            }
+          })}
+        </ul>
+      ) : (
+        <AddEventModal selectedDate={date} isScheduleExist={isScheduleExist} />
+      )} */}
     </StyledCalendarContainer>
   );
 };

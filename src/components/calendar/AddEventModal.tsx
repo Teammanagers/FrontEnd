@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import * as Dialog from '@radix-ui/react-dialog';
@@ -10,7 +10,7 @@ import RemoveTagIcon from '@assets/calendar/remove-tag-icon.svg';
 import { createCalendarEvent } from '@apis/calendar';
 import { teamId } from '../../constant/index';
 
-const AddEventModal = ({ selectedDate, setOpen, open }: ModalProps) => {
+const AddEventModal = ({ selectedDate, isScheduleExist }: ModalProps) => {
   const location = useLocation();
   const [scheduleInfo, setScheduleInfo] = useState<ScheduleInfoType>({
     date: '',
@@ -18,6 +18,16 @@ const AddEventModal = ({ selectedDate, setOpen, open }: ModalProps) => {
     participants: [],
     content: ''
   });
+  const [open, setOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (!isScheduleExist) {
+      setOpen(true);
+    } else {
+      setOpen(false);
+    }
+    console.log(open);
+  }, [selectedDate]);
 
   // 스케줄 내용 입력 받기
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,17 +90,18 @@ const AddEventModal = ({ selectedDate, setOpen, open }: ModalProps) => {
 
   return (
     <>
-      {open && (
-        <DialogRoot
-          open={open}
-          onOpenChange={(open) => {
-            open ? setOpen(true) : handleClosed();
-          }}
-        >
-          <Dialog.Portal>
-            <DialogOverlay />
-            <Dialog.Title />
-            <Dialog.Description />
+      <DialogRoot
+        open={open}
+        onOpenChange={setOpen}
+        // onOpenChange={(open) => {
+        //   open ? setOpen(true) : handleClosed();
+        // }}
+      >
+        <Dialog.Portal>
+          <DialogOverlay />
+          <Dialog.Title />
+          <Dialog.Description />
+          {open && (
             <DialogContent
               isCalendarPage={location?.pathname.startsWith('/calendar')}
               isAddParticipants={scheduleInfo.participants.length > 0}
@@ -101,11 +112,11 @@ const AddEventModal = ({ selectedDate, setOpen, open }: ModalProps) => {
                     <StyledClosedBtn />
                   </button>
                 </Dialog.Close>
-                <span className="date">
+                <h3 className="date">
                   {moment(
                     selectedDate instanceof Date ? selectedDate : null
                   ).format('YYYY.MM.DD')}
-                </span>
+                </h3>
               </div>
               <hr />
               <form onSubmit={handleSubmit}>
@@ -171,9 +182,9 @@ const AddEventModal = ({ selectedDate, setOpen, open }: ModalProps) => {
                 </AddScheduleBtn>
               </form>
             </DialogContent>
-          </Dialog.Portal>
-        </DialogRoot>
-      )}
+          )}
+        </Dialog.Portal>
+      </DialogRoot>
     </>
   );
 };

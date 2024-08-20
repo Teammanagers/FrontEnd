@@ -145,6 +145,7 @@ const Main = styled.div`
   a {
     display: flex;
     align-items: center;
+    width: 170px;
     margin-bottom: 12px;
     cursor: pointer;
   }

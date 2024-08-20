@@ -34,8 +34,9 @@ export interface UpcomingEventProps {
 
 export type ModalProps = {
   selectedDate: Value;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  open: boolean;
+  // setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  // open: boolean;
+  isScheduleExist: boolean;
 };
 
 export interface ParticipantsListType {
