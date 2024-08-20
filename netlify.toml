@@ -9,5 +9,5 @@
   status = 200
 
 [context.production.environment]
-  TOML_ENV_VAR = "From netlify.toml"
-  REACT_APP_TOML_ENV_VAR = "From netlify.toml VITE_BASE_URL"
+  REACT_APP_BASE_URL = "From netlify.toml VITE_BASE_URL"
+  REACT_APP_API_TOKEN = "From netlify.toml VITE_API_TOKEN"
