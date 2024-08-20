@@ -1,6 +1,13 @@
-export interface TeamTag {
-  tagId?: number;
+export interface Tag {
   name: string;
+}
+
+export interface TeamTag extends Tag {
+  tagId?: number;
+}
+
+export interface RoleTag extends Tag {
+  teamManageId?: number;
 }
 
 export interface TeamData {

@@ -49,7 +49,7 @@ export const Member = ({ name }: MemberProps) => {
                 <DeleteBtn onClick={() => handleDeleteTag(index)} />
               </TagInputContainer>
             ) : (
-              <span>{tag}</span>
+              <span>{tag.name}</span>
             )}
           </TagBox>
         ))}
