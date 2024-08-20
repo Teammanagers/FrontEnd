@@ -23,3 +23,8 @@ export const getCalendarEvent = async (
   );
   return response;
 };
+
+export const getUpcomingEvent = async (teamId: number) => {
+  const response = await instance.get(`/api/team/${teamId}/calendar/coming`);
+  return response;
+};

@@ -114,6 +114,7 @@ const AddEventModal = ({ selectedDate, setOpen, open }: ModalProps) => {
                   className="schedule-title"
                   name="schedule-title"
                   placeholder="일정 제목"
+                  maxLength={30}
                   onChange={handleInput}
                 />
                 <hr />
@@ -152,6 +153,7 @@ const AddEventModal = ({ selectedDate, setOpen, open }: ModalProps) => {
                   className="memo"
                   name="memo"
                   placeholder="메모"
+                  maxLength={100}
                   onChange={handleTextarea}
                 ></textarea>
                 <AddScheduleBtn

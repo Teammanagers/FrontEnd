@@ -14,6 +14,24 @@ export interface EventType {
   title: string;
 }
 
+export type UpcomingEventType = {
+  calendarId: number;
+  title: string;
+  status: string;
+  isAlarm: boolean;
+  date: string;
+}[];
+
+export interface UpcomingEventProps {
+  event: {
+    calendarId: number;
+    title: string;
+    status: string;
+    isAlarm: boolean;
+    date: string;
+  };
+}
+
 export type ModalProps = {
   selectedDate: Value;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
