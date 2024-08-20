@@ -5,7 +5,7 @@ import CreateTeam from '@assets/team/create-team.svg';
 import { useNavigate } from 'react-router-dom';
 import { useGetTeamById } from '@hooks/team/useGetTeamById';
 import { TeamInfo, TeamTagList } from 'src/types/team';
-import { useEmptyTeamIdRedirect } from '@hooks/team/\buseEmptyTeamIdRedirect';
+import { useEmptyTeamIdRedirect } from '@hooks/team/useEmptyTeamIdRedirect';
 
 export const TeamPage = () => {
   const navigate = useNavigate();
