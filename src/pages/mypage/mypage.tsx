@@ -5,7 +5,6 @@ import Portfolio from '@assets/mypage/portfolio.svg';
 import Headset from '@assets/mypage/headset.svg';
 import Speaker from '@assets/mypage/speaker.svg';
 import Exclamation from '@assets/mypage/exclamation.svg';
-
 import { useNavigate } from 'react-router-dom';
 
 export const MyPage = () => {
@@ -25,7 +24,7 @@ export const MyPage = () => {
           <SubTitle>나의 투두리스트</SubTitle>
           <IconContainer
             onClick={() => {
-              handleNavigate(`/todo-list`);
+              handleNavigate('/todo-list');
             }}
           >
             <Move />
@@ -39,7 +38,7 @@ export const MyPage = () => {
             <MenuItem
               id="profile"
               onClick={() => {
-                handleNavigate(`/mypage/profile`);
+                handleNavigate('/mypage/profile');
               }}
             >
               <Profile />
@@ -49,7 +48,7 @@ export const MyPage = () => {
             <MenuItem
               id="portfolio"
               onClick={() => {
-                handleNavigate(`/mypage/portfolio`);
+                handleNavigate('/mypage/portfolio');
               }}
             >
               <Portfolio />
@@ -85,20 +84,17 @@ const MyPageContainer = styled.div`
   justify-content: center;
   align-items: center;
 `;
-
 const ContentContainer = styled.div`
   flex: 1;
   padding-top: 90px;
   padding-left: 186px;
 `;
-
 const Header = styled.div`
   width: 442px;
   height: 32px;
   top: 90px;
   margin-bottom: 50px;
 `;
-
 const Title = styled.h1`
   font-size: 21px;
   line-height: 32px;
@@ -112,13 +108,11 @@ const SubHeader = styled.div`
   gap: 18.24px;
   margin-bottom: 19px;
 `;
-
 const SubTitle = styled.h2`
   font-size: 18.24px;
   font-weight: 700;
   line-height: 27.36px;
 `;
-
 const IconContainer = styled.div`
   width: 30.4px;
   height: 30.4px;
@@ -130,7 +124,6 @@ const MainContent = styled.div`
   justify-content: space-between;
   width: 907px;
 `;
-
 const TodoListContainer = styled.div`
   width: 442px;
   height: 328px;
@@ -141,14 +134,12 @@ const TodoListContainer = styled.div`
   padding-top: 18px;
   box-sizing: border-box;
 `;
-
 const TodoListBox = styled.div`
   width: 372px;
   height: 282px;
   border: 1px solid ${(props) => props.theme.colors.lightGray};
   border-radius: 10px;
 `;
-
 const MenuContainer = styled.div`
   width: 442px;
   height: 328px;
@@ -158,7 +149,6 @@ const MenuContainer = styled.div`
   justify-content: space-between;
   gap: 23px;
 `;
-
 const MenuItem = styled.div`
   width: 100%;
   height: 49px;
@@ -171,7 +161,6 @@ const MenuItem = styled.div`
   gap: 12.16px;
   background-color: white;
 `;
-
 const MoveIcon = styled(Move)`
   margin-left: auto;
   cursor: pointer;
