@@ -109,3 +109,14 @@ export const updateRoleTag = async (
     throw error;
   }
 };
+
+// 역할 태그 삭제
+export const deleteRoleTag = async (teamMangeId: number, tagId: number) => {
+  try {
+    await Axios.delete(`/api/management/${teamMangeId}/role/${tagId}`);
+    console.log('역할 태그 삭제');
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};

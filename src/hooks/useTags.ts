@@ -6,13 +6,15 @@ interface TagsProps {
   onEditTeamTag?: (tagId: number, newName: string) => void;
   onCreateRoleTag?: (name: string) => void;
   onEditRoleTag?: (tagId: number, newName: string) => void;
+  onDeleteRoleTag?: (tagId: number) => void;
 }
 
 export const useTags = ({
   initialTags = [],
   onEditTeamTag,
   onCreateRoleTag,
-  onEditRoleTag
+  onEditRoleTag,
+  onDeleteRoleTag
 }: TagsProps) => {
   const [tags, setTags] = useState<TeamTag[]>(initialTags); // 태그 업데이트
   const [showTagInput, setShowTagInput] = useState<boolean>(false); // 태그 입력 인풋창 보여줄지
@@ -60,7 +62,11 @@ export const useTags = ({
     setShowTagInput(true);
   };
 
-  const handleDeleteTag = (index: number) => {
+  const handleDeleteTag = async (index: number) => {
+    const tagId = tags[index].tagId;
+    if (tagId !== undefined && onDeleteRoleTag) {
+      await onDeleteRoleTag(tagId);
+    }
     setTags((prevTags) => {
       const updatedTags = prevTags.filter((_, i) => i !== index);
       setEditTagIndex(null);
