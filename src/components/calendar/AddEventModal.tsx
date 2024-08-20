@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import * as Dialog from '@radix-ui/react-dialog';
@@ -10,7 +10,7 @@ import RemoveTagIcon from '@assets/calendar/remove-tag-icon.svg';
 import { createCalendarEvent } from '@apis/calendar';
 import { teamId } from '../../constant/index';
 
-const AddEventModal = ({ selectedDate, isScheduleExist }: ModalProps) => {
+const AddEventModal = ({ selectedDate, open, setOpen }: ModalProps) => {
   const location = useLocation();
   const [scheduleInfo, setScheduleInfo] = useState<ScheduleInfoType>({
     date: '',
@@ -18,16 +18,6 @@ const AddEventModal = ({ selectedDate, isScheduleExist }: ModalProps) => {
     participants: [],
     content: ''
   });
-  const [open, setOpen] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (!isScheduleExist) {
-      setOpen(true);
-    } else {
-      setOpen(false);
-    }
-    console.log(open);
-  }, [selectedDate]);
 
   // 스케줄 내용 입력 받기
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -90,13 +80,7 @@ const AddEventModal = ({ selectedDate, isScheduleExist }: ModalProps) => {
 
   return (
     <>
-      <DialogRoot
-        open={open}
-        onOpenChange={setOpen}
-        // onOpenChange={(open) => {
-        //   open ? setOpen(true) : handleClosed();
-        // }}
-      >
+      <DialogRoot open={open} onOpenChange={setOpen}>
         <Dialog.Portal>
           <DialogOverlay />
           <Dialog.Title />

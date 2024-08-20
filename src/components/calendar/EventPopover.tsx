@@ -1,8 +1,10 @@
 import styled from 'styled-components';
 import moment from 'moment';
 import * as Popover from '@radix-ui/react-popover';
+import AddEventModal from './AddEventModal';
 import { EventType } from 'src/types/calendar';
 import AddEventButton from '@assets/calendar/add-event-btn.svg';
+import { useState } from 'react';
 
 type EventPopoverProps = {
   date: Date;
@@ -10,31 +12,43 @@ type EventPopoverProps = {
 };
 
 const EventPopover = ({ date, eventList }: EventPopoverProps) => {
+  const [open, setOpen] = useState<boolean>(false);
+
+  const handleModalOpen = () => {
+    setOpen(true);
+  };
   return (
-    <PopoverRoot defaultOpen={true}>
-      <Popover.Trigger asChild>
-        <PopoverAnchor />
-      </Popover.Trigger>
-      <Popover.Portal>
-        <PopoverContent>
-          <h4 className="date">{moment(date).format('YYYY-MM-DD')}</h4>
-          <ul className="event-list">
-            {eventList.map((event) => {
-              return (
-                <li className="event" key={event.calendarId}>
-                  {event.title}
-                </li>
-              );
-            })}
-          </ul>
-          <button className="add-event-button" type="button">
-            <span>일정 추가하기</span>
-            <StyledAddEventButton />
-          </button>
-          <PopoverArrow />
-        </PopoverContent>
-      </Popover.Portal>
-    </PopoverRoot>
+    <>
+      <PopoverRoot defaultOpen={true}>
+        <Popover.Trigger asChild>
+          <PopoverAnchor />
+        </Popover.Trigger>
+        <Popover.Portal>
+          <PopoverContent>
+            <h4 className="date">{moment(date).format('YYYY-MM-DD')}</h4>
+            <ul className="event-list">
+              {eventList.map((event) => {
+                return (
+                  <li className="event" key={event.calendarId}>
+                    {event.title}
+                  </li>
+                );
+              })}
+            </ul>
+            <button
+              className="add-event-button"
+              type="button"
+              onClick={handleModalOpen}
+            >
+              <span>일정 추가하기</span>
+              <StyledAddEventButton />
+            </button>
+            <PopoverArrow />
+          </PopoverContent>
+        </Popover.Portal>
+      </PopoverRoot>
+      <AddEventModal selectedDate={date} open={open} setOpen={setOpen} />
+    </>
   );
 };
 

@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
-import AddEventModal from './AddEventModal';
 import { EventType, Value } from '../../types/calendar';
 import NextBtn from '@assets/calendar/next-btn.svg';
 import PrevBtn from '@assets/calendar/prev-btn.svg';
@@ -17,7 +16,6 @@ const EventCalendar = () => {
   const [date, setDate] = useState<Value>(null);
   const [month, setMonth] = useState<number | null>(null);
   const [eventList, setEventList] = useState<EventType[]>([]);
-  const [isScheduleExist, setIsScheduleExist] = useState<boolean>(false);
   const [calendarHeight, setCalendarHeight] = useState<string>('520px');
 
   console.log(eventList);
@@ -26,17 +24,6 @@ const EventCalendar = () => {
   const handleDateChange = (newDate: Value) => {
     setDate(newDate);
   };
-
-  // 일정 있는지 여부 업데이트
-  useEffect(() => {
-    if (date) {
-      const formattedDate = moment(date instanceof Date ? date : null).format(
-        'YYYY-MM-DD'
-      );
-      const hasSchedule = eventList.some((v) => v.date === formattedDate);
-      setIsScheduleExist(hasSchedule);
-    }
-  }, [date, eventList]);
 
   // 멤버 불러오기
   useEffect(() => {
@@ -132,15 +119,13 @@ const EventCalendar = () => {
             (event: EventType) =>
               event.date === moment(date).format('YYYY-MM-DD')
           );
-          if (filteredEventList.length > 0) {
-            return (
-              <>
-                <Dot />
-                <EventPopover date={date} eventList={filteredEventList} />
-              </>
-            );
-          }
-          return null;
+          return (
+            <>
+              <EventPopover date={date} eventList={filteredEventList} />
+              {filteredEventList.length > 0 && <Dot />}
+            </>
+          );
+          return <></>;
         }}
         // 달 넘어갈 때 자동 선택된 값(1일)으로 캘린더 height 변화
         onActiveStartDateChange={({ activeStartDate }) =>
@@ -153,20 +138,6 @@ const EventCalendar = () => {
         prevLabel={<PrevBtn />}
         minDetail="year" // 10년단위 년도 숨기기
       />
-      {/* {date && isScheduleExist ? (
-        <ul>
-          {eventList.map((event: EventType) => {
-            if (
-              event.date ===
-              moment(date instanceof Date ? date : null).format('YYYY-MM-DD')
-            ) {
-              return <EventPopover event={event} />;
-            }
-          })}
-        </ul>
-      ) : (
-        <AddEventModal selectedDate={date} isScheduleExist={isScheduleExist} />
-      )} */}
     </StyledCalendarContainer>
   );
 };
