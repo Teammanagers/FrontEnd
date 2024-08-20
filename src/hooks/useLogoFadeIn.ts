@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-const useLogoFadeIn = (delay: number) => {
+export const useLogoFadeIn = (delay: number) => {
   const [isLogoFadeInActivate, setIsLogoFadeInActivate] = useState(false);
 
   useEffect(() => {
@@ -21,5 +21,3 @@ const useLogoFadeIn = (delay: number) => {
 
   return isLogoFadeInActivate;
 };
-
-export default useLogoFadeIn;
