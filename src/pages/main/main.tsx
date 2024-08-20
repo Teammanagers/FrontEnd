@@ -8,8 +8,15 @@ import TodoList from '@components/todo-list/TodoList';
 import { syncTodos } from '@utils/todoUtils';
 import { teamId } from '../../constant/index';
 import { useTodoStore } from '@store/todoStore';
+import { useIdStore } from '@store/idStore';
+import { getTeamTodos } from '@apis/todo-list';
+import { UserInfo } from 'src/types/todo-list';
 
 const MainPage = () => {
+  const { setOwnerId, setLeaderId } = useIdStore((state) => ({
+    setOwnerId: state.setOwnerId,
+    setLeaderId: state.setLeaderId
+  }));
   const setTeamTodos = useTodoStore((state) => state.setTeamTodos);
 
   const handleCopyClipBoard = (copyCode: string) => {
@@ -20,7 +27,18 @@ const MainPage = () => {
     }
   };
 
+  // 사용자 아이디 및 팀장 아이디 전역 설정
+  const setMemberId = async () => {
+    const response = await getTeamTodos(teamId);
+    const data = response.data.result;
+    const members = data.teamTodoList.map((v: UserInfo) => v.teamManageId);
+
+    setOwnerId(data.ownerTeamManageId);
+    setLeaderId(Math.min(...members));
+  };
+
   useEffect(() => {
+    setMemberId();
     syncTodos({ teamId, setTeamTodos });
   }, []);
 

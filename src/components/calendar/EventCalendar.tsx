@@ -4,11 +4,11 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
 import AddEventModal from './AddEventModal';
-import { useMemberStore } from '@store/memberStore';
 import { EventType, Value } from '../../types/calendar';
 import NextBtn from '@assets/calendar/next-btn.svg';
 import PrevBtn from '@assets/calendar/prev-btn.svg';
 import { teamId } from '../../constant/index';
+import { useMemberStore } from '@store/memberStore';
 import { getCalendarEvent, getTeamMember } from '@apis/calendar';
 
 const EventCalendar = () => {
