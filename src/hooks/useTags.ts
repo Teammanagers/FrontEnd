@@ -23,6 +23,13 @@ export const useTags = ({
 
   const handleAddTag = async (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && newTag.trim() !== '') {
+      // 태그 중복 체크
+      const isDuplicated = tags.some((tag) => tag.name === newTag.trim());
+      if (isDuplicated) {
+        alert('이미 존재하는 태그입니다!');
+        return;
+      }
+
       if (onCreateRoleTag) {
         await onCreateRoleTag(newTag.trim());
       }
@@ -37,9 +44,16 @@ export const useTags = ({
     index: number
   ) => {
     if (e.key === 'Enter' && newTag.trim() !== '') {
+      // 태그 중복 체크
+      const isDuplicated = tags.some((tag) => tag.name === newTag.trim());
+      if (isDuplicated) {
+        alert('이미 존재하는 태그입니다!');
+        return;
+      }
       const updatedTags = [...tags];
       const tagId = updatedTags[index].tagId; // 기존 태그의 ID를 유지
       updatedTags[index] = { tagId, name: newTag.trim() };
+
       setTags(updatedTags);
       setEditTagIndex(null);
       setNewTag('');
@@ -63,7 +77,7 @@ export const useTags = ({
   };
 
   const handleDeleteTag = async (index: number) => {
-    const tagId = tags[index].tagId;
+    const tagId = tags[index]?.tagId;
     if (tagId !== undefined && onDeleteRoleTag) {
       await onDeleteRoleTag(tagId);
     }
