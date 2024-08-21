@@ -1,15 +1,24 @@
 import styled from 'styled-components';
 import Profile from '@assets/management/default-profile.svg';
+import { MemberTypes, Role } from '../../../types/member.ts';
 
-export const CommentInputBox = () => {
+interface CommentInputBoxProps {
+  member: MemberTypes;
+}
+
+export const CommentInputBox = ({ member }: CommentInputBoxProps) => {
   return (
     <CommentBox>
       <ProfileContainer>
-        <Profile />
-        <Name>이름</Name>
-        <TagBox>
-          <TagPart>역할</TagPart>
-        </TagBox>
+        {member.imageUrl ? <ProfileImg src={member.imageUrl} /> : <Profile />}
+        <Name>{member.name}</Name>
+        <TagContainer>
+          {member.roleList?.map((role: Role, index) => (
+            <TagBox key={index}>
+              <TagPart>{role.name}</TagPart>
+            </TagBox>
+          ))}
+        </TagContainer>
       </ProfileContainer>
       <CommentInput />
     </CommentBox>
@@ -29,6 +38,17 @@ const ProfileContainer = styled.div`
   margin-bottom: 8px;
 `;
 
+const ProfileImg = styled.img`
+  width: 40px;
+  height: 40px;
+  border-radius: 100%;
+`;
+
+const TagContainer = styled.div`
+  display: flex;
+  gap: 3px;
+`;
+
 const Name = styled.p`
   font-size: 14px;
   font-weight: 500;
@@ -39,7 +59,7 @@ const Name = styled.p`
 `;
 
 const TagBox = styled.div`
-  width: 37px;
+  width: 40px;
   height: 24px;
   background: white;
   border-radius: 3px;
@@ -52,7 +72,7 @@ const TagPart = styled.p`
   color: ${({ theme }) => theme.colors.mainBlue};
   font-size: 9px;
   font-weight: 500;
-  line-height: 13.5px;
+  line-height: 24px;
 `;
 
 const CommentInput = styled.input`

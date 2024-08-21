@@ -1,21 +1,51 @@
 import styled from 'styled-components';
 import { CommentInputBox } from '@components/management/end-project/CommentInput.tsx';
+import { useEffect, useState } from 'react';
+import { MemberTypes } from '../../../types/member.ts';
+import { getMembers } from '@apis/management.ts';
+import { Axios } from '@apis/axios.ts';
 
 export const Comments = () => {
+  const [me, setMe] = useState<string>('');
+  const [members, setMembers] = useState<MemberTypes[]>([]);
+
+  useEffect(() => {
+    const getMe = async () => {
+      try {
+        const response = await Axios.get(`/api/member`);
+        setMe(response.data.result.name);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getMe();
+  }, []);
+
+  const fetchMembers = async () => {
+    try {
+      const response = await getMembers(1);
+      const filteredMembers = response.filter(
+        (member: MemberTypes) => member.name !== me
+      );
+      setMembers(filteredMembers);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchMembers();
+  }, []);
+
   return (
     <Container>
       <TeamName>UMC 6th 팀매니저</TeamName>
       <InfoText>프로젝트가 종료되었어요!</InfoText>
       <Text>그동안 고생한 팀원들에게 코멘트를 남길 수 있어요</Text>
       <CommentsList>
-        <CommentInputBox />
-        <CommentInputBox />
-        <CommentInputBox />
-        <CommentInputBox />
-        <CommentInputBox />
-        <CommentInputBox />
-        <CommentInputBox />
-        <CommentInputBox />
+        {members.map((member) => (
+          <CommentInputBox key={member.teamManageId} member={member} />
+        ))}
       </CommentsList>
       <BtnContainer>
         <RandomBtn>임의로 작성</RandomBtn>
