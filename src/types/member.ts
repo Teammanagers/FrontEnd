@@ -6,6 +6,6 @@ export interface Role {
 export interface MemberTypes {
   teamManageId: number;
   name: string;
-  imageUrl: string;
+  imageUrl?: string;
   roleList?: Role[];
 }
