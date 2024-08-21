@@ -1,30 +1,60 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import * as Dialog from '@radix-ui/react-dialog';
 import moment from 'moment';
 import ParticipantsList from './ParticipantsList';
-import { AddEventModalProps, ScheduleInfoType } from '../../types/calendar';
+import { ScheduleInfoType } from '../../types/calendar';
 import ClosedBtn from '@assets/calendar/closed-btn.svg';
 import RemoveTagIcon from '@assets/calendar/remove-tag-icon.svg';
-import { createCalendarEvent } from '@apis/calendar';
+import {
+  deleteCalendarEvent,
+  getCalendarEventDetail,
+  updateCalendarEvent
+} from '@apis/calendar';
 import { teamId } from '../../constant/index';
 import { syncCalendarEvent } from '@utils/calendarUtils';
+import { EventProps } from '../../types/calendar';
 import { useCalendarStore } from '@store/calendarStore';
 
-const AddEventModal = ({ selectedDate, open, setOpen }: AddEventModalProps) => {
+const EventModal = ({
+  date,
+  calendarId,
+  checkEvent,
+  setCheckEvent,
+  isEditing,
+  setIsEditing
+}: EventProps) => {
   const location = useLocation();
   const { searchMonth, setEventList } = useCalendarStore((state) => ({
     searchMonth: state.searchMonth,
     setEventList: state.setEventList
   }));
-
   const [scheduleInfo, setScheduleInfo] = useState<ScheduleInfoType>({
     date: '',
     title: '',
     participants: [],
     content: ''
   });
+
+  // 캘린더 일정 상세 가져오기
+  useEffect(() => {
+    const fetchEventDetail = async () => {
+      if (calendarId) {
+        const response = await getCalendarEventDetail(calendarId);
+        const data = response.data.result.calendar;
+        setScheduleInfo((prev) => ({
+          ...prev,
+          date: date,
+          title: data.title,
+          participants: data.participants,
+          content: data.content
+        }));
+        console.log(scheduleInfo);
+      }
+    };
+    fetchEventDetail();
+  }, [calendarId]);
 
   // 스케줄 내용 입력 받기
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,8 +77,8 @@ const AddEventModal = ({ selectedDate, open, setOpen }: AddEventModalProps) => {
     }));
   };
 
-  // 일정 추가하기
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  // 일정 수정하기
+  const handleUpdateEvent = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const target = e.target as HTMLFormElement;
 
@@ -56,30 +86,47 @@ const AddEventModal = ({ selectedDate, open, setOpen }: AddEventModalProps) => {
     const newParticipants = scheduleInfo.participants.map(
       (v) => v.teamManageId
     );
-    const memo = (target[1] as HTMLTextAreaElement).value;
+    const content = (target[1] as HTMLTextAreaElement).value;
 
-    const event = {
-      date: moment(selectedDate instanceof Date ? selectedDate : null).format(
-        'YYYY-MM-DDTHH:mm:ss.SSS[Z]'
-      ),
+    const newEvent = {
       title: eventTitle,
       participants: newParticipants,
-      content: memo
+      content: content
     };
+    console.log(newEvent);
 
     try {
-      await createCalendarEvent(teamId, event);
-      setOpen(false);
+      await updateCalendarEvent(calendarId, newEvent);
       // 일정 변동사항 업데이트
       syncCalendarEvent({ teamId, searchMonth, setEventList });
+      checkEvent ? setCheckEvent(false) : setIsEditing(false);
     } catch (error) {
       console.error(error);
     }
   };
 
+  // 일정 수정하기 모달로 변경
+  const handleEditEvent = () => {
+    setIsEditing(true);
+    setCheckEvent(false);
+  };
+
+  // 일정 삭제하기
+  const handleDeleteEvent = async () => {
+    await deleteCalendarEvent(calendarId);
+    // 일정 변동사항 업데이트
+    syncCalendarEvent({ teamId, searchMonth, setEventList });
+    setIsEditing(false);
+  };
+
+  // 일정 완료하기
+  const handleCompleteEvent = () => {
+    setCheckEvent(false);
+  };
+
   // 상태 업데이트 후 모달 닫기
   const handleClosed = () => {
-    setOpen(false);
+    checkEvent ? setCheckEvent(false) : setIsEditing(false);
     setScheduleInfo({
       date: '',
       title: '',
@@ -90,12 +137,17 @@ const AddEventModal = ({ selectedDate, open, setOpen }: AddEventModalProps) => {
 
   return (
     <>
-      <DialogRoot open={open} onOpenChange={setOpen}>
+      <DialogRoot
+        open={checkEvent ? checkEvent : isEditing}
+        onOpenChange={checkEvent ? setCheckEvent : setIsEditing}
+      >
         <Dialog.Portal>
           <DialogOverlay />
           <Dialog.Title />
           <Dialog.Description />
-          {open && (
+
+          {/* 일정 수정하기 모달 */}
+          {isEditing && (
             <DialogContent
               isCalendarPage={location?.pathname.startsWith('/calendar')}
               isAddParticipants={scheduleInfo.participants.length > 0}
@@ -106,18 +158,15 @@ const AddEventModal = ({ selectedDate, open, setOpen }: AddEventModalProps) => {
                     <StyledClosedBtn />
                   </button>
                 </Dialog.Close>
-                <h3 className="date">
-                  {moment(
-                    selectedDate instanceof Date ? selectedDate : null
-                  ).format('YYYY.MM.DD')}
-                </h3>
+                <h3 className="date">{moment(date).format('YYYY.MM.DD')}</h3>
               </div>
               <hr />
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleUpdateEvent}>
                 <input
                   type="text"
+                  value={scheduleInfo.title}
                   className="schedule-title"
-                  name="schedule-title"
+                  name="title"
                   placeholder="일정 제목"
                   maxLength={30}
                   onChange={handleInput}
@@ -155,35 +204,106 @@ const AddEventModal = ({ selectedDate, open, setOpen }: AddEventModalProps) => {
                 </div>
                 <hr />
                 <textarea
-                  className="memo"
-                  name="memo"
+                  className="content"
+                  value={scheduleInfo.content}
+                  name="content"
                   placeholder="메모"
                   maxLength={100}
                   onChange={handleTextarea}
-                ></textarea>
-                <AddScheduleBtn
-                  className="add-schedule-btn"
-                  type="submit"
-                  disabled={
-                    scheduleInfo.title &&
-                    scheduleInfo.participants.length > 0 &&
-                    scheduleInfo.content
-                      ? false
-                      : true
-                  }
-                >
-                  일정 추가하기
-                </AddScheduleBtn>
+                />
+                <EventButtons>
+                  <DeleteEventBtn
+                    className="add-schedule-btn"
+                    type="button"
+                    onClick={handleDeleteEvent}
+                  >
+                    삭제하기
+                  </DeleteEventBtn>
+                  <CompleteEventBtn
+                    className="add-schedule-btn"
+                    type="submit"
+                    disabled={
+                      scheduleInfo.title &&
+                      scheduleInfo.participants.length > 0 &&
+                      scheduleInfo.content
+                        ? false
+                        : true
+                    }
+                  >
+                    저장하기
+                  </CompleteEventBtn>
+                </EventButtons>
               </form>
             </DialogContent>
           )}
+
+          {/* 일정 확인하기 모달 */}
+          {checkEvent &&
+            scheduleInfo.title &&
+            scheduleInfo.content &&
+            scheduleInfo.participants.length > 0 && (
+              <DialogContent
+                isCalendarPage={location?.pathname.startsWith('/calendar')}
+                isAddParticipants={scheduleInfo.participants.length > 0}
+              >
+                <div className="header">
+                  <Dialog.Close asChild onClick={handleClosed}>
+                    <button className="closed-btn-container">
+                      <StyledClosedBtn />
+                    </button>
+                  </Dialog.Close>
+                  <h3 className="date">{moment(date).format('YYYY.MM.DD')}</h3>
+                </div>
+                <hr />
+                <form>
+                  <h3 className="schedule-title">{scheduleInfo.title}</h3>
+                  <hr />
+                  <div className="participants">
+                    {scheduleInfo.participants.length > 0 || (
+                      <span className="participants-index">참여자</span>
+                    )}
+                    <ul className="participants-tags">
+                      {scheduleInfo.participants.length > 0 &&
+                        scheduleInfo.participants.map((member) => (
+                          <li
+                            className="participants-tag"
+                            key={member.teamManageId}
+                          >
+                            <span className="participants-name">
+                              {member.name}
+                            </span>
+                          </li>
+                        ))}
+                    </ul>
+                  </div>
+                  <hr />
+                  <p className="content">{scheduleInfo.content}</p>
+                  <EventButtons>
+                    <EditEventBtn
+                      className="add-schedule-btn"
+                      type="button"
+                      onClick={handleEditEvent}
+                    >
+                      수정하기
+                    </EditEventBtn>
+                    <CompleteEventBtn
+                      className="add-schedule-btn"
+                      type="submit"
+                      onClick={handleCompleteEvent}
+                    >
+                      일정 완료하기
+                    </CompleteEventBtn>
+                  </EventButtons>
+                </form>
+              </DialogContent>
+            )}
         </Dialog.Portal>
       </DialogRoot>
     </>
   );
 };
 
-export default AddEventModal;
+export default EventModal;
 
 const DialogRoot = styled(Dialog.Root)``;
 
@@ -261,14 +381,16 @@ const DialogContent = styled(Dialog.Content)<{
     flex-direction: column;
 
     .schedule-title {
+      display: flex;
+      align-items: center;
       width: inherit;
       height: 30px;
       background-color: white;
       border: none;
-      padding: 0;
-      margin-bottom: 5px;
+      margin: 0 0 5px 0;
       font-size: 13px;
       font-weight: 700;
+      line-height: 18px;
       color: #1d1d1d;
       outline: none;
     }
@@ -335,11 +457,11 @@ const DialogContent = styled(Dialog.Content)<{
       }
     }
 
-    .memo {
+    .content {
       height: 87px;
-      padding-top: 6px;
+      padding: 6px 0 0 0;
       border: none;
-      margin-bottom: 5px;
+      margin: 0 0 5px 0;
       color: #1d1d1d;
       font-size: 11px;
       font-weight: 400;
@@ -358,7 +480,7 @@ const DialogContent = styled(Dialog.Content)<{
         border-radius: 76px;
       }
     }
-    .memo::placeholder {
+    .content::placeholder {
       font-size: 11px;
       font-weight: 400;
       color: #999999;
@@ -372,7 +494,6 @@ const DialogContent = styled(Dialog.Content)<{
     }
     to {
       opacity: 1;
-      /* transform: translate(-50%, -50%) scale(1); */
     }
   }
 `;
@@ -385,13 +506,36 @@ const StyledRemoveTagIcon = styled(RemoveTagIcon)`
   cursor: pointer;
 `;
 
-const AddScheduleBtn = styled.button`
-  height: 36px;
-  font-size: 12px;
-  font-weight: 700;
+const EventButtons = styled.div`
+  display: flex;
+  justify-content: center;
+
+  & > button {
+    width: 158px;
+    height: 36px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 18px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+`;
+const DeleteEventBtn = styled.button`
+  border: 1.52px solid #ff0000;
+  margin-right: 4px;
+  color: #ff0000;
+  background-color: white;
+`;
+
+const EditEventBtn = styled.button`
+  border: 1.52px solid ${(props) => props.theme.colors.mainBlue};
+  margin-right: 4px;
+  color: ${(props) => props.theme.colors.mainBlue};
+  background-color: white;
+`;
+
+const CompleteEventBtn = styled.button`
   border: none;
-  border-radius: 3px;
   color: white;
   background-color: ${(props) => (props.disabled ? '#CCCCCC' : '#5c9eff')};
-  cursor: pointer;
 `;
