@@ -8,9 +8,9 @@ import { ScheduleInfoType } from '../../types/calendar';
 import ClosedBtn from '@assets/calendar/closed-btn.svg';
 import RemoveTagIcon from '@assets/calendar/remove-tag-icon.svg';
 import {
-  createCalendarEvent,
   deleteCalendarEvent,
-  getCalendarEventDetail
+  getCalendarEventDetail,
+  updateCalendarEvent
 } from '@apis/calendar';
 import { teamId } from '../../constant/index';
 import { syncCalendarEvent } from '@utils/calendarUtils';
@@ -43,7 +43,6 @@ const EventModal = ({
       if (calendarId) {
         const response = await getCalendarEventDetail(calendarId);
         const data = response.data.result.calendar;
-        console.log(data);
         setScheduleInfo((prev) => ({
           ...prev,
           date: date,
@@ -51,6 +50,7 @@ const EventModal = ({
           participants: data.participants,
           content: data.content
         }));
+        console.log(scheduleInfo);
       }
     };
     fetchEventDetail();
@@ -77,8 +77,8 @@ const EventModal = ({
     }));
   };
 
-  // 일정 추가하기
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  // 일정 수정하기
+  const handleUpdateEvent = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const target = e.target as HTMLFormElement;
 
@@ -89,14 +89,16 @@ const EventModal = ({
     const content = (target[1] as HTMLTextAreaElement).value;
 
     const newEvent = {
-      date: moment(date).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
       title: eventTitle,
       participants: newParticipants,
       content: content
     };
+    console.log(newEvent);
 
     try {
-      await createCalendarEvent(teamId, newEvent);
+      await updateCalendarEvent(calendarId, newEvent);
+      // 일정 변동사항 업데이트
+      syncCalendarEvent({ teamId, searchMonth, setEventList });
       checkEvent ? setCheckEvent(false) : setIsEditing(false);
     } catch (error) {
       console.error(error);
@@ -145,96 +147,95 @@ const EventModal = ({
           <Dialog.Description />
 
           {/* 일정 수정하기 모달 */}
-          {isEditing &&
-            scheduleInfo.title &&
-            scheduleInfo.content &&
-            scheduleInfo.participants.length > 0 && (
-              <DialogContent
-                isCalendarPage={location?.pathname.startsWith('/calendar')}
-                isAddParticipants={scheduleInfo.participants.length > 0}
-              >
-                <div className="header">
-                  <Dialog.Close asChild onClick={handleClosed}>
-                    <button className="closed-btn-container">
-                      <StyledClosedBtn />
-                    </button>
-                  </Dialog.Close>
-                  <h3 className="date">{moment(date).format('YYYY.MM.DD')}</h3>
+          {isEditing && (
+            <DialogContent
+              isCalendarPage={location?.pathname.startsWith('/calendar')}
+              isAddParticipants={scheduleInfo.participants.length > 0}
+            >
+              <div className="header">
+                <Dialog.Close asChild onClick={handleClosed}>
+                  <button className="closed-btn-container">
+                    <StyledClosedBtn />
+                  </button>
+                </Dialog.Close>
+                <h3 className="date">{moment(date).format('YYYY.MM.DD')}</h3>
+              </div>
+              <hr />
+              <form onSubmit={handleUpdateEvent}>
+                <input
+                  type="text"
+                  value={scheduleInfo.title}
+                  className="schedule-title"
+                  name="title"
+                  placeholder="일정 제목"
+                  maxLength={30}
+                  onChange={handleInput}
+                />
+                <hr />
+                <div className="participants">
+                  {scheduleInfo.participants.length > 0 || (
+                    <span className="participants-index">참여자</span>
+                  )}
+                  <ul className="participants-tags">
+                    {scheduleInfo.participants.length > 0 &&
+                      scheduleInfo.participants.map((member) => (
+                        <li
+                          className="participants-tag"
+                          key={member.teamManageId}
+                        >
+                          <span className="participants-name">
+                            {member.name}
+                          </span>
+                          <div
+                            className="remove-participant-icon"
+                            onClick={() =>
+                              removeParticipants(member.teamManageId)
+                            }
+                          >
+                            <StyledRemoveTagIcon />
+                          </div>
+                        </li>
+                      ))}
+                    <ParticipantsList
+                      scheduleInfo={scheduleInfo}
+                      setScheduleInfo={setScheduleInfo}
+                    />
+                  </ul>
                 </div>
                 <hr />
-                <form onSubmit={handleSubmit}>
-                  <input
-                    type="text"
-                    value={scheduleInfo.title}
-                    className="schedule-title"
-                    name="title"
-                    placeholder="일정 제목"
-                    maxLength={30}
-                    onChange={handleInput}
-                  />
-                  <hr />
-                  <div className="participants">
-                    {scheduleInfo.participants.length > 0 || (
-                      <span className="participants-index">참여자</span>
-                    )}
-                    {/* <ul className="participants-tags">
-                      {scheduleInfo.participants.length > 0 &&
-                        scheduleInfo.participants.map((member) => (
-                          <li
-                            className="participants-tag"
-                            key={member.teamManageId}
-                          >
-                            <span className="participants-name">{member}</span>
-                            <div
-                              className="remove-participant-icon"
-                              onClick={() =>
-                                removeParticipants(member.teamManageId)
-                              }
-                            >
-                              <StyledRemoveTagIcon />
-                            </div>
-                          </li>
-                        ))}
-                      <ParticipantsList
-                        scheduleInfo={scheduleInfo}
-                        setScheduleInfo={setScheduleInfo}
-                      />
-                    </ul> */}
-                  </div>
-                  <hr />
-                  <textarea
-                    className="content"
-                    value={scheduleInfo.content}
-                    name="content"
-                    placeholder="메모"
-                    maxLength={100}
-                    onChange={handleTextarea}
-                  />
-                  <EventButtons>
-                    <DeleteEventBtn
-                      className="add-schedule-btn"
-                      type="button"
-                      onClick={handleDeleteEvent}
-                    >
-                      삭제하기
-                    </DeleteEventBtn>
-                    <CompleteEventBtn
-                      className="add-schedule-btn"
-                      type="submit"
-                      disabled={
-                        scheduleInfo.title &&
-                        scheduleInfo.participants.length > 0 &&
-                        scheduleInfo.content
-                          ? false
-                          : true
-                      }
-                    >
-                      저장하기
-                    </CompleteEventBtn>
-                  </EventButtons>
-                </form>
-              </DialogContent>
-            )}
+                <textarea
+                  className="content"
+                  value={scheduleInfo.content}
+                  name="content"
+                  placeholder="메모"
+                  maxLength={100}
+                  onChange={handleTextarea}
+                />
+                <EventButtons>
+                  <DeleteEventBtn
+                    className="add-schedule-btn"
+                    type="button"
+                    onClick={handleDeleteEvent}
+                  >
+                    삭제하기
+                  </DeleteEventBtn>
+                  <CompleteEventBtn
+                    className="add-schedule-btn"
+                    type="submit"
+                    disabled={
+                      scheduleInfo.title &&
+                      scheduleInfo.participants.length > 0 &&
+                      scheduleInfo.content
+                        ? false
+                        : true
+                    }
+                  >
+                    저장하기
+                  </CompleteEventBtn>
+                </EventButtons>
+              </form>
+            </DialogContent>
+          )}
 
           {/* 일정 확인하기 모달 */}
           {checkEvent &&
@@ -261,17 +262,19 @@ const EventModal = ({
                     {scheduleInfo.participants.length > 0 || (
                       <span className="participants-index">참여자</span>
                     )}
-                    {/* <ul className="participants-tags">
+                    <ul className="participants-tags">
                       {scheduleInfo.participants.length > 0 &&
                         scheduleInfo.participants.map((member) => (
                           <li
                             className="participants-tag"
                             key={member.teamManageId}
                           >
-                            <span className="participants-name">{member}</span>
+                            <span className="participants-name">
+                              {member.name}
+                            </span>
                           </li>
                         ))}
-                    </ul> */}
+                    </ul>
                   </div>
                   <hr />
                   <p className="content">{scheduleInfo.content}</p>

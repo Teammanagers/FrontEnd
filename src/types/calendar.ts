@@ -43,8 +43,6 @@ export interface UpcomingEventProps {
 
 export type EventModalProps = {
   selectedDate: Value;
-  // open: boolean;
-  // setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export type AddEventModalProps = {
@@ -73,4 +71,10 @@ export interface ScheduleInfoType extends BaseEventype {
     teamManageId: number;
     name: string;
   }[];
+}
+
+export interface UpdateEventProps {
+  title: string;
+  participants: number[];
+  content: string;
 }

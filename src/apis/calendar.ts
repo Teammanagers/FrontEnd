@@ -1,5 +1,5 @@
 import { instance } from './instance';
-import { CreateEventProps } from 'src/types/calendar';
+import { CreateEventProps, UpdateEventProps } from 'src/types/calendar';
 
 export const getTeamMember = async (teamId: number) => {
   const response = await instance.get(`/api/team/${teamId}/member`);
@@ -11,6 +11,14 @@ export const createCalendarEvent = async (
   event: CreateEventProps
 ) => {
   const response = await instance.post(`/api/team/${teamId}/calendar`, event);
+  return response;
+};
+
+export const updateCalendarEvent = async (
+  eventId: number,
+  data: UpdateEventProps
+) => {
+  const response = await instance.patch(`/api/calendar/${eventId}`, data);
   return response;
 };
 
