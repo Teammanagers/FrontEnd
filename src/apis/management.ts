@@ -1,6 +1,17 @@
 import { Axios } from '@apis/axios.ts';
 import { TeamData } from '../types/management.ts';
 
+// 나.. 조회
+export const getMe = async () => {
+  try {
+    const response = await Axios.get(`/api/member`);
+    return response.data.result.name;
+    console.log(response);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 // 내 팀 조회
 export const getMyTeam = async () => {
   try {

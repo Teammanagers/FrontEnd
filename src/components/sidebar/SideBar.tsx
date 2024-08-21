@@ -20,19 +20,47 @@ import End from '@assets/sidebar/end.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { DropDown } from '@components/sidebar/DropDown.tsx';
-import { getMyTeam } from '@apis/management.ts';
+import { getMe, getMembers, getMyTeam } from '@apis/management.ts';
 import { TeamProps } from '../../types/management.ts';
+import { MemberTypes } from '../../types/member.ts';
 
 export const SideBar = () => {
   const [teams, setTeams] = useState<TeamProps[]>([]);
   const [currentTeam, setCurrentTeam] = useState<TeamProps | null>(null);
   const [hover, setHover] = useState<boolean>(false);
   const [showDropDown, setShowDropDown] = useState<boolean>(false);
+  const [isLeader, setIsLeader] = useState<boolean>(false);
   const navigate = useNavigate();
   const location = useLocation();
 
+  useEffect(() => {
+    const checkLeader = async () => {
+      try {
+        const members = await getMembers(1);
+        const me = await getMe();
+
+        // 팀장
+        const leader = members.reduce(
+          (prev: MemberTypes, curr: MemberTypes) => {
+            return prev.teamManageId < curr.teamManageId ? prev : curr;
+          }
+        );
+        setIsLeader(me.teamManageId === leader.teamManageId);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    checkLeader();
+  }, []);
+
   const handleNavigate = (path: string) => {
     navigate(path);
+  };
+
+  const handleNavigateEnd = () => {
+    if (isLeader) {
+      navigate(`/management/end`);
+    } else navigate(`/management/stop`);
   };
 
   const handleDropDown = () => {
@@ -191,20 +219,16 @@ export const SideBar = () => {
           <SideBarText selected={isActive(`/mypage`)}>마이페이지</SideBarText>
         )}
       </IconContainer>
-      {/* 팀원, 팀장에 따라 종료 페이지 다르게 */}
-      <IconContainer
-        onClick={() => {
-          handleNavigate(`/management/end`);
-        }}
-        isHovered={hover}
-        red
-      >
+      <IconContainer onClick={handleNavigateEnd} isHovered={hover} red>
         <End />
         {hover && (
-          <SideBarText selected={isActive(`/management/end`)} red>
-            프로젝트
-            <br />
-            종료
+          <SideBarText
+            selected={isActive(
+              isLeader ? `/management/end` : `/management/stop`
+            )}
+            red
+          >
+            {isLeader ? '프로젝트 종료' : '팀 나가기'}
           </SideBarText>
         )}
       </IconContainer>
@@ -294,12 +318,6 @@ const SideBarText = styled.p<SelectedProps>`
 const IconContainer = styled.div<SelectedProps>`
   width: 100%;
   height: 51px;
-  background-color: ${({ selected, theme, red }) =>
-    selected
-      ? red
-        ? '#FFE9E9'
-        : theme.colors.background
-      : 'white'}; // 왜 안될까..
   display: flex;
   justify-content: ${({ isHovered }) => (isHovered ? 'flex-start' : 'center')};
   padding-left: ${({ isHovered }) => (isHovered ? '19px' : '0')};
@@ -308,6 +326,14 @@ const IconContainer = styled.div<SelectedProps>`
   align-items: center;
   cursor: pointer;
   transition: width 0.3s ease;
+
+  // 얘 안돼 ㅜ.ㅜ
+  background-color: ${({ selected, theme, red }) => {
+    if (selected) {
+      return red ? '#FFE9E9' : theme.colors.background;
+    }
+    return 'white';
+  }};
 
   &:last-child {
     margin-top: 18px;
