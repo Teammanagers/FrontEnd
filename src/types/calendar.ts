@@ -14,10 +14,41 @@ export interface EventType {
   title: string;
 }
 
-export type ModalProps = {
+export interface EventProps {
+  date: string;
+  calendarId: number;
+  checkEvent: boolean;
+  setCheckEvent: React.Dispatch<React.SetStateAction<boolean>>;
+  isEditing: boolean;
+  setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export type UpcomingEventType = {
+  calendarId: number;
+  title: string;
+  status: string;
+  isAlarm: boolean;
+  date: string;
+}[];
+
+export interface UpcomingEventProps {
+  event: {
+    calendarId: number;
+    title: string;
+    status: string;
+    isAlarm: boolean;
+    date: string;
+  };
+}
+
+export type EventModalProps = {
   selectedDate: Value;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export type AddEventModalProps = {
+  selectedDate: Value;
   open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export interface ParticipantsListType {
@@ -40,4 +71,10 @@ export interface ScheduleInfoType extends BaseEventype {
     teamManageId: number;
     name: string;
   }[];
+}
+
+export interface UpdateEventProps {
+  title: string;
+  participants: number[];
+  content: string;
 }

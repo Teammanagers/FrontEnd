@@ -35,13 +35,14 @@ const Notice = () => {
   };
 
   const fetchNoticeList = async () => {
+    // 공지 리스트 받아오기
     const response = await getNoticeList(teamId);
     setNoticeList(response.data.result.noticeList.reverse());
+    // 최신 공지 받아오기
     const res = await getNoticeRecent(teamId);
     setNoticeRecent(res.data.result.recentNotice.content);
   };
 
-  // 공지  받아오기
   useEffect(() => {
     fetchNoticeList();
   }, []);
