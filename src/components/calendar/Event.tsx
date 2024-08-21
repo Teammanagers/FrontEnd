@@ -27,7 +27,7 @@ const Event = ({ event }: EventProp) => {
   // 일정 완료
   const handleCompleteEvent = async (eventId: number) => {
     setIsComplete(true);
-    updateEventState(eventId);
+    await updateEventState(eventId);
   };
 
   useEffect(() => {

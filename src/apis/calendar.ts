@@ -19,6 +19,11 @@ export const updateEventState = async (eventId: number) => {
   return response;
 };
 
+export const deleteCalendarEvent = async (eventId: number) => {
+  const response = await instance.delete(`/api/calendar/${eventId}`);
+  return response;
+};
+
 export const getCalendarEvent = async (
   teamId: number,
   month: number | null
