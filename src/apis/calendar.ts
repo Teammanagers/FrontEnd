@@ -14,6 +14,11 @@ export const createCalendarEvent = async (
   return response;
 };
 
+export const updateEventState = async (eventId: number) => {
+  const response = await instance.patch(`/api/calendar/${eventId}/state`);
+  return response;
+};
+
 export const getCalendarEvent = async (
   teamId: number,
   month: number | null

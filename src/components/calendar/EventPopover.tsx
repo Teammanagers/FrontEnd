@@ -5,6 +5,7 @@ import AddEventModal from './AddEventModal';
 import { EventType } from 'src/types/calendar';
 import AddEventButton from '@assets/calendar/add-event-btn.svg';
 import { useState } from 'react';
+import Event from './Event';
 
 type EventPopoverProps = {
   date: Date;
@@ -14,6 +15,7 @@ type EventPopoverProps = {
 const EventPopover = ({ date, eventList }: EventPopoverProps) => {
   const [open, setOpen] = useState<boolean>(false);
 
+  console.log(eventList);
   const handleModalOpen = () => {
     setOpen(true);
   };
@@ -28,11 +30,7 @@ const EventPopover = ({ date, eventList }: EventPopoverProps) => {
             <h4 className="date">{moment(date).format('YYYY-MM-DD')}</h4>
             <ul className="event-list">
               {eventList.map((event) => {
-                return (
-                  <li className="event" key={event.calendarId}>
-                    {event.title}
-                  </li>
-                );
+                return <Event event={event} />;
               })}
             </ul>
             <button
@@ -85,16 +83,8 @@ const PopoverContent = styled(Popover.Content)`
   }
 
   .event-list {
-    padding: 0 0 0 20px;
+    padding: 0;
     margin: 0;
-
-    .event {
-      margin-bottom: 9px;
-      font-size: 10px;
-      font-weight: 400;
-      line-height: 15px;
-      color: #1d1d1d;
-    }
   }
 
   .add-event-button {

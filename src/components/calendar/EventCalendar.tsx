@@ -18,8 +18,6 @@ const EventCalendar = () => {
   const [eventList, setEventList] = useState<EventType[]>([]);
   const [calendarHeight, setCalendarHeight] = useState<string>('520px');
 
-  console.log(eventList);
-
   // 날짜 업데이트
   const handleDateChange = (newDate: Value) => {
     setDate(newDate);

@@ -62,6 +62,7 @@ const AddEventModal = ({ selectedDate, open, setOpen }: ModalProps) => {
 
     try {
       await createCalendarEvent(teamId, event);
+      setOpen(false);
     } catch (error) {
       console.error(error);
     }
