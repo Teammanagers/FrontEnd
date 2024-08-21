@@ -9,9 +9,16 @@ import ClosedBtn from '@assets/calendar/closed-btn.svg';
 import RemoveTagIcon from '@assets/calendar/remove-tag-icon.svg';
 import { createCalendarEvent } from '@apis/calendar';
 import { teamId } from '../../constant/index';
+import { syncCalendarEvent } from '@utils/calendarUtils';
+import { useCalendarStore } from '@store/calendarStore';
 
 const AddEventModal = ({ selectedDate, open, setOpen }: AddEventModalProps) => {
   const location = useLocation();
+  const { searchMonth, setEventList } = useCalendarStore((state) => ({
+    searchMonth: state.searchMonth,
+    setEventList: state.setEventList
+  }));
+
   const [scheduleInfo, setScheduleInfo] = useState<ScheduleInfoType>({
     date: '',
     title: '',
@@ -63,6 +70,8 @@ const AddEventModal = ({ selectedDate, open, setOpen }: AddEventModalProps) => {
     try {
       await createCalendarEvent(teamId, event);
       setOpen(false);
+      // 일정 변동사항 업데이트
+      syncCalendarEvent({ teamId, searchMonth, setEventList });
     } catch (error) {
       console.error(error);
     }

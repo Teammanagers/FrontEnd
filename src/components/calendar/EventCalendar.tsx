@@ -8,14 +8,21 @@ import NextBtn from '@assets/calendar/next-btn.svg';
 import PrevBtn from '@assets/calendar/prev-btn.svg';
 import { teamId } from '../../constant/index';
 import { useMemberStore } from '@store/memberStore';
-import { getCalendarEvent, getTeamMember } from '@apis/calendar';
+import { useCalendarStore } from '@store/calendarStore';
+import { getTeamMember } from '@apis/calendar';
 import EventPopover from './EventPopover';
+import { syncCalendarEvent } from '@utils/calendarUtils';
 
 const EventCalendar = () => {
   const setTeamMember = useMemberStore((state) => state.setTeamMember);
+  const { searchMonth, setSearchMonth, eventList, setEventList } =
+    useCalendarStore((state) => ({
+      searchMonth: state.searchMonth,
+      setSearchMonth: state.setSearchMonth,
+      eventList: state.eventList,
+      setEventList: state.setEventList
+    }));
   const [date, setDate] = useState<Value>(null);
-  const [month, setMonth] = useState<number | null>(null);
-  const [eventList, setEventList] = useState<EventType[]>([]);
   const [calendarHeight, setCalendarHeight] = useState<string>('520px');
 
   // 날짜 업데이트
@@ -37,7 +44,7 @@ const EventCalendar = () => {
   const updateMonth = (activeStartDate: Date | null) => {
     setDate(activeStartDate);
     if (activeStartDate) {
-      setMonth(activeStartDate?.getMonth() + 1);
+      setSearchMonth(activeStartDate?.getMonth() + 1);
     }
   };
   useEffect(() => {
@@ -47,15 +54,10 @@ const EventCalendar = () => {
     console.log(null);
   }, []);
 
-  // 월 스케쥴 가져오기
-  const fetchCalendarEvent = async () => {
-    const response = await getCalendarEvent(teamId, month);
-    setEventList(response.data.result.calendarListOfMonth);
-    console.log(eventList);
-  };
+  // 일정 변동사항 업데이트
   useEffect(() => {
-    if (month) fetchCalendarEvent();
-  }, [month]);
+    syncCalendarEvent({ teamId, searchMonth, setEventList });
+  }, [searchMonth]);
 
   // 매월 몇 주인지 구하기 -> 5,6주일 때 height 변화
   useEffect(() => {

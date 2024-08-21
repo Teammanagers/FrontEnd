@@ -24,7 +24,7 @@ export const deleteCalendarEvent = async (eventId: number) => {
   return response;
 };
 
-export const getCalendarEvent = async (
+export const getCalendarEventList = async (
   teamId: number,
   month: number | null
 ) => {
