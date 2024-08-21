@@ -15,7 +15,6 @@ type EventPopoverProps = {
 const EventPopover = ({ date, eventList }: EventPopoverProps) => {
   const [open, setOpen] = useState<boolean>(false);
 
-  console.log(eventList);
   const handleModalOpen = () => {
     setOpen(true);
   };

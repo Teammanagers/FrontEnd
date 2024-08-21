@@ -3,14 +3,28 @@ import styled from 'styled-components';
 import { EventType } from 'src/types/calendar';
 import CheckedIcon from '@assets/todo-list/checked.svg';
 import { updateEventState } from '@apis/calendar';
+import EventModal from './EventModal';
 
 type EventProp = {
   event: EventType;
 };
 
 const Event = ({ event }: EventProp) => {
+  const [checkEvent, setCheckEvent] = useState<boolean>(false);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isComplete, setIsComplete] = useState<boolean>(false);
 
+  // 일정 확인
+  const handleCheckEvent = () => {
+    setCheckEvent(true);
+  };
+
+  // 일정 수정
+  const handleEditEvent = () => {
+    setIsEditing(true);
+  };
+
+  // 일정 완료
   const handleCompleteEvent = async (eventId: number) => {
     setIsComplete(true);
     updateEventState(eventId);
@@ -21,27 +35,41 @@ const Event = ({ event }: EventProp) => {
   }, []);
 
   return (
-    <EventWrapper key={event.calendarId}>
-      <div className="event-title-container">
-        <div className="ellipse"></div>
-        <p className="event-title"> {event.title}</p>
-      </div>
-      <div className="buttons">
-        {isComplete || <button className="edit-button">수정</button>}
-        {isComplete ? (
-          <button className="checked-button" type="button">
-            <CheckedIcon />
-          </button>
-        ) : (
-          <button
-            className="complete-button"
-            onClick={() => handleCompleteEvent(event.calendarId)}
-          >
-            완료
-          </button>
-        )}
-      </div>
-    </EventWrapper>
+    <>
+      <EventWrapper key={event.calendarId}>
+        <div className="event-title-container" onClick={handleCheckEvent}>
+          <div className="ellipse"></div>
+          <p className="event-title"> {event.title}</p>
+        </div>
+        <div className="buttons">
+          {isComplete || (
+            <button className="edit-button" onClick={handleEditEvent}>
+              수정
+            </button>
+          )}
+          {isComplete ? (
+            <button className="checked-button" type="button">
+              <CheckedIcon />
+            </button>
+          ) : (
+            <button
+              className="complete-button"
+              onClick={() => handleCompleteEvent(event.calendarId)}
+            >
+              완료
+            </button>
+          )}
+        </div>
+      </EventWrapper>
+      <EventModal
+        date={event.date}
+        calendarId={event.calendarId}
+        checkEvent={checkEvent}
+        setCheckEvent={setCheckEvent}
+        isEditing={isEditing}
+        setIsEditing={setIsEditing}
+      />
+    </>
   );
 };
 
@@ -79,6 +107,7 @@ const EventWrapper = styled.li`
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      cursor: pointer;
     }
   }
   .buttons {

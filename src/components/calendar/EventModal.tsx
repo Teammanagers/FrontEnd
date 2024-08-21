@@ -1,16 +1,32 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import * as Dialog from '@radix-ui/react-dialog';
 import moment from 'moment';
 import ParticipantsList from './ParticipantsList';
-import { AddEventModalProps, ScheduleInfoType } from '../../types/calendar';
+import { ScheduleInfoType } from '../../types/calendar';
 import ClosedBtn from '@assets/calendar/closed-btn.svg';
 import RemoveTagIcon from '@assets/calendar/remove-tag-icon.svg';
-import { createCalendarEvent } from '@apis/calendar';
+import { createCalendarEvent, getCalendarEventDetail } from '@apis/calendar';
 import { teamId } from '../../constant/index';
 
-const AddEventModal = ({ selectedDate, open, setOpen }: AddEventModalProps) => {
+type EventProp = {
+  date: string;
+  calendarId: number;
+  checkEvent: boolean;
+  setCheckEvent: React.Dispatch<React.SetStateAction<boolean>>;
+  isEditing: boolean;
+  setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+const EventModal = ({
+  date,
+  calendarId,
+  checkEvent,
+  setCheckEvent,
+  isEditing,
+  setIsEditing
+}: EventProp) => {
   const location = useLocation();
   const [scheduleInfo, setScheduleInfo] = useState<ScheduleInfoType>({
     date: '',
@@ -18,6 +34,25 @@ const AddEventModal = ({ selectedDate, open, setOpen }: AddEventModalProps) => {
     participants: [],
     content: ''
   });
+
+  useEffect(() => {
+    const fetchEventDetail = async () => {
+      if (calendarId) {
+        const response = await getCalendarEventDetail(calendarId);
+        const data = response.data.result.calendar;
+        console.log(data);
+        setScheduleInfo((prev) => ({
+          ...prev,
+          date: date,
+          title: data.title,
+          participants: data.participants,
+          content: data.content
+        }));
+        // console.log(scheduleInfo);
+      }
+    };
+    fetchEventDetail();
+  }, [calendarId]);
 
   // 스케줄 내용 입력 받기
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,26 +86,24 @@ const AddEventModal = ({ selectedDate, open, setOpen }: AddEventModalProps) => {
     );
     const memo = (target[1] as HTMLTextAreaElement).value;
 
-    const event = {
-      date: moment(selectedDate instanceof Date ? selectedDate : null).format(
-        'YYYY-MM-DDTHH:mm:ss.SSS[Z]'
-      ),
+    const newEvent = {
+      date: moment(date).format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
       title: eventTitle,
       participants: newParticipants,
       content: memo
     };
 
-    try {
-      await createCalendarEvent(teamId, event);
-      setOpen(false);
-    } catch (error) {
-      console.error(error);
-    }
+    // try {
+    //   await createCalendarEvent(teamId, newEvent);
+    //   setOpen(false);
+    // } catch (error) {
+    //   console.error(error);
+    // }
   };
 
   // 상태 업데이트 후 모달 닫기
   const handleClosed = () => {
-    setOpen(false);
+    checkEvent ? setCheckEvent(false) : setIsEditing(false);
     setScheduleInfo({
       date: '',
       title: '',
@@ -81,12 +114,15 @@ const AddEventModal = ({ selectedDate, open, setOpen }: AddEventModalProps) => {
 
   return (
     <>
-      <DialogRoot open={open} onOpenChange={setOpen}>
+      <DialogRoot
+        open={checkEvent ? checkEvent : isEditing}
+        onOpenChange={checkEvent ? setCheckEvent : setIsEditing}
+      >
         <Dialog.Portal>
           <DialogOverlay />
           <Dialog.Title />
           <Dialog.Description />
-          {open && (
+          {isEditing && (
             <DialogContent
               isCalendarPage={location?.pathname.startsWith('/calendar')}
               isAddParticipants={scheduleInfo.participants.length > 0}
@@ -97,18 +133,15 @@ const AddEventModal = ({ selectedDate, open, setOpen }: AddEventModalProps) => {
                     <StyledClosedBtn />
                   </button>
                 </Dialog.Close>
-                <h3 className="date">
-                  {moment(
-                    selectedDate instanceof Date ? selectedDate : null
-                  ).format('YYYY.MM.DD')}
-                </h3>
+                <h3 className="date">{moment(date).format('YYYY.MM.DD')}</h3>
               </div>
               <hr />
               <form onSubmit={handleSubmit}>
                 <input
                   type="text"
+                  value={scheduleInfo.title}
                   className="schedule-title"
-                  name="schedule-title"
+                  name="title"
                   placeholder="일정 제목"
                   maxLength={30}
                   onChange={handleInput}
@@ -125,9 +158,7 @@ const AddEventModal = ({ selectedDate, open, setOpen }: AddEventModalProps) => {
                           className="participants-tag"
                           key={member.teamManageId}
                         >
-                          <span className="participants-name">
-                            {member.name}
-                          </span>
+                          <span className="participants-name">{member}</span>
                           <div
                             className="remove-participant-icon"
                             onClick={() =>
@@ -147,24 +178,40 @@ const AddEventModal = ({ selectedDate, open, setOpen }: AddEventModalProps) => {
                 <hr />
                 <textarea
                   className="memo"
-                  name="memo"
+                  value={scheduleInfo.content}
+                  name="content"
                   placeholder="메모"
                   maxLength={100}
                   onChange={handleTextarea}
-                ></textarea>
-                <AddScheduleBtn
-                  className="add-schedule-btn"
-                  type="submit"
-                  disabled={
-                    scheduleInfo.title &&
-                    scheduleInfo.participants.length > 0 &&
-                    scheduleInfo.content
-                      ? false
-                      : true
-                  }
-                >
-                  일정 추가하기
-                </AddScheduleBtn>
+                />
+                <EventButtons>
+                  <EditEventBtn
+                    className="add-schedule-btn"
+                    type="submit"
+                    disabled={
+                      scheduleInfo.title &&
+                      scheduleInfo.participants.length > 0 &&
+                      scheduleInfo.content
+                        ? false
+                        : true
+                    }
+                  >
+                    삭제하기
+                  </EditEventBtn>
+                  <CompleteEventBtn
+                    className="add-schedule-btn"
+                    type="submit"
+                    disabled={
+                      scheduleInfo.title &&
+                      scheduleInfo.participants.length > 0 &&
+                      scheduleInfo.content
+                        ? false
+                        : true
+                    }
+                  >
+                    저장하기
+                  </CompleteEventBtn>
+                </EventButtons>
               </form>
             </DialogContent>
           )}
@@ -174,7 +221,7 @@ const AddEventModal = ({ selectedDate, open, setOpen }: AddEventModalProps) => {
   );
 };
 
-export default AddEventModal;
+export default EventModal;
 
 const DialogRoot = styled(Dialog.Root)``;
 
@@ -363,7 +410,6 @@ const DialogContent = styled(Dialog.Content)<{
     }
     to {
       opacity: 1;
-      /* transform: translate(-50%, -50%) scale(1); */
     }
   }
 `;
@@ -376,13 +422,28 @@ const StyledRemoveTagIcon = styled(RemoveTagIcon)`
   cursor: pointer;
 `;
 
-const AddScheduleBtn = styled.button`
-  height: 36px;
-  font-size: 12px;
-  font-weight: 700;
+const EventButtons = styled.div`
+  display: flex;
+  justify-content: center;
+
+  & > button {
+    width: 158px;
+    height: 36px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 18px;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+`;
+const EditEventBtn = styled.button`
+  border: ${(props) => (props.disabled ? 'none' : '1.52px solid #FF0000')};
+  margin-right: 4px;
+  color: ${(props) => (props.disabled ? 'white' : '#FF0000')};
+  background-color: ${(props) => (props.disabled ? '#CCCCCC' : 'white')};
+`;
+const CompleteEventBtn = styled.button`
   border: none;
-  border-radius: 3px;
   color: white;
   background-color: ${(props) => (props.disabled ? '#CCCCCC' : '#5c9eff')};
-  cursor: pointer;
 `;

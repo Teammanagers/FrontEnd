@@ -32,7 +32,13 @@ export interface UpcomingEventProps {
   };
 }
 
-export type ModalProps = {
+export type EventModalProps = {
+  selectedDate: Value;
+  // open: boolean;
+  // setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export type AddEventModalProps = {
   selectedDate: Value;
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;

@@ -111,7 +111,7 @@ const EventCalendar = () => {
         //   moment(date).format('YYYY. MM')
         // } // 네비게이션에서 2023. 12 이렇게 보이도록 설정
 
-        // 일정 있는 날짜에 점 추가 및 팝업 마운트
+        // 일정 있는 날짜에 점 UI 추가 및 팝업 마운트
         tileContent={({ date }) => {
           const filteredEventList = eventList.filter(
             (event: EventType) =>
@@ -123,7 +123,6 @@ const EventCalendar = () => {
               {filteredEventList.length > 0 && <Dot />}
             </>
           );
-          return <></>;
         }}
         // 달 넘어갈 때 자동 선택된 값(1일)으로 캘린더 height 변화
         onActiveStartDateChange={({ activeStartDate }) =>
