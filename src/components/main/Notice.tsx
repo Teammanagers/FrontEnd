@@ -18,8 +18,6 @@ const Notice = () => {
   const [noticeList, setNoticeList] = useState<NoticeListType>([]);
   const [open, setOpen] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>('');
-  console.log(ownerTeamManageId);
-  console.log(leaderTeamManageId);
 
   const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);

@@ -13,15 +13,9 @@ import {
   getCalendarEventDetail
 } from '@apis/calendar';
 import { teamId } from '../../constant/index';
-
-type EventProp = {
-  date: string;
-  calendarId: number;
-  checkEvent: boolean;
-  setCheckEvent: React.Dispatch<React.SetStateAction<boolean>>;
-  isEditing: boolean;
-  setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
-};
+import { syncCalendarEvent } from '@utils/calendarUtils';
+import { EventProps } from '../../types/calendar';
+import { useCalendarStore } from '@store/calendarStore';
 
 const EventModal = ({
   date,
@@ -30,8 +24,12 @@ const EventModal = ({
   setCheckEvent,
   isEditing,
   setIsEditing
-}: EventProp) => {
+}: EventProps) => {
   const location = useLocation();
+  const { searchMonth, setEventList } = useCalendarStore((state) => ({
+    searchMonth: state.searchMonth,
+    setEventList: state.setEventList
+  }));
   const [scheduleInfo, setScheduleInfo] = useState<ScheduleInfoType>({
     date: '',
     title: '',
@@ -39,6 +37,7 @@ const EventModal = ({
     content: ''
   });
 
+  // 캘린더 일정 상세 가져오기
   useEffect(() => {
     const fetchEventDetail = async () => {
       if (calendarId) {
@@ -112,8 +111,9 @@ const EventModal = ({
 
   // 일정 삭제하기
   const handleDeleteEvent = async () => {
-    const response = await deleteCalendarEvent(calendarId);
-    console.log(response);
+    await deleteCalendarEvent(calendarId);
+    // 일정 변동사항 업데이트
+    syncCalendarEvent({ teamId, searchMonth, setEventList });
     setIsEditing(false);
   };
 
@@ -145,149 +145,155 @@ const EventModal = ({
           <Dialog.Description />
 
           {/* 일정 수정하기 모달 */}
-          {isEditing && (
-            <DialogContent
-              isCalendarPage={location?.pathname.startsWith('/calendar')}
-              isAddParticipants={scheduleInfo.participants.length > 0}
-            >
-              <div className="header">
-                <Dialog.Close asChild onClick={handleClosed}>
-                  <button className="closed-btn-container">
-                    <StyledClosedBtn />
-                  </button>
-                </Dialog.Close>
-                <h3 className="date">{moment(date).format('YYYY.MM.DD')}</h3>
-              </div>
-              <hr />
-              <form onSubmit={handleSubmit}>
-                <input
-                  type="text"
-                  value={scheduleInfo.title}
-                  className="schedule-title"
-                  name="title"
-                  placeholder="일정 제목"
-                  maxLength={30}
-                  onChange={handleInput}
-                />
-                <hr />
-                <div className="participants">
-                  {scheduleInfo.participants.length > 0 || (
-                    <span className="participants-index">참여자</span>
-                  )}
-                  <ul className="participants-tags">
-                    {scheduleInfo.participants.length > 0 &&
-                      scheduleInfo.participants.map((member) => (
-                        <li
-                          className="participants-tag"
-                          key={member.teamManageId}
-                        >
-                          <span className="participants-name">{member}</span>
-                          <div
-                            className="remove-participant-icon"
-                            onClick={() =>
-                              removeParticipants(member.teamManageId)
-                            }
-                          >
-                            <StyledRemoveTagIcon />
-                          </div>
-                        </li>
-                      ))}
-                    <ParticipantsList
-                      scheduleInfo={scheduleInfo}
-                      setScheduleInfo={setScheduleInfo}
-                    />
-                  </ul>
+          {isEditing &&
+            scheduleInfo.title &&
+            scheduleInfo.content &&
+            scheduleInfo.participants.length > 0 && (
+              <DialogContent
+                isCalendarPage={location?.pathname.startsWith('/calendar')}
+                isAddParticipants={scheduleInfo.participants.length > 0}
+              >
+                <div className="header">
+                  <Dialog.Close asChild onClick={handleClosed}>
+                    <button className="closed-btn-container">
+                      <StyledClosedBtn />
+                    </button>
+                  </Dialog.Close>
+                  <h3 className="date">{moment(date).format('YYYY.MM.DD')}</h3>
                 </div>
                 <hr />
-                <textarea
-                  className="content"
-                  value={scheduleInfo.content}
-                  name="content"
-                  placeholder="메모"
-                  maxLength={100}
-                  onChange={handleTextarea}
-                />
-                <EventButtons>
-                  <DeleteEventBtn
-                    className="add-schedule-btn"
-                    type="button"
-                    onClick={handleDeleteEvent}
-                  >
-                    삭제하기
-                  </DeleteEventBtn>
-                  <CompleteEventBtn
-                    className="add-schedule-btn"
-                    type="submit"
-                    disabled={
-                      scheduleInfo.title &&
-                      scheduleInfo.participants.length > 0 &&
-                      scheduleInfo.content
-                        ? false
-                        : true
-                    }
-                  >
-                    저장하기
-                  </CompleteEventBtn>
-                </EventButtons>
-              </form>
-            </DialogContent>
-          )}
+                <form onSubmit={handleSubmit}>
+                  <input
+                    type="text"
+                    value={scheduleInfo.title}
+                    className="schedule-title"
+                    name="title"
+                    placeholder="일정 제목"
+                    maxLength={30}
+                    onChange={handleInput}
+                  />
+                  <hr />
+                  <div className="participants">
+                    {scheduleInfo.participants.length > 0 || (
+                      <span className="participants-index">참여자</span>
+                    )}
+                    {/* <ul className="participants-tags">
+                      {scheduleInfo.participants.length > 0 &&
+                        scheduleInfo.participants.map((member) => (
+                          <li
+                            className="participants-tag"
+                            key={member.teamManageId}
+                          >
+                            <span className="participants-name">{member}</span>
+                            <div
+                              className="remove-participant-icon"
+                              onClick={() =>
+                                removeParticipants(member.teamManageId)
+                              }
+                            >
+                              <StyledRemoveTagIcon />
+                            </div>
+                          </li>
+                        ))}
+                      <ParticipantsList
+                        scheduleInfo={scheduleInfo}
+                        setScheduleInfo={setScheduleInfo}
+                      />
+                    </ul> */}
+                  </div>
+                  <hr />
+                  <textarea
+                    className="content"
+                    value={scheduleInfo.content}
+                    name="content"
+                    placeholder="메모"
+                    maxLength={100}
+                    onChange={handleTextarea}
+                  />
+                  <EventButtons>
+                    <DeleteEventBtn
+                      className="add-schedule-btn"
+                      type="button"
+                      onClick={handleDeleteEvent}
+                    >
+                      삭제하기
+                    </DeleteEventBtn>
+                    <CompleteEventBtn
+                      className="add-schedule-btn"
+                      type="submit"
+                      disabled={
+                        scheduleInfo.title &&
+                        scheduleInfo.participants.length > 0 &&
+                        scheduleInfo.content
+                          ? false
+                          : true
+                      }
+                    >
+                      저장하기
+                    </CompleteEventBtn>
+                  </EventButtons>
+                </form>
+              </DialogContent>
+            )}
 
           {/* 일정 확인하기 모달 */}
-          {checkEvent && (
-            <DialogContent
-              isCalendarPage={location?.pathname.startsWith('/calendar')}
-              isAddParticipants={scheduleInfo.participants.length > 0}
-            >
-              <div className="header">
-                <Dialog.Close asChild onClick={handleClosed}>
-                  <button className="closed-btn-container">
-                    <StyledClosedBtn />
-                  </button>
-                </Dialog.Close>
-                <h3 className="date">{moment(date).format('YYYY.MM.DD')}</h3>
-              </div>
-              <hr />
-              <form>
-                <h3 className="schedule-title">{scheduleInfo.title}</h3>
-                <hr />
-                <div className="participants">
-                  {scheduleInfo.participants.length > 0 || (
-                    <span className="participants-index">참여자</span>
-                  )}
-                  <ul className="participants-tags">
-                    {scheduleInfo.participants.length > 0 &&
-                      scheduleInfo.participants.map((member) => (
-                        <li
-                          className="participants-tag"
-                          key={member.teamManageId}
-                        >
-                          <span className="participants-name">{member}</span>
-                        </li>
-                      ))}
-                  </ul>
+          {checkEvent &&
+            scheduleInfo.title &&
+            scheduleInfo.content &&
+            scheduleInfo.participants.length > 0 && (
+              <DialogContent
+                isCalendarPage={location?.pathname.startsWith('/calendar')}
+                isAddParticipants={scheduleInfo.participants.length > 0}
+              >
+                <div className="header">
+                  <Dialog.Close asChild onClick={handleClosed}>
+                    <button className="closed-btn-container">
+                      <StyledClosedBtn />
+                    </button>
+                  </Dialog.Close>
+                  <h3 className="date">{moment(date).format('YYYY.MM.DD')}</h3>
                 </div>
                 <hr />
-                <p className="content">{scheduleInfo.content}</p>
-                <EventButtons>
-                  <EditEventBtn
-                    className="add-schedule-btn"
-                    type="button"
-                    onClick={handleEditEvent}
-                  >
-                    수정하기
-                  </EditEventBtn>
-                  <CompleteEventBtn
-                    className="add-schedule-btn"
-                    type="submit"
-                    onClick={handleCompleteEvent}
-                  >
-                    일정 완료하기
-                  </CompleteEventBtn>
-                </EventButtons>
-              </form>
-            </DialogContent>
-          )}
+                <form>
+                  <h3 className="schedule-title">{scheduleInfo.title}</h3>
+                  <hr />
+                  <div className="participants">
+                    {scheduleInfo.participants.length > 0 || (
+                      <span className="participants-index">참여자</span>
+                    )}
+                    {/* <ul className="participants-tags">
+                      {scheduleInfo.participants.length > 0 &&
+                        scheduleInfo.participants.map((member) => (
+                          <li
+                            className="participants-tag"
+                            key={member.teamManageId}
+                          >
+                            <span className="participants-name">{member}</span>
+                          </li>
+                        ))}
+                    </ul> */}
+                  </div>
+                  <hr />
+                  <p className="content">{scheduleInfo.content}</p>
+                  <EventButtons>
+                    <EditEventBtn
+                      className="add-schedule-btn"
+                      type="button"
+                      onClick={handleEditEvent}
+                    >
+                      수정하기
+                    </EditEventBtn>
+                    <CompleteEventBtn
+                      className="add-schedule-btn"
+                      type="submit"
+                      onClick={handleCompleteEvent}
+                    >
+                      일정 완료하기
+                    </CompleteEventBtn>
+                  </EventButtons>
+                </form>
+              </DialogContent>
+            )}
         </Dialog.Portal>
       </DialogRoot>
     </>

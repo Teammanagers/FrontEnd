@@ -14,6 +14,15 @@ export interface EventType {
   title: string;
 }
 
+export interface EventProps {
+  date: string;
+  calendarId: number;
+  checkEvent: boolean;
+  setCheckEvent: React.Dispatch<React.SetStateAction<boolean>>;
+  isEditing: boolean;
+  setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
 export type UpcomingEventType = {
   calendarId: number;
   title: string;
