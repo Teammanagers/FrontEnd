@@ -1,5 +1,5 @@
 import { Axios } from '@apis/axios.ts';
-import { TeamData } from '../types/management.ts';
+import { ScheduleRequestBody, TeamData } from '../types/management.ts';
 
 // 내 팀 조회
 export const getMyTeam = async () => {
@@ -126,6 +126,36 @@ export const deleteRoleTag = async (teamManageId: number, tagId: number) => {
   try {
     await Axios.delete(`/api/management/${teamManageId}/role/${tagId}`);
     console.log('역할 태그 삭제');
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+// 스케줄 조회
+export const getSchedules = async (teamId: number) => {
+  try {
+    const response = await Axios.get(`/api/team/${teamId}/schedule`);
+    console.log(response);
+    return response.data.result;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+// 스케줄 추가
+export const createSchedule = async (
+  teamId: number,
+  scheduleData: ScheduleRequestBody
+) => {
+  try {
+    const response = await Axios.post(
+      `/api/team/${teamId}/schedule`,
+      scheduleData
+    );
+    console.log(response.data);
+    return response.data;
   } catch (error) {
     console.error(error);
     throw error;
