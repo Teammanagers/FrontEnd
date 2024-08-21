@@ -1,48 +1,43 @@
 import styled from 'styled-components';
 import { useState } from 'react';
-
-export const people = [
-  { id: '0', name: '이예은' },
-  { id: '1', name: '김도헌' },
-  { id: '2', name: '홍길동' },
-  { id: '3', name: '김이박' },
-  { id: '4', name: '김봄' },
-  { id: '5', name: '김여름' },
-  { id: '6', name: '김가을' },
-  { id: '7', name: '김겨울' },
-  { id: '8', name: 'abc' },
-  { id: '9', name: '할말있어보자하곤아무말없이마주앉아' }
-];
+import { MemberTypes } from '../../../types/member.ts';
 
 interface PeopleDropDownProps {
-  onAddPerson: (personId: string) => void;
-  selectedPeople: string[];
+  onAddPerson: (personId: number) => void;
+  selectedPeople: number[];
+  members: MemberTypes[];
+  refreshMembers: () => void;
 }
 
 export const PeopleDropDown = ({
   onAddPerson,
-  selectedPeople
+  selectedPeople,
+  members,
+  refreshMembers
 }: PeopleDropDownProps) => {
-  const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [hoveredId, setHoveredId] = useState<number | null>(null);
 
   return (
     <DropDownContainer>
-      {people.map((person) => (
+      {members.map((member) => (
         <NameContainer
           onMouseEnter={() => {
-            setHoveredId(person.id);
+            setHoveredId(member.teamManageId);
           }}
           onMouseLeave={() => {
             setHoveredId(null);
           }}
-          onClick={() => onAddPerson(person.id)}
-          key={person.id}
+          onClick={() => {
+            onAddPerson(member.teamManageId);
+            refreshMembers();
+          }}
+          key={member.teamManageId}
         >
           <Name
-            hover={hoveredId === person.id}
-            isSelected={selectedPeople.includes(person.id)}
+            hover={hoveredId === member.teamManageId}
+            isSelected={selectedPeople.includes(member.teamManageId)}
           >
-            {person.name}
+            {member.name}
           </Name>
         </NameContainer>
       ))}

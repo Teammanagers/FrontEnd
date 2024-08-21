@@ -1,6 +1,16 @@
-import { Axios } from '@apis/Axios.ts';
+import { Axios } from '@apis/axios.ts';
 import { TeamData } from '../types/management.ts';
-import { MemberTypes } from '../types/member.ts';
+
+// 내 팀 조회
+export const getMyTeam = async () => {
+  try {
+    const response = await Axios.get(`/api/member/team`);
+    return response.data.result.teamList;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
 
 // 팀 조회
 export const getTeamData = async (teamId: number): Promise<TeamData> => {
@@ -13,10 +23,10 @@ export const getTeamData = async (teamId: number): Promise<TeamData> => {
   }
 };
 
-// 팀 멤버 조회
-export const getMembers = async (teamId: number): Promise<MemberTypes> => {
+// 팀 멤버 조회 (역할태그 포함)
+export const getMembers = async (teamId: number) => {
   try {
-    const response = await Axios.get(`/api/team/${teamId}/member`);
+    const response = await Axios.get(`/api/team/${teamId}/member/detail`);
     return response.data.result.teamMember;
   } catch (error) {
     console.error(error);
@@ -70,6 +80,52 @@ export const updateTag = async (
     });
     console.log(response.data);
     return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+// 역할 태그 생성
+export const createRoleTag = async (teamManageId: number, name: string) => {
+  try {
+    const response = await Axios.post(`/api/management/${teamManageId}/role`, {
+      name: name
+    });
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+// 역할 태그 수정
+export const updateRoleTag = async (
+  teamManageId: number,
+  tagId: number,
+  name: string
+) => {
+  try {
+    const response = await Axios.patch(
+      `/api/management/${teamManageId}/role/${tagId}`,
+      {
+        name: name
+      }
+    );
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+// 역할 태그 삭제
+export const deleteRoleTag = async (teamManageId: number, tagId: number) => {
+  try {
+    await Axios.delete(`/api/management/${teamManageId}/role/${tagId}`);
+    console.log('역할 태그 삭제');
   } catch (error) {
     console.error(error);
     throw error;
