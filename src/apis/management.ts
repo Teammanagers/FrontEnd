@@ -1,6 +1,17 @@
 import { Axios } from '@apis/axios.ts';
 import { TeamData } from '../types/management.ts';
 
+// 내 팀 조회
+export const getMyTeam = async () => {
+  try {
+    const response = await Axios.get(`/api/member/team`);
+    return response.data.result.teamList;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 // 팀 조회
 export const getTeamData = async (teamId: number): Promise<TeamData> => {
   try {
@@ -111,9 +122,9 @@ export const updateRoleTag = async (
 };
 
 // 역할 태그 삭제
-export const deleteRoleTag = async (teamMangeId: number, tagId: number) => {
+export const deleteRoleTag = async (teamManageId: number, tagId: number) => {
   try {
-    await Axios.delete(`/api/management/${teamMangeId}/role/${tagId}`);
+    await Axios.delete(`/api/management/${teamManageId}/role/${tagId}`);
     console.log('역할 태그 삭제');
   } catch (error) {
     console.error(error);
