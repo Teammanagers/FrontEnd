@@ -3,10 +3,9 @@ import Add from '@assets/management/add-button.svg';
 import Delete from '@assets/management/delete-icon.svg';
 import { TitleText } from '@components/management/team-code/TeamCode.tsx';
 import { ButtonHTMLAttributes, useEffect, useRef, useState } from 'react';
-import {
-  people,
-  PeopleDropDown
-} from '@components/management/schedule/PeopleDropDown.tsx';
+import { PeopleDropDown } from '@components/management/schedule/PeopleDropDown.tsx';
+import { getMembers } from '@apis/management.ts';
+import { MemberTypes } from '../../../types/member.ts';
 
 interface ScheduleProps {
   onAddSchedule: () => void;
@@ -14,29 +13,45 @@ interface ScheduleProps {
 }
 
 export const Schedule = ({ onAddSchedule, isSubmitted }: ScheduleProps) => {
+  const [members, setMembers] = useState<MemberTypes[]>([]);
   const [isOpened, setIsOpened] = useState<boolean>(false);
-  const [selectedPeople, setSelectedPeople] = useState<string[]>(
-    people.map((person) => person.id)
-  );
+  const [selectedPeople, setSelectedPeople] = useState<number[]>([]);
   const [dropDownPosition, setDropDownPosition] = useState<{
     top: number;
     left: number;
   }>({ top: 0, left: 0 });
   const addBtnRef = useRef<HTMLDivElement>(null);
 
-  const handleAddPerson = (personId: string) => {
-    if (!selectedPeople.includes(personId)) {
-      setSelectedPeople([...selectedPeople, personId]);
+  const fetchMembers = async () => {
+    const response = await getMembers(1);
+    setMembers(response);
+    setSelectedPeople(
+      response.map((member: MemberTypes) => member.teamManageId)
+    );
+  };
+
+  useEffect(() => {
+    fetchMembers();
+  }, []);
+
+  const refreshMembers = async () => {
+    await fetchMembers();
+  };
+
+  const handleAddPerson = (teamManageId: number) => {
+    if (!selectedPeople.includes(teamManageId)) {
+      setSelectedPeople([...selectedPeople, teamManageId]);
       setIsOpened(false);
     }
+    console.log(teamManageId);
   };
 
   const handleAddBtnClick = () => {
     setIsOpened(true);
   };
 
-  const handleDeleteBtnClick = (personId: string) => {
-    setSelectedPeople(selectedPeople.filter((id) => id !== personId));
+  const handleDeleteBtnClick = (teamManageId: number) => {
+    setSelectedPeople(selectedPeople.filter((id) => id !== teamManageId));
   };
 
   const handleSubmit = () => {
@@ -56,20 +71,20 @@ export const Schedule = ({ onAddSchedule, isSubmitted }: ScheduleProps) => {
         <TitleText>Schedule</TitleText>
         <PeopleContainer>
           <ContentText>현재 참여자들의 가능 시간: </ContentText>
-          {selectedPeople.map((personId) => {
-            const person = people.find((p) => p.id === personId);
+          {selectedPeople.map((teamManageId) => {
+            const member = members.find((m) => m.teamManageId === teamManageId);
             return (
-              <Person key={personId}>
-                <Name>{person?.name}</Name>
+              <Person key={teamManageId}>
+                <Name>{member?.name}</Name>
                 <DeleteBtn
                   onClick={() => {
-                    handleDeleteBtnClick(personId);
+                    handleDeleteBtnClick(teamManageId);
                   }}
                 />
               </Person>
             );
           })}
-          {selectedPeople.length < 10 && (
+          {selectedPeople.length < members.length && (
             <AddBtnContainer ref={addBtnRef} onClick={handleAddBtnClick}>
               <AddBtn />
             </AddBtnContainer>
@@ -84,6 +99,8 @@ export const Schedule = ({ onAddSchedule, isSubmitted }: ScheduleProps) => {
               <PeopleDropDown
                 onAddPerson={handleAddPerson}
                 selectedPeople={selectedPeople}
+                members={members}
+                refreshMembers={refreshMembers}
               />
             </DropDownContainer>
           )}

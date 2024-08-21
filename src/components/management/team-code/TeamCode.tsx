@@ -59,7 +59,7 @@ export const TeamCode = ({
     startEditingTag,
     setTags,
     setNewTag
-  } = useTags({ initialTags: tagList || [], onEditTag: handleTagUpdate });
+  } = useTags({ initialTags: tagList || [], onEditTeamTag: handleTagUpdate });
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -76,11 +76,7 @@ export const TeamCode = ({
       } catch (error) {
         console.error(error);
       }
-      // const imgUrl = URL.createObjectURL(file);
-      // setProfileImage(imgUrl);
     }
-    // 서버 API 연동시 추가 로직 필요
-    console.log(file);
   };
 
   const handleImgClick = () => {
