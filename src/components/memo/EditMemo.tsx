@@ -30,7 +30,7 @@ export const EditMemo = () => {
     setShowTagInput,
     setEditTagIndex,
     setNewTag
-  } = useTags();
+  } = useTags({});
 
   const navigate = useNavigate();
 
@@ -40,9 +40,13 @@ export const EditMemo = () => {
         try {
           const response = await getMemoById(Number(memoId));
           const memo = response.result.memo;
+
           setTitle(memo.title);
           setContent(memo.content);
-          setTags(memo.tagList.map((tag: { name: string }) => tag.name));
+          setTags([
+            ...tags,
+            memo.tagList.map((tag: { name: string }) => tag.name)
+          ]);
         } catch (error) {
           console.error(error);
         }
@@ -73,7 +77,8 @@ export const EditMemo = () => {
   const handleSubmit = async () => {
     try {
       if (memoId) {
-        await updateMemo(Number(memoId), title, tags, content);
+        const tagNames = tags.map((tag) => tag.name);
+        await updateMemo(Number(memoId), title, tagNames, content);
       }
       navigate(`/memo`);
     } catch (error) {
@@ -283,6 +288,7 @@ const ContentText = styled.textarea`
   border: none;
   font-size: 15px;
   line-height: 23px;
+  background: white;
 `;
 
 const ButtonContainer = styled.div`

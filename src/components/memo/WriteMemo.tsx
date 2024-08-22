@@ -26,13 +26,14 @@ export const WriteMemo = () => {
     setShowTagInput,
     setEditTagIndex,
     setNewTag
-  } = useTags();
+  } = useTags({});
 
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
     try {
-      const createMemoResult = await createMemo(1, title, tags, content);
+      const tagNames = tags.map((tag) => tag.name);
+      const createMemoResult = await createMemo(1, title, tagNames, content);
       console.log('메모: ', createMemoResult);
       navigate(`/memo`);
       console.log(title, tags, content);
@@ -57,7 +58,6 @@ export const WriteMemo = () => {
               autoFocus
             />
           </TitleContainer>
-
           {/* 태그 */}
           <TagContainer>
             {tags.map((tag, index) => (
@@ -76,7 +76,7 @@ export const WriteMemo = () => {
                   </TagInputContainer>
                 ) : (
                   <>
-                    <span>{tag}</span>
+                    <span>{tag.name}</span>
                   </>
                 )}
               </Tag>
@@ -235,6 +235,7 @@ const ContentText = styled.textarea`
   border: none;
   font-size: 15px;
   line-height: 23px;
+  background: white;
 `;
 
 const SubmitBtn = styled.button`
