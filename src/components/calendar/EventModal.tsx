@@ -13,10 +13,10 @@ import {
   updateCalendarEvent,
   updateEventState
 } from '@apis/calendar';
-import { teamId } from '../../constant/index';
 import { syncCalendarEvent } from '@utils/calendarUtils';
 import { EventProps } from '../../types/calendar';
 import { useCalendarStore } from '@store/calendarStore';
+import { useIdStore } from '@store/idStore';
 
 const EventModal = ({
   date,
@@ -26,6 +26,9 @@ const EventModal = ({
   isEditing,
   setIsEditing
 }: EventProps) => {
+  const { teamId } = useIdStore((state) => ({
+    teamId: state.teamId
+  }));
   const location = useLocation();
   const { searchMonth, setEventList, setUpcomingEventList } = useCalendarStore(
     (state) => ({
@@ -502,6 +505,10 @@ const DialogContent = styled(Dialog.Content)<{
         width: 3px;
         background-color: #dddddd;
         border-radius: 76px;
+      }
+
+      &::-webkit-scrollbar-thumb:active {
+        background-color: #5a5a5a;
       }
     }
     .content::placeholder {
