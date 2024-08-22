@@ -157,10 +157,37 @@ const TeamCodeCopy = styled.div`
     font-weight: 400;
     line-height: 13.5px;
     background-color: white;
+    opacity: 0;
+    transform: translateY(-10px);
+    animation: fadeInOut 4s ease-in-out;
+  }
+
+  .team-code-copy-text.active {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   .highlight {
     color: ${(props) => props.theme.colors.mainBlue};
+  }
+
+  @keyframes fadeInOut {
+    0% {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    10% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    90% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
   }
 `;
 
