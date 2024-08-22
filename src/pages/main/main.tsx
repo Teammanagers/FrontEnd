@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Notice from '@components/main/Notice';
@@ -6,33 +6,66 @@ import NavigateBtn from '@assets/main/navigate-btn.svg';
 import EventCalendar from '@components/calendar/EventCalendar';
 import TodoList from '@components/todo-list/TodoList';
 import { syncTodos } from '@utils/todoUtils';
-import { teamId } from '../../constant/index';
 import { useTodoStore } from '@store/todoStore';
+import { getTeamInfo } from '@apis/main';
+import { useIdStore } from '@store/idStore';
 
 const MainPage = () => {
+  const { teamId, setTeamId } = useIdStore((state) => ({
+    teamId: state.teamId,
+    setTeamId: state.setTeamId
+  }));
   const setTeamTodos = useTodoStore((state) => state.setTeamTodos);
+  const [teamCode, setTeamCode] = useState<number | null>(null);
+  const [teamCodeCopy, setTeamCodeCopy] = useState<boolean>(false);
 
   const handleCopyClipBoard = (copyCode: string) => {
     try {
+      setTeamCodeCopy(true);
+      setTimeout(() => {
+        setTeamCodeCopy(false);
+      }, 2000);
       navigator.clipboard.writeText(copyCode);
     } catch (e) {
       alert('팀코드 복사에 실패하였습니다!');
     }
   };
 
-  useEffect(() => {
+  // 팀 코드 가져오기
+  const fetchTeamCode = async (teamId: number) => {
+    const respose = await getTeamInfo(teamId);
+    setTeamCode(respose.data.result.team.teamCode);
+  };
+
+  // 팀 아이디 가져오기
+  const getTeamId = () => {
+    const id = localStorage.getItem('teamId');
+    setTeamId(Number(id));
     syncTodos({ teamId, setTeamTodos });
-  }, []);
+    fetchTeamCode(teamId);
+  };
+
+  useEffect(() => {
+    getTeamId();
+  }, [teamId]);
 
   return (
     <Layout>
       <header>
         <Notice />
         <TeamCodeCopy>
-          <strong>X65VRG34</strong>
-          <button onClick={() => handleCopyClipBoard('X65VRG34')}>
+          <strong>{teamCode}</strong>
+          <button
+            className={teamCodeCopy ? 'active' : 'unactive'}
+            onClick={() => handleCopyClipBoard(String(teamCode))}
+          >
             팀 코드복사
           </button>
+          {teamCodeCopy && (
+            <p className="team-code-copy-text">
+              <span className="highlight">팀 코드</span>가 복사되었습니다
+            </p>
+          )}
         </TeamCodeCopy>
       </header>
 
@@ -72,6 +105,7 @@ const Layout = styled.div`
 `;
 
 const TeamCodeCopy = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -98,12 +132,61 @@ const TeamCodeCopy = styled.div`
     font-weight: 700;
     line-height: 13.5px;
     color: white;
-    background-color: ${(props) => props.theme.colors.mainBlue};
     cursor: pointer;
     outline: none;
+  }
+  .active {
+    background-color: ${(props) => props.theme.colors.subBlue};
+  }
+  .unactive {
+    background-color: ${(props) => props.theme.colors.mainBlue};
+  }
 
-    &:active {
-      background-color: ${(props) => props.theme.colors.subBlue};
+  .team-code-copy-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 70px;
+    left: 3px;
+    width: 155px;
+    height: 32px;
+    border-radius: 4px;
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.08);
+    font-size: 9px;
+    font-weight: 400;
+    line-height: 13.5px;
+    background-color: white;
+    opacity: 0;
+    transform: translateY(-10px);
+    animation: fadeInOut 4s ease-in-out;
+  }
+
+  .team-code-copy-text.active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .highlight {
+    color: ${(props) => props.theme.colors.mainBlue};
+  }
+
+  @keyframes fadeInOut {
+    0% {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    10% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    90% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-10px);
     }
   }
 `;

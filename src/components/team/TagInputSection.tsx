@@ -34,7 +34,7 @@ export const TagInputSection: React.FC<TagInputSectionProps> = ({
             marginLeft: '3px'
           }}
         >
-          (최대 한글 5자 또는 영어 5글자)
+          (최대 한글 5글자 또는 영어 5글자)
         </span>
       </TitleLabel>
       <TagInputWrapper>
@@ -42,19 +42,22 @@ export const TagInputSection: React.FC<TagInputSectionProps> = ({
           <TagItem key={index} tag={tag} onRemove={() => removeTag(index)} />
         ))}
         <TagInputContainer>
-          <TagInputDiv
-            tabIndex={0} // TabIndex를 추가하여 TagInputDiv이 포커스를 받을 수 있도록 설정
-            onFocus={() => setIsInputFocused(true)}
-            onBlur={() => setIsInputFocused(false)}
-          >
-            <TagInput
-              ref={inputRef}
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onKeyDown={handleKeyDown}
-            />
-            <PlusButtonIcon />
-          </TagInputDiv>
+          {tags.length < 3 && (
+            <TagInputDiv
+              tabIndex={0}
+              onFocus={() => setIsInputFocused(true)}
+              onBlur={() => setIsInputFocused(false)}
+            >
+              <TagInput
+                ref={inputRef}
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyDown={handleKeyDown}
+                maxLength={5}
+              />
+              <PlusButtonIcon />
+            </TagInputDiv>
+          )}
 
           {tags.length === 0 && !isInputFocused && (
             <HelperText>
@@ -96,6 +99,7 @@ const TagInputWrapper = styled.div`
 `;
 
 const TagInput = styled.input`
+  color: black;
   width: 29px;
   height: 29px;
   background-color: #f9fbff;
@@ -135,7 +139,7 @@ const PlusButtonIcon = styled(PlusButton)`
 
 const HelperText = styled.span`
   position: absolute;
-  width: 300px;
+  width: 500px;
   margin-left: 56px;
   font-size: 14px;
   color: #888888;

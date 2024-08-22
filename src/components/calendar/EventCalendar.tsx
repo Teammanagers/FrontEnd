@@ -6,56 +6,74 @@ import moment from 'moment';
 import { EventType, Value } from '../../types/calendar';
 import NextBtn from '@assets/calendar/next-btn.svg';
 import PrevBtn from '@assets/calendar/prev-btn.svg';
-import { teamId } from '../../constant/index';
 import { useMemberStore } from '@store/memberStore';
 import { useCalendarStore } from '@store/calendarStore';
 import { getTeamMember } from '@apis/calendar';
 import EventPopover from './EventPopover';
 import { syncCalendarEvent } from '@utils/calendarUtils';
+import { useIdStore } from '@store/idStore';
 
 const EventCalendar = () => {
+  const { teamId, setTeamId } = useIdStore((state) => ({
+    teamId: state.teamId,
+    setTeamId: state.setTeamId
+  }));
   const setTeamMember = useMemberStore((state) => state.setTeamMember);
-  const { searchMonth, setSearchMonth, eventList, setEventList } =
-    useCalendarStore((state) => ({
-      searchMonth: state.searchMonth,
-      setSearchMonth: state.setSearchMonth,
-      eventList: state.eventList,
-      setEventList: state.setEventList
-    }));
-  const [date, setDate] = useState<Value>(null);
+  const {
+    searchMonth,
+    setSearchMonth,
+    eventList,
+    setEventList,
+    setUpcomingEventList
+  } = useCalendarStore((state) => ({
+    searchMonth: state.searchMonth,
+    setSearchMonth: state.setSearchMonth,
+    eventList: state.eventList,
+    setEventList: state.setEventList,
+    setUpcomingEventList: state.setUpcomingEventList
+  }));
+  const [selectedDate, setSelectedDate] = useState<Value>(null);
   const [calendarHeight, setCalendarHeight] = useState<string>('520px');
 
   // 날짜 업데이트
   const handleDateChange = (newDate: Value) => {
-    setDate(newDate);
+    setSelectedDate(newDate);
   };
 
   // 멤버 불러오기
   useEffect(() => {
+    const id = localStorage.getItem('teamId');
+    setTeamId(Number(id));
+
     const fetchMember = async () => {
       const response = await getTeamMember(teamId);
       setTeamMember(response.data.result.teamMember);
     };
 
     fetchMember();
-  }, []);
+  }, [teamId]);
 
   // 월 업데이트
   const updateMonth = (activeStartDate: Date | null) => {
-    setDate(activeStartDate);
+    setSelectedDate(activeStartDate);
     if (activeStartDate) {
       setSearchMonth(activeStartDate?.getMonth() + 1);
     }
   };
   useEffect(() => {
-    setDate(null);
+    setSelectedDate(null);
     // 현재 날짜 기준으로 초기 월 설정
     updateMonth(new Date());
   }, []);
 
   // 일정 변동사항 업데이트
   useEffect(() => {
-    syncCalendarEvent({ teamId, searchMonth, setEventList });
+    syncCalendarEvent({
+      teamId,
+      searchMonth,
+      setEventList,
+      setUpcomingEventList
+    });
   }, [searchMonth]);
 
   // 매월 몇 주인지 구하기 -> 5,6주일 때 height 변화
@@ -90,14 +108,14 @@ const EventCalendar = () => {
       }
     };
 
-    const week = determineWeeksInMonth(date);
+    const week = determineWeeksInMonth(selectedDate);
 
     if (week >= 6) {
       setCalendarHeight('595px');
     } else {
       setCalendarHeight('520px');
     }
-  }, [date]);
+  }, [selectedDate]);
 
   return (
     <StyledCalendarContainer height={calendarHeight}>
@@ -122,7 +140,18 @@ const EventCalendar = () => {
           return (
             <>
               <EventPopover date={date} eventList={filteredEventList} />
-              {filteredEventList.length > 0 && <Dot />}
+              {filteredEventList.length > 0 && (
+                <Dot
+                  isSelected={
+                    moment(
+                      selectedDate instanceof Date ? selectedDate : null
+                    ).format('YYYY-MM-DD') ===
+                      moment(date).format('YYYY-MM-DD') &&
+                    moment(new Date()).format('YYYY-MM-DD') !==
+                      moment(date).format('YYYY-MM-DD')
+                  }
+                />
+              )}
             </>
           );
         }}
@@ -152,7 +181,7 @@ const StyledCalendarContainer = styled.div<{ height: string }>`
     flex-direction: column;
     align-items: center;
     width: inherit;
-    transition: height 300ms;
+    transition: height 200ms;
     height: ${(props) => props.height};
     padding: 24px 47px;
     background-color: rgba(255, 255, 255, 1);
@@ -220,11 +249,11 @@ const StyledCalendarContainer = styled.div<{ height: string }>`
       text-transform: capitalize;
     }
 
-    .react-calendar__month-view__weekdays abbr {
+    .react-calendar__month-view__weekdays__weekday abbr {
       text-decoration: none;
       font-size: 18px;
-      font-weight: 500;
       color: #1d1d1d;
+      font-weight: 500;
     }
 
     /* 요일, 날짜 크기 및 정렬 */
@@ -311,13 +340,13 @@ const StyledCalendarContainer = styled.div<{ height: string }>`
 
 const StyledCalendar = styled(Calendar)``;
 
-const Dot = styled.div`
+const Dot = styled.div<{ isSelected: boolean }>`
   position: absolute;
-  bottom: 15%;
+  bottom: 17%;
   left: 50%;
   transform: translate(-50%);
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background-color: ${(props) => props.theme.colors.mainBlue};
+  background-color: ${(props) => (props.isSelected ? 'white' : '#5C9EFF')};
 `;

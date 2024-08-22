@@ -1,21 +1,29 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import styled from 'styled-components';
 import UpcomingEvent from '@components/calendar/UpcomingEvent';
-import { UpcomingEventType } from 'src/types/calendar';
 import { getUpcomingEvent } from '@apis/calendar';
-import { teamId } from '../../constant/index';
+// import { teamId } from '../../constant/index';
+import { useCalendarStore } from '@store/calendarStore';
+import { useIdStore } from '@store/idStore';
 
 const UpcomingEventList = () => {
-  const [upcomingEventList, setUpcomingEventList] = useState<UpcomingEventType>(
-    []
+  const { teamId } = useIdStore((state) => ({
+    teamId: state.teamId
+  }));
+  const { upcomingEventList, setUpcomingEventList } = useCalendarStore(
+    (state) => ({
+      upcomingEventList: state.upcomingEventList,
+      setUpcomingEventList: state.setUpcomingEventList
+    })
   );
 
   useEffect(() => {
     const fetchUpcomingEvent = async () => {
       const response = await getUpcomingEvent(teamId);
       setUpcomingEventList(response.data.result.comingCalendarList);
+      console.log(upcomingEventList);
     };
-    fetchUpcomingEvent();
+    if (teamId) fetchUpcomingEvent();
   }, []);
 
   return (

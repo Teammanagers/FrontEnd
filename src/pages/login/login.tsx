@@ -2,6 +2,7 @@ import OnBoarding from '@components/login/OnBoarding';
 import LogoFadeIn from '@components/login/LogoFadeIn';
 import { useLogoFadeIn } from '@hooks/useLogoFadeIn';
 import styled from 'styled-components';
+import { useEffect } from 'react';
 
 const Wrapper = styled.div`
   height: 100vh;
@@ -11,6 +12,21 @@ const Wrapper = styled.div`
 
 export const LoginPage = () => {
   const isLogoFadeInActivate = useLogoFadeIn(3000);
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const accessToken =
+      urlParams.get('accessToken') || localStorage.getItem('accessToken');
+    const isNewUser =
+      urlParams.get('isNewUser') || localStorage.getItem('isNewUser');
+
+    if (!accessToken || !isNewUser) {
+      return;
+    }
+
+    localStorage.setItem('accessToken', accessToken);
+    localStorage.setItem('isNewUser', isNewUser);
+  }, []);
 
   return (
     <Wrapper>

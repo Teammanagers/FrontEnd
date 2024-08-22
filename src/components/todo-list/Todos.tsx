@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTodoStore } from '@store/todoStore';
 import * as Accordion from '@radix-ui/react-accordion';
@@ -7,7 +7,6 @@ import Todo from './Todo';
 import { UserInfo } from 'src/types/todo-list';
 import { createTodo } from '@apis/todo-list';
 import { syncTodos } from '@utils/todoUtils';
-import { teamId } from '../../constant/index';
 import { Container, StyledAddTodoIcon } from './layout/StyledTodos';
 import { useIdStore } from '@store/idStore';
 
@@ -22,10 +21,13 @@ const Todos = ({ userInfo }: TodosProps) => {
   const { setTeamTodos } = useTodoStore((state) => ({
     setTeamTodos: state.setTeamTodos
   }));
-  const { ownerTeamManageId, leaderTeamManageId } = useIdStore((state) => ({
-    ownerTeamManageId: state.ownerTeamManageId,
-    leaderTeamManageId: state.leaderTeamManageId
-  }));
+  const { ownerTeamManageId, leaderTeamManageId, teamId, setTeamId } =
+    useIdStore((state) => ({
+      ownerTeamManageId: state.ownerTeamManageId,
+      leaderTeamManageId: state.leaderTeamManageId,
+      teamId: state.teamId,
+      setTeamId: state.setTeamId
+    }));
 
   // 투두 추가하기
   const openAddTodo = () => {
@@ -61,6 +63,11 @@ const Todos = ({ userInfo }: TodosProps) => {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    const id = localStorage.getItem('teamId');
+    setTeamId(Number(id));
+  }, [teamId]);
 
   return (
     // 투두 or 메인 페이지일 때

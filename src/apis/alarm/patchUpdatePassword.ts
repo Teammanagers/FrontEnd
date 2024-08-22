@@ -1,8 +1,8 @@
 import { Axios } from '@apis/axios';
 
-export const getTeamById = async () => {
+export const updateAlarmStatus = async (alarmId: number) => {
   try {
-    const response = await Axios.get(`/api/member/team`, {
+    const response = await Axios.patch(`/api/alarm/${alarmId}`, {
       withCredentials: true,
       headers: {
         Accept: 'application/json',
@@ -11,6 +11,6 @@ export const getTeamById = async () => {
     });
     return response.data;
   } catch (error) {
-    throw new Error(error.response?.data?.message || 'Something went wrong');
+    return { error };
   }
 };

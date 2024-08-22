@@ -13,10 +13,10 @@ import {
   updateCalendarEvent,
   updateEventState
 } from '@apis/calendar';
-import { teamId } from '../../constant/index';
 import { syncCalendarEvent } from '@utils/calendarUtils';
 import { EventProps } from '../../types/calendar';
 import { useCalendarStore } from '@store/calendarStore';
+import { useIdStore } from '@store/idStore';
 
 const EventModal = ({
   date,
@@ -26,11 +26,17 @@ const EventModal = ({
   isEditing,
   setIsEditing
 }: EventProps) => {
-  const location = useLocation();
-  const { searchMonth, setEventList } = useCalendarStore((state) => ({
-    searchMonth: state.searchMonth,
-    setEventList: state.setEventList
+  const { teamId } = useIdStore((state) => ({
+    teamId: state.teamId
   }));
+  const location = useLocation();
+  const { searchMonth, setEventList, setUpcomingEventList } = useCalendarStore(
+    (state) => ({
+      searchMonth: state.searchMonth,
+      setEventList: state.setEventList,
+      setUpcomingEventList: state.setUpcomingEventList
+    })
+  );
   const [scheduleInfo, setScheduleInfo] = useState<ScheduleInfoType>({
     date: '',
     title: '',
@@ -51,7 +57,6 @@ const EventModal = ({
           participants: data.participants,
           content: data.content
         }));
-        console.log(scheduleInfo);
       }
     };
     fetchEventDetail();
@@ -94,12 +99,16 @@ const EventModal = ({
       participants: newParticipants,
       content: content
     };
-    console.log(newEvent);
 
     try {
       await updateCalendarEvent(calendarId, newEvent);
       // 일정 변동사항 업데이트
-      syncCalendarEvent({ teamId, searchMonth, setEventList });
+      syncCalendarEvent({
+        teamId,
+        searchMonth,
+        setEventList,
+        setUpcomingEventList
+      });
       checkEvent ? setCheckEvent(false) : setIsEditing(false);
     } catch (error) {
       console.error(error);
@@ -116,7 +125,12 @@ const EventModal = ({
   const handleDeleteEvent = async () => {
     await deleteCalendarEvent(calendarId);
     // 일정 변동사항 업데이트
-    syncCalendarEvent({ teamId, searchMonth, setEventList });
+    syncCalendarEvent({
+      teamId,
+      searchMonth,
+      setEventList,
+      setUpcomingEventList
+    });
     setIsEditing(false);
   };
 
@@ -125,7 +139,12 @@ const EventModal = ({
     await updateEventState(calendarId);
     setCheckEvent(false);
     // 일정 변동사항 업데이트
-    syncCalendarEvent({ teamId, searchMonth, setEventList });
+    syncCalendarEvent({
+      teamId,
+      searchMonth,
+      setEventList,
+      setUpcomingEventList
+    });
   };
 
   // 상태 업데이트 후 모달 닫기
@@ -486,6 +505,10 @@ const DialogContent = styled(Dialog.Content)<{
         width: 3px;
         background-color: #dddddd;
         border-radius: 76px;
+      }
+
+      &::-webkit-scrollbar-thumb:active {
+        background-color: #5a5a5a;
       }
     }
     .content::placeholder {
