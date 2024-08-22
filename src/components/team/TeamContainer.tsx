@@ -20,7 +20,7 @@ const TeamContainer: React.FC<LayoutProps> = ({ children }) => {
     '/team/create': '프로젝트를 위해 팀을 생성해 주세요',
     '/team/join': '팀 참가를 위해 코드를 입력해 주세요',
     '/team/share': '팀원의 참가를 위해 팀 코드를 공유해 주세요',
-    '/team': `${team.result.name}님이 현재 진행하고 있는 팀 프로젝트에요!`
+    '/team': `${team && team.result.name}님이 현재 진행하고 있는 팀 프로젝트에요!`
   }[location.pathname];
 
   return (
