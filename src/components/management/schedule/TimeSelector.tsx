@@ -31,9 +31,9 @@ export const TimeSelector = ({
   const [times, setTimes] = useState<TimeSlot[]>(initialTimes);
   const timeOptions = generateTimeOptions();
 
-  useEffect(() => {
-    console.log('초기 스케줄: ', initialTimes);
-  }, [initialTimes]);
+  // useEffect(() => {
+  //   console.log('초기 스케줄: ', initialTimes);
+  // }, [initialTimes]);
 
   const handleAddTime = () => {
     if (times.length < 3) {

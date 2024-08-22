@@ -21,13 +21,19 @@ export const ManagementPage = () => {
     setShowAddSchedule(true);
   };
 
-  const handleScheduleSubmit = (newSchedule: ScheduleDto | null) => {
+  const handleScheduleSubmit = async (newSchedule: ScheduleDto | null) => {
     if (newSchedule) {
       setSchedules(newSchedule); // 스케줄 추가로직 수정, 나중에 더 필요할 수도 있음
+    } else {
+      setSchedules(null);
     }
     console.log(schedules);
     setShowAddSchedule(false);
   };
+
+  useEffect(() => {
+    console.log(schedules);
+  }, [schedules]);
 
   const fetchTeamData = async () => {
     const response = await getTeamData(1);
@@ -60,12 +66,13 @@ export const ManagementPage = () => {
     }
   };
 
+  const fetchData = async () => {
+    await fetchTeamData();
+    await fetchSchedules();
+    await fetchMySchedules();
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      await fetchTeamData();
-      await fetchSchedules();
-      await fetchMySchedules();
-    };
     fetchData();
   }, []);
 

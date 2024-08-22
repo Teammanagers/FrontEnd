@@ -6,7 +6,11 @@ import Reset from '@assets/management/reset.svg';
 import Submit from '@assets/management/submit.svg';
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
-import { createSchedule, updateSchedule } from '@apis/management.ts';
+import {
+  createSchedule,
+  deleteSchedule,
+  updateSchedule
+} from '@apis/management.ts';
 import { ScheduleDto } from '../../../types/management.ts';
 import { convertTimeTableToTimeSlots } from '@components/management/schedule/ShowSchedule.tsx';
 
@@ -15,9 +19,10 @@ interface DayTimeSlots {
   [key: string]: TimeSlot[];
 }
 
+// AddSchedule 컴포넌트에서 Props 타입 수정
 interface AddScheduleProps {
   onSubmit: (schedule: ScheduleDto | null) => void;
-  initialSchedules?: ScheduleDto | null;
+  initialSchedules?: ScheduleDto | null; // 여기에 ScheduleWrapper 타입 적용
 }
 
 export const AddSchedule = ({
@@ -39,6 +44,7 @@ export const AddSchedule = ({
   useEffect(() => {
     if (initialSchedules) {
       setWeeklyTimes({
+        ...weeklyTimes,
         Monday: convertTimeTableToTimeSlots(
           initialSchedules.monday?.value || []
         ),
@@ -62,8 +68,10 @@ export const AddSchedule = ({
         )
       });
     }
-    console.log('초기값2: ', initialSchedules);
-  }, []);
+    console.log('값2: ', initialSchedules);
+    console.log('값3: ', weeklyTimes);
+  }, [initialSchedules]);
+  console.log('값4: ', weeklyTimes);
 
   useEffect(() => {
     console.log('초기값1: ', initialSchedules);
@@ -86,6 +94,10 @@ export const AddSchedule = ({
     });
   };
 
+  useEffect(() => {
+    console.log('weekly: ', weeklyTimes);
+  }, [weeklyTimes]);
+
   // 타임슬롯을 타임 테이블로 변환
   const convertTimeSlotToTimeTable = (timeSlots: TimeSlot[]): string[] => {
     const timeTable = Array(48).fill('0'); // 24시간, 30분 간격 -> 48개의 슬롯으로 초기화 / 기본값은 0
@@ -101,8 +113,6 @@ export const AddSchedule = ({
         timeTable[i] = '1';
       }
     });
-    console.log(timeTable);
-
     return timeTable;
   };
 
@@ -110,33 +120,47 @@ export const AddSchedule = ({
     const isEmpty = Object.values(weeklyTimes).every(
       (times) => times.length === 0
     );
-    if (isEmpty) {
-      onSubmit(null);
-      return;
-    }
-
-    const requestBody = {
-      monday: { value: convertTimeSlotToTimeTable(weeklyTimes.Monday) },
-      tuesday: { value: convertTimeSlotToTimeTable(weeklyTimes.Tuesday) },
-      wednesday: { value: convertTimeSlotToTimeTable(weeklyTimes.Wednesday) },
-      thursday: { value: convertTimeSlotToTimeTable(weeklyTimes.Thursday) },
-      friday: { value: convertTimeSlotToTimeTable(weeklyTimes.Friday) },
-      saturday: { value: convertTimeSlotToTimeTable(weeklyTimes.Saturday) },
-      sunday: { value: convertTimeSlotToTimeTable(weeklyTimes.Sunday) }
-    };
 
     try {
-      if (initialSchedules) {
+      if (initialSchedules && isEmpty) {
+        // 스케줄 수정 시 모든 값이 0으로 설정되면 삭제 처리
+        await deleteSchedule(31); // 팀 아이디 1로 설정, 실제로는 동적으로 설정해야 함
+        onSubmit(null);
+      } else if (initialSchedules) {
+        // 스케줄 수정
+        const requestBody = {
+          monday: { value: convertTimeSlotToTimeTable(weeklyTimes.Monday) },
+          tuesday: { value: convertTimeSlotToTimeTable(weeklyTimes.Tuesday) },
+          wednesday: {
+            value: convertTimeSlotToTimeTable(weeklyTimes.Wednesday)
+          },
+          thursday: { value: convertTimeSlotToTimeTable(weeklyTimes.Thursday) },
+          friday: { value: convertTimeSlotToTimeTable(weeklyTimes.Friday) },
+          saturday: { value: convertTimeSlotToTimeTable(weeklyTimes.Saturday) },
+          sunday: { value: convertTimeSlotToTimeTable(weeklyTimes.Sunday) }
+        };
+
         const response = await updateSchedule(1, requestBody);
         onSubmit(response.scheduleDto);
-        console.log(response.scheduleDto);
       } else {
+        // 스케줄 추가
+        const requestBody = {
+          monday: { value: convertTimeSlotToTimeTable(weeklyTimes.Monday) },
+          tuesday: { value: convertTimeSlotToTimeTable(weeklyTimes.Tuesday) },
+          wednesday: {
+            value: convertTimeSlotToTimeTable(weeklyTimes.Wednesday)
+          },
+          thursday: { value: convertTimeSlotToTimeTable(weeklyTimes.Thursday) },
+          friday: { value: convertTimeSlotToTimeTable(weeklyTimes.Friday) },
+          saturday: { value: convertTimeSlotToTimeTable(weeklyTimes.Saturday) },
+          sunday: { value: convertTimeSlotToTimeTable(weeklyTimes.Sunday) }
+        };
+
         const response = await createSchedule(1, requestBody);
         onSubmit(response.scheduleDto);
-        console.log(response.scheduleDto);
       }
     } catch (error) {
-      console.error('스케줄 생성/수정 중 오류가 발생했습니다:', error);
+      console.error('스케줄 생성/수정/삭제 중 오류가 발생했습니다:', error);
       onSubmit(null);
     }
   };

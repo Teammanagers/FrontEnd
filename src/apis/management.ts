@@ -147,7 +147,7 @@ export const getSchedules = async (teamId: number) => {
 export const getMySchedules = async (teamId: number) => {
   try {
     const response = await Axios.get(`/api/schedule/${teamId}`);
-    return response.data.result;
+    return response.data.result.schedule;
   } catch (error) {
     console.error(error);
     throw error;
@@ -187,5 +187,15 @@ export const updateSchedule = async (
   } catch (error) {
     console.error(error);
     throw error;
+  }
+};
+
+// 내 스케줄 삭제
+export const deleteSchedule = async (teamManageId: number) => {
+  try {
+    await Axios.delete(`/api/team/${teamManageId}/schedule`);
+    console.log('내 스케줄 삭제됐더염');
+  } catch (error) {
+    console.log('스케줄 삭제 실패!');
   }
 };
