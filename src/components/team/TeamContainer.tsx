@@ -40,7 +40,9 @@ const TeamContainer: React.FC<LayoutProps> = ({ children }) => {
           {teamTextByPath}
         </span>
       </div>
-      {children}
+      <div style={{ display: 'grid', placeItems: 'center', width: '100%' }}>
+        {children}
+      </div>
     </>
   );
 };
