@@ -62,6 +62,7 @@ export const AddSchedule = ({ onSubmit }: AddScheduleProps) => {
         timeTable[i] = '1';
       }
     });
+    console.log(timeTable);
 
     return timeTable;
   };
@@ -85,6 +86,8 @@ export const AddSchedule = ({ onSubmit }: AddScheduleProps) => {
       sunday: { value: convertTimeSlotToTimeTable(weeklyTimes.Sunday) }
     };
 
+    console.log('Request Body:', requestBody); // 잘 온다...
+
     try {
       const response = await createSchedule(1, requestBody); // 팀 아이디 1로 설정, 실제로는 동적으로 설정해야 함
       onSubmit(response.scheduleDto);
@@ -93,6 +96,8 @@ export const AddSchedule = ({ onSubmit }: AddScheduleProps) => {
       onSubmit(null);
     }
   };
+
+  console.log('weekly times: ', weeklyTimes);
 
   return (
     <Container>

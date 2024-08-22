@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { SwungDash } from '@components/management/schedule/TimeSelector.tsx';
 import { ScheduleDto } from '../../../types/management.ts';
+import { useEffect } from 'react';
 
 interface ShowScheduleProps {
   schedule: ScheduleDto;
@@ -37,6 +38,10 @@ const convertTimeTableToTimeSlots = (timeTable: string[]): TimeSlot[] => {
 };
 
 export const ShowSchedule = ({ schedule }: ShowScheduleProps) => {
+  useEffect(() => {
+    // console.log(schedule);
+  }, []);
+
   return (
     <ScheduleContainer>
       {Object.entries(schedule).map(([day, timeTable]) => (

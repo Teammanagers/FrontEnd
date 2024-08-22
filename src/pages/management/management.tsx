@@ -6,13 +6,13 @@ import { AddSchedule } from '@components/management/schedule/AddSchedule.tsx';
 import { useEffect, useState } from 'react';
 import { ShowSchedule } from '@components/management/schedule/ShowSchedule.tsx';
 import { NoSchedule } from '@components/management/schedule/NoSchedule.tsx';
-import { getSchedules, getTeamData } from '@apis/management.ts';
+import { getMySchedules, getSchedules, getTeamData } from '@apis/management.ts';
 import { ScheduleDto, TeamData, TeamTag } from '../../types/management.ts';
 
 export const ManagementPage = () => {
-  const [showAddSchedule, setShowAddSchedule] = useState<boolean>(false); //
-  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  const [showAddSchedule, setShowAddSchedule] = useState<boolean>(false);
   const [schedules, setSchedules] = useState<ScheduleDto | null>(null);
+  const [mySchedules, setMySchedules] = useState<ScheduleDto | null>(null);
 
   const [teamData, setTeamData] = useState<TeamData | null>(null);
   const [tags, setTags] = useState<TeamTag[]>([]);
@@ -23,9 +23,9 @@ export const ManagementPage = () => {
 
   const handleScheduleSubmit = (newSchedule: ScheduleDto | null) => {
     if (newSchedule) {
-      setIsSubmitted(true);
       setSchedules(newSchedule); // 스케줄 추가로직 수정, 나중에 더 필요할 수도 있음
     }
+    console.log(schedules);
     setShowAddSchedule(false);
   };
 
@@ -36,15 +36,22 @@ export const ManagementPage = () => {
     setTags(newTags);
   };
 
+  // 팀 스케줄 조회
   const fetchSchedules = async () => {
     const response = await getSchedules(1);
     setSchedules(response.scheduleDto);
-    console.log(response.scheduleDto);
+  };
+
+  // 내 스케줄 조회
+  const fetchMySchedules = async () => {
+    const response = await getMySchedules(1);
+    setMySchedules(response);
   };
 
   const refreshTeamData = async () => {
     await fetchTeamData();
     await fetchSchedules();
+    await fetchMySchedules();
   };
 
   const handleTeamNameChange = (newName: string) => {
@@ -54,8 +61,12 @@ export const ManagementPage = () => {
   };
 
   useEffect(() => {
-    fetchTeamData();
-    fetchSchedules();
+    const fetchData = async () => {
+      await fetchTeamData();
+      await fetchSchedules();
+      await fetchMySchedules();
+    };
+    fetchData();
   }, []);
 
   return (
@@ -71,10 +82,7 @@ export const ManagementPage = () => {
       <Members />
       {!showAddSchedule ? (
         <>
-          <Schedule
-            onAddSchedule={handleAddSchedule}
-            isSubmitted={isSubmitted}
-          />
+          <Schedule onAddSchedule={handleAddSchedule} schedules={mySchedules} />
           {schedules && Object.keys(schedules).length > 0 ? (
             <ShowSchedule schedule={schedules} />
           ) : (

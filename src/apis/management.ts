@@ -136,7 +136,17 @@ export const deleteRoleTag = async (teamManageId: number, tagId: number) => {
 export const getSchedules = async (teamId: number) => {
   try {
     const response = await Axios.get(`/api/team/${teamId}/schedule`);
-    console.log(response);
+    return response.data.result;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+// 내 스케줄 조회
+export const getMySchedules = async (teamId: number) => {
+  try {
+    const response = await Axios.get(`/api/schedule/${teamId}`);
     return response.data.result;
   } catch (error) {
     console.error(error);
