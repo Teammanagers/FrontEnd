@@ -32,7 +32,7 @@ export const TimeSelector = ({
   const timeOptions = generateTimeOptions();
 
   useEffect(() => {
-    console.log('initial times: ', initialTimes);
+    console.log('초기 스케줄: ', initialTimes);
   }, [initialTimes]);
 
   const handleAddTime = () => {

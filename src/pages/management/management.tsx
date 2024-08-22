@@ -90,7 +90,10 @@ export const ManagementPage = () => {
           )}
         </>
       ) : (
-        <AddSchedule onSubmit={handleScheduleSubmit} />
+        <AddSchedule
+          onSubmit={handleScheduleSubmit}
+          initialSchedules={mySchedules && mySchedules}
+        />
       )}
     </Container>
   );

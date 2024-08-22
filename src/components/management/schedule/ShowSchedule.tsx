@@ -13,7 +13,9 @@ interface TimeSlot {
 }
 
 // TimeTable을 TimeSlot으로 변환
-const convertTimeTableToTimeSlots = (timeTable: string[]): TimeSlot[] => {
+export const convertTimeTableToTimeSlots = (
+  timeTable: string[]
+): TimeSlot[] => {
   const timeSlots: TimeSlot[] = [];
   let startTime: string | null = null;
 

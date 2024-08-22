@@ -5,9 +5,10 @@ import {
 import Reset from '@assets/management/reset.svg';
 import Submit from '@assets/management/submit.svg';
 import styled from 'styled-components';
-import { useState } from 'react';
-import { createSchedule } from '@apis/management.ts';
+import { useEffect, useState } from 'react';
+import { createSchedule, updateSchedule } from '@apis/management.ts';
 import { ScheduleDto } from '../../../types/management.ts';
+import { convertTimeTableToTimeSlots } from '@components/management/schedule/ShowSchedule.tsx';
 
 interface DayTimeSlots {
   // 요일: 값(TimeSlot[] 형태)
@@ -16,9 +17,13 @@ interface DayTimeSlots {
 
 interface AddScheduleProps {
   onSubmit: (schedule: ScheduleDto | null) => void;
+  initialSchedules?: ScheduleDto | null;
 }
 
-export const AddSchedule = ({ onSubmit }: AddScheduleProps) => {
+export const AddSchedule = ({
+  onSubmit,
+  initialSchedules
+}: AddScheduleProps) => {
   // 요일별로 시간 지정
   const [weeklyTimes, setWeeklyTimes] = useState<DayTimeSlots>({
     Monday: [],
@@ -29,6 +34,40 @@ export const AddSchedule = ({ onSubmit }: AddScheduleProps) => {
     Saturday: [],
     Sunday: []
   });
+
+  // 컴포넌트가 처음 렌더링될 때 initialSchedules를 사용하여 weeklyTimes 초기화
+  useEffect(() => {
+    if (initialSchedules) {
+      setWeeklyTimes({
+        Monday: convertTimeTableToTimeSlots(
+          initialSchedules.monday?.value || []
+        ),
+        Tuesday: convertTimeTableToTimeSlots(
+          initialSchedules.tuesday?.value || []
+        ),
+        Wednesday: convertTimeTableToTimeSlots(
+          initialSchedules.wednesday?.value || []
+        ),
+        Thursday: convertTimeTableToTimeSlots(
+          initialSchedules.thursday?.value || []
+        ),
+        Friday: convertTimeTableToTimeSlots(
+          initialSchedules.friday?.value || []
+        ),
+        Saturday: convertTimeTableToTimeSlots(
+          initialSchedules.saturday?.value || []
+        ),
+        Sunday: convertTimeTableToTimeSlots(
+          initialSchedules.sunday?.value || []
+        )
+      });
+    }
+    console.log('초기값2: ', initialSchedules);
+  }, []);
+
+  useEffect(() => {
+    console.log('초기값1: ', initialSchedules);
+  }, []);
 
   // 특정 요일의 시간 업데이트 함수
   const handleTimeChange = (day: string, times: TimeSlot[]) => {
@@ -86,18 +125,21 @@ export const AddSchedule = ({ onSubmit }: AddScheduleProps) => {
       sunday: { value: convertTimeSlotToTimeTable(weeklyTimes.Sunday) }
     };
 
-    console.log('Request Body:', requestBody); // 잘 온다...
-
     try {
-      const response = await createSchedule(1, requestBody); // 팀 아이디 1로 설정, 실제로는 동적으로 설정해야 함
-      onSubmit(response.scheduleDto);
+      if (initialSchedules) {
+        const response = await updateSchedule(1, requestBody);
+        onSubmit(response.scheduleDto);
+        console.log(response.scheduleDto);
+      } else {
+        const response = await createSchedule(1, requestBody);
+        onSubmit(response.scheduleDto);
+        console.log(response.scheduleDto);
+      }
     } catch (error) {
-      console.error('스케줄 생성 중 오류가 발생했습니다:', error);
+      console.error('스케줄 생성/수정 중 오류가 발생했습니다:', error);
       onSubmit(null);
     }
   };
-
-  console.log('weekly times: ', weeklyTimes);
 
   return (
     <Container>

@@ -171,3 +171,21 @@ export const createSchedule = async (
     throw error;
   }
 };
+
+// 내 스케줄 수정
+export const updateSchedule = async (
+  teamId: number,
+  scheduleData: ScheduleRequestBody
+) => {
+  try {
+    const response = await Axios.patch(
+      `/api/team/${teamId}/schedule`,
+      scheduleData
+    );
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
