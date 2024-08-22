@@ -1,32 +1,119 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import Back from '@assets/mypage/back.svg';
 import Move from '@assets/mypage/move.svg';
-import { useTags } from '@hooks/mypage/useTags.ts';
-import { TagSection } from '@hooks/mypage/TagSection';
+import { getSimplePortfolio, getDetailedPortfolio } from '@apis/portfolio';
+import { SharedFile } from '@components/mypage/portfolio/sharedFile';
 
 interface Portfolio {
+  teamId: number;
   title: string;
   period: string;
+}
+
+interface DetailedPortfolio {
+  name: string;
+  start: string;
+  end: string;
+  teamTagList: string[];
+  teamMemberList: string[];
+  teamMyRole: string[];
+  storageList: {
+    storageId: number;
+    title: string;
+    size: string;
+    uploadAt: string;
+    fileUrl: string;
+    uploader: string;
+  }[];
 }
 
 export const PortfolioPage = () => {
   const navigate = useNavigate();
 
-  const portfolios = [{ title: 'UMC', period: '2023.12~2024.02' }];
-
+  const [portfolios, setPortfolios] = useState<Portfolio[]>([]);
   const [selectedPortfolio, setSelectedPortfolio] = useState<Portfolio | null>(
     null
   );
+  const [selectedFileId, setSelectedFileId] = useState<number | null>(null);
+  const handleFileSelect = (id: number) => {
+    setSelectedFileId(id);
+  };
+  const [detailedPortfolio, setDetailedPortfolio] =
+    useState<DetailedPortfolio | null>(null);
 
-  const handlePortfolioClick = (portfolio: Portfolio) => {
-    setSelectedPortfolio(portfolio);
+  const testDetailedPortfolio = {
+    //임시 데이터
+    storageList: [
+      {
+        id: 1,
+        name: 'Test File 1',
+        size: '1MB',
+        date: '2024-08-21',
+        type: 'jpg',
+        author: '기획자'
+      },
+      {
+        id: 2,
+        name: 'Test File 2',
+        size: '2MB',
+        date: '2024-08-22',
+        type: 'ppt',
+        author: 'User2'
+      },
+      {
+        id: 3,
+        name: 'Test File 2',
+        size: '2MB',
+        date: '2024-08-22',
+        type: 'ppt',
+        author: 'User2'
+      },
+      {
+        id: 4,
+        name: 'Test File 2',
+        size: '2MB',
+        date: '2024-08-22',
+        type: 'ppt',
+        author: 'User2'
+      }
+    ]
   };
 
-  const useTagsCategory = useTags();
-  const useTagsMember = useTags();
-  const useTagsRole = useTags();
+  // SimplePortfolio API 호출
+  useEffect(() => {
+    const fetchSimplePortfolio = async () => {
+      try {
+        const response = await getSimplePortfolio();
+
+        const portfolioData = response.result.portfolioList.map((item) => ({
+          teamId: item.teamId,
+          title: item.name,
+          period: `${item.start.substring(0, 10)}~${item.end.substring(0, 10)}`
+        }));
+        console.log('simple api 호출 성공');
+        setPortfolios(portfolioData);
+      } catch (error) {
+        console.error('Failed to fetch simple portfolio:', error);
+      }
+    };
+
+    fetchSimplePortfolio();
+  }, []);
+
+  // 포트폴리오 클릭 시 DetailedPortfolio API 호출
+  const handlePortfolioClick = async (portfolio: Portfolio) => {
+    setSelectedPortfolio(portfolio);
+    try {
+      const response = await getDetailedPortfolio(portfolio.teamId);
+      console.log(response.result);
+      console.log('detailed api 호출 성공');
+      setDetailedPortfolio(response.result);
+    } catch (error) {
+      console.error('Failed to fetch detailed portfolio:', error);
+    }
+  };
 
   return (
     <PortfolioContainer>
@@ -57,7 +144,7 @@ export const PortfolioPage = () => {
               <PortfolioMenu>
                 {portfolios.map((portfolio) => (
                   <MyPortfolio
-                    key={portfolio.title}
+                    key={portfolio.teamId}
                     onClick={() => handlePortfolioClick(portfolio)}
                   >
                     <InfoBox>
@@ -79,22 +166,62 @@ export const PortfolioPage = () => {
                     </ProjectInfo>
                     <MainInfo>
                       <ProjectTags>
-                        <TagSection
-                          title="프로젝트 카테고리"
-                          useTagsHook={useTagsCategory}
-                        />
-                        <TagSection
-                          title="프로젝트 멤버"
-                          useTagsHook={useTagsMember}
-                        />
-                        <TagSection
-                          title="나의 역할"
-                          useTagsHook={useTagsRole}
-                        />
+                        <TagContainer>
+                          <TagTitle>프로젝트 카테고리</TagTitle>
+                          <TagBox>
+                            {detailedPortfolio &&
+                            detailedPortfolio.teamTagList.length > 0 ? (
+                              detailedPortfolio.teamTagList.map(
+                                (tag, index) => <Tag key={index}>{tag}</Tag>
+                              )
+                            ) : (
+                              <></>
+                            )}
+                          </TagBox>
+                        </TagContainer>
+                        <TagContainer>
+                          <TagTitle>프로젝트 멤버</TagTitle>
+                          <TagBox>
+                            {detailedPortfolio &&
+                            detailedPortfolio.teamMemberList.length > 0 ? (
+                              detailedPortfolio.teamMemberList.map(
+                                (tag, index) => <Tag key={index}>{tag}</Tag>
+                              )
+                            ) : (
+                              <></>
+                            )}
+                          </TagBox>
+                        </TagContainer>
+                        <TagContainer>
+                          <TagTitle>나의 역할</TagTitle>
+                          <TagBox>
+                            {detailedPortfolio &&
+                            detailedPortfolio.teamMyRole.length > 0 ? (
+                              detailedPortfolio.teamMyRole.map((tag, index) => (
+                                <Tag key={index}>{tag}</Tag>
+                              ))
+                            ) : (
+                              <></>
+                            )}
+                          </TagBox>
+                        </TagContainer>
                       </ProjectTags>
                       <SharedFiles>
                         <SharedBoxTitle>공유했던 파일</SharedBoxTitle>
-                        <SharedBox></SharedBox>
+                        <SharedBox>
+                          {testDetailedPortfolio.storageList.length > 0 ? (
+                            testDetailedPortfolio.storageList.map((file) => (
+                              <SharedFile
+                                key={file.id}
+                                file={file}
+                                onFileSelect={() => handleFileSelect(file.id)}
+                                isSelected={file.id === selectedFileId}
+                              />
+                            ))
+                          ) : (
+                            <></>
+                          )}
+                        </SharedBox>
                       </SharedFiles>
                     </MainInfo>
                   </>
@@ -111,6 +238,7 @@ export const PortfolioPage = () => {
     </PortfolioContainer>
   );
 };
+
 const PortfolioContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.background};
   width: 100%;
@@ -159,6 +287,7 @@ const PortfolioMenu = styled.div`
   display: flex;
   flex-direction: column;
   gap: 15px;
+  box-sizing: border-box;
 `;
 
 const MyPortfolio = styled.div`
@@ -181,6 +310,7 @@ const ViewPortfolio = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  box-sizing: border-box;
 `;
 
 const InfoBox = styled.div`
@@ -266,12 +396,49 @@ const ProjectPeriod = styled.div`
   color: ${({ theme }) => theme.colors.darkGray};
 `;
 
+const TagBox = styled.div`
+  height: 40px;
+  padding: 8px 0px;
+  display: flex;
+  flex-direction: row;
+  gap: 7px;
+`;
+const TagTitle = styled.div`
+  font-size: 12px;
+  font-weight: 700;
+  color: ${({ theme }) => theme.colors.black};
+`;
+
 const ProjectTags = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   height: 231px;
   gap: 18px;
+`;
+
+const TagContainer = styled.div`
+  height: 65px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.silver};
+`;
+
+const Tag = styled.div`
+  width: 37px;
+  height: 24px;
+  border-radius: 3px;
+  padding: 8px 6px;
+  background-color: ${({ theme }) => theme.colors.background};
+  color: ${({ theme }) => theme.colors.mainBlue};
+  font-size: 9px;
+  font-weight: 500;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 `;
 
 const SharedFiles = styled.div`
@@ -291,4 +458,8 @@ const SharedBox = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
+  width: 488px;
+  height: 214px;
+  overflow-y: auto;
+  overflow-x: hidden;
 `;
