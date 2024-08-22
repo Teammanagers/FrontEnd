@@ -51,7 +51,6 @@ const EventCalendar = () => {
     setDate(null);
     // 현재 날짜 기준으로 초기 월 설정
     updateMonth(new Date());
-    console.log(null);
   }, []);
 
   // 일정 변동사항 업데이트
@@ -153,11 +152,13 @@ const StyledCalendarContainer = styled.div<{ height: string }>`
     flex-direction: column;
     align-items: center;
     width: inherit;
+    transition: height 300ms;
     height: ${(props) => props.height};
     padding: 24px 47px;
     background-color: rgba(255, 255, 255, 1);
     border-radius: 12px;
     border: 1px solid rgba(221, 235, 255, 1);
+    overflow: hidden;
   }
 
   /* 전체 폰트 컬러 */
@@ -216,12 +217,14 @@ const StyledCalendarContainer = styled.div<{ height: string }>`
     /* 요일  */
     .react-calendar__month-view__weekdays {
       column-gap: 18px;
+      text-transform: capitalize;
     }
 
     .react-calendar__month-view__weekdays abbr {
       text-decoration: none;
       font-size: 18px;
       font-weight: 500;
+      color: #1d1d1d;
     }
 
     /* 요일, 날짜 크기 및 정렬 */

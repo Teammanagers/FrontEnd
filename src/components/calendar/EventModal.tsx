@@ -270,7 +270,7 @@ const EventModal = ({
                       {scheduleInfo.participants.length > 0 &&
                         scheduleInfo.participants.map((member) => (
                           <li
-                            className="participants-tag"
+                            className="participants-tag check-event-modal"
                             key={member.teamManageId}
                           >
                             <span className="participants-name">
@@ -446,6 +446,10 @@ const DialogContent = styled(Dialog.Content)<{
             display: flex;
             align-items: center;
           }
+        }
+
+        .check-event-modal {
+          min-width: 37px;
         }
       }
 
