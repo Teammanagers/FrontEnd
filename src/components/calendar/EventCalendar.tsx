@@ -15,13 +15,19 @@ import { syncCalendarEvent } from '@utils/calendarUtils';
 
 const EventCalendar = () => {
   const setTeamMember = useMemberStore((state) => state.setTeamMember);
-  const { searchMonth, setSearchMonth, eventList, setEventList } =
-    useCalendarStore((state) => ({
-      searchMonth: state.searchMonth,
-      setSearchMonth: state.setSearchMonth,
-      eventList: state.eventList,
-      setEventList: state.setEventList
-    }));
+  const {
+    searchMonth,
+    setSearchMonth,
+    eventList,
+    setEventList,
+    setUpcomingEventList
+  } = useCalendarStore((state) => ({
+    searchMonth: state.searchMonth,
+    setSearchMonth: state.setSearchMonth,
+    eventList: state.eventList,
+    setEventList: state.setEventList,
+    setUpcomingEventList: state.setUpcomingEventList
+  }));
   const [selectedDate, setSelectedDate] = useState<Value>(null);
   const [calendarHeight, setCalendarHeight] = useState<string>('520px');
   console.log(selectedDate);
@@ -56,7 +62,12 @@ const EventCalendar = () => {
 
   // 일정 변동사항 업데이트
   useEffect(() => {
-    syncCalendarEvent({ teamId, searchMonth, setEventList });
+    syncCalendarEvent({
+      teamId,
+      searchMonth,
+      setEventList,
+      setUpcomingEventList
+    });
   }, [searchMonth]);
 
   // 매월 몇 주인지 구하기 -> 5,6주일 때 height 변화
