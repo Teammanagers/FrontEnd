@@ -5,21 +5,32 @@ import Check from '@assets/login/check.svg';
 import RightArrow from '@assets/login/right-arrow.svg';
 import { ButtonHTMLAttributes, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSubmitTerm } from '@hooks/useSubmitTerm';
 
 const Signup = () => {
   const navigate = useNavigate();
-  const [isFirstChecked, setIsFirstChecked] = useState<boolean>(false);
-  const [isSecondChecked, setIsSecondChecked] = useState<boolean>(false);
+  const [isTermsOfUseChecked, setIsTermsOfUseChecked] =
+    useState<boolean>(false);
+  const [isPrivacyPolicyChecked, setIsPrivacyPolicyChecked] =
+    useState<boolean>(false);
+
+  const submitTerm = useSubmitTerm();
 
   const navigateToLogin = () => {
+    localStorage.removeItem('accessToken');
     navigate('/login');
   };
 
   const navigateToComplete = () => {
-    navigate('/login-complete');
+    if (isTermsOfUseChecked && isPrivacyPolicyChecked) {
+      submitTerm.mutate({
+        termsOfUse: isTermsOfUseChecked,
+        privacyPolicy: isPrivacyPolicyChecked
+      });
+    }
   };
 
-  const isButtonEnabled = isFirstChecked && isSecondChecked;
+  const isButtonEnabled = isTermsOfUseChecked && isPrivacyPolicyChecked;
 
   const handleCheckboxClick = (
     setIsChecked: React.Dispatch<React.SetStateAction<boolean>>
@@ -38,16 +49,16 @@ const Signup = () => {
       <TitleText>팀매니저를 이용하려면 약관에 동의가 필요해요</TitleText>
       <FormWrapper>
         <CheckboxSection
-          checked={isFirstChecked}
-          onCheckboxClick={() => handleCheckboxClick(setIsFirstChecked)}
+          checked={isTermsOfUseChecked}
+          onCheckboxClick={() => handleCheckboxClick(setIsTermsOfUseChecked)}
           linkUrl="https://teammanagers.notion.site/7e7dceb62a6a438eb323a285f446a1c7?pvs=4"
           label1="필수"
           label2="이용약관 동의하기"
         />
         <Separator />
         <CheckboxSection
-          checked={isSecondChecked}
-          onCheckboxClick={() => handleCheckboxClick(setIsSecondChecked)}
+          checked={isPrivacyPolicyChecked}
+          onCheckboxClick={() => handleCheckboxClick(setIsPrivacyPolicyChecked)}
           linkUrl="https://teammanagers.notion.site/b1b95614dbf745fc9add464a20025c44?pvs=4"
           label1="필수"
           label2="개인정보처리방침 동의하기"
