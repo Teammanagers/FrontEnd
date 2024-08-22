@@ -13,9 +13,14 @@ import { getTeamInfo } from '@apis/main';
 const MainPage = () => {
   const setTeamTodos = useTodoStore((state) => state.setTeamTodos);
   const [teamCode, setTeamCode] = useState<number | null>(null);
+  const [teamCodeCopy, setTeamCodeCopy] = useState<boolean>(false);
 
   const handleCopyClipBoard = (copyCode: string) => {
     try {
+      setTeamCodeCopy(true);
+      setTimeout(() => {
+        setTeamCodeCopy(false);
+      }, 2000);
       navigator.clipboard.writeText(copyCode);
     } catch (e) {
       alert('팀코드 복사에 실패하였습니다!');
@@ -38,9 +43,17 @@ const MainPage = () => {
         <Notice />
         <TeamCodeCopy>
           <strong>{teamCode}</strong>
-          <button onClick={() => handleCopyClipBoard(String(teamCode))}>
+          <button
+            className={teamCodeCopy ? 'active' : 'unactive'}
+            onClick={() => handleCopyClipBoard(String(teamCode))}
+          >
             팀 코드복사
           </button>
+          {teamCodeCopy && (
+            <p className="team-code-copy-text">
+              <span className="highlight">팀 코드</span>가 복사되었습니다
+            </p>
+          )}
         </TeamCodeCopy>
       </header>
 
@@ -80,6 +93,7 @@ const Layout = styled.div`
 `;
 
 const TeamCodeCopy = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -106,13 +120,35 @@ const TeamCodeCopy = styled.div`
     font-weight: 700;
     line-height: 13.5px;
     color: white;
-    background-color: ${(props) => props.theme.colors.mainBlue};
     cursor: pointer;
     outline: none;
+  }
+  .active {
+    background-color: ${(props) => props.theme.colors.subBlue};
+  }
+  .unactive {
+    background-color: ${(props) => props.theme.colors.mainBlue};
+  }
 
-    &:active {
-      background-color: ${(props) => props.theme.colors.subBlue};
-    }
+  .team-code-copy-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 70px;
+    left: 3px;
+    width: 155px;
+    height: 32px;
+    border-radius: 4px;
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.08);
+    font-size: 9px;
+    font-weight: 400;
+    line-height: 13.5px;
+    background-color: white;
+  }
+
+  .highlight {
+    color: ${(props) => props.theme.colors.mainBlue};
   }
 `;
 

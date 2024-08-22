@@ -77,7 +77,6 @@ const Todo = ({ todo, teamManageId }: TodoProps) => {
   // 삭제
   const handleDelete = async () => {
     try {
-      // await deleteTodo(todo.todoId, newTodo);
       await deleteTodo(todo.todoId);
       await syncTodos({ teamId, setTeamTodos });
     } catch (error) {
