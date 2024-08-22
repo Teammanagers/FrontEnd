@@ -1,8 +1,8 @@
 export interface CommentData {
   id: number;
-  author: string;
-  role: string;
-  date: string;
+  writer: string;
+  createdAt: string;
   content: string;
+  parentId: number;
   replies: CommentData[];
 }
