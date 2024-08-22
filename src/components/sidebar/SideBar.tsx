@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import Logo from '@assets/sidebar/logo.svg';
 import Open from '@assets/sidebar/drop-down-open.svg';
 import Home from '@assets/sidebar/home.svg';
 import HomeClick from '@assets/sidebar/home-click.svg';
@@ -19,13 +18,17 @@ import MyPage from '@assets/sidebar/mypage.svg';
 import MyPageClick from '@assets/sidebar/mypage-click.svg';
 import End from '@assets/sidebar/end.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DropDown } from '@components/sidebar/DropDown.tsx';
 import Alarm from '@components/alarm/alarm';
 import { useGetAlarmList } from '@hooks/alarm/useGetAlarmList';
 import { AlarmListType } from 'src/types/alarm';
+import { getMyTeam } from '@apis/management.ts';
+import { TeamProps } from '../../types/management.ts';
 
 export const SideBar = () => {
+  const [teams, setTeams] = useState<TeamProps[]>([]);
+  const [currentTeam, setCurrentTeam] = useState<TeamProps | null>(null);
   const [hover, setHover] = useState<boolean>(false);
   const [showDropDown, setShowDropDown] = useState<boolean>(false);
   const [isAlarmOpen, setIsAlarmOpen] = useState<boolean>(false);
@@ -51,6 +54,25 @@ export const SideBar = () => {
     setHover(false);
   };
 
+  const fetchTeams = async () => {
+    try {
+      const response = await getMyTeam();
+      setTeams(response);
+
+      // 현재 속한 팀 아이디에 해당하는 팀을 찾음
+      const foundTeam = response.find((team: TeamProps) => team.teamId === 1);
+      if (foundTeam) {
+        setCurrentTeam(foundTeam);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTeams();
+  }, []);
+
   return (
     <SideBarContainer
       isHovered={hover || isAlarmOpen}
@@ -63,17 +85,27 @@ export const SideBar = () => {
       }}
     >
       <LogoContainer>
-        <LogoImg />
-        {hover && (
-          <DropDownContainer>
-            <LogoText>UMC 6th 팀매니저</LogoText>
-            <Wrapper onClick={handleDropDown}>
-              <Open />
-            </Wrapper>
-          </DropDownContainer>
+        {currentTeam && (
+          <>
+            <LogoImg src={currentTeam.imageUrl} />
+            {hover && (
+              <DropDownContainer>
+                <LogoText>{currentTeam.title}</LogoText>
+                <Wrapper onClick={handleDropDown}>
+                  <Open />
+                </Wrapper>
+              </DropDownContainer>
+            )}
+          </>
         )}
       </LogoContainer>
-      {showDropDown && <DropDown />}
+      {showDropDown && (
+        <DropDown
+          teams={teams}
+          currentTeam={currentTeam}
+          onTeamSelected={setCurrentTeam}
+        />
+      )}
       <Hr style={{ margin: '11px 0 11px 0' }} />
       <IconContainer
         onClick={() => {
@@ -289,7 +321,7 @@ const IconContainer = styled.div<SelectedProps>`
   }
 `;
 
-const LogoImg = styled(Logo)`
+const LogoImg = styled.img`
   width: 37px;
   height: 37px;
 `;
