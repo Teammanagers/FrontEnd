@@ -17,12 +17,15 @@ export const LoginPage = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const accessToken =
       urlParams.get('accessToken') || localStorage.getItem('accessToken');
+    const isNewUser =
+      urlParams.get('isNewUser') || localStorage.getItem('isNewUser');
 
     if (!accessToken) {
       return;
     }
 
     localStorage.setItem('accessToken', accessToken);
+    localStorage.setItem('isNewUser', isNewUser);
   }, []);
 
   return (

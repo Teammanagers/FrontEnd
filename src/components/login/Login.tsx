@@ -29,9 +29,14 @@ const Login = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
+    const isNewUser = !!localStorage.getItem('isNewUser');
 
-    if (token) {
+    if (token && isNewUser) {
       navigate('/signup');
+    }
+
+    if (token && !isNewUser) {
+      navigate('/team');
     }
   }, [isRouteByEvent]);
 
