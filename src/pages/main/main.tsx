@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Notice from '@components/main/Notice';
@@ -8,9 +8,11 @@ import TodoList from '@components/todo-list/TodoList';
 import { syncTodos } from '@utils/todoUtils';
 import { teamId } from '../../constant/index';
 import { useTodoStore } from '@store/todoStore';
+import { getTeamInfo } from '@apis/main';
 
 const MainPage = () => {
   const setTeamTodos = useTodoStore((state) => state.setTeamTodos);
+  const [teamCode, setTeamCode] = useState<number | null>(null);
 
   const handleCopyClipBoard = (copyCode: string) => {
     try {
@@ -20,8 +22,14 @@ const MainPage = () => {
     }
   };
 
+  const fetchTeamCode = async () => {
+    const respose = await getTeamInfo(teamId);
+    setTeamCode(respose.data.result.team.teamCode);
+  };
+
   useEffect(() => {
     syncTodos({ teamId, setTeamTodos });
+    fetchTeamCode();
   }, []);
 
   return (
@@ -29,8 +37,8 @@ const MainPage = () => {
       <header>
         <Notice />
         <TeamCodeCopy>
-          <strong>X65VRG34</strong>
-          <button onClick={() => handleCopyClipBoard('X65VRG34')}>
+          <strong>{teamCode}</strong>
+          <button onClick={() => handleCopyClipBoard(String(teamCode))}>
             팀 코드복사
           </button>
         </TeamCodeCopy>

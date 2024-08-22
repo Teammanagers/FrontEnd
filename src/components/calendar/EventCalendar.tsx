@@ -164,7 +164,7 @@ const StyledCalendarContainer = styled.div<{ height: string }>`
     flex-direction: column;
     align-items: center;
     width: inherit;
-    transition: height 300ms;
+    transition: height 200ms;
     height: ${(props) => props.height};
     padding: 24px 47px;
     background-color: rgba(255, 255, 255, 1);
@@ -232,11 +232,11 @@ const StyledCalendarContainer = styled.div<{ height: string }>`
       text-transform: capitalize;
     }
 
-    .react-calendar__month-view__weekdays abbr {
+    .react-calendar__month-view__weekdays__weekday abbr {
       text-decoration: none;
       font-size: 18px;
-      font-weight: 500;
       color: #1d1d1d;
+      font-weight: 500;
     }
 
     /* 요일, 날짜 크기 및 정렬 */

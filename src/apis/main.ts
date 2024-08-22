@@ -1,5 +1,10 @@
 import { instance } from './instance';
 
+export const getTeamInfo = async (teamId: number) => {
+  const response = await instance.get(`/api/team/${teamId}`);
+  return response;
+};
+
 export const getNoticeRecent = async (teamId: number) => {
   const response = await instance.get(`/api/team/${teamId}/notice/recent`);
   return response;
