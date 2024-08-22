@@ -6,12 +6,18 @@ import { FileProps } from './FileProps';
 import { FileItem } from './FileItem';
 
 interface FileMenuContainerProps {
-  files: FileProps[];
+  files: {
+    id: number;
+    name: string;
+    date: string;
+    size: string;
+    type: string;
+    author: string;
+  }[];
   onFileSelect: (id: number) => void;
-  onFileAdd: (fileItem: FileProps, fileObject: File) => void;
   selectedFileId: number | null;
+  onFileAdd: (fileItem: FileProps, fileObject: File) => void;
 }
-
 export const FileMenuContainer: React.FC<FileMenuContainerProps> = ({
   files,
   onFileSelect,
