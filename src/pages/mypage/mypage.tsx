@@ -5,7 +5,6 @@ import Portfolio from '@assets/mypage/portfolio.svg';
 import Headset from '@assets/mypage/headset.svg';
 import Speaker from '@assets/mypage/speaker.svg';
 import Exclamation from '@assets/mypage/exclamation.svg';
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getMyTodos } from '@apis/todo-list';
