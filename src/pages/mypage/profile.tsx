@@ -52,6 +52,11 @@ export const ProfilePage = () => {
     });
   };
 
+  const handleClickLogoutButton = () => {
+    localStorage.removeItem('accessToken');
+    navigate('/login');
+  };
+
   const openQuitModal = () => setIsQuitModalOpen(true);
   const closeQuitModal = () => setIsQuitModalOpen(false);
   const toggleEditMode = () => setIsEditing((prev) => !prev);
@@ -90,7 +95,10 @@ export const ProfilePage = () => {
         </MainContent>
 
         <QuitContainer>
-          <QuitButton onClick={openQuitModal}>
+          <LogoutButton onClick={handleClickLogoutButton}>
+            로그아웃
+          </LogoutButton>
+          <QuitButton onClick={openQuitModal} style={{ marginLeft: '12px' }}>
             <WrongUser />
             탈퇴하기
           </QuitButton>
@@ -135,10 +143,28 @@ const MainContent = styled.div`
   gap: 35px;
 `;
 const QuitContainer = styled.div`
+  display: flex;
   padding-top: 63px;
-  padding-left: 880px;
+  padding-left: 702px;
+`;
+const LogoutButton = styled.button`
+  font-weight: 700;
+  font-size: 15px;
+  width: 216px;
+  height: 48px;
+  border: none;
+  background-color: ${({ theme }) => theme.colors.red};
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border-radius: 8px;
+  cursor: pointer;
 `;
 const QuitButton = styled.button`
+  font-weight: 700;
+  font-size: 15px;
   width: 216px;
   height: 48px;
   border: 1px solid ${({ theme }) => theme.colors.red};
