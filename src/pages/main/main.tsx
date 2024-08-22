@@ -6,11 +6,15 @@ import NavigateBtn from '@assets/main/navigate-btn.svg';
 import EventCalendar from '@components/calendar/EventCalendar';
 import TodoList from '@components/todo-list/TodoList';
 import { syncTodos } from '@utils/todoUtils';
-import { teamId } from '../../constant/index';
 import { useTodoStore } from '@store/todoStore';
 import { getTeamInfo } from '@apis/main';
+import { useIdStore } from '@store/idStore';
 
 const MainPage = () => {
+  const { teamId, setTeamId } = useIdStore((state) => ({
+    teamId: state.teamId,
+    setTeamId: state.setTeamId
+  }));
   const setTeamTodos = useTodoStore((state) => state.setTeamTodos);
   const [teamCode, setTeamCode] = useState<number | null>(null);
   const [teamCodeCopy, setTeamCodeCopy] = useState<boolean>(false);
@@ -27,14 +31,24 @@ const MainPage = () => {
     }
   };
 
-  const fetchTeamCode = async () => {
+  // 팀 코드 가져오기
+  const fetchTeamCode = async (teamId: number) => {
     const respose = await getTeamInfo(teamId);
     setTeamCode(respose.data.result.team.teamCode);
   };
 
-  useEffect(() => {
+  // 팀 아이디 가져오기
+  const getTeamId = () => {
+    const id = localStorage.getItem('teamId');
+    setTeamId(Number(id));
     syncTodos({ teamId, setTeamTodos });
-    fetchTeamCode();
+    fetchTeamCode(teamId);
+
+    console.log(teamId);
+  };
+
+  useEffect(() => {
+    getTeamId();
   }, []);
 
   return (
