@@ -32,18 +32,13 @@ export const ManagementPage = () => {
   const fetchTeamData = async () => {
     const response = await getTeamData(1);
     setTeamData(response);
-
-    // const newTags = response.teamTagList?.map((tag) => tag.name) || [];
     const newTags = response.teamTagList || [];
     setTags(newTags);
-    // console.log(typeof newTags);
-    // console.log(newTags);
   };
   //
   useEffect(() => {
     fetchTeamData();
   }, []);
-  console.log(teamData);
 
   const refreshTeamData = async () => {
     await fetchTeamData();

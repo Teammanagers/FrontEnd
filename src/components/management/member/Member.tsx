@@ -6,13 +6,26 @@ import {
   TagInputContainer,
   DeleteBtn
 } from '@components/management/team-code/TeamCode.tsx';
+import { Role } from '../../../types/member.ts';
+import {
+  createRoleTag,
+  deleteRoleTag,
+  updateRoleTag
+} from '@apis/management.ts';
 
 interface MemberProps {
+  teamManageId: number;
   name: string;
+  roleList: Role[];
   refreshMembers: () => void;
 }
 
-export const Member = ({ name }: MemberProps) => {
+export const Member = ({
+  teamManageId,
+  name,
+  roleList,
+  refreshMembers
+}: MemberProps) => {
   const {
     tags,
     showTagInput,
@@ -24,7 +37,21 @@ export const Member = ({ name }: MemberProps) => {
     handleDeleteTag,
     setShowTagInput,
     setNewTag
-  } = useTags();
+  } = useTags({
+    initialTags: roleList,
+    onCreateRoleTag: async (tagName) => {
+      await createRoleTag(teamManageId, tagName);
+      refreshMembers();
+    },
+    onEditRoleTag: async (tagId, newName) => {
+      await updateRoleTag(teamManageId, tagId, newName);
+      refreshMembers();
+    },
+    onDeleteRoleTag: async (tagId) => {
+      await deleteRoleTag(teamManageId, tagId);
+      refreshMembers();
+    }
+  });
 
   return (
     <MemberContainer>

@@ -1,43 +1,16 @@
-import { useState } from 'react';
 import moment from 'moment';
 import styled from 'styled-components';
-import RemindAlertIcon from '@assets/calendar/reminder-alert.svg';
-
-interface UpcomingEventProps {
-  event: {
-    calendarId: number;
-    title: string;
-    status: string;
-    isAlarm: boolean;
-    date: string;
-  };
-}
+import { UpcomingEventProps } from 'src/types/calendar';
 
 const UpcomingEvent = ({ event }: UpcomingEventProps) => {
-  const [isAlarm, setIsAlarm] = useState<boolean>(false);
-
-  const handleSetAlarm = () => {
-    setIsAlarm(!isAlarm);
-  };
-
   return (
     <UpcomingEventWrapper>
       <div className="event-info">
         <div className="date-scheduler">
-          {moment(event.date).format('YYYY.MM.DD')} · 이예은
+          {moment(event.date).format('YYYY.MM.DD')}
         </div>
         <h3 className="event-title">{event.title}</h3>
       </div>
-
-      <button
-        className={isAlarm ? 'alarm-sent' : 'alarm-active'}
-        onClick={handleSetAlarm}
-      >
-        <div className="remind-alert-icon">
-          <RemindAlertIcon />
-        </div>
-        <span>{isAlarm ? '알림 설정 완료' : '리마인드 알림'}</span>
-      </button>
     </UpcomingEventWrapper>
   );
 };
@@ -73,39 +46,15 @@ const UpcomingEventWrapper = styled.li`
     }
 
     .event-title {
+      width: 413px;
       margin: 0;
       font-size: 15px;
       font-weight: 500;
       line-height: 21px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
       color: #1d1d1d;
     }
-  }
-
-  .alarm-active,
-  .alarm-sent {
-    display: flex;
-    align-items: center;
-    width: 107px;
-    height: 30px;
-    border-radius: 4px;
-    border: none;
-    background-color: #5c9eff;
-    cursor: pointer;
-
-    .remind-alert-icon {
-      margin-right: 4px;
-      cursor: pointer;
-    }
-
-    span {
-      font-size: 11px;
-      font-weight: 700;
-      line-height: 16.5px;
-      color: white;
-    }
-  }
-
-  .alarm-sent {
-    background-color: #55b7e8;
   }
 `;

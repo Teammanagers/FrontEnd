@@ -1,4 +1,4 @@
-import { useState, KeyboardEvent, MouseEvent } from 'react';
+import { useEffect, useState, KeyboardEvent, MouseEvent } from 'react';
 
 export interface UseTagsReturn {
   tags: string[];
@@ -41,10 +41,19 @@ export const useTags = (): UseTagsReturn => {
 
   const handleDeleteTag = (e: MouseEvent, index: number) => {
     e.stopPropagation();
-    setTags(tags.filter((_, i) => i !== index));
-    setEditTagIndex(null);
-    setNewTag('');
+    setTags((prevTags) => {
+      const updatedTags = prevTags.filter((_, i) => i !== index);
+      setEditTagIndex(null);
+      setNewTag('');
+      return updatedTags;
+    });
   };
+
+  useEffect(() => {
+    if (tags.length < 3) {
+      setShowTagInput(false);
+    }
+  }, [tags]);
 
   const handleAddTag = () => {
     setShowTagInput(true);

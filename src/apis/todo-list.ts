@@ -29,12 +29,8 @@ export const setTodoCheck = async (todoId: number) => {
   return response;
 };
 
-export const deleteTodo = async (todoId: number, todo: string) => {
-  const response = await instance.delete(`/api/todo/${todoId}`, {
-    data: {
-      title: todo
-    }
-  });
+export const deleteTodo = async (todoId: number) => {
+  const response = await instance.delete(`/api/todo/${todoId}`);
   return response;
 };
 
