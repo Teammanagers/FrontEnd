@@ -10,7 +10,8 @@ import RemoveTagIcon from '@assets/calendar/remove-tag-icon.svg';
 import {
   deleteCalendarEvent,
   getCalendarEventDetail,
-  updateCalendarEvent
+  updateCalendarEvent,
+  updateEventState
 } from '@apis/calendar';
 import { teamId } from '../../constant/index';
 import { syncCalendarEvent } from '@utils/calendarUtils';
@@ -120,8 +121,11 @@ const EventModal = ({
   };
 
   // 일정 완료하기
-  const handleCompleteEvent = () => {
+  const handleCompleteEvent = async () => {
+    await updateEventState(calendarId);
     setCheckEvent(false);
+    // 일정 변동사항 업데이트
+    syncCalendarEvent({ teamId, searchMonth, setEventList });
   };
 
   // 상태 업데이트 후 모달 닫기
@@ -266,7 +270,7 @@ const EventModal = ({
                       {scheduleInfo.participants.length > 0 &&
                         scheduleInfo.participants.map((member) => (
                           <li
-                            className="participants-tag"
+                            className="participants-tag check-event-modal"
                             key={member.teamManageId}
                           >
                             <span className="participants-name">
@@ -443,6 +447,10 @@ const DialogContent = styled(Dialog.Content)<{
             align-items: center;
           }
         }
+
+        .check-event-modal {
+          min-width: 37px;
+        }
       }
 
       &::-webkit-scrollbar {
@@ -494,6 +502,7 @@ const DialogContent = styled(Dialog.Content)<{
     }
     to {
       opacity: 1;
+      transform: translate(0) scale(1);
     }
   }
 `;

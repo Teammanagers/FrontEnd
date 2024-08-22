@@ -372,7 +372,7 @@ const DialogContent = styled(Dialog.Content)<{
     }
     to {
       opacity: 1;
-      /* transform: translate(-50%, -50%) scale(1); */
+      transform: translate(0) scale(1);
     }
   }
 `;

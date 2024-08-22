@@ -23,6 +23,10 @@ export const Container = styled.div<{ ismypage: boolean }>`
     width: 382px;
   }
 
+  .accordion-item {
+    overflow: hidden;
+  }
+
   .accordion-trigger {
     display: flex;
     align-items: center;
@@ -79,6 +83,7 @@ export const Container = styled.div<{ ismypage: boolean }>`
     justify-content: center;
     width: 382px;
     height: auto;
+    will-change: max-height;
     background-color: white;
     box-sizing: border-box;
 
@@ -147,7 +152,6 @@ export const Container = styled.div<{ ismypage: boolean }>`
 
     .todo {
       display: flex;
-      /* justify-content: center; */
       align-items: center;
       padding: 0 18px;
       width: 382px;
@@ -161,14 +165,15 @@ export const Container = styled.div<{ ismypage: boolean }>`
   }
 
   /* 오픈 시 content 애니메이션 */
-  .accordion-content[data-state='open'] .accordion-content-container {
+  .accordion-content[data-state='open'] {
+    /* animation: slideDown 500ms cubic-bezier(0.87, 0, 0.13, 1); */
+    animation: slideDown 400ms ease-in-out;
     padding-top: 10px;
-    /* animation: slideDown 300ms cubic-bezier(0.87, 0, 0.13, 1); */
-    /* animation: slideDown 300ms ease-in-out; */
   }
-  .accordion-content[data-state='closed'] .accordion-content-container {
+  .accordion-content[data-state='closed'] {
     /* animation: slideUp 300ms cubic-bezier(0.87, 0, 0.13, 1); */
-    /* animation: slideUp 100ms ease-in-out; */
+    animation: slideUp 400ms ease-in-out;
+    padding-top: 10px;
   }
 
   /* 버튼 애니메이션 */
@@ -196,19 +201,19 @@ export const Container = styled.div<{ ismypage: boolean }>`
 
   @keyframes slideDown {
     from {
-      height: 0;
+      max-height: 0;
     }
     to {
-      height: var(--radix-accordion-content-height);
+      max-height: var(--radix-accordion-content-height);
     }
   }
 
   @keyframes slideUp {
     from {
-      height: var(--radix-accordion-content-height);
+      max-height: var(--radix-accordion-content-height);
     }
     to {
-      height: 0;
+      max-height: 0;
     }
   }
 `;
