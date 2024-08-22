@@ -14,10 +14,13 @@ import { useCalendarStore } from '@store/calendarStore';
 
 const AddEventModal = ({ selectedDate, open, setOpen }: AddEventModalProps) => {
   const location = useLocation();
-  const { searchMonth, setEventList } = useCalendarStore((state) => ({
-    searchMonth: state.searchMonth,
-    setEventList: state.setEventList
-  }));
+  const { searchMonth, setEventList, setUpcomingEventList } = useCalendarStore(
+    (state) => ({
+      searchMonth: state.searchMonth,
+      setEventList: state.setEventList,
+      setUpcomingEventList: state.setUpcomingEventList
+    })
+  );
 
   const [scheduleInfo, setScheduleInfo] = useState<ScheduleInfoType>({
     date: '',
@@ -71,7 +74,12 @@ const AddEventModal = ({ selectedDate, open, setOpen }: AddEventModalProps) => {
       await createCalendarEvent(teamId, event);
       setOpen(false);
       // 일정 변동사항 업데이트
-      syncCalendarEvent({ teamId, searchMonth, setEventList });
+      syncCalendarEvent({
+        teamId,
+        searchMonth,
+        setEventList,
+        setUpcomingEventList
+      });
     } catch (error) {
       console.error(error);
     }
@@ -372,7 +380,7 @@ const DialogContent = styled(Dialog.Content)<{
     }
     to {
       opacity: 1;
-      /* transform: translate(-50%, -50%) scale(1); */
+      transform: translate(0) scale(1);
     }
   }
 `;

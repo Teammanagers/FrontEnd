@@ -15,19 +15,26 @@ import { syncCalendarEvent } from '@utils/calendarUtils';
 
 const EventCalendar = () => {
   const setTeamMember = useMemberStore((state) => state.setTeamMember);
-  const { searchMonth, setSearchMonth, eventList, setEventList } =
-    useCalendarStore((state) => ({
-      searchMonth: state.searchMonth,
-      setSearchMonth: state.setSearchMonth,
-      eventList: state.eventList,
-      setEventList: state.setEventList
-    }));
-  const [date, setDate] = useState<Value>(null);
+  const {
+    searchMonth,
+    setSearchMonth,
+    eventList,
+    setEventList,
+    setUpcomingEventList
+  } = useCalendarStore((state) => ({
+    searchMonth: state.searchMonth,
+    setSearchMonth: state.setSearchMonth,
+    eventList: state.eventList,
+    setEventList: state.setEventList,
+    setUpcomingEventList: state.setUpcomingEventList
+  }));
+  const [selectedDate, setSelectedDate] = useState<Value>(null);
   const [calendarHeight, setCalendarHeight] = useState<string>('520px');
+  console.log(selectedDate);
 
   // 날짜 업데이트
   const handleDateChange = (newDate: Value) => {
-    setDate(newDate);
+    setSelectedDate(newDate);
   };
 
   // 멤버 불러오기
@@ -42,21 +49,25 @@ const EventCalendar = () => {
 
   // 월 업데이트
   const updateMonth = (activeStartDate: Date | null) => {
-    setDate(activeStartDate);
+    setSelectedDate(activeStartDate);
     if (activeStartDate) {
       setSearchMonth(activeStartDate?.getMonth() + 1);
     }
   };
   useEffect(() => {
-    setDate(null);
+    setSelectedDate(null);
     // 현재 날짜 기준으로 초기 월 설정
     updateMonth(new Date());
-    console.log(null);
   }, []);
 
   // 일정 변동사항 업데이트
   useEffect(() => {
-    syncCalendarEvent({ teamId, searchMonth, setEventList });
+    syncCalendarEvent({
+      teamId,
+      searchMonth,
+      setEventList,
+      setUpcomingEventList
+    });
   }, [searchMonth]);
 
   // 매월 몇 주인지 구하기 -> 5,6주일 때 height 변화
@@ -91,14 +102,14 @@ const EventCalendar = () => {
       }
     };
 
-    const week = determineWeeksInMonth(date);
+    const week = determineWeeksInMonth(selectedDate);
 
     if (week >= 6) {
       setCalendarHeight('595px');
     } else {
       setCalendarHeight('520px');
     }
-  }, [date]);
+  }, [selectedDate]);
 
   return (
     <StyledCalendarContainer height={calendarHeight}>
@@ -106,13 +117,14 @@ const EventCalendar = () => {
         locale="en-US"
         calendarType="gregory" // 일요일 부터 시작
         onChange={handleDateChange}
-        // formatDay={(locale: string | undefined, date: Date) =>
-        //   moment(date).format('D')
-        // } // MM일 제거 -> 숫자만 보이게
-        // formatMonthYear={(locale: string | undefined, date: Date) =>
-        //   moment(date).format('YYYY. MM')
-        // } // 네비게이션에서 2023. 12 이렇게 보이도록 설정
-
+        // MM일 제거 -> 숫자만 보이게
+        formatDay={(_locale: string | undefined, date: Date) =>
+          moment(date).format('D')
+        }
+        // 네비게이션에서 2023. 12 이렇게 보이도록 설정
+        formatMonthYear={(_locale: string | undefined, date: Date) =>
+          moment(date).format('YYYY. MM')
+        }
         // 일정 있는 날짜에 점 UI 추가 및 팝업 마운트
         tileContent={({ date }) => {
           const filteredEventList = eventList.filter(
@@ -122,7 +134,18 @@ const EventCalendar = () => {
           return (
             <>
               <EventPopover date={date} eventList={filteredEventList} />
-              {filteredEventList.length > 0 && <Dot />}
+              {filteredEventList.length > 0 && (
+                <Dot
+                  isSelected={
+                    moment(
+                      selectedDate instanceof Date ? selectedDate : null
+                    ).format('YYYY-MM-DD') ===
+                      moment(date).format('YYYY-MM-DD') &&
+                    moment(new Date()).format('YYYY-MM-DD') !==
+                      moment(date).format('YYYY-MM-DD')
+                  }
+                />
+              )}
             </>
           );
         }}
@@ -152,11 +175,13 @@ const StyledCalendarContainer = styled.div<{ height: string }>`
     flex-direction: column;
     align-items: center;
     width: inherit;
+    transition: height 200ms;
     height: ${(props) => props.height};
     padding: 24px 47px;
     background-color: rgba(255, 255, 255, 1);
     border-radius: 12px;
     border: 1px solid rgba(221, 235, 255, 1);
+    overflow: hidden;
   }
 
   /* 전체 폰트 컬러 */
@@ -215,11 +240,13 @@ const StyledCalendarContainer = styled.div<{ height: string }>`
     /* 요일  */
     .react-calendar__month-view__weekdays {
       column-gap: 18px;
+      text-transform: capitalize;
     }
 
-    .react-calendar__month-view__weekdays abbr {
+    .react-calendar__month-view__weekdays__weekday abbr {
       text-decoration: none;
       font-size: 18px;
+      color: #1d1d1d;
       font-weight: 500;
     }
 
@@ -307,13 +334,13 @@ const StyledCalendarContainer = styled.div<{ height: string }>`
 
 const StyledCalendar = styled(Calendar)``;
 
-const Dot = styled.div`
+const Dot = styled.div<{ isSelected: boolean }>`
   position: absolute;
-  bottom: 15%;
+  bottom: 17%;
   left: 50%;
   transform: translate(-50%);
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background-color: ${(props) => props.theme.colors.mainBlue};
+  background-color: ${(props) => (props.isSelected ? 'white' : '#5C9EFF')};
 `;

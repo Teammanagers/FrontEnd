@@ -25,8 +25,8 @@ const Event = ({ event }: EventProp) => {
   };
 
   // 일정 완료
-  const handleCompleteEvent = async (eventId: number) => {
-    setIsComplete(true);
+  const handleUpdateEventState = async (eventId: number) => {
+    setIsComplete(!isComplete);
     await updateEventState(eventId);
   };
 
@@ -39,7 +39,9 @@ const Event = ({ event }: EventProp) => {
       <EventWrapper key={event.calendarId}>
         <div className="event-title-container" onClick={handleCheckEvent}>
           <div className="ellipse"></div>
-          <p className="event-title"> {event.title}</p>
+          <p className={isComplete ? 'underline event-title' : 'event-title'}>
+            {event.title}
+          </p>
         </div>
         <div className="buttons">
           {isComplete || (
@@ -48,13 +50,17 @@ const Event = ({ event }: EventProp) => {
             </button>
           )}
           {isComplete ? (
-            <button className="checked-button" type="button">
+            <button
+              className="checked-button"
+              type="button"
+              onClick={() => handleUpdateEventState(event.calendarId)}
+            >
               <CheckedIcon />
             </button>
           ) : (
             <button
               className="complete-button"
-              onClick={() => handleCompleteEvent(event.calendarId)}
+              onClick={() => handleUpdateEventState(event.calendarId)}
             >
               완료
             </button>
@@ -95,6 +101,9 @@ const EventWrapper = styled.li`
       border-radius: 6px;
       background-color: #1d1d1d;
       margin-right: 7px;
+    }
+    .underline {
+      text-decoration: line-through;
     }
     .event-title {
       width: 153px;

@@ -1,23 +1,31 @@
 import TeamContainer from '@components/team/TeamContainer';
 import styled from 'styled-components';
-import TeamLogo from '@assets/team/logo.svg';
 import CreateTeam from '@assets/team/create-team.svg';
 import { useNavigate } from 'react-router-dom';
-import { useGetTeamById } from '@hooks/team/useGetTeamById';
-import { TeamInfo, TeamTagList } from 'src/types/team';
-import { useEmptyTeamIdRedirect } from '@hooks/team/useEmptyTeamIdRedirect';
+import SearchTeamSection from '@components/team/SelectTeamSection';
+import { getTeamById } from '@apis/team/getTeamById';
+import { useState, useEffect } from 'react';
 
 export const TeamPage = () => {
   const navigate = useNavigate();
-  const { teamId } = useEmptyTeamIdRedirect();
+  const [team, setTeam] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const { data, isLoading, isError } = useGetTeamById(Number(teamId));
+  useEffect(() => {
+    const fetchTeam = async () => {
+      try {
+        const data = await getTeamById();
+        setTeam(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  if (isLoading || isError || !data) {
-    return null;
-  }
-
-  const { team } = data.result as TeamInfo;
+    fetchTeam();
+  }, []);
 
   const handleClickJoinButton = () => {
     navigate('/team/join');
@@ -30,28 +38,19 @@ export const TeamPage = () => {
   return (
     <TeamContainer>
       <TeamIndexContainer>
+        {!loading &&
+          team.result.teamList.map((item) => {
+            return <SearchTeamSection data={item} />;
+          })}
         <SelectTeamComponent>
-          <TeamLogoComponent withBorder>
-            {team ? (
-              <img style={{ objectFit: 'cover' }} src={team.imageUrl} />
-            ) : (
-              <TeamLogo />
-            )}
-          </TeamLogoComponent>
-          <TeamTitleComponent>{team.title}</TeamTitleComponent>
-          <TeamTagContainer>
-            {team.teamTagList.map((tag: TeamTagList) => {
-              return (
-                <TeamTagComponent key={tag.tagId}>{tag.name}</TeamTagComponent>
-              );
-            })}
-          </TeamTagContainer>
-        </SelectTeamComponent>
-        <SelectTeamComponent onClick={handleClickCreateButton}>
-          <TeamLogoComponent>
-            <CreateTeam />
-          </TeamLogoComponent>
-          <TeamTitleComponent>새로운 팀 생성하기</TeamTitleComponent>
+          {!loading && team.result.teamList < 5 && (
+            <>
+              <TeamLogoComponent onClick={handleClickCreateButton}>
+                <CreateTeam />
+              </TeamLogoComponent>
+              <TeamTitleComponent>새로운 팀 생성하기</TeamTitleComponent>
+            </>
+          )}
         </SelectTeamComponent>
       </TeamIndexContainer>
       <ButtonContainer>
@@ -62,11 +61,11 @@ export const TeamPage = () => {
   );
 };
 
-const TeamIndexContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 23px;
+const TeamTitleComponent = styled.p`
+  text-align: center;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 27px;
 `;
 
 const SelectTeamComponent = styled.div`
@@ -86,41 +85,23 @@ const TeamLogoComponent = styled.div<{ withBorder?: boolean }>`
   background-color: #ffffff;
   border: ${(props) =>
     props.withBorder ? '0.76px solid #5c9eff' : '0.76px solid #F0F0F0'};
+  overflow: hidden;
 
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     border-radius: 100%;
+    display: block;
   }
 `;
 
-const TeamTitleComponent = styled.p`
-  text-align: center;
-  font-size: 18px;
-  font-weight: 500;
-  line-height: 27px;
-`;
-
-const TeamTagContainer = styled.div`
+const TeamIndexContainer = styled.div`
   display: flex;
+  align-items: center;
   justify-content: center;
-  margin-top: 6px;
-  gap: 8px;
-`;
-
-const TeamTagComponent = styled.div`
-  display: grid;
-  place-content: center;
-  text-align: center;
-  padding: 0px 10px;
-  height: 30px;
-  border-radius: 5px;
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 18px;
-  color: #5c9eff;
-  background-color: #ffffff;
+  gap: 23px;
+  overflow-x: hidden;
 `;
 
 const ButtonContainer = styled.div`
