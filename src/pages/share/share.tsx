@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { FileMenuContainer } from '@components/share/FileMenuContainer';
 import { FeedbackSection } from '@components/share/FeedbackSection';
-import { FileItem } from '@components/share/FileItem';
+import { getStorageList } from '@apis/share';
 
 interface FileItem {
   id: number;
@@ -15,27 +15,11 @@ interface FileItem {
 }
 
 export const SharePage = () => {
-  const [files, setFiles] = useState<FileItem[]>([
-    {
-      id: 1,
-      name: '프로젝트 계획서',
-      date: '2023-08-12',
-      size: '2.4 MB',
-      type: 'pdf',
-      author: '홍길동'
-    },
-    {
-      id: 2,
-      name: '디자인 초안',
-      date: '2023-08-10',
-      size: '3.1 MB',
-      type: 'pptx',
-      author: '김철수'
-    }
-  ]);
-
+  const [files, setFiles] = useState<FileItem[]>([]);
   const [selectedFileId, setSelectedFileId] = useState<number | null>(null);
   const [isUploading, setIsUploading] = useState<boolean>(false);
+
+  const teamId = 1;
 
   const handleFileAdd = (newFile: FileItem) => {
     setFiles([...files, newFile]);
@@ -45,6 +29,34 @@ export const SharePage = () => {
   const handleFileSelect = (id: number) => {
     setSelectedFileId(id);
   };
+
+  useEffect(() => {
+    const fetchFiles = async () => {
+      try {
+        const FileData = await getStorageList(teamId);
+        console.log('데이터 뭔데', FileData);
+
+        if (Array.isArray(FileData)) {
+          const formattedFiles = FileData.map((file) => ({
+            id: file.storageId,
+            name: file.title,
+            date: new Date(file.uploadAt).toISOString().slice(0, 10),
+            size: file.size,
+            type: file.fileExtension,
+            author: file.uploader
+          }));
+          setFiles(formattedFiles);
+          console.log('파일정보:', formattedFiles);
+        } else {
+          console.error('result 없음');
+        }
+      } catch (error) {
+        console.error('error', error);
+      }
+    };
+
+    fetchFiles();
+  }, [teamId]);
 
   return (
     <SharePageContainer>
@@ -57,6 +69,7 @@ export const SharePage = () => {
         />
         <FeedbackContainer>
           <FeedbackSection
+            teamId={teamId}
             isUploading={isUploading}
             selectedFileId={selectedFileId}
             files={files}
