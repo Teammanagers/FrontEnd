@@ -9,11 +9,12 @@ import { MemberTypes } from '../../../types/member.ts';
 
 interface ScheduleProps {
   onAddSchedule: () => void;
-  isSubmitted: boolean;
+  isScheduled: boolean;
 }
 
-export const Schedule = ({ onAddSchedule, isSubmitted }: ScheduleProps) => {
+export const Schedule = ({ onAddSchedule, isScheduled }: ScheduleProps) => {
   const [members, setMembers] = useState<MemberTypes[]>([]);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [isOpened, setIsOpened] = useState<boolean>(false);
   const [selectedPeople, setSelectedPeople] = useState<number[]>([]);
   const [dropDownPosition, setDropDownPosition] = useState<{
@@ -43,7 +44,6 @@ export const Schedule = ({ onAddSchedule, isSubmitted }: ScheduleProps) => {
       setSelectedPeople([...selectedPeople, teamManageId]);
       setIsOpened(false);
     }
-    console.log(teamManageId);
   };
 
   const handleAddBtnClick = () => {
@@ -64,6 +64,12 @@ export const Schedule = ({ onAddSchedule, isSubmitted }: ScheduleProps) => {
       setDropDownPosition({ top: position.top, left: position.left });
     }
   }, [isOpened, selectedPeople]);
+
+  useEffect(() => {
+    if (isScheduled) {
+      setIsSubmitted(true);
+    } else setIsSubmitted(false);
+  }, [isScheduled]);
 
   return (
     <Container>
