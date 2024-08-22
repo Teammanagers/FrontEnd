@@ -51,7 +51,7 @@ const Notice = () => {
     const id = localStorage.getItem('teamId');
     setTeamId(Number(id));
     if (teamId) fetchNoticeList();
-  }, []);
+  }, [teamId]);
 
   return (
     <>

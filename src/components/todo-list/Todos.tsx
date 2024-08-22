@@ -67,7 +67,7 @@ const Todos = ({ userInfo }: TodosProps) => {
   useEffect(() => {
     const id = localStorage.getItem('teamId');
     setTeamId(Number(id));
-  }, []);
+  }, [teamId]);
 
   return (
     // 투두 or 메인 페이지일 때

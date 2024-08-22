@@ -33,7 +33,7 @@ export const TodoListPage = () => {
     setTeamId(Number(id));
 
     fetchTeamTodos();
-  }, [setTeamTodos]);
+  }, [setTeamTodos, teamId]);
 
   return (
     <Layout>

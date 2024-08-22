@@ -47,7 +47,7 @@ const MainPage = () => {
 
   useEffect(() => {
     getTeamId();
-  }, []);
+  }, [teamId]);
 
   return (
     <Layout>

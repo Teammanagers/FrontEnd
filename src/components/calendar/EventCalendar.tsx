@@ -14,8 +14,9 @@ import { syncCalendarEvent } from '@utils/calendarUtils';
 import { useIdStore } from '@store/idStore';
 
 const EventCalendar = () => {
-  const { teamId } = useIdStore((state) => ({
-    teamId: state.teamId
+  const { teamId, setTeamId } = useIdStore((state) => ({
+    teamId: state.teamId,
+    setTeamId: state.setTeamId
   }));
   const setTeamMember = useMemberStore((state) => state.setTeamMember);
   const {
@@ -41,13 +42,16 @@ const EventCalendar = () => {
 
   // 멤버 불러오기
   useEffect(() => {
+    const id = localStorage.getItem('teamId');
+    setTeamId(Number(id));
+
     const fetchMember = async () => {
       const response = await getTeamMember(teamId);
       setTeamMember(response.data.result.teamMember);
     };
 
     fetchMember();
-  }, []);
+  }, [teamId]);
 
   // 월 업데이트
   const updateMonth = (activeStartDate: Date | null) => {

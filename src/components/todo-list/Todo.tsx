@@ -91,7 +91,7 @@ const Todo = ({ todo, teamManageId }: TodoProps) => {
     todo.status === 'PROCEEDING' ? setChecked(false) : setChecked(true);
     const id = localStorage.getItem('teamId');
     setTeamId(Number(id));
-  }, []);
+  }, [teamId]);
 
   // 깨우기 알람 설정
   const handleAwake = async () => {

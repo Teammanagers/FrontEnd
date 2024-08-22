@@ -34,7 +34,7 @@ const TodoList = () => {
     setTeamId(Number(id));
 
     if (teamId) setMemberId();
-  }, []);
+  }, [teamId]);
 
   return (
     <Wrapper isTodoPage={location.pathname.startsWith('/todo-list')}>
