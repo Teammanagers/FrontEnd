@@ -1,4 +1,4 @@
-import { Axios } from '@apis/axios.ts';
+import { Axios } from '@apis/Axios.ts';
 import { ScheduleRequestBody, TeamData } from '../types/management.ts';
 
 // 내 팀 조회
@@ -147,7 +147,7 @@ export const getSchedules = async (teamId: number) => {
 export const getMySchedules = async (teamId: number) => {
   try {
     const response = await Axios.get(`/api/schedule/${teamId}`);
-    return response.data.result.schedule;
+    return response.data.result.scheduleDto;
   } catch (error) {
     console.error(error);
     throw error;
@@ -164,7 +164,6 @@ export const createSchedule = async (
       `/api/team/${teamId}/schedule`,
       scheduleData
     );
-    console.log(response.data);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -194,7 +193,6 @@ export const updateSchedule = async (
 export const deleteSchedule = async (teamManageId: number) => {
   try {
     await Axios.delete(`/api/team/${teamManageId}/schedule`);
-    console.log('내 스케줄 삭제됐더염');
   } catch (error) {
     console.log('스케줄 삭제 실패!');
   }

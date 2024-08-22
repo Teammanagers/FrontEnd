@@ -6,14 +6,13 @@ import { ButtonHTMLAttributes, useEffect, useRef, useState } from 'react';
 import { PeopleDropDown } from '@components/management/schedule/PeopleDropDown.tsx';
 import { getMembers } from '@apis/management.ts';
 import { MemberTypes } from '../../../types/member.ts';
-import { ScheduleDto } from '../../../types/management.ts';
 
 interface ScheduleProps {
   onAddSchedule: () => void;
-  schedules: ScheduleDto | null;
+  isScheduled: boolean;
 }
 
-export const Schedule = ({ onAddSchedule, schedules }: ScheduleProps) => {
+export const Schedule = ({ onAddSchedule, isScheduled }: ScheduleProps) => {
   const [members, setMembers] = useState<MemberTypes[]>([]);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [isOpened, setIsOpened] = useState<boolean>(false);
@@ -36,10 +35,6 @@ export const Schedule = ({ onAddSchedule, schedules }: ScheduleProps) => {
     fetchMembers();
   }, []);
 
-  useEffect(() => {
-    console.log('내 스케줄 3: ', schedules);
-  }, [schedules]);
-
   const refreshMembers = async () => {
     await fetchMembers();
   };
@@ -49,7 +44,6 @@ export const Schedule = ({ onAddSchedule, schedules }: ScheduleProps) => {
       setSelectedPeople([...selectedPeople, teamManageId]);
       setIsOpened(false);
     }
-    console.log(teamManageId);
   };
 
   const handleAddBtnClick = () => {
@@ -72,10 +66,10 @@ export const Schedule = ({ onAddSchedule, schedules }: ScheduleProps) => {
   }, [isOpened, selectedPeople]);
 
   useEffect(() => {
-    if (schedules && Object.keys(schedules).length > 0) {
+    if (isScheduled) {
       setIsSubmitted(true);
     } else setIsSubmitted(false);
-  }, [schedules]);
+  }, [isScheduled]);
 
   return (
     <Container>

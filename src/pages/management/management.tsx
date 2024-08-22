@@ -13,6 +13,7 @@ export const ManagementPage = () => {
   const [showAddSchedule, setShowAddSchedule] = useState<boolean>(false);
   const [schedules, setSchedules] = useState<ScheduleDto | null>(null);
   const [mySchedules, setMySchedules] = useState<ScheduleDto | null>(null);
+  const [isScheduled, setIsScheduled] = useState<boolean>(false);
 
   const [teamData, setTeamData] = useState<TeamData | null>(null);
   const [tags, setTags] = useState<TeamTag[]>([]);
@@ -27,12 +28,12 @@ export const ManagementPage = () => {
     } else {
       setSchedules(null);
     }
-    console.log(schedules);
     setShowAddSchedule(false);
+    await refreshTeamData(); // 스케줄 제출 후 데이터 갱신
   };
 
   useEffect(() => {
-    console.log(schedules);
+    console.log('팀스케줄: ', schedules);
   }, [schedules]);
 
   const fetchTeamData = async () => {
@@ -46,11 +47,13 @@ export const ManagementPage = () => {
   const fetchSchedules = async () => {
     const response = await getSchedules(1);
     setSchedules(response.scheduleDto);
+    setIsScheduled(response.isScheduled);
   };
 
   // 내 스케줄 조회
   const fetchMySchedules = async () => {
     const response = await getMySchedules(1);
+    console.log('내스케줄 패치:', response);
     setMySchedules(response);
   };
 
@@ -89,7 +92,10 @@ export const ManagementPage = () => {
       <Members />
       {!showAddSchedule ? (
         <>
-          <Schedule onAddSchedule={handleAddSchedule} schedules={mySchedules} />
+          <Schedule
+            onAddSchedule={handleAddSchedule}
+            isScheduled={isScheduled}
+          />
           {schedules && Object.keys(schedules).length > 0 ? (
             <ShowSchedule schedule={schedules} />
           ) : (
@@ -100,6 +106,7 @@ export const ManagementPage = () => {
         <AddSchedule
           onSubmit={handleScheduleSubmit}
           initialSchedules={mySchedules && mySchedules}
+          isScheduled={isScheduled}
         />
       )}
     </Container>
