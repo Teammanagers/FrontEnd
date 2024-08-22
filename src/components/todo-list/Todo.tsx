@@ -10,7 +10,6 @@ import {
   setTodoCheck,
   updateTodo
 } from '@apis/todo-list';
-import { teamId } from '../../constant/index';
 import { useTodoStore } from '@store/todoStore';
 import { syncTodos } from '@utils/todoUtils';
 import { TodoProps } from 'src/types/todo-list';
@@ -18,6 +17,10 @@ import { useLocation } from 'react-router-dom';
 import { useIdStore } from '@store/idStore';
 
 const Todo = ({ todo, teamManageId }: TodoProps) => {
+  const { teamId, setTeamId } = useIdStore((state) => ({
+    teamId: state.teamId,
+    setTeamId: state.setTeamId
+  }));
   const location = useLocation();
   const { setTeamTodos } = useTodoStore((state) => ({
     setTeamTodos: state.setTeamTodos
@@ -86,6 +89,8 @@ const Todo = ({ todo, teamManageId }: TodoProps) => {
 
   useEffect(() => {
     todo.status === 'PROCEEDING' ? setChecked(false) : setChecked(true);
+    const id = localStorage.getItem('teamId');
+    setTeamId(Number(id));
   }, []);
 
   // 깨우기 알람 설정

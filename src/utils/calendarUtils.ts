@@ -15,10 +15,12 @@ export const syncCalendarEvent = async ({
   setEventList,
   setUpcomingEventList
 }: SyncCalendarEventProps) => {
-  // 전체 일정 가져오기
-  const eventList = await getCalendarEventList(teamId, searchMonth);
-  setEventList(eventList.data.result.calendarListOfMonth);
-  // 다가오는 일정 가져오기
-  const upcomingEventList = await getUpcomingEvent(teamId);
-  setUpcomingEventList(upcomingEventList.data.result.comingCalendarList);
+  if (teamId) {
+    // 전체 일정 가져오기
+    const eventList = await getCalendarEventList(teamId, searchMonth);
+    setEventList(eventList.data.result.calendarListOfMonth);
+    // 다가오는 일정 가져오기
+    const upcomingEventList = await getUpcomingEvent(teamId);
+    setUpcomingEventList(upcomingEventList.data.result.comingCalendarList);
+  }
 };

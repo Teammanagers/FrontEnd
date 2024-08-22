@@ -2,10 +2,14 @@ import { useEffect } from 'react';
 import styled from 'styled-components';
 import UpcomingEvent from '@components/calendar/UpcomingEvent';
 import { getUpcomingEvent } from '@apis/calendar';
-import { teamId } from '../../constant/index';
+// import { teamId } from '../../constant/index';
 import { useCalendarStore } from '@store/calendarStore';
+import { useIdStore } from '@store/idStore';
 
 const UpcomingEventList = () => {
+  const { teamId } = useIdStore((state) => ({
+    teamId: state.teamId
+  }));
   const { upcomingEventList, setUpcomingEventList } = useCalendarStore(
     (state) => ({
       upcomingEventList: state.upcomingEventList,
@@ -19,7 +23,7 @@ const UpcomingEventList = () => {
       setUpcomingEventList(response.data.result.comingCalendarList);
       console.log(upcomingEventList);
     };
-    fetchUpcomingEvent();
+    if (teamId) fetchUpcomingEvent();
   }, []);
 
   return (

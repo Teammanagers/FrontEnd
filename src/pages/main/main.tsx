@@ -43,8 +43,6 @@ const MainPage = () => {
     setTeamId(Number(id));
     syncTodos({ teamId, setTeamTodos });
     fetchTeamCode(teamId);
-
-    console.log(teamId);
   };
 
   useEffect(() => {

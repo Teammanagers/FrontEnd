@@ -2,7 +2,6 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 import moment from 'moment';
 import styled from 'styled-components';
 import * as Dialog from '@radix-ui/react-dialog';
-import { teamId } from '../../constant/index';
 import LouderSpeakerIcon from '@assets/main/loud-speaker.svg';
 import PublishNoticeIcon from '@assets/main/publish-notice.svg';
 import { createNotice, getNoticeList, getNoticeRecent } from '@apis/main';
@@ -10,6 +9,10 @@ import { NoticeListType } from 'src/types/matin';
 import { useIdStore } from '@store/idStore';
 
 const Notice = () => {
+  const { teamId, setTeamId } = useIdStore((state) => ({
+    teamId: state.teamId,
+    setTeamId: state.setTeamId
+  }));
   const { ownerTeamManageId, leaderTeamManageId } = useIdStore((state) => ({
     ownerTeamManageId: state.ownerTeamManageId,
     leaderTeamManageId: state.leaderTeamManageId
@@ -44,7 +47,10 @@ const Notice = () => {
   };
 
   useEffect(() => {
-    fetchNoticeList();
+    console.log(teamId);
+    const id = localStorage.getItem('teamId');
+    setTeamId(Number(id));
+    if (teamId) fetchNoticeList();
   }, []);
 
   return (

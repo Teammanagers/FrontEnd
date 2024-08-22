@@ -5,10 +5,13 @@ import Todos from './Todos';
 import { useTodoStore } from '@store/todoStore';
 import { UserInfo } from 'src/types/todo-list';
 import { getTeamTodos } from '@apis/todo-list';
-import { teamId } from '../../constant/index';
 import { useIdStore } from '@store/idStore';
 
 const TodoList = () => {
+  const { teamId, setTeamId } = useIdStore((state) => ({
+    teamId: state.teamId,
+    setTeamId: state.setTeamId
+  }));
   const location = useLocation();
   const { setOwnerId, setLeaderId } = useIdStore((state) => ({
     setOwnerId: state.setOwnerId,
@@ -27,7 +30,10 @@ const TodoList = () => {
       setOwnerId(data.ownerTeamManageId);
       setLeaderId(Math.min(...members));
     };
-    setMemberId();
+    const id = localStorage.getItem('teamId');
+    setTeamId(Number(id));
+
+    if (teamId) setMemberId();
   }, []);
 
   return (

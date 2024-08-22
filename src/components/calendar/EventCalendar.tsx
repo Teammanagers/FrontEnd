@@ -6,14 +6,17 @@ import moment from 'moment';
 import { EventType, Value } from '../../types/calendar';
 import NextBtn from '@assets/calendar/next-btn.svg';
 import PrevBtn from '@assets/calendar/prev-btn.svg';
-import { teamId } from '../../constant/index';
 import { useMemberStore } from '@store/memberStore';
 import { useCalendarStore } from '@store/calendarStore';
 import { getTeamMember } from '@apis/calendar';
 import EventPopover from './EventPopover';
 import { syncCalendarEvent } from '@utils/calendarUtils';
+import { useIdStore } from '@store/idStore';
 
 const EventCalendar = () => {
+  const { teamId } = useIdStore((state) => ({
+    teamId: state.teamId
+  }));
   const setTeamMember = useMemberStore((state) => state.setTeamMember);
   const {
     searchMonth,
@@ -30,7 +33,6 @@ const EventCalendar = () => {
   }));
   const [selectedDate, setSelectedDate] = useState<Value>(null);
   const [calendarHeight, setCalendarHeight] = useState<string>('520px');
-  console.log(selectedDate);
 
   // 날짜 업데이트
   const handleDateChange = (newDate: Value) => {
