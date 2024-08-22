@@ -20,7 +20,7 @@ export const LoginPage = () => {
     const isNewUser =
       urlParams.get('isNewUser') || localStorage.getItem('isNewUser');
 
-    if (!accessToken) {
+    if (!accessToken || !isNewUser) {
       return;
     }
 
