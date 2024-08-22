@@ -18,7 +18,7 @@ export const MemoList = () => {
       }
     };
     fetchMemos();
-  }, [memos]);
+  }, []);
 
   return (
     <MemoListContainer>

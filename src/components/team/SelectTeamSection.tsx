@@ -17,7 +17,7 @@ const SearchTeamSection = ({ data }: SelectTeamSectionProps) => {
   const navigate = useNavigate();
   const handleTeamClick = () => {
     localStorage.removeItem('teamId');
-    localStorage.setItem('teamId', `${data.teamId}`);
+    'teamId', `${data.teamId}`;
     navigate('/');
   };
   return (

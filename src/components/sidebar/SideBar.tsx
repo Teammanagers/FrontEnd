@@ -22,7 +22,6 @@ import { useEffect, useState } from 'react';
 import { DropDown } from '@components/sidebar/DropDown.tsx';
 import Alarm from '@components/alarm/alarm';
 import { useGetAlarmList } from '@hooks/alarm/useGetAlarmList';
-import { AlarmListType } from 'src/types/alarm';
 import { getMyTeam } from '@apis/management.ts';
 import { TeamProps } from '../../types/management.ts';
 
@@ -35,7 +34,12 @@ export const SideBar = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { result }: AlarmListType = useGetAlarmList(12);
+  const { data, isError } = useGetAlarmList(
+    Number(localStorage.getItem('teamId')) || null
+  );
+  if (isError) {
+    return null;
+  }
 
   const handleNavigate = (path: string) => {
     navigate(path);
@@ -126,7 +130,7 @@ export const SideBar = () => {
         {isAlarmOpen ? <BellClick /> : <Bell />}
         {hover && <SideBarText selected={isAlarmOpen}>알림</SideBarText>}
         <Alarm
-          data={result?.alarmList}
+          data={data?.result.alarmList}
           isAlarmOpen={isAlarmOpen}
           toggleAlarm={toggleAlarm}
           setHover={setHover}

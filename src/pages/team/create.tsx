@@ -72,6 +72,7 @@ export const CreateTeamPage = () => {
                   placeholder="팀명 또는 프로젝트를 입력해 주세요"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
+                  maxLength={20}
                 />
               </TitleInputDiv>
               <TagInputSection {...tagInput} />
@@ -161,6 +162,8 @@ const TitleInput = styled.input`
   box-sizing: border-box;
   border: 1px solid #cccccc;
   border-radius: 6px;
+  background-color: white;
+  color: #1d1d1d;
 `;
 
 const SubmitButton = styled.button<{ isFormValid: boolean }>`
