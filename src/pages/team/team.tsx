@@ -4,28 +4,14 @@ import CreateTeam from '@assets/team/create-team.svg';
 import { useNavigate } from 'react-router-dom';
 import SearchTeamSection from '@components/team/SelectTeamSection';
 import { getTeamById } from '@apis/team/getTeamById';
-import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
 export const TeamPage = () => {
   const navigate = useNavigate();
-  const [team, setTeam] = useState(null);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchTeam = async () => {
-      try {
-        const data = await getTeamById();
-        setTeam(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchTeam();
-  }, []);
+  const { data: team, isLoading } = useQuery({
+    queryKey: ['team'],
+    queryFn: getTeamById
+  });
 
   const handleClickJoinButton = () => {
     navigate('/team/join');
@@ -38,12 +24,12 @@ export const TeamPage = () => {
   return (
     <TeamContainer>
       <TeamIndexContainer>
-        {!loading &&
+        {!isLoading &&
           team.result.teamList.map((item) => {
             return <SearchTeamSection data={item} />;
           })}
         <SelectTeamComponent>
-          {!loading && team.result.teamList < 5 && (
+          {!isLoading && team.result.teamList < 5 && (
             <>
               <TeamLogoComponent onClick={handleClickCreateButton}>
                 <CreateTeam />
