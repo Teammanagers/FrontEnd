@@ -22,12 +22,13 @@ const EventCalendar = () => {
       eventList: state.eventList,
       setEventList: state.setEventList
     }));
-  const [date, setDate] = useState<Value>(null);
+  const [selectedDate, setSelectedDate] = useState<Value>(null);
   const [calendarHeight, setCalendarHeight] = useState<string>('520px');
+  console.log(selectedDate);
 
   // 날짜 업데이트
   const handleDateChange = (newDate: Value) => {
-    setDate(newDate);
+    setSelectedDate(newDate);
   };
 
   // 멤버 불러오기
@@ -42,13 +43,13 @@ const EventCalendar = () => {
 
   // 월 업데이트
   const updateMonth = (activeStartDate: Date | null) => {
-    setDate(activeStartDate);
+    setSelectedDate(activeStartDate);
     if (activeStartDate) {
       setSearchMonth(activeStartDate?.getMonth() + 1);
     }
   };
   useEffect(() => {
-    setDate(null);
+    setSelectedDate(null);
     // 현재 날짜 기준으로 초기 월 설정
     updateMonth(new Date());
   }, []);
@@ -90,14 +91,14 @@ const EventCalendar = () => {
       }
     };
 
-    const week = determineWeeksInMonth(date);
+    const week = determineWeeksInMonth(selectedDate);
 
     if (week >= 6) {
       setCalendarHeight('595px');
     } else {
       setCalendarHeight('520px');
     }
-  }, [date]);
+  }, [selectedDate]);
 
   return (
     <StyledCalendarContainer height={calendarHeight}>
@@ -122,7 +123,18 @@ const EventCalendar = () => {
           return (
             <>
               <EventPopover date={date} eventList={filteredEventList} />
-              {filteredEventList.length > 0 && <Dot />}
+              {filteredEventList.length > 0 && (
+                <Dot
+                  isSelected={
+                    moment(
+                      selectedDate instanceof Date ? selectedDate : null
+                    ).format('YYYY-MM-DD') ===
+                      moment(date).format('YYYY-MM-DD') &&
+                    moment(new Date()).format('YYYY-MM-DD') !==
+                      moment(date).format('YYYY-MM-DD')
+                  }
+                />
+              )}
             </>
           );
         }}
@@ -311,13 +323,13 @@ const StyledCalendarContainer = styled.div<{ height: string }>`
 
 const StyledCalendar = styled(Calendar)``;
 
-const Dot = styled.div`
+const Dot = styled.div<{ isSelected: boolean }>`
   position: absolute;
-  bottom: 15%;
+  bottom: 17%;
   left: 50%;
   transform: translate(-50%);
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background-color: ${(props) => props.theme.colors.mainBlue};
+  background-color: ${(props) => (props.isSelected ? 'white' : '#5C9EFF')};
 `;

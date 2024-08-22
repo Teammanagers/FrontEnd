@@ -51,7 +51,6 @@ const EventModal = ({
           participants: data.participants,
           content: data.content
         }));
-        console.log(scheduleInfo);
       }
     };
     fetchEventDetail();
@@ -94,7 +93,6 @@ const EventModal = ({
       participants: newParticipants,
       content: content
     };
-    console.log(newEvent);
 
     try {
       await updateCalendarEvent(calendarId, newEvent);
