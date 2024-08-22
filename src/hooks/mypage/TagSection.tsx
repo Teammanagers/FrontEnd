@@ -7,11 +7,19 @@ import AddTag from '@assets/mypage/add-tag.svg';
 interface TagSectionProps {
   title: string;
   useTagsHook: UseTagsReturn;
+  tagHeight?: string;
+  tagFontSize?: string;
+  tagBackgroundColor?: string;
+  tagPadding?: string;
 }
 
 export const TagSection: React.FC<TagSectionProps> = ({
   title,
-  useTagsHook
+  useTagsHook,
+  tagHeight = '24px',
+  tagPadding = '8px 6px',
+  tagFontSize = '9px',
+  tagBackgroundColor = '#f9fbff'
 }) => {
   const {
     tags,
@@ -30,10 +38,19 @@ export const TagSection: React.FC<TagSectionProps> = ({
       <TagsTitle>{title}</TagsTitle>
       <Tags>
         {tags.map((tag, index) => (
-          <TagContainer key={index} onClick={() => handleEditTag(index)}>
+          <TagContainer
+            key={index}
+            onClick={() => handleEditTag(index)}
+            tagHeight={tagHeight}
+            tagFontSize={tagFontSize}
+            tagBackgroundColor={tagBackgroundColor}
+            tagPadding={tagPadding}
+          >
             {editTagIndex === index ? (
-              <TagInputContainer>
+              <TagInputContainer tagHeight={tagHeight}>
                 <TagInput
+                  tagFontSize={tagFontSize}
+                  tagHeight={tagHeight}
                   value={newTag}
                   onChange={(e) => setNewTag(e.target.value)}
                   onKeyDown={handleTagKeyDown}
@@ -48,8 +65,10 @@ export const TagSection: React.FC<TagSectionProps> = ({
           </TagContainer>
         ))}
         {showTagInput && editTagIndex === null && (
-          <TagInputContainer>
+          <TagInputContainer tagHeight={tagHeight}>
             <TagInput
+              tagFontSize={tagFontSize}
+              tagHeight={tagHeight}
               value={newTag}
               onChange={(e) => setNewTag(e.target.value)}
               onKeyDown={handleTagKeyDown}
@@ -77,38 +96,44 @@ const Tags = styled.div`
   padding: 8px 0px;
 `;
 
-const TagContainer = styled.div`
+const TagContainer = styled.div<{
+  tagHeight: string;
+  tagFontSize: string;
+  tagBackgroundColor: string;
+  tagPadding: string;
+}>`
   box-sizing: border-box;
-  height: 24px;
+  height: ${({ tagHeight }) => tagHeight};
   border-radius: 3px;
-  padding: 8px 6px;
+  padding: ${({ tagPadding }) => tagPadding};
   gap: 8px;
-  background: ${({ theme }) => theme.colors.background};
+  background: ${({ tagBackgroundColor }) => tagBackgroundColor};
   color: ${({ theme }) => theme.colors.mainBlue};
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 9px;
+  font-size: ${({ tagFontSize }) => tagFontSize};
   font-weight: 500;
   cursor: pointer;
 `;
 
-const TagInputContainer = styled.div`
-  height: 24px;
+const TagInputContainer = styled.div<{ tagHeight: string }>`
+  height: ${({ tagHeight }) => tagHeight};
   position: relative;
   display: flex;
   align-items: center;
   background: ${({ theme }) => theme.colors.background};
 `;
 
-const TagInput = styled.input`
-  width: 78px;
-  height: 14px;
+const TagInput = styled.input<{ tagFontSize: string; tagHeight: string }>`
+  width: 70px;
+  height: ${({ tagHeight }) => tagHeight};
   color: ${({ theme }) => theme.colors.mainBlue};
   background-color: ${({ theme }) => theme.colors.background};
   border: none;
-  font-size: 9px;
+  font-size: ${({ tagFontSize }) => tagFontSize};
   font-weight: 500;
+  padding-left: 10px;
 `;
 
 const DeleteBtn = styled(DeleteTag)<
