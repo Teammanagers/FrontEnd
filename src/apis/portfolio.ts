@@ -1,4 +1,4 @@
-import { Axios } from './Axios';
+import { Axios } from './axios';
 import { PortfolioResponse, DetailedPortfolio } from 'src/types/portfolio';
 
 //내 포트폴리오 조회
