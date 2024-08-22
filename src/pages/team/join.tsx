@@ -47,7 +47,6 @@ export const JoinTeamPage = () => {
     }
   };
 
-  console.log(validation, 'ㅎㅇ');
   return (
     <TeamContainer>
       {isModalOpen && (

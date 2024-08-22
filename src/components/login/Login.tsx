@@ -3,73 +3,42 @@ import LogoImage from '@assets/login/project-logo.svg';
 import KakaoLogo from '@assets/login/kakao-logo.svg';
 import NaverLogo from '@assets/login/naver-logo.svg';
 import GoogleLogo from '@assets/login/google-logo.svg';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { useEffect } from 'react';
 
 const Login = () => {
   const navigate = useNavigate();
-  const handleClickButton = () => {
-    navigate('/signup');
-  };
-
+  const [isRouteByEvent, setIsRouteByEvent] = useState<boolean>(false);
   const handleKakaoButtonClick = () => {
-    const url = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${import.meta.env.VITE_KAKAO_REST_API_KEY}&redirect_uri=${import.meta.env.VITE_KAKAO_REDIRECT_URI}`;
-
-    const name = 'oauthLogin';
-    const width = 500;
-    const height = 450;
-    const left = window.screen.width / 2 - width / 2;
-    const top = window.screen.height / 2 - height / 2;
-
-    window.open(
-      `${url}&display=popup`,
-      name,
-      `menubar=no,toolbar=no,status=no,width=${width},height=${height},toolbar=no,left=${left},top=${top}`
-    );
+    window.location.href =
+      'https://dev.teammanagers.kr/oauth2/authorization/kakao';
+    setIsRouteByEvent(true);
   };
 
-  // 팝업으로부터 전달된 메시지를 처리하는 함수
-  const handleMessage = async (event) => {
-    console.log(event, '흠..');
-    if (event.data.type === 'kakaoLogin' && event.data.code) {
-      try {
-        const code = event.data.code;
-
-        const tokenResponse = await axios.post(
-          `https://kauth.kakao.com/oauth/token?grant_type=authorization_code&client_id=${import.meta.env.VITE_KAKAO_REST_API_KEY}&redirect_uri=${import.meta.env.VITE_KAKAO_REDIRECT_URI}&code=${code}&client_secret=${VITE_KAKAO_CLIENT_SECRET}`
-        );
-
-        const accessToken = tokenResponse.data.access_token;
-
-        const userInfoResponse = await axios.get(
-          'https://kapi.kakao.com/v2/user/me',
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`
-            }
-          }
-        );
-
-        const userInfo = userInfoResponse.data;
-        console.log('Kakao user info:', userInfo);
-
-        // 로그인 후 페이지 이동
-        navigate('/signup');
-      } catch (error) {
-        console.error('Kakao login error:', error);
-      }
-    }
+  const handleNaverButtonClick = () => {
+    window.location.href =
+      'https://dev.teammanagers.kr/oauth2/authorization/naver';
+    setIsRouteByEvent(true);
   };
 
-  // 컴포넌트가 마운트되면 메시지 이벤트 리스너를 등록
+  const handleGoogleButtonClick = () => {
+    window.location.href =
+      'https://dev.teammanagers.kr/oauth2/authorization/google';
+    setIsRouteByEvent(true);
+  };
+
   useEffect(() => {
-    window.addEventListener('message', handleMessage);
+    const token = localStorage.getItem('accessToken');
+    const isNewUser = !!localStorage.getItem('isNewUser');
 
-    return () => {
-      window.removeEventListener('message', handleMessage);
-    };
-  }, []);
+    if (token && isNewUser) {
+      navigate('/signup');
+    }
+
+    if (token && !isNewUser) {
+      navigate('/team');
+    }
+  }, [isRouteByEvent]);
 
   return (
     <OnBoardingTextDiv>
@@ -83,7 +52,7 @@ const Login = () => {
       <Button
         backgroundColor="#03c75a"
         textColor="white"
-        onClick={handleClickButton}
+        onClick={handleNaverButtonClick}
       >
         <NaverLogo />
         <ButtonText>네이버로 1초만에 시작하기</ButtonText>
@@ -92,7 +61,7 @@ const Login = () => {
         backgroundColor="white"
         textColor="#000"
         borderColor="#5A5A5A"
-        onClick={handleClickButton}
+        onClick={handleGoogleButtonClick}
       >
         <GoogleLogo />
         <ButtonText>구글로 1초만에 시작하기</ButtonText>

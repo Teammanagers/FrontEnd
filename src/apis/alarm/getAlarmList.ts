@@ -1,8 +1,9 @@
-import { Axios } from '@apis/axios';
+import { Axios } from '@apis/Axios';
+import { GetTeamResponse } from 'src/types/team';
 
-export const getTeamById = async () => {
+export const getAlarm = async (teamId: number): Promise<GetTeamResponse> => {
   try {
-    const response = await Axios.get(`/api/member/team`, {
+    const response = await Axios.get(`/api/alarm/${teamId}`, {
       withCredentials: true,
       headers: {
         Accept: 'application/json',
