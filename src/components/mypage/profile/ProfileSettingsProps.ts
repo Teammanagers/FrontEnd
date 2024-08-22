@@ -13,7 +13,7 @@ export interface ProfileSettingsProps {
   updateProfile: (
     image: File | null,
     name: string,
-    belong: string,
+    major: string,
     phoneNumber: string,
     confidentRole: string[]
   ) => Promise<void>;

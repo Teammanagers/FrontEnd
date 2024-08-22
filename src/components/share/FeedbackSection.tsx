@@ -1,51 +1,103 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import SelectedFeedback from '@assets/mypage/selected-feedback.svg';
 import Dot from '@assets/mypage/dot.svg';
 import { FileProps } from './FileProps';
 import { Comment } from './Comment';
-import { CommentData } from './CommentData';
 import { TextInput } from './TextInput';
+import { createFeedback, getFeedback } from '@apis/share';
+import { CommentData } from 'src/types/storage';
 
 interface FeedbackSectionProps {
+  teamId: number;
   isUploading: boolean;
   selectedFileId: number | null;
   files: FileProps[];
 }
 
 export const FeedbackSection: React.FC<FeedbackSectionProps> = ({
+  teamId,
   isUploading,
   selectedFileId,
   files
 }) => {
-  const [comments, setComments] = useState<CommentData[]>([]);
+  const [commentsMap, setCommentsMap] = useState<Record<number, CommentData[]>>(
+    {}
+  );
   const [feedbackContent, setFeedbackContent] = useState<string>('');
 
-  // 전체 날짜와 시간을 포맷하는 함수
+  useEffect(() => {
+    const fetchFeedback = async () => {
+      try {
+        const feedbackData = await getFeedback();
+        console.log('피드백 데이터', feedbackData);
+
+        // 피드백 데이터를 파일별로 맵핑
+        const newCommentsMap: Record<number, CommentData[]> = {};
+
+        feedbackData.result.forEach((comment) => {
+          if (comment.parentId !== null) {
+            if (!newCommentsMap[comment.parentId]) {
+              newCommentsMap[comment.parentId] = [];
+            }
+            newCommentsMap[comment.parentId].push(comment);
+          }
+        });
+
+        setCommentsMap(newCommentsMap);
+      } catch (error) {
+        console.error('피드백 데이터를 불러오는데 실패했습니다:', error);
+      }
+    };
+
+    // 함수 호출
+    fetchFeedback();
+  }, [teamId]);
+
   const formatDateTime = (date: Date) => {
     return date.toISOString().slice(0, 16).replace('T', ' ').replace(/-/g, '.');
   };
 
-  // 날짜만 포맷하는 함수
   const formatDate = (date: Date) => {
     return date.toISOString().slice(0, 10).replace(/-/g, '.');
   };
 
-  const handleFeedbackSubmit = () => {
-    if (feedbackContent.trim() === '') return;
+  const handleFeedbackSubmit = async () => {
+    if (feedbackContent.trim() === '' || selectedFileId === null) return;
 
-    const newComment: CommentData = {
-      id: Date.now(),
-      author: '사용자',
-      role: '역할',
-      //   date: new Date().toISOString().slice(0, 16).replace('T', ' '),
-      date: formatDateTime(new Date()),
-      content: feedbackContent,
-      replies: []
-    };
+    try {
+      const newComment: CommentData = {
+        id: Date.now(),
+        writer: '사용자',
+        createdAt: formatDateTime(new Date()),
+        content: feedbackContent,
+        parentId: selectedFileId,
+        replies: []
+      };
 
-    setComments([...comments, newComment]);
-    setFeedbackContent('');
+      const feedbackData = {
+        parentId: selectedFileId, // 피드백이 해당 파일에 연결되도록 설정
+        content: feedbackContent
+      };
+
+      await createFeedback(teamId, feedbackData);
+
+      // 피드백이 성공적으로 생성된 후, 로컬 상태 업데이트
+      setCommentsMap((prevCommentsMap) => {
+        const updatedComments = [
+          ...(prevCommentsMap[selectedFileId] || []),
+          newComment
+        ];
+        return {
+          ...prevCommentsMap,
+          [selectedFileId]: updatedComments
+        };
+      });
+
+      setFeedbackContent('');
+    } catch (error) {
+      console.error('피드백 생성 실패:', error);
+    }
   };
 
   if (isUploading) {
@@ -69,7 +121,8 @@ export const FeedbackSection: React.FC<FeedbackSectionProps> = ({
   }
 
   if (selectedFileId !== null) {
-    const selectedFile = files.find((files) => files.id === selectedFileId);
+    const selectedFile = files.find((file) => file.id === selectedFileId);
+    const comments = commentsMap[selectedFileId] || [];
 
     return (
       <SelectedField>
@@ -103,17 +156,21 @@ export const FeedbackSection: React.FC<FeedbackSectionProps> = ({
                           ...c.replies,
                           {
                             id: Date.now(),
-                            author: '사용자',
-                            role: '역할',
-                            date: formatDateTime(new Date()),
+                            writer: '사용자',
+                            createdAt: formatDateTime(new Date()),
                             content: replyContent,
+                            parentId: commentId,
                             replies: []
-                          }
+                          } as CommentData
                         ]
                       }
                     : c
                 );
-                setComments(updatedComments);
+
+                setCommentsMap((prevCommentsMap) => ({
+                  ...prevCommentsMap,
+                  [selectedFileId]: updatedComments
+                }));
               }}
             />
           ))}

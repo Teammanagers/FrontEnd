@@ -53,7 +53,8 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
           contact,
           confidentRole
         );
-        toggleEditMode(); // 수정 모드를 종료
+
+        toggleEditMode(); // 수정 모드 종료
       } catch (error) {
         console.error('Failed to update profile:', error);
       }
@@ -86,7 +87,6 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
           </>
         );
       default:
-        // 기본값으로 카카오를 렌더링하도록 설정
         return (
           <>
             <Kakao />

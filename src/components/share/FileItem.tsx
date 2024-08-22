@@ -3,7 +3,9 @@ import styled from 'styled-components';
 import Dot from '@assets/mypage/dot.svg';
 import SelectedFeedback from '@assets/mypage/selected-feedback.svg';
 import DefaultFeedback from '@assets/share/default-feedback.svg';
+import Word from '@assets/share/word.svg';
 import Ppt from '@assets/mypage/ppt.svg';
+import Image from '@assets/share/image.svg';
 import { FileProps } from './FileProps';
 
 interface FileItemProps {
@@ -19,11 +21,18 @@ export const FileItem: React.FC<FileItemProps> = ({
 }) => {
   const getFileIcon = (fileType: string) => {
     switch (fileType.toLowerCase()) {
+      case 'jpg':
+      case 'jpeg':
+      case 'png':
+      case 'gif':
+      case 'bmp':
+      case 'svg':
+        return <Image />;
       case 'ppt':
       case 'pptx':
         return <Ppt />;
       default:
-        return <Ppt />; // 문서, 이미지 파일 추가되면 수정할 예정
+        return <Word />;
     }
   };
 
