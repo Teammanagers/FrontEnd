@@ -4,14 +4,24 @@ import styled from 'styled-components';
 import * as Dialog from '@radix-ui/react-dialog';
 import moment from 'moment';
 import ParticipantsList from './ParticipantsList';
-import { ModalProps, ScheduleInfoType } from '../../types/calendar';
+import { AddEventModalProps, ScheduleInfoType } from '../../types/calendar';
 import ClosedBtn from '@assets/calendar/closed-btn.svg';
 import RemoveTagIcon from '@assets/calendar/remove-tag-icon.svg';
 import { createCalendarEvent } from '@apis/calendar';
 import { teamId } from '../../constant/index';
+import { syncCalendarEvent } from '@utils/calendarUtils';
+import { useCalendarStore } from '@store/calendarStore';
 
-const AddEventModal = ({ selectedDate, setOpen, open }: ModalProps) => {
+const AddEventModal = ({ selectedDate, open, setOpen }: AddEventModalProps) => {
   const location = useLocation();
+  const { searchMonth, setEventList, setUpcomingEventList } = useCalendarStore(
+    (state) => ({
+      searchMonth: state.searchMonth,
+      setEventList: state.setEventList,
+      setUpcomingEventList: state.setUpcomingEventList
+    })
+  );
+
   const [scheduleInfo, setScheduleInfo] = useState<ScheduleInfoType>({
     date: '',
     title: '',
@@ -62,6 +72,14 @@ const AddEventModal = ({ selectedDate, setOpen, open }: ModalProps) => {
 
     try {
       await createCalendarEvent(teamId, event);
+      setOpen(false);
+      // 일정 변동사항 업데이트
+      syncCalendarEvent({
+        teamId,
+        searchMonth,
+        setEventList,
+        setUpcomingEventList
+      });
     } catch (error) {
       console.error(error);
     }
@@ -80,17 +98,12 @@ const AddEventModal = ({ selectedDate, setOpen, open }: ModalProps) => {
 
   return (
     <>
-      {open && (
-        <DialogRoot
-          open={open}
-          onOpenChange={(open) => {
-            open ? setOpen(true) : handleClosed();
-          }}
-        >
-          <Dialog.Portal>
-            <DialogOverlay />
-            <Dialog.Title />
-            <Dialog.Description />
+      <DialogRoot open={open} onOpenChange={setOpen}>
+        <Dialog.Portal>
+          <DialogOverlay />
+          <Dialog.Title />
+          <Dialog.Description />
+          {open && (
             <DialogContent
               isCalendarPage={location?.pathname.startsWith('/calendar')}
               isAddParticipants={scheduleInfo.participants.length > 0}
@@ -101,11 +114,11 @@ const AddEventModal = ({ selectedDate, setOpen, open }: ModalProps) => {
                     <StyledClosedBtn />
                   </button>
                 </Dialog.Close>
-                <span className="date">
+                <h3 className="date">
                   {moment(
                     selectedDate instanceof Date ? selectedDate : null
                   ).format('YYYY.MM.DD')}
-                </span>
+                </h3>
               </div>
               <hr />
               <form onSubmit={handleSubmit}>
@@ -114,6 +127,7 @@ const AddEventModal = ({ selectedDate, setOpen, open }: ModalProps) => {
                   className="schedule-title"
                   name="schedule-title"
                   placeholder="일정 제목"
+                  maxLength={30}
                   onChange={handleInput}
                 />
                 <hr />
@@ -152,6 +166,7 @@ const AddEventModal = ({ selectedDate, setOpen, open }: ModalProps) => {
                   className="memo"
                   name="memo"
                   placeholder="메모"
+                  maxLength={100}
                   onChange={handleTextarea}
                 ></textarea>
                 <AddScheduleBtn
@@ -169,9 +184,9 @@ const AddEventModal = ({ selectedDate, setOpen, open }: ModalProps) => {
                 </AddScheduleBtn>
               </form>
             </DialogContent>
-          </Dialog.Portal>
-        </DialogRoot>
-      )}
+          )}
+        </Dialog.Portal>
+      </DialogRoot>
     </>
   );
 };
@@ -365,7 +380,7 @@ const DialogContent = styled(Dialog.Content)<{
     }
     to {
       opacity: 1;
-      /* transform: translate(-50%, -50%) scale(1); */
+      transform: translate(0) scale(1);
     }
   }
 `;

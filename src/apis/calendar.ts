@@ -1,5 +1,5 @@
 import { instance } from './instance';
-import { CreateEventProps } from 'src/types/calendar';
+import { CreateEventProps, UpdateEventProps } from 'src/types/calendar';
 
 export const getTeamMember = async (teamId: number) => {
   const response = await instance.get(`/api/team/${teamId}/member`);
@@ -14,12 +14,40 @@ export const createCalendarEvent = async (
   return response;
 };
 
-export const getCalendarEvent = async (
+export const updateCalendarEvent = async (
+  eventId: number,
+  data: UpdateEventProps
+) => {
+  const response = await instance.patch(`/api/calendar/${eventId}`, data);
+  return response;
+};
+
+export const updateEventState = async (eventId: number) => {
+  const response = await instance.patch(`/api/calendar/${eventId}/state`);
+  return response;
+};
+
+export const deleteCalendarEvent = async (eventId: number) => {
+  const response = await instance.delete(`/api/calendar/${eventId}`);
+  return response;
+};
+
+export const getCalendarEventList = async (
   teamId: number,
   month: number | null
 ) => {
   const response = await instance.get(
     `/api/team/${teamId}/calendar?month=${month}`
   );
+  return response;
+};
+
+export const getCalendarEventDetail = async (calendarId: number) => {
+  const response = await instance.get(`/api/calendar/${calendarId}`);
+  return response;
+};
+
+export const getUpcomingEvent = async (teamId: number) => {
+  const response = await instance.get(`/api/team/${teamId}/calendar/coming`);
   return response;
 };

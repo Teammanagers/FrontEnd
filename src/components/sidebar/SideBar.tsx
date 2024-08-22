@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import Logo from '@assets/sidebar/logo.svg';
 import Open from '@assets/sidebar/drop-down-open.svg';
 import Home from '@assets/sidebar/home.svg';
 import HomeClick from '@assets/sidebar/home-click.svg';
@@ -19,14 +18,24 @@ import MyPage from '@assets/sidebar/mypage.svg';
 import MyPageClick from '@assets/sidebar/mypage-click.svg';
 import End from '@assets/sidebar/end.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DropDown } from '@components/sidebar/DropDown.tsx';
+import Alarm from '@components/alarm/alarm';
+import { useGetAlarmList } from '@hooks/alarm/useGetAlarmList';
+import { AlarmListType } from 'src/types/alarm';
+import { getMyTeam } from '@apis/management.ts';
+import { TeamProps } from '../../types/management.ts';
 
 export const SideBar = () => {
+  const [teams, setTeams] = useState<TeamProps[]>([]);
+  const [currentTeam, setCurrentTeam] = useState<TeamProps | null>(null);
   const [hover, setHover] = useState<boolean>(false);
   const [showDropDown, setShowDropDown] = useState<boolean>(false);
+  const [isAlarmOpen, setIsAlarmOpen] = useState<boolean>(false);
   const navigate = useNavigate();
   const location = useLocation();
+
+  const { result }: AlarmListType = useGetAlarmList(12);
 
   const handleNavigate = (path: string) => {
     navigate(path);
@@ -40,8 +49,33 @@ export const SideBar = () => {
     return location.pathname === path;
   };
 
+  const toggleAlarm = () => {
+    setIsAlarmOpen(!isAlarmOpen);
+    setHover(false);
+  };
+
+  const fetchTeams = async () => {
+    try {
+      const response = await getMyTeam();
+      setTeams(response);
+
+      // 현재 속한 팀 아이디에 해당하는 팀을 찾음
+      const foundTeam = response.find((team: TeamProps) => team.teamId === 1);
+      if (foundTeam) {
+        setCurrentTeam(foundTeam);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTeams();
+  }, []);
+
   return (
     <SideBarContainer
+      isHovered={hover || isAlarmOpen}
       onMouseEnter={() => {
         setHover(true);
       }}
@@ -51,17 +85,27 @@ export const SideBar = () => {
       }}
     >
       <LogoContainer>
-        <LogoImg />
-        {hover && (
-          <DropDownContainer>
-            <LogoText>UMC 6th 팀매니저</LogoText>
-            <Wrapper onClick={handleDropDown}>
-              <Open />
-            </Wrapper>
-          </DropDownContainer>
+        {currentTeam && (
+          <>
+            <LogoImg src={currentTeam.imageUrl} />
+            {hover && (
+              <DropDownContainer>
+                <LogoText>{currentTeam.title}</LogoText>
+                <Wrapper onClick={handleDropDown}>
+                  <Open />
+                </Wrapper>
+              </DropDownContainer>
+            )}
+          </>
         )}
       </LogoContainer>
-      {showDropDown && <DropDown />}
+      {showDropDown && (
+        <DropDown
+          teams={teams}
+          currentTeam={currentTeam}
+          onTeamSelected={setCurrentTeam}
+        />
+      )}
       <Hr style={{ margin: '11px 0 11px 0' }} />
       <IconContainer
         onClick={() => {
@@ -75,14 +119,18 @@ export const SideBar = () => {
       </IconContainer>
       {/*  현재 알림페이지가 없다... 일단 일시적으로 홈으로 라우팅 */}
       <IconContainer
-        onClick={() => {
-          handleNavigate(`/`);
-        }}
-        selected={isActive(`/`)}
+        onClick={() => setIsAlarmOpen(!isAlarmOpen)}
+        selected={isAlarmOpen}
         isHovered={hover}
       >
-        {isActive(`/`) ? <BellClick /> : <Bell />}
-        {hover && <SideBarText selected={isActive(`/`)}>알림</SideBarText>}
+        {isAlarmOpen ? <BellClick /> : <Bell />}
+        {hover && <SideBarText selected={isAlarmOpen}>알림</SideBarText>}
+        <Alarm
+          data={result?.alarmList}
+          isAlarmOpen={isAlarmOpen}
+          toggleAlarm={toggleAlarm}
+          setHover={setHover}
+        />
       </IconContainer>
       <IconContainer
         onClick={() => {
@@ -179,12 +227,12 @@ export const SideBar = () => {
   );
 };
 
-const SideBarContainer = styled.div`
+const SideBarContainer = styled.div<{ isHovered: boolean }>`
   position: fixed;
   z-index: 1000;
   top: 0;
   left: 0;
-  width: 73px;
+  width: ${({ isHovered }) => (isHovered ? '158px' : '73px')};
   height: 832px;
   background-color: white;
   display: flex;
@@ -193,10 +241,6 @@ const SideBarContainer = styled.div`
   gap: 7px;
   transition: width 0.3s ease;
   box-shadow: 4px 0 16px 0 rgba(0, 0, 0, 0.06);
-
-  &:hover {
-    width: 158px;
-  }
 `;
 
 const LogoContainer = styled.div`
@@ -277,7 +321,7 @@ const IconContainer = styled.div<SelectedProps>`
   }
 `;
 
-const LogoImg = styled(Logo)`
+const LogoImg = styled.img`
   width: 37px;
   height: 37px;
 `;

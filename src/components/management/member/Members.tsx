@@ -20,7 +20,6 @@ export const Members = () => {
 
   useEffect(() => {
     fetchMembers();
-    // console.log(members);
   }, []);
 
   const refreshMembers = async () => {
@@ -34,8 +33,10 @@ export const Members = () => {
         {members.length > 0 ? (
           members.map((member) => (
             <Member
-              key={member.memberId}
+              key={member.teamManageId}
+              teamManageId={member.teamManageId}
               name={member.name}
+              roleList={member.roleList || []}
               refreshMembers={refreshMembers}
             />
           ))

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import TeamContainer from '@components/team/TeamContainer';
 import { useCreatePassword } from '@hooks/team/useCreatePassword';
@@ -37,6 +37,12 @@ export const ShareTeamPage: React.FC = () => {
       createPasswordMutation.mutate({ teamId, password });
     }
   };
+
+  useEffect(() => {
+    if (teamCode) {
+      localStorage.setItem('teamId', `${teamId}`);
+    }
+  }, [teamCode]);
 
   return (
     <TeamContainer>
