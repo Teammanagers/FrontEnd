@@ -106,13 +106,14 @@ const EventCalendar = () => {
         locale="en-US"
         calendarType="gregory" // 일요일 부터 시작
         onChange={handleDateChange}
-        // formatDay={(locale: string | undefined, date: Date) =>
-        //   moment(date).format('D')
-        // } // MM일 제거 -> 숫자만 보이게
-        // formatMonthYear={(locale: string | undefined, date: Date) =>
-        //   moment(date).format('YYYY. MM')
-        // } // 네비게이션에서 2023. 12 이렇게 보이도록 설정
-
+        // MM일 제거 -> 숫자만 보이게
+        formatDay={(_locale: string | undefined, date: Date) =>
+          moment(date).format('D')
+        }
+        // 네비게이션에서 2023. 12 이렇게 보이도록 설정
+        formatMonthYear={(_locale: string | undefined, date: Date) =>
+          moment(date).format('YYYY. MM')
+        }
         // 일정 있는 날짜에 점 UI 추가 및 팝업 마운트
         tileContent={({ date }) => {
           const filteredEventList = eventList.filter(
