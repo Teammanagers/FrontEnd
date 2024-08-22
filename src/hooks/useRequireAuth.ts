@@ -8,9 +8,9 @@ export const RequireAuth = ({ children }) => {
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
     if (!accessToken && location.pathname !== '/login') {
-      // navigate('/login');
+      navigate('/login');
     }
-  }, [navigate]);
+  }, [children]);
 
   return children;
 };
