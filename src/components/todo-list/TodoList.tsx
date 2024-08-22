@@ -1,19 +1,40 @@
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import Todos from './Todos';
-import MockData from '@assets/todo-list/mock-data.json';
+import { useTodoStore } from '@store/todoStore';
 import { UserInfo } from 'src/types/todo-list';
-import { useLocation } from 'react-router-dom';
-
-const Mock = MockData as UserInfo[];
+import { getTeamTodos } from '@apis/todo-list';
+import { teamId } from '../../constant/index';
+import { useIdStore } from '@store/idStore';
 
 const TodoList = () => {
   const location = useLocation();
+  const { setOwnerId, setLeaderId } = useIdStore((state) => ({
+    setOwnerId: state.setOwnerId,
+    setLeaderId: state.setLeaderId
+  }));
+
+  const teamTodoList = useTodoStore((state) => state.teamTodoList);
+
+  // 사용자 아이디 및 팀장 아이디 전역 설정
+  useEffect(() => {
+    const setMemberId = async () => {
+      const response = await getTeamTodos(teamId);
+      const data = response.data.result;
+      const members = data.teamTodoList.map((v: UserInfo) => v.teamManageId);
+
+      setOwnerId(data.ownerTeamManageId);
+      setLeaderId(Math.min(...members));
+    };
+    setMemberId();
+  }, []);
 
   return (
-    <Wrapper isTodoPage={location?.pathname.startsWith('/todo-list')}>
-      <Container isTodoPage={location?.pathname.startsWith('/todo-list')}>
-        {Mock.map((userInfo: UserInfo) => (
-          <Todos userInfo={userInfo} key={userInfo.id} />
+    <Wrapper isTodoPage={location.pathname.startsWith('/todo-list')}>
+      <Container isTodoPage={location.pathname.startsWith('/todo-list')}>
+        {teamTodoList.map((userInfo: UserInfo) => (
+          <Todos userInfo={userInfo} key={userInfo.teamManageId} />
         ))}
       </Container>
     </Wrapper>

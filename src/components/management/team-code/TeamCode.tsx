@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import Add from '@assets/management/add-icon.svg';
 import Delete from '@assets/management/delete-icon.svg';
 import DefaultProfileImg from '@assets/management/profile-img-default.svg';
 import Upload from '@assets/management/upload-icon.svg';
@@ -14,38 +13,70 @@ import {
 } from 'react';
 import copy from 'copy-to-clipboard';
 import { useTags } from '@hooks/useTags.ts';
+import { TeamData, TeamTag } from '../../../types/management.ts';
+import { updateProfile, updateTag } from '@apis/management.ts';
 
-export const TeamCode = () => {
-  const [profileImage, setProfileImage] = useState<string | null>(null);
+interface TeamCodeProps extends TeamData {
+  imageUrl?: string;
+  teamCode?: string;
+  title: string;
+  tagList?: TeamTag[];
+  onTeamNameChange: (newName: string) => void;
+  refreshTeamData: () => void;
+}
+
+export const TeamCode = ({
+  teamCode,
+  title,
+  imageUrl,
+  tagList,
+  onTeamNameChange,
+  refreshTeamData
+}: TeamCodeProps) => {
+  const [profileImage, setProfileImage] = useState<string | null>(
+    imageUrl || null
+  );
   const [copyCode, setCopyCode] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [teamName, setTeamName] = useState<string>('UMC 6th 팀매니저');
+  const [teamName, setTeamName] = useState<string>(title || '');
   const [isHovered, setIsHovered] = useState<boolean>(false);
+
+  // 태그 수정 시 호출됨
+  const handleTagUpdate = async (tagId: number, newName: string) => {
+    try {
+      await updateTag(1, tagId, newName);
+      refreshTeamData();
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const {
     tags,
-    showTagInput,
     newTag,
     editTagIndex,
-    handleAddTag,
     handleEditTag,
     startEditingTag,
-    handleDeleteTag,
-    setShowTagInput,
-    setEditTagIndex,
+    setTags,
     setNewTag
-  } = useTags();
+  } = useTags({ initialTags: tagList || [], onEditTeamTag: handleTagUpdate });
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const handleImgChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleImgChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const imgUrl = URL.createObjectURL(file);
-      setProfileImage(imgUrl);
+      try {
+        const response = await updateProfile(1, title, file);
+
+        if (response?.result?.team?.imageUrl) {
+          setProfileImage(response.result.team.imageUrl);
+        }
+        refreshTeamData();
+      } catch (error) {
+        console.error(error);
+      }
     }
-    // 서버 API 연동시 추가 로직 필요
-    console.log(file);
   };
 
   const handleImgClick = () => {
@@ -58,9 +89,21 @@ export const TeamCode = () => {
     }
   };
 
-  const handleNameKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+  const handleNameKeyDown = async (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       setIsEditing(false);
+      try {
+        // 팀 이름 수정
+        await updateProfile(
+          1,
+          teamName,
+          fileInputRef.current?.files?.[0] || null
+        );
+        onTeamNameChange(teamName);
+        refreshTeamData();
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
@@ -69,10 +112,19 @@ export const TeamCode = () => {
   };
 
   const handleCopyCode = () => {
-    copy('X65VRG34'); // 추후에 생성된 팀코드 복사되도록 로직 변경 필요
+    if (teamCode) {
+      copy(teamCode); // 추후에 생성된 팀코드 복사되도록 로직 변경 필요
+    }
     setCopyCode(true);
-    setTimeout(() => setCopyCode(false), 800);
   };
+
+  useEffect(() => {
+    setProfileImage(imageUrl || null); // 상위 컴포넌트에서 받은 imageUrl로 초기화
+  }, [imageUrl]);
+
+  useEffect(() => {
+    setTags(tagList ?? []); // tagList가 undefined인 경우에 빈배열로
+  }, [tagList]);
 
   useEffect(() => {
     if (copyCode) {
@@ -83,12 +135,6 @@ export const TeamCode = () => {
       return () => clearTimeout(timer);
     }
   }, [copyCode]);
-
-  useEffect(() => {
-    console.log(profileImage);
-    console.log(typeof profileImage);
-    console.log(fileInputRef);
-  }, []);
 
   return (
     <TeamCodeContainer>
@@ -123,7 +169,7 @@ export const TeamCode = () => {
                   setIsHovered(false);
                 }}
               >
-                <Title>{teamName}</Title>
+                <Title>{title}</Title>
                 <EditIcon onClick={handleNameClick} hover={isHovered} />
               </TitleWrapper>
             )}
@@ -131,7 +177,7 @@ export const TeamCode = () => {
           <CodeContainer>
             <TeamCodeBox>
               <TitleText>Team Code</TitleText>
-              <Code>X65VRG34</Code>
+              <Code>{teamCode}</Code>
             </TeamCodeBox>
           </CodeContainer>
           <CopyBtn onClick={handleCopyCode} copied={copyCode}>
@@ -163,41 +209,14 @@ export const TeamCode = () => {
                         maxLength={5}
                         autoFocus
                       />
-                      <DeleteBtn onClick={() => handleDeleteTag(index)} />
                     </TagInputContainer>
                   ) : (
                     <>
-                      <span>{tag}</span>
+                      <span>{tag.name}</span>
                     </>
                   )}
                 </TagContainer>
               ))}
-              {showTagInput && editTagIndex === null && (
-                <TagInputContainer>
-                  {/* 태그 생성 */}
-                  <TagInput
-                    value={newTag}
-                    onChange={(e) => {
-                      if (e.target.value.length <= 5) {
-                        setNewTag(e.target.value);
-                      }
-                    }}
-                    onKeyDown={handleAddTag}
-                    autoFocus
-                  />
-                  <DeleteBtn onClick={() => handleDeleteTag(-1)} />
-                </TagInputContainer>
-              )}
-              {!showTagInput && tags.length < 3 && (
-                <AddTagBtn
-                  onClick={() => {
-                    setShowTagInput(true);
-                    setEditTagIndex(null);
-                  }}
-                >
-                  <Add />
-                </AddTagBtn>
-              )}
             </Tags>
           </TagBox>
         </BottomContainer>
@@ -394,17 +413,4 @@ export const TagInputContainer = styled.div`
   position: relative;
   display: flex;
   align-items: center;
-`;
-
-const AddTagBtn = styled.button`
-  width: 30px;
-  height: 30px;
-  border-radius: 5px;
-  border: none;
-  background: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0;
-  cursor: pointer;
 `;

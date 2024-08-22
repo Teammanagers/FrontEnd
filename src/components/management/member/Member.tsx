@@ -6,8 +6,26 @@ import {
   TagInputContainer,
   DeleteBtn
 } from '@components/management/team-code/TeamCode.tsx';
+import { Role } from '../../../types/member.ts';
+import {
+  createRoleTag,
+  deleteRoleTag,
+  updateRoleTag
+} from '@apis/management.ts';
 
-export const Member = () => {
+interface MemberProps {
+  teamManageId: number;
+  name: string;
+  roleList: Role[];
+  refreshMembers: () => void;
+}
+
+export const Member = ({
+  teamManageId,
+  name,
+  roleList,
+  refreshMembers
+}: MemberProps) => {
   const {
     tags,
     showTagInput,
@@ -19,13 +37,27 @@ export const Member = () => {
     handleDeleteTag,
     setShowTagInput,
     setNewTag
-  } = useTags();
+  } = useTags({
+    initialTags: roleList,
+    onCreateRoleTag: async (tagName) => {
+      await createRoleTag(teamManageId, tagName);
+      refreshMembers();
+    },
+    onEditRoleTag: async (tagId, newName) => {
+      await updateRoleTag(teamManageId, tagId, newName);
+      refreshMembers();
+    },
+    onDeleteRoleTag: async (tagId) => {
+      await deleteRoleTag(teamManageId, tagId);
+      refreshMembers();
+    }
+  });
 
   return (
     <MemberContainer>
       <ProfileImg />
       <NameContainer>
-        <NameText>이름</NameText>
+        <NameText>{name}</NameText>
         {tags.map((tag, index) => (
           <TagBox key={index} onClick={() => startEditingTag(index)}>
             {editTagIndex === index ? (
@@ -44,7 +76,7 @@ export const Member = () => {
                 <DeleteBtn onClick={() => handleDeleteTag(index)} />
               </TagInputContainer>
             ) : (
-              <span>{tag}</span>
+              <span>{tag.name}</span>
             )}
           </TagBox>
         ))}

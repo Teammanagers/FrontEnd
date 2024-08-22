@@ -1,11 +1,17 @@
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Notice from '@components/main/Notice';
 import NavigateBtn from '@assets/main/navigate-btn.svg';
 import EventCalendar from '@components/calendar/EventCalendar';
 import TodoList from '@components/todo-list/TodoList';
+import { syncTodos } from '@utils/todoUtils';
+import { teamId } from '../../constant/index';
+import { useTodoStore } from '@store/todoStore';
 
 const MainPage = () => {
+  const setTeamTodos = useTodoStore((state) => state.setTeamTodos);
+
   const handleCopyClipBoard = (copyCode: string) => {
     try {
       navigator.clipboard.writeText(copyCode);
@@ -13,6 +19,10 @@ const MainPage = () => {
       alert('팀코드 복사에 실패하였습니다!');
     }
   };
+
+  useEffect(() => {
+    syncTodos({ teamId, setTeamTodos });
+  }, []);
 
   return (
     <Layout>
@@ -117,6 +127,7 @@ const Main = styled.div`
   a {
     display: flex;
     align-items: center;
+    width: 170px;
     margin-bottom: 12px;
     cursor: pointer;
   }

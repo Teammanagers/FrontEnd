@@ -4,12 +4,21 @@ import styled from 'styled-components';
 import * as Dialog from '@radix-ui/react-dialog';
 import moment from 'moment';
 import ParticipantsList from './ParticipantsList';
-import { ModalProps, ScheduleInfoType } from '../../types/calendar';
+import { AddEventModalProps, ScheduleInfoType } from '../../types/calendar';
 import ClosedBtn from '@assets/calendar/closed-btn.svg';
 import RemoveTagIcon from '@assets/calendar/remove-tag-icon.svg';
+import { createCalendarEvent } from '@apis/calendar';
+import { teamId } from '../../constant/index';
+import { syncCalendarEvent } from '@utils/calendarUtils';
+import { useCalendarStore } from '@store/calendarStore';
 
-const AddEventModal = ({ date, setOpen, open }: ModalProps) => {
+const AddEventModal = ({ selectedDate, open, setOpen }: AddEventModalProps) => {
   const location = useLocation();
+  const { searchMonth, setEventList } = useCalendarStore((state) => ({
+    searchMonth: state.searchMonth,
+    setEventList: state.setEventList
+  }));
+
   const [scheduleInfo, setScheduleInfo] = useState<ScheduleInfoType>({
     date: '',
     title: '',
@@ -28,9 +37,9 @@ const AddEventModal = ({ date, setOpen, open }: ModalProps) => {
   };
 
   // 참가자 태그 삭제
-  const removeParticipants = (index: number) => {
+  const removeParticipants = (teamManageId: number) => {
     const newParticipants = scheduleInfo.participants.filter(
-      (_, idx) => idx !== index
+      (v) => v.teamManageId !== teamManageId
     );
     setScheduleInfo((prev) => ({
       ...prev,
@@ -39,21 +48,33 @@ const AddEventModal = ({ date, setOpen, open }: ModalProps) => {
   };
 
   // 일정 추가하기
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const target = e.target as HTMLFormElement;
+
     const eventTitle = (target[0] as HTMLInputElement).value;
+    const newParticipants = scheduleInfo.participants.map(
+      (v) => v.teamManageId
+    );
     const memo = (target[1] as HTMLTextAreaElement).value;
 
-    setScheduleInfo((prev) => ({
-      ...prev,
-      date: moment(date instanceof Date ? date : null).format(
-        'YYYY-MM-DD[T]HH:mm:ss.SSS'
+    const event = {
+      date: moment(selectedDate instanceof Date ? selectedDate : null).format(
+        'YYYY-MM-DDTHH:mm:ss.SSS[Z]'
       ),
       title: eventTitle,
-      participants: scheduleInfo.participants,
+      participants: newParticipants,
       content: memo
-    }));
+    };
+
+    try {
+      await createCalendarEvent(teamId, event);
+      setOpen(false);
+      // 일정 변동사항 업데이트
+      syncCalendarEvent({ teamId, searchMonth, setEventList });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   // 상태 업데이트 후 모달 닫기
@@ -69,19 +90,15 @@ const AddEventModal = ({ date, setOpen, open }: ModalProps) => {
 
   return (
     <>
-      {open && (
-        <DialogRoot
-          open={open}
-          onOpenChange={(open) => {
-            open ? setOpen(true) : handleClosed();
-          }}
-        >
-          <Dialog.Portal>
-            <DialogOverlay />
-            <Dialog.Title />
-            <Dialog.Description />
+      <DialogRoot open={open} onOpenChange={setOpen}>
+        <Dialog.Portal>
+          <DialogOverlay />
+          <Dialog.Title />
+          <Dialog.Description />
+          {open && (
             <DialogContent
               isCalendarPage={location?.pathname.startsWith('/calendar')}
+              isAddParticipants={scheduleInfo.participants.length > 0}
             >
               <div className="header">
                 <Dialog.Close asChild onClick={handleClosed}>
@@ -89,11 +106,11 @@ const AddEventModal = ({ date, setOpen, open }: ModalProps) => {
                     <StyledClosedBtn />
                   </button>
                 </Dialog.Close>
-                <span className="date">
-                  {moment(date instanceof Date ? date : null).format(
-                    'YYYY.MM.DD'
-                  )}
-                </span>
+                <h3 className="date">
+                  {moment(
+                    selectedDate instanceof Date ? selectedDate : null
+                  ).format('YYYY.MM.DD')}
+                </h3>
               </div>
               <hr />
               <form onSubmit={handleSubmit}>
@@ -102,6 +119,7 @@ const AddEventModal = ({ date, setOpen, open }: ModalProps) => {
                   className="schedule-title"
                   name="schedule-title"
                   placeholder="일정 제목"
+                  maxLength={30}
                   onChange={handleInput}
                 />
                 <hr />
@@ -111,28 +129,36 @@ const AddEventModal = ({ date, setOpen, open }: ModalProps) => {
                   )}
                   <ul className="participants-tags">
                     {scheduleInfo.participants.length > 0 &&
-                      scheduleInfo.participants.map((item, index) => (
-                        <li className="participants-tag" key={index}>
-                          <span className="participants-name">{item}</span>
+                      scheduleInfo.participants.map((member) => (
+                        <li
+                          className="participants-tag"
+                          key={member.teamManageId}
+                        >
+                          <span className="participants-name">
+                            {member.name}
+                          </span>
                           <div
                             className="remove-participant-icon"
-                            onClick={() => removeParticipants(index)}
+                            onClick={() =>
+                              removeParticipants(member.teamManageId)
+                            }
                           >
                             <StyledRemoveTagIcon />
                           </div>
                         </li>
                       ))}
+                    <ParticipantsList
+                      scheduleInfo={scheduleInfo}
+                      setScheduleInfo={setScheduleInfo}
+                    />
                   </ul>
-                  <ParticipantsList
-                    scheduleInfo={scheduleInfo}
-                    setScheduleInfo={setScheduleInfo}
-                  />
                 </div>
                 <hr />
                 <textarea
                   className="memo"
                   name="memo"
                   placeholder="메모"
+                  maxLength={100}
                   onChange={handleTextarea}
                 ></textarea>
                 <AddScheduleBtn
@@ -150,9 +176,9 @@ const AddEventModal = ({ date, setOpen, open }: ModalProps) => {
                 </AddScheduleBtn>
               </form>
             </DialogContent>
-          </Dialog.Portal>
-        </DialogRoot>
-      )}
+          )}
+        </Dialog.Portal>
+      </DialogRoot>
     </>
   );
 };
@@ -177,7 +203,10 @@ const DialogOverlay = styled(Dialog.Overlay)`
   }
 `;
 
-const DialogContent = styled(Dialog.Content)<{ isCalendarPage: boolean }>`
+const DialogContent = styled(Dialog.Content)<{
+  isCalendarPage: boolean;
+  isAddParticipants: boolean;
+}>`
   position: fixed;
   top: ${(props) => (props.isCalendarPage ? '237px' : '285px')};
   left: 255px;
@@ -251,10 +280,12 @@ const DialogContent = styled(Dialog.Content)<{ isCalendarPage: boolean }>`
 
     .participants {
       display: flex;
-      align-items: center;
+      align-items: ${(props) =>
+        props.isAddParticipants ? 'flex-start' : 'center'};
       width: inherit;
       height: 30px;
       margin-bottom: 5px;
+      overflow: auto;
 
       .participants-index {
         transform: translateY(10%); //세로 가운데 정렬
@@ -270,6 +301,8 @@ const DialogContent = styled(Dialog.Content)<{ isCalendarPage: boolean }>`
         .participants-tag {
           display: flex;
           align-items: center;
+          min-width: 55px;
+          width: auto;
           height: 24px;
           padding: 0 6px;
           border-radius: 3px;
@@ -289,6 +322,17 @@ const DialogContent = styled(Dialog.Content)<{ isCalendarPage: boolean }>`
           }
         }
       }
+
+      &::-webkit-scrollbar {
+        height: 1px;
+        background-color: white;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        width: 3px;
+        background-color: ${(props) => props.theme.colors.mainBlue};
+        border-radius: 76px;
+      }
     }
 
     .memo {
@@ -302,6 +346,17 @@ const DialogContent = styled(Dialog.Content)<{ isCalendarPage: boolean }>`
       background-color: white;
       outline: none;
       resize: none;
+
+      &::-webkit-scrollbar {
+        width: 3px;
+        background-color: white;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        width: 3px;
+        background-color: #dddddd;
+        border-radius: 76px;
+      }
     }
     .memo::placeholder {
       font-size: 11px;
@@ -317,7 +372,7 @@ const DialogContent = styled(Dialog.Content)<{ isCalendarPage: boolean }>`
     }
     to {
       opacity: 1;
-      /* transform: translate(-50%, -50%) scale(1); */
+      transform: translate(0) scale(1);
     }
   }
 `;

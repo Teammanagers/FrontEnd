@@ -4,13 +4,15 @@ import RegisterProfile from '@assets/team/register-profile.svg';
 import { TagInputSection } from '@components/team/TagInputSection';
 import { useTagInput } from '@hooks/useTagInput';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useCreateTeam } from '@hooks/team/useCreateTeam';
 
 export const CreateTeamPage = () => {
   const [title, setTitle] = useState<string>('');
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const tagInput = useTagInput();
-  const navigate = useNavigate();
+
+  // useCreateTeam 훅 사용
+  const createTeamMutation = useCreateTeam();
 
   const isFormValid =
     title.trim() !== '' && tagInput.tags.length > 0 && profileImage !== null;
@@ -33,8 +35,14 @@ export const CreateTeamPage = () => {
     ? URL.createObjectURL(profileImage)
     : RegisterProfile;
 
-  const handleRouteClick = () => {
-    navigate('/team/share');
+  const handleCreateTeam = () => {
+    if (isFormValid) {
+      createTeamMutation.mutate({
+        title,
+        teamTagList: tagInput.tags,
+        imageFile: profileImage
+      });
+    }
   };
 
   return (
@@ -68,7 +76,7 @@ export const CreateTeamPage = () => {
               </TitleInputDiv>
               <TagInputSection {...tagInput} />
             </TitleInputWrapper>
-            <SubmitButton isFormValid={isFormValid} onClick={handleRouteClick}>
+            <SubmitButton isFormValid={isFormValid} onClick={handleCreateTeam}>
               팀 생성 완료
             </SubmitButton>
           </TeamInfoComponent>
@@ -104,12 +112,12 @@ const TeamLogoComponent = styled.div`
 const ProfileImage = styled.img`
   width: 100%;
   height: 100%;
-  object-fit: cover; // 이미지 비율 유지
-  border-radius: 50%; // 원형으로 만들기
+  object-fit: cover;
+  border-radius: 50%;
 `;
 
 const HiddenFileInput = styled.input`
-  display: none; // 파일 입력을 숨김
+  display: none;
 `;
 
 const TeamInfoComponent = styled.div`

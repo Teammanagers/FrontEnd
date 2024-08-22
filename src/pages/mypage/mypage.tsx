@@ -5,14 +5,29 @@ import Portfolio from '@assets/mypage/portfolio.svg';
 import Headset from '@assets/mypage/headset.svg';
 import Speaker from '@assets/mypage/speaker.svg';
 import Exclamation from '@assets/mypage/exclamation.svg';
+
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getMyTodos } from '@apis/todo-list';
+import { MyTodoList } from 'src/types/todo-list';
+import MyTodos from '@components/todo-list/MyTodos';
 
 export const MyPage = () => {
   const navigate = useNavigate();
+  const [myTodos, setMyTodos] = useState<MyTodoList[]>([]);
 
   const handleNavigate = (path: string) => {
     navigate(path);
   };
+
+  // 내 투두리스트
+  useEffect(() => {
+    const fetchMyTodos = async () => {
+      const response = await getMyTodos();
+      setMyTodos(response.data.result.myTodoListDtos);
+    };
+    fetchMyTodos();
+  }, []);
 
   return (
     <MyPageContainer>
@@ -32,7 +47,11 @@ export const MyPage = () => {
         </SubHeader>
         <MainContent>
           <TodoListContainer>
-            <TodoListBox>todoList 컴포넌트</TodoListBox>
+            <Wrapper>
+              {myTodos.map((myTodos: MyTodoList, index) => (
+                <MyTodos myTodos={myTodos} key={index} />
+              ))}
+            </Wrapper>
           </TodoListContainer>
           <MenuContainer>
             <MenuItem
@@ -125,20 +144,38 @@ const MainContent = styled.div`
   width: 907px;
 `;
 const TodoListContainer = styled.div`
+  display: flex;
+  justify-content: center;
   width: 442px;
   height: 328px;
   background-color: #fff;
   border: 1px solid ${(props) => props.theme.colors.subLightBlue};
   border-radius: 9px;
-  padding-left: 18px;
-  padding-top: 18px;
+  padding: 19px 0;
   box-sizing: border-box;
 `;
-const TodoListBox = styled.div`
-  width: 372px;
-  height: 282px;
-  border: 1px solid ${(props) => props.theme.colors.lightGray};
-  border-radius: 10px;
+
+const Wrapper = styled.div`
+  width: 407px;
+  overflow: auto;
+
+  &::-webkit-scrollbar {
+    width: 12px;
+    background-color: white;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    width: 10px;
+    background-color: #f0f0f0;
+    border: 2px solid white;
+    border-radius: 76px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: inset 0px 0px 5px white;
+  }
 `;
 const MenuContainer = styled.div`
   width: 442px;
