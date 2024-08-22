@@ -82,6 +82,10 @@ const Container = styled.div<{ isTodoPage: boolean }>`
     border-radius: 76px;
   }
 
+  &::-webkit-scrollbar-thumb:active {
+    background-color: #5a5a5a;
+  }
+
   &::-webkit-scrollbar-track {
     background-color: white;
     border-radius: 10px;

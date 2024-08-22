@@ -365,6 +365,10 @@ const DialogContent = styled(Dialog.Content)<{
         background-color: #dddddd;
         border-radius: 76px;
       }
+
+      &::-webkit-scrollbar-thumb:active {
+        background-color: #5a5a5a;
+      }
     }
     .memo::placeholder {
       font-size: 11px;
