@@ -15,6 +15,7 @@ import {
 
 interface MemberProps {
   teamManageId: number;
+  imageUrl: string;
   name: string;
   roleList: Role[];
   refreshMembers: () => void;
@@ -22,6 +23,7 @@ interface MemberProps {
 
 export const Member = ({
   teamManageId,
+  imageUrl,
   name,
   roleList,
   refreshMembers
@@ -55,7 +57,7 @@ export const Member = ({
 
   return (
     <MemberContainer>
-      <ProfileImg />
+      {imageUrl ? <ProfileImg src={imageUrl} /> : <DefaultProfileImage />}
       <NameContainer>
         <NameText>{name}</NameText>
         {tags.map((tag, index) => (
@@ -113,9 +115,16 @@ const MemberContainer = styled.div`
   align-items: center;
 `;
 
-const ProfileImg = styled(DefaultProfileImg)`
+const ProfileImg = styled.img`
   width: 40px;
   height: 40px;
+  border-radius: 100%;
+`;
+
+const DefaultProfileImage = styled(DefaultProfileImg)`
+  width: 40px;
+  height: 40px;
+  border-radius: 100%;
 `;
 
 const NameContainer = styled.div`

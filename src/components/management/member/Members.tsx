@@ -34,6 +34,7 @@ export const Members = () => {
           members.map((member) => (
             <Member
               key={member.teamManageId}
+              imageUrl={member.imageUrl || ''}
               teamManageId={member.teamManageId}
               name={member.name}
               roleList={member.roleList || []}
@@ -63,4 +64,20 @@ const MemberContainer = styled.div`
   margin-top: 10px;
   overflow-y: scroll;
   overflow-x: hidden;
+  
+  &::-webkit-scrollbar {
+    width: 9px;
+    height: 182px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: ${({ theme }) => theme.colors.lightGray};
+    border-radius: 76px;
+  }
+
+  &::-webkit-scrollbar-thumb:active {
+    background: ${({ theme }) => theme.colors.darkGray};
+  }
+
+\` ;
 `;
