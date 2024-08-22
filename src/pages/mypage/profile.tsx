@@ -7,6 +7,7 @@ import { QuitModal } from '@components/mypage/QuitModal';
 import ProfileSettings from '@components/mypage/profile/ProfileSettings';
 import TeamComments from '@components/mypage/profile/TeamComments';
 import { getProfile, updateProfile } from '@apis/mypage';
+import { CommentDTO } from 'src/types/profile';
 
 export const ProfilePage = () => {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ export const ProfilePage = () => {
   const [name, setName] = useState<string>('');
   const [contact, setContact] = useState<string>('');
   const [major, setMajor] = useState<string>('');
+  const [commentList, setCommentList] = useState<CommentDTO[]>([]);
   const [loginProcess, setLoginProcess] = useState<string>('');
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
 
@@ -32,6 +34,7 @@ export const ProfilePage = () => {
           setMajor(profileData.result.belong);
           setLoginProcess(profileData.result.loginProcess);
           setUploadedImage(profileData.result.imageUrl);
+          setCommentList(profileData.result.commentList);
           console.log(profileData.result);
         } else {
           console.error('Profile data is missing the "result" field');
@@ -86,6 +89,7 @@ export const ProfilePage = () => {
           <TeamComments
             isHiddenArray={isHiddenArray}
             toggleHidden={toggleHidden}
+            commentList={commentList}
           />
         </MainContent>
 
