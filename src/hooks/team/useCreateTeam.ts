@@ -10,9 +10,8 @@ export const useCreateTeam = (): UseMutationResult<
 > => {
   const navigate = useNavigate();
   const mutation = useMutation({
-    mutationFn: createTeam, // 올바른 함수 전달
+    mutationFn: createTeam,
     onSuccess: (data) => {
-      console.log(data.result, 'ㅎㅇ');
       navigate('/team/share', {
         state: {
           teamCode: data.result.teamCode,
