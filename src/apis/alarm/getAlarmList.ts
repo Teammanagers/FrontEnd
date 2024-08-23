@@ -1,15 +1,19 @@
 import { Axios } from '@apis/Axios';
-import { GetTeamResponse } from 'src/types/team';
 
-export const getAlarm = async (
-  teamId: number | null
-): Promise<GetTeamResponse> => {
+export const getAlarm = async (teamId: number | null) => {
+  const token = localStorage.getItem('accessToken');
+
+  if (!token) {
+    return null;
+  }
+
   try {
     const response = await Axios.get(`/api/alarm/${teamId}`, {
       withCredentials: true,
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
       }
     });
     return response.data;

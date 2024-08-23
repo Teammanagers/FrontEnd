@@ -2,6 +2,12 @@ import { Axios } from '@apis/Axios';
 import { TermProps } from 'src/types/term';
 
 export const postTerms = async ({ termsOfUse, privacyPolicy }: TermProps) => {
+  const token = localStorage.getItem('accessToken');
+
+  if (!token) {
+    return null;
+  }
+
   try {
     const response = await Axios.post(
       `/api/terms`,
@@ -9,7 +15,8 @@ export const postTerms = async ({ termsOfUse, privacyPolicy }: TermProps) => {
       {
         withCredentials: true,
         headers: {
-          Accept: 'application/json'
+          Accept: 'application/json',
+          Authorization: `Bearer ${token}`
         }
       }
     );
