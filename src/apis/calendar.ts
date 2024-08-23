@@ -1,4 +1,4 @@
-import { Axios } from './Axios';
+import { Axios } from '@apis/Axios';
 import { CreateEventProps, UpdateEventProps } from 'src/types/calendar';
 
 export const getTeamMember = async (teamId: number) => {
