@@ -34,12 +34,7 @@ export const SideBar = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { data, isError } = useGetAlarmList(
-    Number(localStorage.getItem('teamId')) || null
-  );
-  if (isError) {
-    return null;
-  }
+  const { result } = useGetAlarmList(Number(localStorage.getItem('teamId')));
 
   const handleNavigate = (path: string) => {
     navigate(path);
@@ -130,7 +125,7 @@ export const SideBar = () => {
         {isAlarmOpen ? <BellClick /> : <Bell />}
         {hover && <SideBarText selected={isAlarmOpen}>알림</SideBarText>}
         <Alarm
-          data={data?.result.alarmList}
+          data={result?.alarmList}
           isAlarmOpen={isAlarmOpen}
           toggleAlarm={toggleAlarm}
           setHover={setHover}
