@@ -3,14 +3,31 @@ import { AddMemoLarge } from '@components/memo/AddMemoLarge.tsx';
 import { MemoList } from '@components/memo/MemoList.tsx';
 import { useEffect, useState } from 'react';
 import { getMemos } from '@apis/memo.ts';
+import { useIdStore } from '@store/idStore.ts';
 
 export const MemoPage = () => {
   const [hasMemo, setHasMemo] = useState<boolean>(false);
 
+  const { teamId, setTeamId } = useIdStore((state) => ({
+    teamId: state.teamId,
+    setTeamId: state.setTeamId
+  }));
+
+  const getTeamId = () => {
+    const id = localStorage.getItem('teamId');
+    setTeamId(Number(id));
+  };
+
+  useEffect(() => {
+    getTeamId();
+    console.log(teamId);
+  }, [teamId]);
+  console.log(teamId);
+
   useEffect(() => {
     const fetchMemos = async () => {
       try {
-        const response = await getMemos(1);
+        const response = await getMemos(teamId);
         const memos = response.result.memoList;
         setHasMemo(memos.length > 0);
       } catch (error) {
