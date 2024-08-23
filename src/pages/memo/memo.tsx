@@ -35,7 +35,7 @@ export const MemoPage = () => {
       }
     };
     fetchMemos();
-  }, []);
+  }, [teamId]);
 
   return <Container>{hasMemo ? <MemoList /> : <AddMemoLarge />}</Container>;
 };

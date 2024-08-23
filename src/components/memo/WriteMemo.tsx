@@ -29,11 +29,17 @@ export const WriteMemo = () => {
   } = useTags({});
 
   const navigate = useNavigate();
+  const teamId = Number(localStorage.getItem('teamId'));
 
   const handleSubmit = async () => {
     try {
       const tagNames = tags.map((tag) => tag.name);
-      const createMemoResult = await createMemo(1, title, tagNames, content);
+      const createMemoResult = await createMemo(
+        teamId,
+        title,
+        tagNames,
+        content
+      );
       console.log('메모: ', createMemoResult);
       navigate(`/memo`);
       console.log(title, tags, content);
