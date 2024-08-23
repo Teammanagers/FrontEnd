@@ -5,20 +5,14 @@ import { useNavigate } from 'react-router-dom';
 import SearchTeamSection from '@components/team/SelectTeamSection';
 import { getTeamById } from '@apis/team/getTeamById';
 import { useQuery } from '@tanstack/react-query';
-import { useEffect } from 'react';
 
 export const TeamPage = () => {
   const navigate = useNavigate();
   const { data: team, isLoading } = useQuery({
     queryKey: ['team'],
-    queryFn: getTeamById
+    queryFn: getTeamById,
+    enabled: !!localStorage.getItem('accessToken')
   });
-
-  useEffect(() => {
-    if (!team && !isLoading) {
-      window.location.reload();
-    }
-  }, []);
 
   const handleClickJoinButton = () => {
     navigate('/team/join');
