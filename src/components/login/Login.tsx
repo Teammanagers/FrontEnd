@@ -39,7 +39,7 @@ const Login = () => {
     if (token && !isNewUser) {
       navigate('/team');
     }
-  }, [isRouteByEvent, location]);
+  }, [isRouteByEvent, window.location.href]);
 
   return (
     <OnBoardingTextDiv>
