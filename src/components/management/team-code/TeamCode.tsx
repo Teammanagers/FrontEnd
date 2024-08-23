@@ -23,6 +23,7 @@ interface TeamCodeProps extends TeamData {
   tagList?: TeamTag[];
   onTeamNameChange: (newName: string) => void;
   refreshTeamData: () => void;
+  teamId: number;
 }
 
 export const TeamCode = ({
@@ -31,7 +32,8 @@ export const TeamCode = ({
   imageUrl,
   tagList,
   onTeamNameChange,
-  refreshTeamData
+  refreshTeamData,
+  teamId
 }: TeamCodeProps) => {
   const [profileImage, setProfileImage] = useState<string | null>(
     imageUrl || null
@@ -44,7 +46,7 @@ export const TeamCode = ({
   // 태그 수정 시 호출됨
   const handleTagUpdate = async (tagId: number, newName: string) => {
     try {
-      await updateTag(1, tagId, newName);
+      await updateTag(teamId, tagId, newName);
       refreshTeamData();
     } catch (error) {
       console.error(error);
@@ -67,7 +69,7 @@ export const TeamCode = ({
     const file = e.target.files?.[0];
     if (file) {
       try {
-        const response = await updateProfile(1, title, file);
+        const response = await updateProfile(teamId, title, file);
 
         if (response?.result?.team?.imageUrl) {
           setProfileImage(response.result.team.imageUrl);
@@ -95,7 +97,7 @@ export const TeamCode = ({
       try {
         // 팀 이름 수정
         await updateProfile(
-          1,
+          teamId,
           teamName,
           fileInputRef.current?.files?.[0] || null
         );

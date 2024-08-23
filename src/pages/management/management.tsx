@@ -8,6 +8,7 @@ import { ShowSchedule } from '@components/management/schedule/ShowSchedule.tsx';
 import { NoSchedule } from '@components/management/schedule/NoSchedule.tsx';
 import { getMySchedules, getSchedules, getTeamData } from '@apis/management.ts';
 import { ScheduleDto, TeamData, TeamTag } from '../../types/management.ts';
+import { useIdStore } from '@store/idStore.ts';
 
 export const ManagementPage = () => {
   const [showAddSchedule, setShowAddSchedule] = useState<boolean>(false);
@@ -17,6 +18,20 @@ export const ManagementPage = () => {
 
   const [teamData, setTeamData] = useState<TeamData | null>(null);
   const [tags, setTags] = useState<TeamTag[]>([]);
+
+  const { teamId, setTeamId } = useIdStore((state) => ({
+    teamId: state.teamId,
+    setTeamId: state.setTeamId
+  }));
+  const getTeamId = () => {
+    const id = localStorage.getItem('teamId');
+    setTeamId(Number(id));
+  };
+
+  useEffect(() => {
+    getTeamId();
+    console.log(teamId);
+  }, [teamId]);
 
   const handleAddSchedule = () => {
     setShowAddSchedule(true);
@@ -32,12 +47,8 @@ export const ManagementPage = () => {
     await refreshTeamData(); // 스케줄 제출 후 데이터 갱신
   };
 
-  useEffect(() => {
-    console.log('팀스케줄: ', schedules);
-  }, [schedules]);
-
   const fetchTeamData = async () => {
-    const response = await getTeamData(1);
+    const response = await getTeamData(teamId);
     setTeamData(response);
     const newTags = response.teamTagList || [];
     setTags(newTags);
@@ -45,14 +56,14 @@ export const ManagementPage = () => {
 
   // 팀 스케줄 조회
   const fetchSchedules = async () => {
-    const response = await getSchedules(1);
+    const response = await getSchedules(teamId);
     setSchedules(response.scheduleDto);
     setIsScheduled(response.isScheduled);
   };
 
   // 내 스케줄 조회
   const fetchMySchedules = async () => {
-    const response = await getMySchedules(1);
+    const response = await getMySchedules(teamId);
     console.log('내스케줄 패치:', response);
     setMySchedules(response);
   };
@@ -70,14 +81,18 @@ export const ManagementPage = () => {
   };
 
   const fetchData = async () => {
-    await fetchTeamData();
-    await fetchSchedules();
-    await fetchMySchedules();
+    if (teamId) {
+      await fetchTeamData();
+      await fetchSchedules();
+      await fetchMySchedules();
+    }
   };
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  console.log(teamId);
 
   return (
     <Container>
@@ -88,13 +103,15 @@ export const ManagementPage = () => {
         tagList={tags}
         onTeamNameChange={handleTeamNameChange}
         refreshTeamData={refreshTeamData}
+        teamId={teamId}
       />
-      <Members />
+      <Members teamId={teamId} />
       {!showAddSchedule ? (
         <>
           <Schedule
             onAddSchedule={handleAddSchedule}
             isScheduled={isScheduled}
+            teamId={teamId}
           />
           {schedules && Object.keys(schedules).length > 0 ? (
             <ShowSchedule schedule={schedules} />
@@ -107,6 +124,7 @@ export const ManagementPage = () => {
           onSubmit={handleScheduleSubmit}
           initialSchedules={mySchedules && mySchedules}
           isScheduled={isScheduled}
+          teamId={teamId}
         />
       )}
     </Container>

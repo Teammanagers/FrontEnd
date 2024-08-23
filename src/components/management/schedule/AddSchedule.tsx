@@ -24,12 +24,14 @@ interface AddScheduleProps {
   onSubmit: (schedule: ScheduleDto | null) => void;
   initialSchedules?: ScheduleDto | null;
   isScheduled: boolean;
+  teamId: number;
 }
 
 export const AddSchedule = ({
   onSubmit,
   initialSchedules,
-  isScheduled
+  isScheduled,
+  teamId
 }: AddScheduleProps) => {
   // 요일별로 시간 지정
   const [weeklyTimes, setWeeklyTimes] = useState<DayTimeSlots>({
@@ -126,7 +128,7 @@ export const AddSchedule = ({
           sunday: { value: convertTimeSlotToTimeTable(weeklyTimes.Sunday) }
         };
 
-        const response = await createSchedule(1, requestBody);
+        const response = await createSchedule(teamId, requestBody);
         onSubmit(response.scheduleDto);
       } else if (initialSchedules && isEmpty) {
         await deleteSchedule(31); // 아이디 값 변경하기
@@ -144,7 +146,7 @@ export const AddSchedule = ({
           sunday: { value: convertTimeSlotToTimeTable(weeklyTimes.Sunday) }
         };
 
-        const response = await updateSchedule(1, requestBody);
+        const response = await updateSchedule(teamId, requestBody);
         onSubmit(response.scheduleDto);
       }
     } catch (error) {

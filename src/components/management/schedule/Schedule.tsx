@@ -10,9 +10,14 @@ import { MemberTypes } from '../../../types/member.ts';
 interface ScheduleProps {
   onAddSchedule: () => void;
   isScheduled: boolean;
+  teamId: number;
 }
 
-export const Schedule = ({ onAddSchedule, isScheduled }: ScheduleProps) => {
+export const Schedule = ({
+  onAddSchedule,
+  isScheduled,
+  teamId
+}: ScheduleProps) => {
   const [members, setMembers] = useState<MemberTypes[]>([]);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [isOpened, setIsOpened] = useState<boolean>(false);
@@ -24,7 +29,7 @@ export const Schedule = ({ onAddSchedule, isScheduled }: ScheduleProps) => {
   const addBtnRef = useRef<HTMLDivElement>(null);
 
   const fetchMembers = async () => {
-    const response = await getMembers(1);
+    const response = await getMembers(teamId);
     setMembers(response);
     setSelectedPeople(
       response.map((member: MemberTypes) => member.teamManageId)

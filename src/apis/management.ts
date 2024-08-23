@@ -1,8 +1,13 @@
-import { Axios } from '@apis/Axios.ts';
+import { Axios } from '@apis/axios.ts';
 import { ScheduleRequestBody, TeamData } from '../types/management.ts';
 
 // 내 팀 조회
 export const getMyTeam = async () => {
+  const token = localStorage.getItem('teamId');
+  if (!token) {
+    return null;
+  }
+
   try {
     const response = await Axios.get(`/api/member/team`);
     return response.data.result.teamList;
