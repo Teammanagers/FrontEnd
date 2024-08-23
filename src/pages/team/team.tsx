@@ -5,14 +5,22 @@ import { useNavigate } from 'react-router-dom';
 import SearchTeamSection from '@components/team/SelectTeamSection';
 import { getTeamById } from '@apis/team/getTeamById';
 import { useQuery } from '@tanstack/react-query';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export const TeamPage = () => {
   const navigate = useNavigate();
-  const { data: team, isLoading } = useQuery({
-    queryKey: ['team'],
-    queryFn: getTeamById
-  });
+  const [data, setData] = useState();
+  const [isDataLoading, setIsDataLoading] = useState();
+
+  useEffect(() => {
+    const { data: team, isLoading } = useQuery({
+      queryKey: ['team'],
+      queryFn: getTeamById
+    });
+
+    setData(team);
+    setIsDataLoading(isLoading);
+  }, []);
 
   const handleClickJoinButton = () => {
     navigate('/team/join');
@@ -22,21 +30,15 @@ export const TeamPage = () => {
     navigate('/team/create');
   };
 
-  useEffect(() => {
-    if (!isLoading && !team) {
-      window.location.reload();
-    }
-  }, [isLoading, team]);
-
   return (
     <TeamContainer>
       <TeamIndexContainer>
-        {!isLoading &&
-          team?.result.teamList.map((item) => {
+        {!isDataLoading &&
+          data?.result.teamList.map((item) => {
             return <SearchTeamSection data={item} />;
           })}
         <SelectTeamComponent>
-          {!isLoading && team?.result.teamList.length < 5 && (
+          {!isDataLoading && data?.result.teamList.length < 5 && (
             <>
               <TeamLogoComponent onClick={handleClickCreateButton}>
                 <CreateTeam />
