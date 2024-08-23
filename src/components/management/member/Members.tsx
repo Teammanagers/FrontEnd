@@ -4,9 +4,32 @@ import { Member } from '@components/management/member/Member.tsx';
 import { useEffect, useState } from 'react';
 import { getMembers } from '@apis/management.ts';
 import { MemberTypes } from '../../../types/member.ts';
+import { useIdStore } from '@store/idStore.ts';
 
 export const Members = () => {
   const [members, setMembers] = useState<MemberTypes[]>([]);
+
+  const { teamId, setTeamId } = useIdStore((state) => ({
+    teamId: state.teamId,
+    setTeamId: state.setTeamId
+  }));
+  const getTeamId = () => {
+    const id = localStorage.getItem('teamId');
+    setTeamId(Number(id));
+  };
+
+  // useEffect(() => {
+  //   fetchMembers();
+  // }, []);
+
+  useEffect(() => {
+    getTeamId();
+    if (teamId) {
+      fetchMembers();
+    }
+    console.log(teamId);
+  }, [teamId]);
+  console.log(teamId);
 
   const fetchMembers = async () => {
     try {
@@ -16,10 +39,6 @@ export const Members = () => {
       console.error('Error fetching members:', error);
     }
   };
-
-  useEffect(() => {
-    fetchMembers();
-  }, []);
 
   const refreshMembers = async () => {
     await fetchMembers();

@@ -31,7 +31,6 @@ export const ManagementPage = () => {
   useEffect(() => {
     getTeamId();
     console.log(teamId);
-    console.log(getTeamId());
   }, [teamId]);
 
   const handleAddSchedule = () => {
@@ -82,9 +81,11 @@ export const ManagementPage = () => {
   };
 
   const fetchData = async () => {
-    await fetchTeamData();
-    await fetchSchedules();
-    await fetchMySchedules();
+    if (teamId) {
+      await fetchTeamData();
+      await fetchSchedules();
+      await fetchMySchedules();
+    }
   };
 
   useEffect(() => {

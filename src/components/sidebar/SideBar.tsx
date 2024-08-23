@@ -25,7 +25,6 @@ import { useGetAlarmList } from '@hooks/alarm/useGetAlarmList';
 import { getMyTeam } from '@apis/management.ts';
 import { TeamProps } from '../../types/management.ts';
 import { useIdStore } from '@store/idStore.ts';
-import { syncTodos } from '@utils/todoUtils.ts';
 
 export const SideBar = () => {
   const [teams, setTeams] = useState<TeamProps[]>([]);
@@ -40,25 +39,29 @@ export const SideBar = () => {
     Number(localStorage.getItem('teamId')) || null
   );
 
-  const { teamId, setTeamId } = useIdStore((state) => ({
-    teamId: state.teamId,
-    setTeamId: state.setTeamId
-  }));
+  // const { teamId, setTeamId } = useIdStore((state) => ({
+  //   teamId: state.teamId,
+  //   setTeamId: state.setTeamId
+  // }));
+  //
+  // const getTeamId = () => {
+  //   const id = localStorage.getItem('teamId');
+  //   setTeamId(Number(id));
+  // };
+  //
+  // useEffect(() => {
+  //   getTeamId();
+  // }, [teamId]);
 
-  const getTeamId = () => {
-    const id = localStorage.getItem('teamId');
-    setTeamId(Number(id));
-  };
-
-  useEffect(() => {
-    getTeamId();
-  }, [teamId]);
-
-  if (isLoading) {
-    return null;
-  }
   const teamId = Number(localStorage.getItem('teamId'));
   const { result } = teamId && useGetAlarmList(teamId);
+  useEffect(() => {
+    console.log('팀아이디:', teamId);
+  }, [teamId]);
+
+  useEffect(() => {
+    console.log(teams);
+  }, [teams]);
 
   const handleNavigate = (path: string) => {
     navigate(path);
@@ -81,6 +84,7 @@ export const SideBar = () => {
     try {
       const response = await getMyTeam();
       setTeams(response);
+      console.log('팀:', teams);
 
       // 현재 속한 팀 아이디에 해당하는 팀을 찾음
       const foundTeam = response.find(
@@ -93,10 +97,14 @@ export const SideBar = () => {
       console.error(error);
     }
   };
-
+  console.log(teams);
   useEffect(() => {
     fetchTeams();
   }, []);
+
+  if (isLoading) {
+    return null;
+  }
 
   return (
     <SideBarContainer

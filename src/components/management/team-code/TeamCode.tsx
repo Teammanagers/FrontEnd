@@ -23,6 +23,7 @@ interface TeamCodeProps extends TeamData {
   tagList?: TeamTag[];
   onTeamNameChange: (newName: string) => void;
   refreshTeamData: () => void;
+  teamId: number;
 }
 
 export const TeamCode = ({
