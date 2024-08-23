@@ -6,6 +6,12 @@ export const postValidatePassword = async ({
   teamCode,
   password
 }: ValidatePasswordResponse) => {
+  const token = localStorage.getItem('accessToken');
+
+  if (!token) {
+    return null;
+  }
+
   try {
     const response = await Axios.post(
       `/api/team/${teamId}`,
@@ -13,7 +19,8 @@ export const postValidatePassword = async ({
       {
         withCredentials: true,
         headers: {
-          Accept: 'application/json'
+          Accept: 'application/json',
+          Authorization: `Bearer ${token}`
         }
       }
     );

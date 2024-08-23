@@ -5,6 +5,12 @@ export const updateTeamPassword = async ({
   teamId,
   password
 }: UpdateTeamPasswordInput) => {
+  const token = localStorage.getItem('accessToken');
+
+  if (!token) {
+    return null;
+  }
+
   try {
     const response = await Axios.patch(
       `/api/team/${teamId}/password`,
@@ -15,7 +21,8 @@ export const updateTeamPassword = async ({
         withCredentials: true,
         headers: {
           Accept: 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
         }
       }
     );

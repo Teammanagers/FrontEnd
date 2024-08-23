@@ -13,7 +13,7 @@ export const getTeamById = async () => {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}` // 토큰을 헤더에 추가
+        Authorization: `Bearer ${token}`
       }
     });
     return response.data;
