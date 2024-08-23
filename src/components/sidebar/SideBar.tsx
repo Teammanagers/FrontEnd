@@ -39,29 +39,22 @@ export const SideBar = () => {
     Number(localStorage.getItem('teamId')) || null
   );
 
-  // const { teamId, setTeamId } = useIdStore((state) => ({
-  //   teamId: state.teamId,
-  //   setTeamId: state.setTeamId
-  // }));
-  //
-  // const getTeamId = () => {
-  //   const id = localStorage.getItem('teamId');
-  //   setTeamId(Number(id));
-  // };
-  //
-  // useEffect(() => {
-  //   getTeamId();
-  // }, [teamId]);
+  const { teamId, setTeamId } = useIdStore((state) => ({
+    teamId: state.teamId,
+    setTeamId: state.setTeamId
+  }));
 
-  const teamId = Number(localStorage.getItem('teamId'));
-  const { result } = teamId && useGetAlarmList(teamId);
+  const getTeamId = () => {
+    const id = localStorage.getItem('teamId');
+    setTeamId(Number(id));
+  };
+
   useEffect(() => {
-    console.log('팀아이디:', teamId);
+    getTeamId();
   }, [teamId]);
 
-  useEffect(() => {
-    console.log(teams);
-  }, [teams]);
+  // const teamId = Number(localStorage.getItem('teamId'));
+  const { result } = useGetAlarmList(teamId);
 
   const handleNavigate = (path: string) => {
     navigate(path);
@@ -80,27 +73,26 @@ export const SideBar = () => {
     setHover(false);
   };
 
-  const fetchTeams = async () => {
-    try {
-      const response = await getMyTeam();
-      setTeams(response);
-      console.log('팀:', teams);
-
-      // 현재 속한 팀 아이디에 해당하는 팀을 찾음
-      const foundTeam = response.find(
-        (team: TeamProps) => team.teamId === teamId
-      );
-      if (foundTeam) {
-        setCurrentTeam(foundTeam);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  console.log(teams);
   useEffect(() => {
+    const fetchTeams = async () => {
+      try {
+        const response = await getMyTeam();
+        setTeams(response);
+
+        // 현재 속한 팀 아이디에 해당하는 팀을 찾음
+        const foundTeam = response.find(
+          (team: TeamProps) => team.teamId === teamId
+        );
+        if (foundTeam) {
+          setCurrentTeam(foundTeam);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
     fetchTeams();
-  }, []);
+  }, [teamId]);
 
   if (isLoading) {
     return null;
