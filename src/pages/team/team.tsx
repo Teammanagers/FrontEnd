@@ -4,10 +4,12 @@ import CreateTeam from '@assets/team/create-team.svg';
 import { useNavigate } from 'react-router-dom';
 import SearchTeamSection from '@components/team/SelectTeamSection';
 import { getTeamById } from '@apis/team/getTeamById';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect } from 'react';
 
 export const TeamPage = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { data: team, isLoading } = useQuery({
     queryKey: ['team'],
     queryFn: getTeamById
@@ -20,6 +22,12 @@ export const TeamPage = () => {
   const handleClickCreateButton = () => {
     navigate('/team/create');
   };
+
+  useEffect(() => {
+    if (!isLoading && !team) {
+      queryClient.refetchQueries({ queryKey: ['team'] });
+    }
+  }, [isLoading, team, queryClient]);
 
   return (
     <TeamContainer>
