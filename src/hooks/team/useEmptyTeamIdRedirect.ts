@@ -10,7 +10,7 @@ export const useEmptyTeamIdRedirect = (redirectPath: string = '/login') => {
 
   useEffect(() => {
     if (!teamId || !teamCode) {
-      navigate(redirectPath);
+      // navigate(redirectPath);
     }
   }, [teamId, teamCode, navigate, redirectPath]);
 
