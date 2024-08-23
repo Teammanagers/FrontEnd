@@ -4,10 +4,11 @@ import KakaoLogo from '@assets/login/kakao-logo.svg';
 import NaverLogo from '@assets/login/naver-logo.svg';
 import GoogleLogo from '@assets/login/google-logo.svg';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [isRouteByEvent, setIsRouteByEvent] = useState<boolean>(false);
   const handleKakaoButtonClick = () => {
     window.location.href =
@@ -31,14 +32,14 @@ const Login = () => {
     const token = localStorage.getItem('accessToken');
     const isNewUser = !!localStorage.getItem('isNewUser');
 
-    if (token && isNewUser) {
+    if (token && !!isNewUser) {
       navigate('/signup');
     }
 
     if (token && !isNewUser) {
       navigate('/team');
     }
-  }, [isRouteByEvent]);
+  }, [isRouteByEvent, location]);
 
   return (
     <OnBoardingTextDiv>

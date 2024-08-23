@@ -34,7 +34,8 @@ export const SideBar = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { result } = useGetAlarmList(Number(localStorage.getItem('teamId')));
+  const teamId = Number(localStorage.getItem('teamId'));
+  const { result } = teamId && useGetAlarmList(teamId);
 
   const handleNavigate = (path: string) => {
     navigate(path);
