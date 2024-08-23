@@ -106,8 +106,8 @@ const SelectTeamComponent = styled.div`
 const TeamLogoComponent = styled.div`
   width: 163px;
   height: 163px;
-  cursor: pointer; // 클릭 가능하게 커서 변경
-  position: relative; // 자식 요소의 절대 위치를 위한 설정
+  cursor: pointer;
+  position: relative;
 `;
 
 const ProfileImage = styled.img`

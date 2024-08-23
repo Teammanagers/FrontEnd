@@ -6,6 +6,12 @@ export const createTeam = async ({
   teamTagList,
   imageFile
 }: CreateTeamInput) => {
+  const token = localStorage.getItem('accessToken');
+
+  if (!token) {
+    return null;
+  }
+
   try {
     const formData = new FormData();
     const createTeam = JSON.stringify({ title, teamTagList });
@@ -16,7 +22,8 @@ export const createTeam = async ({
     const response = await Axios.post('/api/team', formData, {
       withCredentials: true,
       headers: {
-        Accept: 'application/json'
+        Accept: 'application/json',
+        Authorization: `Bearer ${token}`
       }
     });
     return response.data;
