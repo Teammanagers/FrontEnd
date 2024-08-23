@@ -3,43 +3,23 @@ import LogoImage from '@assets/login/project-logo.svg';
 import KakaoLogo from '@assets/login/kakao-logo.svg';
 import NaverLogo from '@assets/login/naver-logo.svg';
 import GoogleLogo from '@assets/login/google-logo.svg';
-import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
 
 const Login = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const [isRouteByEvent, setIsRouteByEvent] = useState<boolean>(false);
   const handleKakaoButtonClick = () => {
     window.location.href =
       'https://dev.teammanagers.kr/oauth2/authorization/kakao';
-    setIsRouteByEvent(true);
   };
 
   const handleNaverButtonClick = () => {
     window.location.href =
       'https://dev.teammanagers.kr/oauth2/authorization/naver';
-    setIsRouteByEvent(true);
+    true;
   };
 
   const handleGoogleButtonClick = () => {
     window.location.href =
       'https://dev.teammanagers.kr/oauth2/authorization/google';
-    setIsRouteByEvent(true);
   };
-
-  useEffect(() => {
-    const token = localStorage.getItem('accessToken');
-    const isNewUser = !!localStorage.getItem('isNewUser');
-
-    if (token && !!isNewUser) {
-      navigate('/signup');
-    }
-
-    if (token && !isNewUser) {
-      navigate('/team');
-    }
-  }, [isRouteByEvent, window.location.href]);
 
   return (
     <OnBoardingTextDiv>
