@@ -24,6 +24,8 @@ import Alarm from '@components/alarm/alarm';
 import { useGetAlarmList } from '@hooks/alarm/useGetAlarmList';
 import { getMyTeam } from '@apis/management.ts';
 import { TeamProps } from '../../types/management.ts';
+import { useIdStore } from '@store/idStore.ts';
+import { syncTodos } from '@utils/todoUtils.ts';
 
 export const SideBar = () => {
   const [teams, setTeams] = useState<TeamProps[]>([]);
@@ -34,6 +36,27 @@ export const SideBar = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const { data, isLoading, isError } = useGetAlarmList(
+    Number(localStorage.getItem('teamId')) || null
+  );
+
+  const { teamId, setTeamId } = useIdStore((state) => ({
+    teamId: state.teamId,
+    setTeamId: state.setTeamId
+  }));
+
+  const getTeamId = () => {
+    const id = localStorage.getItem('teamId');
+    setTeamId(Number(id));
+  };
+
+  useEffect(() => {
+    getTeamId();
+  }, [teamId]);
+
+  if (isLoading) {
+    return null;
+  }
   const teamId = Number(localStorage.getItem('teamId'));
   const { result } = teamId && useGetAlarmList(teamId);
 
@@ -60,7 +83,9 @@ export const SideBar = () => {
       setTeams(response);
 
       // 현재 속한 팀 아이디에 해당하는 팀을 찾음
-      const foundTeam = response.find((team: TeamProps) => team.teamId === 1);
+      const foundTeam = response.find(
+        (team: TeamProps) => team.teamId === teamId
+      );
       if (foundTeam) {
         setCurrentTeam(foundTeam);
       }
@@ -126,7 +151,7 @@ export const SideBar = () => {
         {isAlarmOpen ? <BellClick /> : <Bell />}
         {hover && <SideBarText selected={isAlarmOpen}>알림</SideBarText>}
         <Alarm
-          data={result?.alarmList}
+          data={data?.result.alarmList}
           isAlarmOpen={isAlarmOpen}
           toggleAlarm={toggleAlarm}
           setHover={setHover}

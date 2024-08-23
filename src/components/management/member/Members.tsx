@@ -10,9 +10,8 @@ export const Members = () => {
 
   const fetchMembers = async () => {
     try {
-      const response = await getMembers(1);
+      const response = await getMembers(teamId);
       setMembers(Array.isArray(response) ? response : []);
-      // console.log(response);
     } catch (error) {
       console.error('Error fetching members:', error);
     }
