@@ -41,6 +41,7 @@ const AlarmLogo: React.FC<AlarmLogoProps> = ({ type }) => {
 const Alarm = ({ isAlarmOpen, toggleAlarm, setHover, data }: AlarmProps) => {
   const [shouldRender, setShouldRender] = useState(isAlarmOpen);
   const alarmMutation = useUpdateAlarmStatus();
+
   const { data: team } = useQuery({
     queryKey: ['team'],
     queryFn: getTeamById
@@ -74,10 +75,6 @@ const Alarm = ({ isAlarmOpen, toggleAlarm, setHover, data }: AlarmProps) => {
     event.stopPropagation(); // 클릭 이벤트가 부모 요소로 전파되는 것을 막음
     alarmMutation.mutate(alarmId);
   };
-
-  useEffect(() => {
-    alarmMutation.mutate(10);
-  }, []);
 
   return (
     <>

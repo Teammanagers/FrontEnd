@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import * as Dialog from '@radix-ui/react-dialog';
@@ -13,8 +13,9 @@ import { useCalendarStore } from '@store/calendarStore';
 import { useIdStore } from '@store/idStore';
 
 const AddEventModal = ({ selectedDate, open, setOpen }: AddEventModalProps) => {
-  const { teamId } = useIdStore((state) => ({
-    teamId: state.teamId
+  const { teamId, setTeamId } = useIdStore((state) => ({
+    teamId: state.teamId,
+    setTeamId: state.setTeamId
   }));
   const location = useLocation();
   const { searchMonth, setEventList, setUpcomingEventList } = useCalendarStore(
@@ -97,6 +98,11 @@ const AddEventModal = ({ selectedDate, open, setOpen }: AddEventModalProps) => {
       content: ''
     });
   };
+
+  useEffect(() => {
+    const id = localStorage.getItem('teamId');
+    setTeamId(Number(id));
+  }, [teamId]);
 
   return (
     <>
