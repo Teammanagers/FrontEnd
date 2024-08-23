@@ -7,11 +7,12 @@ import { MemoProps } from '../../types/memo.ts';
 
 export const MemoList = () => {
   const [memos, setMemos] = useState<MemoProps[]>([]);
+  const teamId = Number(localStorage.getItem('teamId'));
 
   useEffect(() => {
     const fetchMemos = async () => {
       try {
-        const response = await getMemos(1);
+        const response = await getMemos(teamId);
         setMemos(response.result.memoList);
       } catch (error) {
         console.log(error);
