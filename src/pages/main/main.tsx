@@ -41,8 +41,10 @@ const MainPage = () => {
   const getTeamId = () => {
     const id = localStorage.getItem('teamId');
     setTeamId(Number(id));
-    syncTodos({ teamId, setTeamTodos });
-    fetchTeamCode(teamId);
+    if (teamId) {
+      syncTodos({ teamId, setTeamTodos });
+      fetchTeamCode(teamId);
+    }
   };
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import { Axios } from './axios';
+import { Axios } from './Axios';
 import { ProfileResponse } from 'src/types/profile';
 
 // 내 프로필 조회

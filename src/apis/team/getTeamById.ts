@@ -1,4 +1,4 @@
-import { Axios } from '@apis/axios';
+import { Axios } from '@apis/Axios';
 
 export const getTeamById = async () => {
   try {

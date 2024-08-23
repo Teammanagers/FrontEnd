@@ -1,4 +1,4 @@
-import { Axios } from '@apis/axios.ts';
+import { Axios } from '@apis/Axios.ts';
 import { MemoResponse } from '../types/memo.ts';
 
 // 메모 조회

@@ -1,4 +1,4 @@
-import { Axios } from '@apis/axios';
+import { Axios } from '@apis/Axios';
 import { ValidatePasswordResponse } from 'src/types/team';
 
 export const postValidatePassword = async ({

@@ -1,4 +1,4 @@
-import { Axios } from './axios';
+import { Axios } from './Axios';
 
 export const getMyTodos = async () => {
   const response = await Axios.get(`/api/member/todo`);

@@ -1,4 +1,4 @@
-import { Axios } from './axios';
+import { Axios } from './Axios';
 
 export const getTeamInfo = async (teamId: number) => {
   const response = await Axios.get(`/api/team/${teamId}`);

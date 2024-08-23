@@ -1,4 +1,4 @@
-import { Axios } from '@apis/axios';
+import { Axios } from '@apis/Axios';
 import { CreateTeamInput } from 'src/types/team';
 
 export const createTeam = async ({

@@ -1,4 +1,4 @@
-import { Axios } from './axios';
+import { Axios } from './Axios';
 import {
   StorageResponse,
   FeedbackResponse,
