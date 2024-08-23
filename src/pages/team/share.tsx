@@ -46,32 +46,41 @@ export const ShareTeamPage: React.FC = () => {
 
   return (
     <TeamContainer>
-      <CodeContainer>
-        <Label>Team code</Label>
-        <div style={{ display: 'flex' }}>
-          <Code>{teamCode}</Code>
-          <CopyToClipboard text={teamCode} onCopy={handleCopy}>
-            <CopyButton>팀 코드 복사</CopyButton>
-          </CopyToClipboard>
-        </div>
-        {isCopied && <CopiedMessage>코드가 복사되었습니다!</CopiedMessage>}
-      </CodeContainer>
-      <PasswordContainer>
-        <Label>비밀번호</Label>
-        <PasswordInput
-          type="text"
-          placeholder="참가를 위한 비밀번호를 설정해 주세요"
-          value={password}
-          onChange={handlePasswordChange}
-        />
-        {isPasswordError && <ErrorText>{isPasswordError}</ErrorText>}
-      </PasswordContainer>
-      <NextButton
-        disabled={!password || !!isPasswordError}
-        onClick={handleSubmit}
-      >
-        워크 스페이스로 이동
-      </NextButton>
+      <div style={{ display: 'grid', placeItems: 'center', margin: 'auto' }}>
+        <CodeContainer>
+          <Label>Team code</Label>
+
+          <Code
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center'
+            }}
+          >
+            {teamCode}
+            <CopyToClipboard text={teamCode} onCopy={handleCopy}>
+              <CopyButton style={{ margin: '0 0' }}>팀 코드 복사</CopyButton>
+            </CopyToClipboard>
+          </Code>
+          {isCopied && <CopiedMessage>코드가 복사되었습니다!</CopiedMessage>}
+        </CodeContainer>
+        <PasswordContainer>
+          <Label>비밀번호</Label>
+          <PasswordInput
+            type="text"
+            placeholder="참가를 위한 비밀번호를 설정해 주세요"
+            value={password}
+            onChange={handlePasswordChange}
+          />
+          {isPasswordError && <ErrorText>{isPasswordError}</ErrorText>}
+        </PasswordContainer>
+        <NextButton
+          disabled={!password || !!isPasswordError}
+          onClick={handleSubmit}
+        >
+          워크 스페이스로 이동
+        </NextButton>
+      </div>
     </TeamContainer>
   );
 };
@@ -87,12 +96,12 @@ const CodeContainer = styled.div`
   width: 647px;
   height: 76px;
   margin-top: 95px;
-  margin-left: 372px;
   margin-bottom: 20px;
 `;
 
-const Code = styled.span`
-  width: 536px;
+const Code = styled.div`
+  height: 22.5px;
+  width: 605px;
   flex: 1;
   padding: 13px 18px;
   border: 1px solid #ccc;
@@ -125,15 +134,15 @@ const CopiedMessage = styled.span`
 `;
 
 const PasswordContainer = styled.div`
-  width: 498px;
+  display: grid;
+  width: 647px;
   height: 76px;
   margin-top: 24px;
-  margin-left: 372px;
   margin-bottom: 20px;
 `;
 
 const PasswordInput = styled.input`
-  width: 498px;
+  width: 605px;
   padding: 13px 18px;
   height: 22.5px;
   border: 1px solid #ccc;
@@ -146,7 +155,6 @@ const PasswordInput = styled.input`
 `;
 
 const NextButton = styled.button`
-  margin-left: 372px;
   margin-top: 48px;
   width: 536px;
   height: 48px;
