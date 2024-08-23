@@ -33,13 +33,13 @@ export const LoginPage = () => {
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
-    const isNewUser = !!localStorage.getItem('isNewUser');
+    const isNewUser = localStorage.getItem('isNewUser');
 
-    if (token && !!isNewUser) {
+    if (token && isNewUser === 'true') {
       navigate('/signup');
     }
 
-    if (token && !isNewUser) {
+    if (token && isNewUser === 'false') {
       navigate('/team');
     }
   }, [location]);
