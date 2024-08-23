@@ -25,11 +25,12 @@ export const TeamPage = () => {
     <TeamContainer>
       <TeamIndexContainer>
         {!isLoading &&
-          team?.result.teamList.map((item) => {
+          team &&
+          team.result.teamList.map((item) => {
             return <SearchTeamSection data={item} />;
           })}
         <SelectTeamComponent>
-          {!isLoading && team?.result.teamList.length < 5 && (
+          {!isLoading && (!team || team?.result.teamList.length) < 5 && (
             <>
               <TeamLogoComponent onClick={handleClickCreateButton}>
                 <CreateTeam />
