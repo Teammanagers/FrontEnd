@@ -3,7 +3,7 @@ import LogoFadeIn from '@components/login/LogoFadeIn';
 import { useLogoFadeIn } from '@hooks/useLogoFadeIn';
 import styled from 'styled-components';
 import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const Wrapper = styled.div`
   height: 100vh;
@@ -13,6 +13,7 @@ const Wrapper = styled.div`
 
 export const LoginPage = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const isLogoFadeInActivate = useLogoFadeIn(3000);
 
   useEffect(() => {
@@ -28,6 +29,19 @@ export const LoginPage = () => {
 
     localStorage.setItem('accessToken', accessToken);
     localStorage.setItem('isNewUser', isNewUser);
+  }, [location]);
+
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    const isNewUser = !!localStorage.getItem('isNewUser');
+
+    if (token && !!isNewUser) {
+      navigate('/signup');
+    }
+
+    if (token && !isNewUser) {
+      navigate('/team');
+    }
   }, [location]);
 
   return (
