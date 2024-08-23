@@ -129,25 +129,13 @@ const OnBoardingWrapper = ({ children }: OnBoardingProps) => {
             onSwiper={(swiper) => (swiperRef.current = swiper)}
           >
             <SwiperSlide>
-              <SwiperImage
-                src={firstSwiperImage}
-                alt="first-swiper-image"
-                effect="blur"
-              />
+              <SwiperImage src={firstSwiperImage} alt="first-swiper-image" />
             </SwiperSlide>
             <SwiperSlide>
-              <SwiperImage
-                src={secondSwiperImage}
-                alt="second-swiper-image"
-                effect="blur"
-              />
+              <SwiperImage src={secondSwiperImage} alt="second-swiper-image" />
             </SwiperSlide>
             <SwiperSlide>
-              <SwiperImage
-                src={thirdSwiperImage}
-                alt="third-swiper-image"
-                effect="blur"
-              />
+              <SwiperImage src={thirdSwiperImage} alt="third-swiper-image" />
             </SwiperSlide>
           </Swiper>
           <NavigationDots>

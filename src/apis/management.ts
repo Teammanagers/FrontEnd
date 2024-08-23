@@ -1,5 +1,5 @@
-import { Axios } from '@apis/axios.ts';
-import { TeamData } from '../types/management.ts';
+import { Axios } from '@apis/Axios.ts';
+import { ScheduleRequestBody, TeamData } from '../types/management.ts';
 
 // 내 팀 조회
 export const getMyTeam = async () => {
@@ -129,5 +129,71 @@ export const deleteRoleTag = async (teamManageId: number, tagId: number) => {
   } catch (error) {
     console.error(error);
     throw error;
+  }
+};
+
+// 스케줄 조회
+export const getSchedules = async (teamId: number) => {
+  try {
+    const response = await Axios.get(`/api/team/${teamId}/schedule`);
+    return response.data.result;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+// 내 스케줄 조회
+export const getMySchedules = async (teamId: number) => {
+  try {
+    const response = await Axios.get(`/api/schedule/${teamId}`);
+    return response.data.result.scheduleDto;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+// 스케줄 추가
+export const createSchedule = async (
+  teamId: number,
+  scheduleData: ScheduleRequestBody
+) => {
+  try {
+    const response = await Axios.post(
+      `/api/team/${teamId}/schedule`,
+      scheduleData
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+// 내 스케줄 수정
+export const updateSchedule = async (
+  teamId: number,
+  scheduleData: ScheduleRequestBody
+) => {
+  try {
+    const response = await Axios.patch(
+      `/api/team/${teamId}/schedule`,
+      scheduleData
+    );
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+// 내 스케줄 삭제
+export const deleteSchedule = async (teamManageId: number) => {
+  try {
+    await Axios.delete(`/api/team/${teamManageId}/schedule`);
+  } catch (error) {
+    console.log('스케줄 삭제 실패!');
   }
 };

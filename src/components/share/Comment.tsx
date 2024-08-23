@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { CommentData } from './CommentData';
+import { CommentData } from 'src/types/storage';
 import { TextInput } from './TextInput';
 import UserImage from '@assets/share/user-image.svg';
 import Dot from '@assets/mypage/dot.svg';
@@ -35,10 +35,9 @@ export const Comment: React.FC<CommentProps> = ({
     <CommentContainer isReply={isReply}>
       <CommentHeader>
         <UserImage />
-        <Author>{comment.author}</Author> <Dot />
-        <Role>{comment.role}</Role>
+        <Author>{comment.writer}</Author>
         <Dot />
-        <Date>{comment.date}</Date>
+        <Date>{comment.createdAt}</Date>
       </CommentHeader>
       <CommentContent>{comment.content}</CommentContent>
       {!isReply && (
@@ -88,12 +87,6 @@ const Author = styled.span`
   font-weight: 400;
   color: ${({ theme }) => theme.colors.black};
   margin-left: 3.04px;
-`;
-
-const Role = styled.span`
-  font-size: 10px;
-  font-weight: 400;
-  color: ${({ theme }) => theme.colors.darkGray};
 `;
 
 const Date = styled.span`

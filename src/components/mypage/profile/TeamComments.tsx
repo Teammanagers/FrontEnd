@@ -1,18 +1,21 @@
 import styled from 'styled-components';
 import FirstPage from '@assets/mypage/first-page.svg';
 import Move from '@assets/mypage/move.svg';
+import { CommentDTO } from 'src/types/profile';
 
 interface TeamCommentsProps {
   isHiddenArray: boolean[];
   toggleHidden: (index: number) => void;
+  commentList: CommentDTO[];
 }
 
 const TeamComments: React.FC<TeamCommentsProps> = ({
   isHiddenArray,
-  toggleHidden
+  toggleHidden,
+  commentList
 }) => {
   console.log(isHiddenArray);
-  const shouldShowSeeMore = isHiddenArray.length > 5; // 5개 이상일 때만 SeeMore를 보여줌
+  const shouldShowSeeMore = commentList.length > 5; // 5개 이상일 때만 SeeMore를 보여줌
 
   return (
     <CommentBox>
@@ -26,10 +29,10 @@ const TeamComments: React.FC<TeamCommentsProps> = ({
         )}
       </CommentHeader>
       <CommentContainer>
-        {isHiddenArray.slice(0, 5).map((_, index) => (
+        {commentList.slice(0, 5).map((comment, index) => (
           <Comment key={index}>
             <ToggleText isHidden={isHiddenArray[index]}>
-              {isHiddenArray[index] ? '가려졌어요' : 'PPT를 잘 만들어요!'}
+              {isHiddenArray[index] ? '가려졌어요' : comment.content}
             </ToggleText>
             <ToggleButton
               isHidden={isHiddenArray[index]}

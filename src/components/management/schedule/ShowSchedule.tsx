@@ -1,83 +1,63 @@
 import styled from 'styled-components';
 import { SwungDash } from '@components/management/schedule/TimeSelector.tsx';
+import { ScheduleDto } from '../../../types/management.ts';
 
-export const ShowSchedule = () => {
+interface ShowScheduleProps {
+  schedule: ScheduleDto;
+}
+
+interface TimeSlot {
+  start: string;
+  end: string;
+}
+
+// TimeTable을 TimeSlot으로 변환
+export const convertTimeTableToTimeSlots = (
+  timeTable: string[]
+): TimeSlot[] => {
+  const timeSlots: TimeSlot[] = [];
+  let startTime: string | null = null;
+
+  timeTable.forEach((value, index) => {
+    const time = `${String(Math.floor(index / 2)).padStart(2, '0')}:${
+      index % 2 === 0 ? '00' : '30'
+    }`;
+
+    if (value === '1' && startTime === null) {
+      startTime = time;
+    } else if (value === '0' && startTime !== null) {
+      timeSlots.push({ start: startTime, end: time });
+      startTime = null;
+    }
+  });
+
+  if (startTime !== null) {
+    timeSlots.push({ start: startTime, end: '24:00' });
+  }
+
+  return timeSlots;
+};
+
+export const ShowSchedule = ({ schedule }: ShowScheduleProps) => {
   return (
-    <>
-      <ScheduleContainer>
-        <DayContainer>
-          <DayText>Monday</DayText>
-          {/* map 함수로 불러와서 정렬.. */}
-          <TimeContainer>
-            <TimeBox>09:00</TimeBox>
-            <SwungDash>~</SwungDash>
-            <TimeBox>17:00</TimeBox>
-          </TimeContainer>
-          <TimeContainer>
-            <TimeBox>09:00</TimeBox>
-            <SwungDash>~</SwungDash>
-            <TimeBox>17:00</TimeBox>
-          </TimeContainer>
+    <ScheduleContainer>
+      {Object.entries(schedule).map(([day, timeTable]) => (
+        <DayContainer key={day}>
+          <DayText>{day.charAt(0).toUpperCase() + day.slice(1)}</DayText>
+          {convertTimeTableToTimeSlots(timeTable.value).length > 0 ? (
+            convertTimeTableToTimeSlots(timeTable.value).map((slot, index) => (
+              <TimeContainer key={index}>
+                <TimeBox>{slot.start}</TimeBox>
+                <SwungDash>~</SwungDash>
+                <TimeBox>{slot.end}</TimeBox>
+              </TimeContainer>
+            ))
+          ) : (
+            <TimeContainer>가능한 시간대가 없어요 😥</TimeContainer>
+          )}
         </DayContainer>
-        <DayContainer>
-          <DayText>Tuesday</DayText>
-          {/* 겹치는 시간이 없으면 없다고 띄움 따로 상태관리 하기 */}
-          <TimeContainer>가능한 시간대가 없어요 😥</TimeContainer>
-        </DayContainer>
-        <DayContainer>
-          <DayText>Wednesday</DayText>
-          {/* 겹치는 시간이 없으면 없다고 띄움 따로 상태관리 하기 */}
-          <TimeContainer>가능한 시간대가 없어요 😥</TimeContainer>
-        </DayContainer>
-        <DayContainer>
-          <DayText>Thursday</DayText>
-          {/* 겹치는 시간이 없으면 없다고 띄움 따로 상태관리 하기 */}
-          <TimeContainer>가능한 시간대가 없어요 😥</TimeContainer>
-        </DayContainer>
-        <DayContainer>
-          <DayText>Friday</DayText>
-          {/* map 함수로 불러와서 정렬.. */}
-          <TimeContainer>
-            <TimeBox>09:00</TimeBox>
-            <SwungDash>~</SwungDash>
-            <TimeBox>17:00</TimeBox>
-          </TimeContainer>
-          <TimeContainer>
-            <TimeBox>09:00</TimeBox>
-            <SwungDash>~</SwungDash>
-            <TimeBox>17:00</TimeBox>
-          </TimeContainer>
-        </DayContainer>
-        <DayContainer>
-          <DayText>Saturday</DayText>
-          {/* map 함수로 불러와서 정렬.. */}
-          <TimeContainer>
-            <TimeBox>09:00</TimeBox>
-            <SwungDash>~</SwungDash>
-            <TimeBox>17:00</TimeBox>
-          </TimeContainer>
-          <TimeContainer>
-            <TimeBox>09:00</TimeBox>
-            <SwungDash>~</SwungDash>
-            <TimeBox>17:00</TimeBox>
-          </TimeContainer>
-        </DayContainer>
-        <DayContainer>
-          <DayText>Sunday</DayText>
-          {/* map 함수로 불러와서 정렬.. */}
-          <TimeContainer>
-            <TimeBox>09:00</TimeBox>
-            <SwungDash>~</SwungDash>
-            <TimeBox>17:00</TimeBox>
-          </TimeContainer>
-          <TimeContainer>
-            <TimeBox>09:00</TimeBox>
-            <SwungDash>~</SwungDash>
-            <TimeBox>17:00</TimeBox>
-          </TimeContainer>
-        </DayContainer>
-      </ScheduleContainer>
-    </>
+      ))}
+    </ScheduleContainer>
   );
 };
 
@@ -95,7 +75,6 @@ const DayContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 16px;
-  //background: forestgreen;
 `;
 
 const DayText = styled.p`
@@ -113,7 +92,6 @@ const TimeContainer = styled.div`
   gap: 9px;
   font-size: 12px;
   color: ${({ theme }) => theme.colors.black};
-  //background: burlywood;
 `;
 
 const TimeBox = styled.div`
