@@ -1,6 +1,6 @@
-import OnBoardingWrapper from '@components/login/OnBoardingWrapper';
-import Signup from '@components/signup/Signup';
-import Login from '@components/login/Login';
+import OnBoardingWrapper from '@components/Login/OnBoardingWrapper';
+import Signup from '@components/SignUp/Signup';
+import Login from '@components/Login/Login';
 
 interface OnBoardingProps {
   type: 'signin' | 'signup';

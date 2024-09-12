@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import EventCalendar from '@components/calendar/EventCalendar';
-import UpcomingEventList from '@components/calendar/UpcomingEventList';
+import EventCalendar from '@components/Calendar/EventCalendar';
+import UpcomingEventList from '@components/Calendar/UpcomingEventList';
 
 export const CalendarPage = () => {
   return (

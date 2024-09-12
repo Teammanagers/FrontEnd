@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { CommentInputBox } from '@components/management/end-project/CommentInput.tsx';
+import { CommentInputBox } from '@components/Management/end-project/CommentInput.tsx';
 
 export const Comments = () => {
   return (

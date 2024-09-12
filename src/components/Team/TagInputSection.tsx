@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import PlusButton from '@assets/team/plus-button.svg';
-import TagItem from '@components/team/TagItem';
+import TagItem from '@components/Team/TagItem';
 import { useState } from 'react';
 
 interface TagInputSectionProps {

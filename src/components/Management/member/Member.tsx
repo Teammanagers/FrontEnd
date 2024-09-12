@@ -5,7 +5,7 @@ import { useTags } from '@hooks/useTags.ts';
 import {
   TagInputContainer,
   DeleteBtn
-} from '@components/management/team-code/TeamCode.tsx';
+} from '@components/Management/team-code/TeamCode.tsx';
 import { Role } from '../../../types/member.ts';
 import {
   createRoleTag,

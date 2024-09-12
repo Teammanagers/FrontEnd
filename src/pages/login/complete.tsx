@@ -1,4 +1,4 @@
-import Complete from '@components/login/Complete';
+import Complete from '@components/Login/Complete';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`

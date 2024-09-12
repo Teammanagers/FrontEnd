@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import TeamContainer from '@components/team/TeamContainer';
+import TeamContainer from '@components/Team/TeamContainer';
 import RegisterProfile from '@assets/team/register-profile.svg';
-import { TagInputSection } from '@components/team/TagInputSection';
+import { TagInputSection } from '@components/Team/TagInputSection';
 import { useTagInput } from '@hooks/useTagInput';
 import { useState } from 'react';
 import { useCreateTeam } from '@hooks/team/useCreateTeam';

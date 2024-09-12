@@ -1,4 +1,4 @@
-import OnBoarding from '@components/login/OnBoarding';
+import OnBoarding from '@components/Login/OnBoarding';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`

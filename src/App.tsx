@@ -28,31 +28,31 @@ const App = () => {
           <Routes>
             <Route path="/login" element={<LoginPage />} />
 
-            {/* main page */}
+            {/* Main page */}
             <Route path="/" element={<MainPage />} />
-            {/* login page */}
+            {/* Login page */}
             <Route path="/login-complete" element={<LoginCompletePage />} />
             <Route path="/signup" element={<SignupPage />} />
-            {/* team page */}
+            {/* Team page */}
             <Route path="/team" element={<TeamPage />} />
             <Route path="/team/create" element={<CreateTeamPage />} />
             <Route path="/team/join" element={<JoinTeamPage />} />
             <Route path="/team/share" element={<ShareTeamPage />} />
-            {/* calendar page */}
+            {/* Calendar page */}
             <Route path="/calendar" element={<CalendarPage />} />
             <Route path="/calendar/:id" element={<ExtraCalendarPage />} />
-            {/* management page */}
+            {/* Management page */}
             <Route path="/management" element={<ManagementPage />} />
             <Route path="/management/*" element={<ExtraManagementPage />} />
-            {/* memo page */}
+            {/* Memo page */}
             <Route path="/memo" element={<MemoPage />} />
             <Route path="/memo/*" element={<ExtraMemoPage />} />
-            {/* mypage */}
+            {/* MyPage */}
             <Route path="/mypage" element={<MyPage />} />
             <Route path="/mypage/:id" element={<ExtraMyPage />} />
             <Route path="/mypage/profile" element={<ProfilePage />} />
             <Route path="/mypage/portfolio" element={<PortfolioPage />} />
-            {/* share page */}
+            {/* Share page */}
             <Route path="/share" element={<SharePage />} />
             <Route path="/share/:id" element={<ExtraSharePage />} />
             {/* todolist page */}

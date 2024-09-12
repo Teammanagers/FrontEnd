@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { SwungDash } from '@components/management/schedule/TimeSelector.tsx';
+import { SwungDash } from '@components/Management/schedule/TimeSelector.tsx';
 import { ScheduleDto } from '../../../types/management.ts';
 
 interface ShowScheduleProps {

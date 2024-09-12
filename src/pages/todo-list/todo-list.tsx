@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Layout } from '@components/todo-list/layout/Layout';
-import TeamProgress from '@components/todo-list/TeamProgress';
-import TodoList from '@components/todo-list/TodoList';
+import { Layout } from '@components/TodoList/layout/Layout';
+import TeamProgress from '@components/TodoList/TeamProgress';
+import TodoList from '@components/TodoList/TodoList';
 import { getTeamTodos } from '@apis/todo-list';
 import { useTodoStore } from '../../store/todoStore';
 import { useIdStore } from '@store/idStore';

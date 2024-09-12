@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useState } from 'react';
-import { DeleteMemoModal } from '@components/memo/DeleteMemoModal.tsx';
+import { DeleteMemoModal } from '@components/Memo/DeleteMemoModal.tsx';
 import { useNavigate } from 'react-router-dom';
 import { deleteMemo } from '@apis/memo.ts';
 
