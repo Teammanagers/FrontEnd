@@ -7,7 +7,7 @@ import TodoMenuIcon from '@assets/todo-list/todo-menu.svg';
 import {
   deleteTodo,
   sendAwakeAlarm,
-  setTodoCheck,
+  updateTodoCheck,
   updateTodo
 } from '@apis/todo-list';
 import { useTodoStore } from '@store/todoStore';
@@ -42,12 +42,12 @@ const Todo = ({ todo, teamManageId }: TodoProps) => {
     ) {
       // 체크 UI 및 api 요청
       setChecked(!checked);
-      setTodoCheck(todo.todoId);
+      updateTodoCheck(todo.todoId);
     } else {
       // 내가 팀장이 아닐 때는 내 투두만 체크 가능
       if (ownerTeamManageId === teamManageId) {
         setChecked(!checked);
-        setTodoCheck(todo.todoId);
+        updateTodoCheck(todo.todoId);
       }
     }
   };

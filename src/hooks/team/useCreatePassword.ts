@@ -1,6 +1,6 @@
 import { useMutation, UseMutationResult } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { updateTeamPassword } from '@apis/team/patchUpdatePassword';
+import { updateTeamPassword } from '@apis/team/updatePassword.ts';
 import { UpdateTeamPasswordInput } from 'src/types/team';
 
 export const useCreatePassword = (

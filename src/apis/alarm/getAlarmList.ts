@@ -1,4 +1,4 @@
-import { Axios } from '@apis/Axios';
+import { Axios } from '@apis/axios';
 
 export const getAlarm = async (teamId: number | null) => {
   const token = localStorage.getItem('accessToken');

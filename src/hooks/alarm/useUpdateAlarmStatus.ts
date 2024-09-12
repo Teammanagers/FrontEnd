@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { updateAlarmStatus } from '@apis/alarm/patchUpdatePassword';
+import { updateAlarmStatus } from '@apis/alarm/updatePassword.ts';
 
 export const useUpdateAlarmStatus = () => {
   const mutation = useMutation({
