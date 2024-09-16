@@ -49,9 +49,7 @@ export const createStorageItem = async (
 };
 
 //팀 자료 다운로드
-export const getDownloadStorageItem = async (
-  storageId: number
-): Promise<Blob> => {
+export const getTeamDocuments = async (storageId: number): Promise<Blob> => {
   try {
     const response = await Axios.get(
       `/api/team/${teamId}/storage/${storageId}`,
