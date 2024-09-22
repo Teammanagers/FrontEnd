@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import People from '@assets/management/people.svg';
 import End from '@assets/management/end-icon.svg';
 import { useState } from 'react';
-import { EndProjectModal } from '@components/management/end-project/EndProjectModal.tsx';
+import { EndProjectModal } from '@components/Management/end-project/EndProjectModal.tsx';
 
 export const EndProject = () => {
   const [showModal, setShowModal] = useState<boolean>(false);

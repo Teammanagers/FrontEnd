@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import MenuIcon from '@assets/memo/menu-icon.svg';
 import { ButtonHTMLAttributes, useEffect, useRef, useState } from 'react';
-import { MenuBar } from '@components/memo/MenuBar.tsx';
+import { MenuBar } from '@components/Memo/MenuBar.tsx';
 import { MemoProps, TagProps } from '../../types/memo.ts';
 
 interface Memo extends MemoProps {

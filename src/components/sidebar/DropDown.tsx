@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import Plus from '@assets/sidebar/plus.svg';
 import { useState } from 'react';
-import { AddTeamModal } from '@components/sidebar/AddTeamModal.tsx';
+import { AddTeamModal } from '@components/SideBar/AddTeamModal.tsx';
 import { TeamProps } from '../../types/management.ts';
 
 interface DropDownProps {

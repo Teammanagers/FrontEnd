@@ -24,7 +24,7 @@ export const updateTodo = async (todoId: number, todo: string) => {
   return response;
 };
 
-export const setTodoCheck = async (todoId: number) => {
+export const updateTodoCheck = async (todoId: number) => {
   const response = await Axios.patch(`/api/todo/${todoId}/state`);
   return response;
 };

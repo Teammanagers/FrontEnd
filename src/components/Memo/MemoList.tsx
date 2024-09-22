@@ -1,5 +1,5 @@
-import { AddMemoSmall } from '@components/memo/AddMemoSmall.tsx';
-import { Memo } from '@components/memo/Memo.tsx';
+import { AddMemoSmall } from '@components/Memo/AddMemoSmall.tsx';
+import { Memo } from '@components/Memo/Memo.tsx';
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import { getMemos } from '@apis/memo.ts';

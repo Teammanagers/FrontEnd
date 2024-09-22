@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Back from '@assets/mypage/back.svg';
 import Move from '@assets/mypage/move.svg';
 import { getSimplePortfolio, getDetailedPortfolio } from '@apis/portfolio';
-import { SharedFile } from '@components/mypage/portfolio/SharedFile';
+import { SharedFile } from '@components/MyPage/portfolio/SharedFile';
 
 interface Portfolio {
   teamId: number;

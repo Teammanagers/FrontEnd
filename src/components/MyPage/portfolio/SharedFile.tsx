@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Dot from '@assets/mypage/dot.svg';
-import { FileProps } from '@components/share/FileProps';
+import { FileProps } from '@components/Share/FileProps';
 import Word from '@assets/share/word.svg';
 import Image from '@assets/share/image.svg';
 

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { TitleText } from '@components/management/team-code/TeamCode.tsx';
-import { Member } from '@components/management/member/Member.tsx';
+import { TitleText } from '@components/Management/team-code/TeamCode.tsx';
+import { Member } from '@components/Management/member/Member.tsx';
 import { useEffect, useState } from 'react';
 import { getMembers } from '@apis/management.ts';
 import { MemberTypes } from '../../../types/member.ts';

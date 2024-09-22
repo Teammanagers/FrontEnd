@@ -9,7 +9,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getMyTodos } from '@apis/todo-list';
 import { MyTodoList } from 'src/types/todo-list';
-import MyTodos from '@components/todo-list/MyTodos';
+import MyTodos from '@components/TodoList/MyTodos';
 
 export const MyPage = () => {
   const navigate = useNavigate();

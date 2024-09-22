@@ -1,5 +1,5 @@
-import OnBoarding from '@components/login/OnBoarding';
-import LogoFadeIn from '@components/login/LogoFadeIn';
+import OnBoarding from '@components/Login/OnBoarding';
+import LogoFadeIn from '@components/Login/LogoFadeIn';
 import { useLogoFadeIn } from '@hooks/useLogoFadeIn';
 import styled from 'styled-components';
 import { useEffect } from 'react';

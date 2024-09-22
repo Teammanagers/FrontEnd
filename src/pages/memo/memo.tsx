@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { AddMemoLarge } from '@components/memo/AddMemoLarge.tsx';
-import { MemoList } from '@components/memo/MemoList.tsx';
+import { AddMemoLarge } from '@components/Memo/AddMemoLarge.tsx';
+import { MemoList } from '@components/Memo/MemoList.tsx';
 import { useEffect, useState } from 'react';
 import { getMemos } from '@apis/memo.ts';
 import { useIdStore } from '@store/idStore.ts';

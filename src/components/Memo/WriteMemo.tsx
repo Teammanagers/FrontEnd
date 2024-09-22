@@ -4,18 +4,15 @@ import AddTag from '@assets/memo/add-tag-icon.svg';
 import {
   DeleteBtn,
   TagInputContainer
-} from '@components/management/team-code/TeamCode.tsx';
-import { useNavigate, useParams } from 'react-router-dom';
-import { ButtonHTMLAttributes, useEffect, useState } from 'react';
+} from '@components/Management/team-code/TeamCode.tsx';
+import { useNavigate } from 'react-router-dom';
+import { ButtonHTMLAttributes, useState } from 'react';
 import { useTags } from '@hooks/useTags.ts';
-import { deleteMemo, getMemoById, updateMemo } from '@apis/memo.ts';
-import { DeleteMemoModal } from '@components/memo/DeleteMemoModal.tsx';
+import { createMemo } from '@apis/memo.ts';
 
-export const EditMemo = () => {
-  const { memoId } = useParams<{ memoId: string }>(); // useParams는 string 형태만 받아올 수 있음..
+export const WriteMemo = () => {
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
-  const [isOpenedModal, setIsOpenedModal] = useState<boolean>(false);
 
   const {
     tags,
@@ -26,63 +23,28 @@ export const EditMemo = () => {
     handleEditTag,
     startEditingTag,
     handleDeleteTag,
-    setTags,
     setShowTagInput,
     setEditTagIndex,
     setNewTag
   } = useTags({});
 
   const navigate = useNavigate();
+  const teamId = Number(localStorage.getItem('teamId'));
 
-  useEffect(() => {
-    const fetchMemo = async () => {
-      if (memoId) {
-        try {
-          const response = await getMemoById(Number(memoId));
-          const memo = response.result.memo;
-
-          setTitle(memo.title);
-          setContent(memo.content);
-          setTags([
-            ...tags,
-            memo.tagList.map((tag: { name: string }) => tag.name)
-          ]);
-        } catch (error) {
-          console.error(error);
-        }
-      }
-    };
-    fetchMemo();
-  }, []);
-
-  const handleDelete = async () => {
-    try {
-      await deleteMemo(Number(memoId));
-      setIsOpenedModal(false);
-      navigate(`/memo`);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleModal = () => {
-    setIsOpenedModal(true);
-  };
-
-  const closeModal = () => {
-    setIsOpenedModal(false);
-  };
-
-  // 수정한 메모 등록
   const handleSubmit = async () => {
     try {
-      if (memoId) {
-        const tagNames = tags.map((tag) => tag.name);
-        await updateMemo(Number(memoId), title, tagNames, content);
-      }
+      const tagNames = tags.map((tag) => tag.name);
+      const createMemoResult = await createMemo(
+        teamId,
+        title,
+        tagNames,
+        content
+      );
+      console.log('메모: ', createMemoResult);
       navigate(`/memo`);
+      console.log(title, tags, content);
     } catch (error) {
-      console.error(error);
+      console.error('메모 생성 오류: ', error);
     }
   };
 
@@ -102,7 +64,6 @@ export const EditMemo = () => {
               autoFocus
             />
           </TitleContainer>
-
           {/* 태그 */}
           <TagContainer>
             {tags.map((tag, index) => (
@@ -121,7 +82,7 @@ export const EditMemo = () => {
                   </TagInputContainer>
                 ) : (
                   <>
-                    <span>{tag}</span>
+                    <span>{tag.name}</span>
                   </>
                 )}
               </Tag>
@@ -164,17 +125,9 @@ export const EditMemo = () => {
             maxLength={10000}
             placeholder="내용을 입력해주세요"
           />
-          <ButtonContainer>
-            <DeleteButton type="submit" onClick={handleModal}>
-              메모 삭제
-            </DeleteButton>
-            {isOpenedModal && (
-              <DeleteMemoModal onClose={closeModal} onDelete={handleDelete} />
-            )}
-            <EditButton type="submit" onClick={handleSubmit}>
-              메모 수정
-            </EditButton>
-          </ButtonContainer>
+          <SubmitBtn type="submit" onClick={handleSubmit}>
+            메모 등록
+          </SubmitBtn>
         </BottomContainer>
       </MemoContainer>
     </Container>
@@ -291,31 +244,16 @@ const ContentText = styled.textarea`
   background: white;
 `;
 
-const ButtonContainer = styled.div`
-  display: flex;
-  gap: 19px;
-  margin-top: 19px;
-  justify-content: flex-end;
-`;
-
-const Btn = styled.button`
+const SubmitBtn = styled.button`
   width: 157px;
   height: 36px;
+  margin: 19px 0 0 auto;
+  background: ${(props) => props.theme.colors.mainBlue};
   border-radius: 3px;
   border: none;
+  color: white;
   font-weight: 700;
   font-size: 12px;
   line-height: 18px;
   cursor: pointer;
-`;
-
-const DeleteButton = styled(Btn)`
-  border: 1px solid ${({ theme }) => theme.colors.red};
-  color: ${({ theme }) => theme.colors.red};
-  background: white;
-`;
-
-const EditButton = styled(Btn)`
-  background: ${({ theme }) => theme.colors.mainBlue};
-  color: white;
 `;
