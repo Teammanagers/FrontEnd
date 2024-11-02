@@ -1,4 +1,4 @@
-import { Axios } from '@apis/Axios';
+import { AxiosInstance } from '@/apis/new/axios-instance';
 import { TermProps } from 'src/types/term';
 
 export const postTerms = async ({ termsOfUse, privacyPolicy }: TermProps) => {
@@ -9,7 +9,7 @@ export const postTerms = async ({ termsOfUse, privacyPolicy }: TermProps) => {
   }
 
   try {
-    const response = await Axios.post(
+    const response = await AxiosInstance.post(
       `/api/terms`,
       { termsOfUse, privacyPolicy },
       {
