@@ -1,9 +1,9 @@
-import { Axios } from '@apis/axios.ts';
+import { AxiosInstance } from '@/apis/new/axios-instance.ts';
 import { MemoResponse } from '../types/memo.ts';
 
 // 메모 조회
 export const getMemos = async (teamId: number): Promise<MemoResponse> => {
-  const response = await Axios.get<MemoResponse>(`/api/team/${teamId}/memo`);
+  const response = await AxiosInstance.get<MemoResponse>(`/api/team/${teamId}/memo`);
   return response.data;
 };
 
@@ -15,7 +15,7 @@ export const createMemo = async (
   content: string
 ) => {
   try {
-    const response = await Axios.post(`/api/team/${teamId}/memo`, {
+    const response = await AxiosInstance.post(`/api/team/${teamId}/memo`, {
       title: title,
       tagList: tagList,
       content: content
@@ -30,7 +30,7 @@ export const createMemo = async (
 // 메모 개별 조회
 export const getMemoById = async (memoId: number) => {
   try {
-    const response = await Axios.get(`/api/memo/${memoId}`);
+    const response = await AxiosInstance.get(`/api/memo/${memoId}`);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -46,7 +46,7 @@ export const updateMemo = async (
   content: string
 ) => {
   try {
-    const response = await Axios.patch(`api/memo/${memoId}`, {
+    const response = await AxiosInstance.patch(`api/memo/${memoId}`, {
       title: title,
       tagList: tagList,
       content: content
@@ -61,7 +61,7 @@ export const updateMemo = async (
 // 메모 삭제
 export const deleteMemo = async (memoId: number) => {
   try {
-    await Axios.delete(`/api/memo/${memoId}`);
+    await AxiosInstance.delete(`/api/memo/${memoId}`);
     console.log('메모 삭제');
   } catch (error) {
     console.log(error);

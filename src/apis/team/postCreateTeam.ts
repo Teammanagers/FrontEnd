@@ -1,4 +1,4 @@
-import { Axios } from '@apis/axios';
+import { AxiosInstance } from '@/apis/new/axios-instance';
 import { CreateTeamInput } from 'src/types/team';
 
 export const createTeam = async ({
@@ -19,7 +19,7 @@ export const createTeam = async ({
     formData.append('createTeam', createTeam);
     formData.append('imageFile', imageFile);
 
-    const response = await Axios.post('/api/team', formData, {
+    const response = await AxiosInstance.post('/api/team', formData, {
       withCredentials: true,
       headers: {
         Accept: 'application/json',

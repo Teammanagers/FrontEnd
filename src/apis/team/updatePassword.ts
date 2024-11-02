@@ -1,4 +1,4 @@
-import { Axios } from '@apis/axios';
+import { AxiosInstance } from '@/apis/new/axios-instance';
 import { UpdateTeamPasswordInput } from 'src/types/team';
 
 export const updateTeamPassword = async ({
@@ -12,7 +12,7 @@ export const updateTeamPassword = async ({
   }
 
   try {
-    const response = await Axios.patch(
+    const response = await AxiosInstance.patch(
       `/api/team/${teamId}/password`,
       {
         password

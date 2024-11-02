@@ -1,4 +1,4 @@
-import { Axios } from './axios';
+import { AxiosInstance } from './new/axios-instance';
 import {
   StorageResponse,
   FeedbackResponse,
@@ -11,7 +11,7 @@ export const getStorageList = async (
   teamId: number
 ): Promise<StorageResponse> => {
   try {
-    const response = await Axios.get<StorageResponse>(
+    const response = await AxiosInstance.get<StorageResponse>(
       `/api/team/${teamId}/storage`
     );
     console.log('자료조회 중');
@@ -35,7 +35,7 @@ export const createStorageItem = async (
     formData.append('title', title);
     formData.append('file', file);
 
-    await Axios.post(`/api/team/${teamId}/storage`, formData, {
+    await AxiosInstance.post(`/api/team/${teamId}/storage`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
@@ -51,7 +51,7 @@ export const createStorageItem = async (
 //팀 자료 다운로드
 export const getTeamDocuments = async (storageId: number): Promise<Blob> => {
   try {
-    const response = await Axios.get(
+    const response = await AxiosInstance.get(
       `/api/team/${teamId}/storage/${storageId}`,
       {
         responseType: 'blob'
@@ -70,7 +70,7 @@ export const getTeamDocuments = async (storageId: number): Promise<Blob> => {
 //자료 삭제
 export const deleteStorageItem = async (storageId: number) => {
   try {
-    await Axios.delete(`/api/storage/${storageId}`);
+    await AxiosInstance.delete(`/api/storage/${storageId}`);
     console.log('자료 삭제');
   } catch (error) {
     console.log(error);
@@ -89,7 +89,7 @@ export const createFeedback = async (
   feedbackData: CreateFeedbackParams
 ): Promise<FeedbackResponse> => {
   try {
-    const response = await Axios.post<FeedbackResponse>(
+    const response = await AxiosInstance.post<FeedbackResponse>(
       `/api/storage/${teamId}/feedback`,
       feedbackData
     );
@@ -104,7 +104,7 @@ export const createFeedback = async (
 //자료 피드백 조회
 export const getFeedback = async (): Promise<GetFeedback> => {
   try {
-    const response = await Axios.get<GetFeedback>(
+    const response = await AxiosInstance.get<GetFeedback>(
       `/api/team/${teamId}/storage`
     );
     console.log(response.data);

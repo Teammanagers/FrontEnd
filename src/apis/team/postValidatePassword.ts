@@ -1,4 +1,4 @@
-import { Axios } from '@apis/axios';
+import { AxiosInstance } from '@/apis/new/axios-instance';
 import { ValidatePasswordResponse } from 'src/types/team';
 
 export const postValidatePassword = async ({
@@ -13,7 +13,7 @@ export const postValidatePassword = async ({
   }
 
   try {
-    const response = await Axios.post(
+    const response = await AxiosInstance.post(
       `/api/team/${teamId}`,
       { teamCode: teamCode, password: password },
       {

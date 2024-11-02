@@ -1,4 +1,4 @@
-import { Axios } from '@apis/axios';
+import { AxiosInstance } from '@/apis/new/axios-instance';
 
 export const updateAlarmStatus = async (alarmId: number) => {
   const token = localStorage.getItem('accessToken');
@@ -8,7 +8,7 @@ export const updateAlarmStatus = async (alarmId: number) => {
   }
 
   try {
-    const response = await Axios.patch(`/api/alarm/${alarmId}`, {
+    const response = await AxiosInstance.patch(`/api/alarm/${alarmId}`, {
       withCredentials: true,
       headers: {
         Accept: 'application/json',
