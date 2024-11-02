@@ -1,10 +1,10 @@
-import { Axios } from './axios';
+import { AxiosInstance } from '@/apis/new/axios-instance';
 import { ProfileResponse } from 'src/types/profile';
 
 // 내 프로필 조회
 export const getProfile = async (): Promise<ProfileResponse> => {
   try {
-    const response = await Axios.get<ProfileResponse>(`/api/member`);
+    const response = await AxiosInstance.get<ProfileResponse>(`/api/member`);
     return response.data;
   } catch (error) {
     console.error('Failed to fetch profile:', error);
@@ -36,7 +36,7 @@ export const updateProfile = async (
       formData.append('image', image);
     }
 
-    const response = await Axios.patch(`/api/member`, formData, {
+    const response = await AxiosInstance.patch(`/api/member`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }

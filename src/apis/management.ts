@@ -1,4 +1,4 @@
-import { Axios } from '@apis/axios.ts';
+import { AxiosInstance } from '@/apis/new/axios-instance.ts';
 import { ScheduleRequestBody, TeamData } from '../types/management.ts';
 
 // 내 팀 조회
@@ -9,7 +9,7 @@ export const getMyTeam = async () => {
   }
 
   try {
-    const response = await Axios.get(`/api/member/team`);
+    const response = await AxiosInstance.get(`/api/member/team`);
     return response.data.result.teamList;
   } catch (error) {
     console.error(error);
@@ -20,7 +20,7 @@ export const getMyTeam = async () => {
 // 팀 조회
 export const getTeamData = async (teamId: number): Promise<TeamData> => {
   try {
-    const response = await Axios.get(`/api/team/${teamId}`);
+    const response = await AxiosInstance.get(`/api/team/${teamId}`);
     return response.data.result.team;
   } catch (error) {
     console.log(error);
@@ -31,7 +31,7 @@ export const getTeamData = async (teamId: number): Promise<TeamData> => {
 // 팀 멤버 조회 (역할태그 포함)
 export const getMembers = async (teamId: number) => {
   try {
-    const response = await Axios.get(`/api/team/${teamId}/member/detail`);
+    const response = await AxiosInstance.get(`/api/team/${teamId}/member/detail`);
     return response.data.result.teamMember;
   } catch (error) {
     console.error(error);
@@ -59,7 +59,7 @@ export const updateProfile = async (
       formData.append('imageFile', imageFile);
     }
 
-    const response = await Axios.patch(`/api/team/${teamId}`, formData, {
+    const response = await AxiosInstance.patch(`/api/team/${teamId}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
@@ -80,7 +80,7 @@ export const updateTag = async (
   name: string
 ) => {
   try {
-    const response = await Axios.patch(`/api/team/${teamId}/tag/${tagId}`, {
+    const response = await AxiosInstance.patch(`/api/team/${teamId}/tag/${tagId}`, {
       name: name
     });
     console.log(response.data);
@@ -94,7 +94,7 @@ export const updateTag = async (
 // 역할 태그 생성
 export const createRoleTag = async (teamManageId: number, name: string) => {
   try {
-    const response = await Axios.post(`/api/management/${teamManageId}/role`, {
+    const response = await AxiosInstance.post(`/api/management/${teamManageId}/role`, {
       name: name
     });
     console.log(response.data);
@@ -112,7 +112,7 @@ export const updateRoleTag = async (
   name: string
 ) => {
   try {
-    const response = await Axios.patch(
+    const response = await AxiosInstance.patch(
       `/api/management/${teamManageId}/role/${tagId}`,
       {
         name: name
@@ -129,7 +129,7 @@ export const updateRoleTag = async (
 // 역할 태그 삭제
 export const deleteRoleTag = async (teamManageId: number, tagId: number) => {
   try {
-    await Axios.delete(`/api/management/${teamManageId}/role/${tagId}`);
+    await AxiosInstance.delete(`/api/management/${teamManageId}/role/${tagId}`);
     console.log('역할 태그 삭제');
   } catch (error) {
     console.error(error);
@@ -140,7 +140,7 @@ export const deleteRoleTag = async (teamManageId: number, tagId: number) => {
 // 스케줄 조회
 export const getSchedules = async (teamId: number) => {
   try {
-    const response = await Axios.get(`/api/team/${teamId}/schedule`);
+    const response = await AxiosInstance.get(`/api/team/${teamId}/schedule`);
     return response.data.result;
   } catch (error) {
     console.error(error);
@@ -151,7 +151,7 @@ export const getSchedules = async (teamId: number) => {
 // 내 스케줄 조회
 export const getMySchedules = async (teamId: number) => {
   try {
-    const response = await Axios.get(`/api/schedule/${teamId}`);
+    const response = await AxiosInstance.get(`/api/schedule/${teamId}`);
     return response.data.result.scheduleDto;
   } catch (error) {
     console.error(error);
@@ -165,7 +165,7 @@ export const createSchedule = async (
   scheduleData: ScheduleRequestBody
 ) => {
   try {
-    const response = await Axios.post(
+    const response = await AxiosInstance.post(
       `/api/team/${teamId}/schedule`,
       scheduleData
     );
@@ -182,7 +182,7 @@ export const updateSchedule = async (
   scheduleData: ScheduleRequestBody
 ) => {
   try {
-    const response = await Axios.patch(
+    const response = await AxiosInstance.patch(
       `/api/team/${teamId}/schedule`,
       scheduleData
     );
@@ -197,7 +197,7 @@ export const updateSchedule = async (
 // 내 스케줄 삭제
 export const deleteSchedule = async (teamManageId: number) => {
   try {
-    await Axios.delete(`/api/team/${teamManageId}/schedule`);
+    await AxiosInstance.delete(`/api/team/${teamManageId}/schedule`);
   } catch (error) {
     console.log('스케줄 삭제 실패!');
   }

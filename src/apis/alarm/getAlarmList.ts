@@ -1,4 +1,4 @@
-import { Axios } from '@apis/axios';
+import { AxiosInstance } from '@/apis/new/axios-instance';
 
 export const getAlarm = async (teamId: number | null) => {
   const token = localStorage.getItem('accessToken');
@@ -8,7 +8,7 @@ export const getAlarm = async (teamId: number | null) => {
   }
 
   try {
-    const response = await Axios.get(`/api/alarm/${teamId}`, {
+    const response = await AxiosInstance.get(`/api/alarm/${teamId}`, {
       withCredentials: true,
       headers: {
         Accept: 'application/json',
