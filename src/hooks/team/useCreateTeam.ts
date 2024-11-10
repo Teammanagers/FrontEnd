@@ -1,4 +1,4 @@
-import { createTeam } from '@apis/team/postCreateTeam';
+import { createTeam } from '@/apis/team/postCreateTeam';
 import { useMutation, UseMutationResult } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { CreateTeamInput, CreateTeamResponse } from 'src/types/team';

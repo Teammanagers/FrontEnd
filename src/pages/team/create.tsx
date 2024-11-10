@@ -1,10 +1,10 @@
 import styled from 'styled-components';
-import TeamContainer from '@components/Team/TeamContainer';
-import RegisterProfile from '@assets/team/register-profile.svg';
-import { TagInputSection } from '@components/Team/TagInputSection';
-import { useTagInput } from '@hooks/useTagInput';
+import TeamContainer from '@/components/Team/TeamContainer';
+import RegisterProfile from '@/assets/team/register-profile.svg';
+import { TagInputSection } from '@/components/Team/TagInputSection';
+import { useTagInput } from '@/hooks/useTagInput';
 import { useState } from 'react';
-import { useCreateTeam } from '@hooks/team/useCreateTeam';
+import { useCreateTeam } from '@/hooks/team/useCreateTeam';
 
 export const CreateTeamPage = () => {
   const [title, setTitle] = useState<string>('');

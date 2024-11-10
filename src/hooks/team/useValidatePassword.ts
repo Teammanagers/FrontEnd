@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { postValidatePassword } from '@apis/team/postValidatePassword';
+import { postValidatePassword } from '@/apis/team/postValidatePassword';
 import { useNavigate } from 'react-router-dom';
 
 export const useValidatePassword = () => {

@@ -5,12 +5,12 @@ import * as Dialog from '@radix-ui/react-dialog';
 import moment from 'moment';
 import ParticipantsList from './ParticipantsList';
 import { AddEventModalProps, ScheduleInfoType } from '../../types/calendar';
-import ClosedBtn from '@assets/calendar/closed-btn.svg';
-import RemoveTagIcon from '@assets/calendar/remove-tag-icon.svg';
-import { createCalendarEvent } from '@apis/calendar';
-import { syncCalendarEvent } from '@utils/calendarUtils';
-import { useCalendarStore } from '@store/calendarStore';
-import { useIdStore } from '@store/idStore';
+import ClosedBtn from '@/assets/calendar/closed-btn.svg';
+import RemoveTagIcon from '@/assets/calendar/remove-tag-icon.svg';
+import { createCalendarEvent } from '@/apis/calendar';
+import { syncCalendarEvent } from '@/utils/calendarUtils';
+import { useCalendarStore } from '@/store/calendarStore';
+import { useIdStore } from '@/store/idStore';
 
 const AddEventModal = ({ selectedDate, open, setOpen }: AddEventModalProps) => {
   const { teamId, setTeamId } = useIdStore((state) => ({
@@ -209,7 +209,7 @@ const DialogOverlay = styled(Dialog.Overlay)`
   inset: 0;
   animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
 
-  @keyframes overlayShow {
+  @/keyframes overlayShow {
     from {
       opacity: 0;
     }
@@ -385,7 +385,7 @@ const DialogContent = styled(Dialog.Content)<{
     }
   }
 
-  @keyframes contentShow {
+  @/keyframes contentShow {
     from {
       opacity: 0;
       transform: translate(-7%, 7%) scale(0.96);

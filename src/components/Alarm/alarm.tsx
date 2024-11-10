@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
-import ClosedBtn from '@assets/calendar/closed-btn.svg';
-import Quit from '@assets/alarm/quit.svg';
-import Remind from '@assets/alarm/remind.svg';
-import WakeUp from '@assets/alarm/wake-up.svg';
+import ClosedBtn from '@/assets/calendar/closed-btn.svg';
+import Quit from '@/assets/alarm/quit.svg';
+import Remind from '@/assets/alarm/remind.svg';
+import WakeUp from '@/assets/alarm/wake-up.svg';
 import moment from 'moment';
-import { useUpdateAlarmStatus } from '@hooks/alarm/useUpdateAlarmStatus';
-import { getTeamById } from '@apis/team/getTeamById';
+import { useUpdateAlarmStatus } from '@/hooks/alarm/useUpdateAlarmStatus';
+import { getTeamById } from '@/apis/team/getTeamById';
 import { useQuery } from '@tanstack/react-query';
 
 type AlarmProps = {

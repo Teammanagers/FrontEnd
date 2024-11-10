@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import SelectedFeedback from '@assets/mypage/selected-feedback.svg';
-import Dot from '@assets/mypage/dot.svg';
+import SelectedFeedback from '@/assets/mypage/selected-feedback.svg';
+import Dot from '@/assets/mypage/dot.svg';
 import { FileProps } from './FileProps';
 import { Comment } from './Comment';
 import { TextInput } from './TextInput';
-import { createFeedback, getFeedback } from '@apis/share';
+import { createFeedback, getFeedback } from '@/apis/share';
 import { CommentData } from 'src/types/storage';
 
 interface FeedbackSectionProps {

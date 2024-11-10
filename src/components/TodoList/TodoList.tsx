@@ -2,10 +2,10 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import Todos from './Todos';
-import { useTodoStore } from '@store/todoStore';
+import { useTodoStore } from '@/store/todoStore';
 import { UserInfo } from 'src/types/todo-list';
-import { getTeamTodos } from '@apis/todo-list';
-import { useIdStore } from '@store/idStore';
+import { getTeamTodos } from '@/apis/todo-list';
+import { useIdStore } from '@/store/idStore';
 
 const TodoList = () => {
   const { teamId, setTeamId } = useIdStore((state) => ({

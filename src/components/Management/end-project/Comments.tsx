@@ -1,11 +1,11 @@
 import styled from 'styled-components';
-import { CommentInputBox } from '@components/Management/end-project/CommentInput.tsx';
+import { CommentInputBox } from '@/components/Management/end-project/CommentInput.tsx';
 
 export const Comments = () => {
   return (
     <Container>
       <TeamName>UMC 6th 팀매니저</TeamName>
-      <InfoText>프로젝트가 종료되었어요!</InfoText>
+    <InfoText>프로젝트가 종료되었어요!</InfoText>
       <Text>그동안 고생한 팀원들에게 코멘트를 남길 수 있어요</Text>
       <CommentsList>
         <CommentInputBox />

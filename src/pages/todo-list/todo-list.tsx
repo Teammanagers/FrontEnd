@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Layout } from '@components/TodoList/layout/Layout';
-import TeamProgress from '@components/TodoList/TeamProgress';
-import TodoList from '@components/TodoList/TodoList';
-import { getTeamTodos } from '@apis/todo-list';
+import { Layout } from '@/components/TodoList/layout/Layout';
+import TeamProgress from '@/components/TodoList/TeamProgress';
+import TodoList from '@/components/TodoList/TodoList';
+import { getTeamTodos } from '@/apis/todo-list';
 import { useTodoStore } from '../../store/todoStore';
-import { useIdStore } from '@store/idStore';
+import { useIdStore } from '@/store/idStore';
 
 export const TodoListPage = () => {
   const { teamId, setTeamId } = useIdStore((state) => ({

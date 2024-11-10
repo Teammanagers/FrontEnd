@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { ButtonHTMLAttributes, useEffect, useState } from 'react';
-import Add from '@assets/management/add-button.svg';
+import Add from '@/assets/management/add-button.svg';
 
 const generateTimeOptions = (): string[] => {
   const options: string[] = [];

@@ -1,4 +1,4 @@
-import { getCalendarEventList, getUpcomingEvent } from '@apis/calendar';
+import { getCalendarEventList, getUpcomingEvent } from '@/apis/calendar';
 import { EventType, UpcomingEventType } from 'src/types/calendar';
 
 interface SyncCalendarEventProps {

@@ -1,24 +1,24 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { CalendarPage, ExtraCalendarPage } from '@pages/calendar';
-import { LoginPage, LoginCompletePage } from '@pages/login';
-import { ManagementPage, ExtraManagementPage } from '@pages/management';
-import { MemoPage, ExtraMemoPage } from '@pages/memo';
-import { MyPage, ExtraMyPage } from '@pages/mypage';
-import { SharePage, ExtraSharePage } from '@pages/share';
-import { TodoListPage, ExtraTodoListPage } from '@pages/todo-list';
+import { CalendarPage, ExtraCalendarPage } from '@/pages/calendar';
+import { LoginPage, LoginCompletePage } from '@/pages/login';
+import { ManagementPage, ExtraManagementPage } from '@/pages/management';
+import { MemoPage, ExtraMemoPage } from '@/pages/memo';
+import { MyPage, ExtraMyPage } from '@/pages/mypage';
+import { SharePage, ExtraSharePage } from '@/pages/share';
+import { TodoListPage, ExtraTodoListPage } from '@/pages/todo-list';
 import {
   CreateTeamPage,
   JoinTeamPage,
   TeamPage,
   ShareTeamPage
-} from '@pages/team';
-import ErrorPage from '@pages/error';
-import { ProfilePage } from '@pages/mypage/profile';
-import { PortfolioPage } from '@pages/mypage/portfolio';
-import MainPage from '@pages/main/main';
-import Layout from '@components/Layout';
-import { SignupPage } from '@pages/signup/signup';
-import { RequireAuth } from '@hooks/useRequireAuth';
+} from '@/pages/team';
+import ErrorPage from '@/pages/error';
+import { ProfilePage } from '@/pages/mypage/profile';
+import { PortfolioPage } from '@/pages/mypage/portfolio';
+import MainPage from '@/pages/main/main';
+import Layout from '@/components/Layout';
+import { SignupPage } from '@/pages/signup/signup';
+import { RequireAuth } from '@/hooks/useRequireAuth';
 
 const App = () => {
   return (

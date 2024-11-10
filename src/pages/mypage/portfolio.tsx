@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import Back from '@assets/mypage/back.svg';
-import Move from '@assets/mypage/move.svg';
-import { getSimplePortfolio, getDetailedPortfolio } from '@apis/portfolio';
-import { SharedFile } from '@components/MyPage/portfolio/SharedFile';
+import Back from '@/assets/mypage/back.svg';
+import Move from '@/assets/mypage/move.svg';
+import { getSimplePortfolio, getDetailedPortfolio } from '@/apis/portfolio';
+import { SharedFile } from '@/components/MyPage/portfolio/SharedFile';
 
 interface Portfolio {
   teamId: number;

@@ -1,6 +1,6 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { GetTeamByCodeResponse } from 'src/types/team';
-import { getTeamByCode } from '@apis/team/getTeamByCode';
+import { getTeamByCode } from '@/apis/team/getTeamByCode';
 
 export const useGetTeamByCode = (
   teamCode: string,

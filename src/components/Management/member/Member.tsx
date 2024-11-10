@@ -1,17 +1,17 @@
 import styled from 'styled-components';
-import DefaultProfileImg from '@assets/management/profile-img-default.svg';
-import Add from '@assets/management/add-icon.svg';
-import { useTags } from '@hooks/useTags.ts';
+import DefaultProfileImg from '@/assets/management/profile-img-default.svg';
+import Add from '@/assets/management/add-icon.svg';
+import { useTags } from '@/hooks/useTags.ts';
 import {
   TagInputContainer,
   DeleteBtn
-} from '@components/Management/team-code/TeamCode.tsx';
+} from '@/components/Management/team-code/TeamCode.tsx';
 import { Role } from '../../../types/member.ts';
 import {
   createRoleTag,
   deleteRoleTag,
   updateRoleTag
-} from '@apis/management.ts';
+} from '@/apis/management.ts';
 
 interface MemberProps {
   teamManageId: number;

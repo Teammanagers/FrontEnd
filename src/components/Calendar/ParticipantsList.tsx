@@ -1,8 +1,8 @@
 import * as Popover from '@radix-ui/react-popover';
 import styled from 'styled-components';
-import { useMemberStore } from '@store/memberStore';
+import { useMemberStore } from '@/store/memberStore';
 import { ParticipantsListType, TeamMemberType } from 'src/types/calendar';
-import AddParticipantsBtn from '@assets/calendar/add-participants.svg';
+import AddParticipantsBtn from '@/assets/calendar/add-participants.svg';
 
 const ParticipantsList = ({
   scheduleInfo,

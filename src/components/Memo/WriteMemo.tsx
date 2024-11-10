@@ -1,14 +1,14 @@
 import styled from 'styled-components';
-import BackButton from '@assets/memo/back-button.svg';
-import AddTag from '@assets/memo/add-tag-icon.svg';
+import BackButton from '@/assets/memo/back-button.svg';
+import AddTag from '@/assets/memo/add-tag-icon.svg';
 import {
   DeleteBtn,
   TagInputContainer
-} from '@components/Management/team-code/TeamCode.tsx';
+} from '@/components/Management/team-code/TeamCode.tsx';
 import { useNavigate } from 'react-router-dom';
 import { ButtonHTMLAttributes, useState } from 'react';
-import { useTags } from '@hooks/useTags.ts';
-import { createMemo } from '@apis/memo.ts';
+import { useTags } from '@/hooks/useTags.ts';
+import { createMemo } from '@/apis/memo.ts';
 
 export const WriteMemo = () => {
   const [title, setTitle] = useState<string>('');

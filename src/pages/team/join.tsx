@@ -1,7 +1,7 @@
-import SearchResultSection from '@components/Team/SearchResultSection';
-import TeamContainer from '@components/Team/TeamContainer';
-import { useGetTeamByCode } from '@hooks/team/useGetTeamByCode';
-import { useValidatePassword } from '@hooks/team/useValidatePassword';
+import SearchResultSection from '@/components/Team/SearchResultSection';
+import TeamContainer from '@/components/Team/TeamContainer';
+import { useGetTeamByCode } from '@/hooks/team/useGetTeamByCode';
+import { useValidatePassword } from '@/hooks/team/useValidatePassword';
 import * as Dialog from '@radix-ui/react-dialog';
 import { useState } from 'react';
 import styled from 'styled-components';
@@ -134,7 +134,7 @@ const DialogOverlay = styled(Dialog.Overlay)`
   inset: 0;
   animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
 
-  @keyframes overlayShow {
+  @/keyframes overlayShow {
     from {
       opacity: 0;
     }

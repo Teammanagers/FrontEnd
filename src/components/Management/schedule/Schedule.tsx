@@ -1,10 +1,10 @@
 import styled from 'styled-components';
-import Add from '@assets/management/add-button.svg';
-import Delete from '@assets/management/delete-icon.svg';
-import { TitleText } from '@components/Management/team-code/TeamCode.tsx';
+import Add from '@/assets/management/add-button.svg';
+import Delete from '@/assets/management/delete-icon.svg';
+import { TitleText } from '@/components/Management/team-code/TeamCode.tsx';
 import { ButtonHTMLAttributes, useEffect, useRef, useState } from 'react';
-import { PeopleDropDown } from '@components/Management/schedule/PeopleDropDown.tsx';
-import { getMembers } from '@apis/management.ts';
+import { PeopleDropDown } from '@/components/Management/schedule/PeopleDropDown.tsx';
+import { getMembers } from '@/apis/management.ts';
 import { MemberTypes } from '../../../types/member.ts';
 
 interface ScheduleProps {

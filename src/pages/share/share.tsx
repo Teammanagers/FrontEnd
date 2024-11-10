@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { FileMenuContainer } from '@components/Share/FileMenuContainer';
-import { FeedbackSection } from '@components/Share/FeedbackSection';
-import { getStorageList } from '@apis/share';
+import { FileMenuContainer } from '@/components/Share/FileMenuContainer';
+import { FeedbackSection } from '@/components/Share/FeedbackSection';
+import { getStorageList } from '@/apis/share';
 
 interface FileItem {
   id: number;

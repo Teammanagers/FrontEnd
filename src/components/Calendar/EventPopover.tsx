@@ -3,7 +3,7 @@ import moment from 'moment';
 import * as Popover from '@radix-ui/react-popover';
 import AddEventModal from './AddEventModal';
 import { EventType } from 'src/types/calendar';
-import AddEventButton from '@assets/calendar/add-event-btn.svg';
+import AddEventButton from '@/assets/calendar/add-event-btn.svg';
 import { useState } from 'react';
 import Event from './Event';
 

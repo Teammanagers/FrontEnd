@@ -1,11 +1,11 @@
 import React, { useRef } from 'react';
 import styled, { css } from 'styled-components';
-import Kakao from '@assets/mypage/kakao.svg';
-import Naver from '@assets/mypage/naver.svg';
-import Google from '@assets/mypage/google.svg';
-import UserImage from '@assets/mypage/user-image.svg';
-import { useTags } from '@hooks/mypage/useTags';
-import { TagSection } from '@hooks/mypage/TagSection';
+import Kakao from '@/assets/mypage/kakao.svg';
+import Naver from '@/assets/mypage/naver.svg';
+import Google from '@/assets/mypage/google.svg';
+import UserImage from '@/assets/mypage/user-image.svg';
+import { useTags } from '@/hooks/mypage/useTags';
+import { TagSection } from '@/hooks/mypage/TagSection';
 import { ProfileSettingsProps } from './ProfileSettingsProps';
 
 const ProfileSettings: React.FC<ProfileSettingsProps> = ({

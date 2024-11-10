@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import LeftArrow from '@assets/left-arrow.svg';
-import { getTeamById } from '@apis/team/getTeamById';
+import LeftArrow from '@/assets/left-arrow.svg';
+import { getTeamById } from '@/apis/team/getTeamById';
 import { useQuery } from '@tanstack/react-query';
 
 type LayoutProps = {

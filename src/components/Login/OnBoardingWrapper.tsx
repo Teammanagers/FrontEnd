@@ -5,9 +5,9 @@ import { Swiper as SwiperType } from 'swiper/types';
 import { Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/autoplay';
-import firstSwiperImage from '@assets/login/onboarding-frame-1.png';
-import secondSwiperImage from '@assets/login/onboarding-frame-2.png';
-import thirdSwiperImage from '@assets/login/onboarding-frame-3.png';
+import firstSwiperImage from '@/assets/login/onboarding-frame-1.png';
+import secondSwiperImage from '@/assets/login/onboarding-frame-2.png';
+import thirdSwiperImage from '@/assets/login/onboarding-frame-3.png';
 
 interface OnBoardingProps {
   children: React.ReactNode;

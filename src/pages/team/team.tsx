@@ -1,9 +1,9 @@
-import TeamContainer from '@components/Team/TeamContainer';
+import TeamContainer from '@/components/Team/TeamContainer';
 import styled from 'styled-components';
-import CreateTeam from '@assets/team/create-team.svg';
+import CreateTeam from '@/assets/team/create-team.svg';
 import { useNavigate } from 'react-router-dom';
-import SearchTeamSection from '@components/Team/SelectTeamSection';
-import { getTeamById } from '@apis/team/getTeamById';
+import SearchTeamSection from '@/components/Team/SelectTeamSection';
+import { getTeamById } from '@/apis/team/getTeamById';
 import { useQuery } from '@tanstack/react-query';
 
 export const TeamPage = () => {

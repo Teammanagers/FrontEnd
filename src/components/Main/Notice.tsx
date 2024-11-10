@@ -2,11 +2,11 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 import moment from 'moment';
 import styled from 'styled-components';
 import * as Dialog from '@radix-ui/react-dialog';
-import LouderSpeakerIcon from '@assets/main/loud-speaker.svg';
-import PublishNoticeIcon from '@assets/main/publish-notice.svg';
-import { createNotice, getNoticeList, getNoticeRecent } from '@apis/main';
+import LouderSpeakerIcon from '@/assets/main/loud-speaker.svg';
+import PublishNoticeIcon from '@/assets/main/publish-notice.svg';
+import { createNotice, getNoticeList, getNoticeRecent } from '@/apis/main';
 import { NoticeListType } from 'src/types/matin';
-import { useIdStore } from '@store/idStore';
+import { useIdStore } from '@/store/idStore';
 
 const Notice = () => {
   const { teamId, setTeamId } = useIdStore((state) => ({
@@ -156,7 +156,7 @@ const DialogOverlay = styled(Dialog.Overlay)`
   inset: 0;
   animation: overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
 
-  @keyframes overlayShow {
+  @/keyframes overlayShow {
     from {
       opacity: 0;
     }
@@ -286,7 +286,7 @@ const DialogContent = styled(Dialog.Content)`
     }
   }
 
-  @keyframes contentShow {
+  @/keyframes contentShow {
     from {
       opacity: 0;
       transform: translate(-50%, -48%) scale(0.96);

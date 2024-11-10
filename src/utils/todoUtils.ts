@@ -1,4 +1,4 @@
-import { getTeamTodos } from '@apis/todo-list';
+import { getTeamTodos } from '@/apis/todo-list';
 import { UserInfo } from 'src/types/todo-list';
 
 interface SyncTodosProps {

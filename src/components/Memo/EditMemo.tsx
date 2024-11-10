@@ -1,15 +1,15 @@
 import styled from 'styled-components';
-import BackButton from '@assets/memo/back-button.svg';
-import AddTag from '@assets/memo/add-tag-icon.svg';
+import BackButton from '@/assets/memo/back-button.svg';
+import AddTag from '@/assets/memo/add-tag-icon.svg';
 import {
   DeleteBtn,
   TagInputContainer
-} from '@components/Management/team-code/TeamCode.tsx';
+} from '@/components/Management/team-code/TeamCode.tsx';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ButtonHTMLAttributes, useEffect, useState } from 'react';
-import { useTags } from '@hooks/useTags.ts';
-import { deleteMemo, getMemoById, updateMemo } from '@apis/memo.ts';
-import { DeleteMemoModal } from '@components/Memo/DeleteMemoModal.tsx';
+import { useTags } from '@/hooks/useTags.ts';
+import { deleteMemo, getMemoById, updateMemo } from '@/apis/memo.ts';
+import { DeleteMemoModal } from '@/components/Memo/DeleteMemoModal.tsx';
 
 export const EditMemo = () => {
   const { memoId } = useParams<{ memoId: string }>(); // useParams는 string 형태만 받아올 수 있음..
