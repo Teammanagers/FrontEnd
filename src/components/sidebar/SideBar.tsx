@@ -26,7 +26,7 @@ import { getMyTeam } from '@/apis/management.ts';
 import { TeamProps } from '../../types/management.ts';
 import { useIdStore } from '@/store/idStore.ts';
 
-export const SideBar = () => {
+const SideBar = () => {
   const [teams, setTeams] = useState<TeamProps[]>([]);
   const [currentTeam, setCurrentTeam] = useState<TeamProps | null>(null);
   const [hover, setHover] = useState<boolean>(false);
@@ -35,7 +35,7 @@ export const SideBar = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { data, isLoading, isError } = useGetAlarmList(
+  const { data, isLoading } = useGetAlarmList(
     Number(localStorage.getItem('teamId')) || null
   );
 
@@ -54,7 +54,7 @@ export const SideBar = () => {
   }, [teamId]);
 
   // const teamId = Number(localStorage.getItem('teamId'));
-  const { result } = useGetAlarmList(teamId);
+  // const { result } = useGetAlarmList(teamId);
 
   const handleNavigate = (path: string) => {
     navigate(path);
@@ -357,3 +357,5 @@ const Hr = styled.div`
   background-color: ${(props) => props.theme.colors.subLightBlue};
   margin: 11px 0 11px 0;
 `;
+
+export default SideBar;

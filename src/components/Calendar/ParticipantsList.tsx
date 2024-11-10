@@ -94,7 +94,7 @@ const Button = styled.button`
   }
 `;
 
-const StyledAddParticipantsBtn = styled(AddParticipantsBtn)<{}>`
+const StyledAddParticipantsBtn = styled(AddParticipantsBtn)<object>`
   position: sticky;
   top: 0;
   right: 5px;

@@ -27,8 +27,8 @@ export const TeamPage = () => {
       <TeamIndexContainer>
         {!isLoading &&
           team &&
-          team.result.teamList.map((item) => {
-            return <SearchTeamSection data={item} />;
+          team.result.teamList.map((item, index) => {
+            return <SearchTeamSection key={index} data={item} />;
           })}
         <SelectTeamComponent>
           {!isLoading && (!team || team?.result.teamList.length) < 5 && (

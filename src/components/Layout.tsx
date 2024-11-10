@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom';
 import { ReactNode } from 'react';
-import { SideBar } from '@/components/SideBar/SideBar';
+import SideBar from './SideBar/SideBar';
 
 type LayoutProps = {
   children: ReactNode;
