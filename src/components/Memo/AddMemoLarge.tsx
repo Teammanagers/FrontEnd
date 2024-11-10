@@ -1,5 +1,5 @@
-import AddMemo from '@assets/memo/add-memo.svg';
-import Plus from '@assets/memo/plus.svg';
+import AddMemo from '@/assets/memo/add-memo.svg';
+import Plus from '@/assets/memo/plus.svg';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 

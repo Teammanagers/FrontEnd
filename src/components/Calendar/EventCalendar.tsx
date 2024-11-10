@@ -4,14 +4,14 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import moment from 'moment';
 import { EventType, Value } from '../../types/calendar';
-import NextBtn from '@assets/calendar/next-btn.svg';
-import PrevBtn from '@assets/calendar/prev-btn.svg';
-import { useMemberStore } from '@store/memberStore';
-import { useCalendarStore } from '@store/calendarStore';
-import { getTeamMember } from '@apis/calendar';
+import NextBtn from '@/assets/calendar/next-btn.svg';
+import PrevBtn from '@/assets/calendar/prev-btn.svg';
+import { useMemberStore } from '@/store/memberStore';
+import { useCalendarStore } from '@/store/calendarStore';
+import { getTeamMember } from '@/apis/calendar';
 import EventPopover from './EventPopover';
-import { syncCalendarEvent } from '@utils/calendarUtils';
-import { useIdStore } from '@store/idStore';
+import { syncCalendarEvent } from '@/utils/calendarUtils';
+import { useIdStore } from '@/store/idStore';
 
 const EventCalendar = () => {
   const { teamId, setTeamId } = useIdStore((state) => ({

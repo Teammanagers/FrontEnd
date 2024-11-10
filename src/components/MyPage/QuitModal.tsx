@@ -1,6 +1,6 @@
 import * as Dialog from '@radix-ui/react-dialog';
 import styled from 'styled-components';
-import Send from '@assets/mypage/send.svg';
+import Send from '@/assets/mypage/send.svg';
 
 type ModalProps = {
   onClose: () => void;

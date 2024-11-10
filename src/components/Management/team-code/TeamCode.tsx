@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import Delete from '@assets/management/delete-icon.svg';
-import DefaultProfileImg from '@assets/management/profile-img-default.svg';
-import Upload from '@assets/management/upload-icon.svg';
-import Edit from '@assets/management/edit-icon.svg';
+import Delete from '@/assets/management/delete-icon.svg';
+import DefaultProfileImg from '@/assets/management/profile-img-default.svg';
+import Upload from '@/assets/management/upload-icon.svg';
+import Edit from '@/assets/management/edit-icon.svg';
 import {
   ButtonHTMLAttributes,
   ChangeEvent,
@@ -12,9 +12,9 @@ import {
   useState
 } from 'react';
 import copy from 'copy-to-clipboard';
-import { useTags } from '@hooks/useTags.ts';
+import { useTags } from '@/hooks/useTags.ts';
 import { TeamData, TeamTag } from '../../../types/management.ts';
-import { updateProfile, updateTag } from '@apis/management.ts';
+import { updateProfile, updateTag } from '@/apis/management.ts';
 
 interface TeamCodeProps extends TeamData {
   imageUrl?: string;

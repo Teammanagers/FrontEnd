@@ -1,14 +1,18 @@
 import styled from 'styled-components';
-import { TeamCode } from '@components/Management/team-code/TeamCode.tsx';
-import { Members } from '@components/Management/member/Members.tsx';
-import { Schedule } from '@components/Management/schedule/Schedule.tsx';
-import { AddSchedule } from '@components/Management/schedule/AddSchedule.tsx';
+import { TeamCode } from '@/components/Management/team-code/TeamCode.tsx';
+import { Members } from '@/components/Management/member/Members.tsx';
+import { Schedule } from '@/components/Management/schedule/Schedule.tsx';
+import { AddSchedule } from '@/components/Management/schedule/AddSchedule.tsx';
 import { useEffect, useState } from 'react';
-import { ShowSchedule } from '@components/Management/schedule/ShowSchedule.tsx';
-import { NoSchedule } from '@components/Management/schedule/NoSchedule.tsx';
-import { getMySchedules, getSchedules, getTeamData } from '@apis/management.ts';
+import { ShowSchedule } from '@/components/Management/schedule/ShowSchedule.tsx';
+import { NoSchedule } from '@/components/Management/schedule/NoSchedule.tsx';
+import {
+  getMySchedules,
+  getSchedules,
+  getTeamData
+} from '@/apis/management.ts';
 import { ScheduleDto, TeamData, TeamTag } from '../../types/management.ts';
-import { useIdStore } from '@store/idStore.ts';
+import { useIdStore } from '@/store/idStore.ts';
 
 export const ManagementPage = () => {
   const [showAddSchedule, setShowAddSchedule] = useState<boolean>(false);

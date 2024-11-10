@@ -1,8 +1,8 @@
-import { AddMemoSmall } from '@components/Memo/AddMemoSmall.tsx';
-import { Memo } from '@components/Memo/Memo.tsx';
+import { AddMemoSmall } from '@/components/Memo/AddMemoSmall.tsx';
+import { Memo } from '@/components/Memo/Memo.tsx';
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
-import { getMemos } from '@apis/memo.ts';
+import { getMemos } from '@/apis/memo.ts';
 import { MemoProps } from '../../types/memo.ts';
 
 export const MemoList = () => {

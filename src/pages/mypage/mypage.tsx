@@ -1,15 +1,15 @@
 import styled from 'styled-components';
-import Move from '@assets/mypage/move.svg';
-import Profile from '@assets/mypage/profile.svg';
-import Portfolio from '@assets/mypage/portfolio.svg';
-import Headset from '@assets/mypage/headset.svg';
-import Speaker from '@assets/mypage/speaker.svg';
-import Exclamation from '@assets/mypage/exclamation.svg';
+import Move from '@/assets/mypage/move.svg';
+import Profile from '@/assets/mypage/profile.svg';
+import Portfolio from '@/assets/mypage/portfolio.svg';
+import Headset from '@/assets/mypage/headset.svg';
+import Speaker from '@/assets/mypage/speaker.svg';
+import Exclamation from '@/assets/mypage/exclamation.svg';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getMyTodos } from '@apis/todo-list';
+import { getMyTodos } from '@/apis/todo-list';
 import { MyTodoList } from 'src/types/todo-list';
-import MyTodos from '@components/TodoList/MyTodos';
+import MyTodos from '@/components/TodoList/MyTodos';
 
 export const MyPage = () => {
   const navigate = useNavigate();

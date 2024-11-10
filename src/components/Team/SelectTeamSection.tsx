@@ -1,4 +1,4 @@
-import TeamLogo from '@assets/team/logo.svg';
+import TeamLogo from '@/assets/team/logo.svg';
 import { useNavigate } from 'react-router-dom';
 import { TeamTagList } from 'src/types/team';
 import styled from 'styled-components';

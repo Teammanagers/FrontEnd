@@ -1,4 +1,4 @@
-import { postTerms } from '@apis/login/postTerms';
+import { postTerms } from '@/apis/login/postTerms';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 

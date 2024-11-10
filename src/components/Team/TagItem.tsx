@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import CloseButton from '@assets/team/close-button.svg';
+import CloseButton from '@/assets/team/close-button.svg';
 
 const TagItem = ({ tag, onRemove }: { tag: string; onRemove: () => void }) => (
   <Tag>

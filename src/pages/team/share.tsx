@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import TeamContainer from '@components/Team/TeamContainer';
-import { useCreatePassword } from '@hooks/team/useCreatePassword';
+import TeamContainer from '@/components/Team/TeamContainer';
+import { useCreatePassword } from '@/hooks/team/useCreatePassword';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import { useEmptyTeamIdRedirect } from '@hooks/team/useEmptyTeamIdRedirect';
+import { useEmptyTeamIdRedirect } from '@/hooks/team/useEmptyTeamIdRedirect';
 
 export const ShareTeamPage: React.FC = () => {
   const { teamCode, teamId } = useEmptyTeamIdRedirect();

@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import Back from '@assets/mypage/back.svg';
-import WrongUser from '@assets/mypage/wrong-user.svg';
+import Back from '@/assets/mypage/back.svg';
+import WrongUser from '@/assets/mypage/wrong-user.svg';
 import { useNavigate } from 'react-router-dom';
-import { QuitModal } from '@components/MyPage/QuitModal';
-import ProfileSettings from '@components/MyPage/profile/ProfileSettings';
-import TeamComments from '@components/MyPage/profile/TeamComments';
-import { getProfile, updateProfile } from '@apis/mypage';
+import { QuitModal } from '@/components/MyPage/QuitModal';
+import ProfileSettings from '@/components/MyPage/profile/ProfileSettings';
+import TeamComments from '@/components/MyPage/profile/TeamComments';
+import { getProfile, updateProfile } from '@/apis/mypage';
 import { CommentDTO } from 'src/types/profile';
 
 export const ProfilePage = () => {

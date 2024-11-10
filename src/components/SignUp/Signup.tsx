@@ -1,11 +1,11 @@
 import styled from 'styled-components';
-import Arrow from '@assets/left-arrow.svg';
-import LogoImage from '@assets/login/project-logo.svg';
-import Check from '@assets/login/check.svg';
-import RightArrow from '@assets/login/right-arrow.svg';
+import Arrow from '@/assets/left-arrow.svg';
+import LogoImage from '@/assets/login/project-logo.svg';
+import Check from '@/assets/login/check.svg';
+import RightArrow from '@/assets/login/right-arrow.svg';
 import { ButtonHTMLAttributes, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSubmitTerm } from '@hooks/useSubmitTerm';
+import { useSubmitTerm } from '@/hooks/useSubmitTerm';
 
 const Signup = () => {
   const navigate = useNavigate();

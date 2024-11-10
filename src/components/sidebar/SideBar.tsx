@@ -1,30 +1,30 @@
 import styled from 'styled-components';
-import Open from '@assets/sidebar/drop-down-open.svg';
-import Home from '@assets/sidebar/home.svg';
-import HomeClick from '@assets/sidebar/home-click.svg';
-import Bell from '@assets/sidebar/bell.svg';
-import BellClick from '@assets/sidebar/bell-click.svg';
-import List from '@assets/sidebar/list.svg';
-import ListClick from '@assets/sidebar/list-click.svg';
-import Calendar from '@assets/sidebar/calendar.svg';
-import CalendarClick from '@assets/sidebar/calendar-click.svg';
-import Memo from '@assets/sidebar/memo.svg';
-import MemoClick from '@assets/sidebar/memo-click.svg';
-import File from '@assets/sidebar/file.svg';
-import FileClick from '@assets/sidebar/file-click.svg';
-import Team from '@assets/sidebar/team.svg';
-import TeamClick from '@assets/sidebar/team-click.svg';
-import MyPage from '@assets/sidebar/mypage.svg';
-import MyPageClick from '@assets/sidebar/mypage-click.svg';
-import End from '@assets/sidebar/end.svg';
+import Open from '@/assets/sidebar/drop-down-open.svg';
+import Home from '@/assets/sidebar/home.svg';
+import HomeClick from '@/assets/sidebar/home-click.svg';
+import Bell from '@/assets/sidebar/bell.svg';
+import BellClick from '@/assets/sidebar/bell-click.svg';
+import List from '@/assets/sidebar/list.svg';
+import ListClick from '@/assets/sidebar/list-click.svg';
+import Calendar from '@/assets/sidebar/calendar.svg';
+import CalendarClick from '@/assets/sidebar/calendar-click.svg';
+import Memo from '@/assets/sidebar/memo.svg';
+import MemoClick from '@/assets/sidebar/memo-click.svg';
+import File from '@/assets/sidebar/file.svg';
+import FileClick from '@/assets/sidebar/file-click.svg';
+import Team from '@/assets/sidebar/team.svg';
+import TeamClick from '@/assets/sidebar/team-click.svg';
+import MyPage from '@/assets/sidebar/mypage.svg';
+import MyPageClick from '@/assets/sidebar/mypage-click.svg';
+import End from '@/assets/sidebar/end.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { DropDown } from '@components/SideBar/DropDown.tsx';
-import Alarm from '@components/Alarm/alarm';
-import { useGetAlarmList } from '@hooks/alarm/useGetAlarmList';
-import { getMyTeam } from '@apis/management.ts';
+import { DropDown } from '@/components/SideBar/DropDown.tsx';
+import Alarm from '@/components/Alarm/alarm';
+import { useGetAlarmList } from '@/hooks/alarm/useGetAlarmList';
+import { getMyTeam } from '@/apis/management.ts';
 import { TeamProps } from '../../types/management.ts';
-import { useIdStore } from '@store/idStore.ts';
+import { useIdStore } from '@/store/idStore.ts';
 
 export const SideBar = () => {
   const [teams, setTeams] = useState<TeamProps[]>([]);
@@ -35,7 +35,7 @@ export const SideBar = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { data, isLoading, isError } = useGetAlarmList(
+  const { data, isLoading } = useGetAlarmList(
     Number(localStorage.getItem('teamId')) || null
   );
 
@@ -54,7 +54,7 @@ export const SideBar = () => {
   }, [teamId]);
 
   // const teamId = Number(localStorage.getItem('teamId'));
-  const { result } = useGetAlarmList(teamId);
+  // const { result } = useGetAlarmList(teamId);
 
   const handleNavigate = (path: string) => {
     navigate(path);

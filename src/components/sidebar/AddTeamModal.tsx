@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import Close from '@assets/sidebar/close.svg';
-import Plus from '@assets/sidebar/add-new-team.svg';
-import Search from '@assets/sidebar/search.svg';
+import Close from '@/assets/sidebar/close.svg';
+import Plus from '@/assets/sidebar/add-new-team.svg';
+import Search from '@/assets/sidebar/search.svg';
 import { ButtonHTMLAttributes, useState } from 'react';
 
 interface AddTeamModalProps {

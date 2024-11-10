@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { CommentData } from 'src/types/storage';
 import { TextInput } from './TextInput';
-import UserImage from '@assets/share/user-image.svg';
-import Dot from '@assets/mypage/dot.svg';
+import UserImage from '@/assets/share/user-image.svg';
+import Dot from '@/assets/mypage/dot.svg';
 
 interface CommentProps {
   comment: CommentData;
