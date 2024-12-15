@@ -1,14 +1,23 @@
 import { AxiosInstance } from '@/apis/new/axios-instance';
 import { memoApiUrl, memoApiUrlWithTeamId } from '@/apis/new/urls';
+import { ICreateMemo } from '@/types/new/common';
 import {
   getMemoDetailResponse,
   getMemoListResponse
 } from '@/types/new/response/memo';
 
 // 팀 메모 생성
-export const createMemo = async (teamId: number): Promise<void> => {
-  const response = await AxiosInstance.post(`${memoApiUrlWithTeamId(teamId)}`);
-  return response.data;
+export const createMemo = async ({
+  teamId,
+  title,
+  tagList,
+  content
+}: ICreateMemo): Promise<void> => {
+  await AxiosInstance.post(`${memoApiUrlWithTeamId(teamId)}`, {
+    title,
+    tagList,
+    content
+  });
 };
 
 // 팀 메모 조회

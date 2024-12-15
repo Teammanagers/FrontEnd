@@ -169,3 +169,10 @@ export interface IUpdateMyProfile {
   phoneNumber: string;
   confidentRole: string[];
 }
+
+export interface ICreateMemo {
+  teamId: number;
+  title: string;
+  tagList: string[];
+  content: string;
+}
