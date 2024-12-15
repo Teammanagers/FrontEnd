@@ -1,18 +1,18 @@
 import {
   TimeSelector,
   TimeSlot
-} from '@components/Management/schedule/TimeSelector.tsx';
-import Reset from '@assets/management/reset.svg';
-import Submit from '@assets/management/submit.svg';
+} from '@/components/Management/schedule/TimeSelector.tsx';
+import Reset from '@/assets/management/reset.svg';
+import Submit from '@/assets/management/submit.svg';
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import {
   createSchedule,
   deleteSchedule,
   updateSchedule
-} from '@apis/management.ts';
+} from '@/apis/management.ts';
 import { ScheduleDto } from '../../../types/management.ts';
-import { convertTimeTableToTimeSlots } from '@components/Management/schedule/ShowSchedule.tsx';
+import { convertTimeTableToTimeSlots } from '@/components/Management/schedule/ShowSchedule.tsx';
 
 interface DayTimeSlots {
   // 요일: 값(TimeSlot[] 형태)

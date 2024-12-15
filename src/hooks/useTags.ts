@@ -1,8 +1,8 @@
 import { KeyboardEvent, useEffect, useState } from 'react';
-import { TeamTag } from '../types/management.ts';
+import { ITag } from '@/types/new/common.ts';
 
 interface TagsProps {
-  initialTags?: TeamTag[];
+  initialTags?: ITag[];
   onEditTeamTag?: (tagId: number, newName: string) => void;
   onCreateRoleTag?: (name: string) => void;
   onEditRoleTag?: (tagId: number, newName: string) => void;
@@ -16,7 +16,7 @@ export const useTags = ({
   onEditRoleTag,
   onDeleteRoleTag
 }: TagsProps) => {
-  const [tags, setTags] = useState<TeamTag[]>(initialTags); // 태그 업데이트
+  const [tags, setTags] = useState<ITag[]>(initialTags); // 태그 업데이트
   const [showTagInput, setShowTagInput] = useState<boolean>(false); // 태그 입력 인풋창 보여줄지
   const [newTag, setNewTag] = useState<string>(''); // 새로운 태그 입력값
   const [editTagIndex, setEditTagIndex] = useState<number | null>(null); // 태그 수정시 인덱스값

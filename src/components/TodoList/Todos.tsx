@@ -1,14 +1,14 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useTodoStore } from '@store/todoStore';
+import { useTodoStore } from '@/store/todoStore';
 import * as Accordion from '@radix-ui/react-accordion';
 import { AccordionTrigger, AccordionContent } from './AccordionComponents';
 import Todo from './Todo';
 import { UserInfo } from 'src/types/todo-list';
-import { createTodo } from '@apis/todo-list';
-import { syncTodos } from '@utils/todoUtils';
+import { createTodo } from '@/apis/todo-list';
+import { syncTodos } from '@/utils/todoUtils';
 import { Container, StyledAddTodoIcon } from './layout/StyledTodos';
-import { useIdStore } from '@store/idStore';
+import { useIdStore } from '@/store/idStore';
 
 interface TodosProps {
   userInfo: UserInfo;

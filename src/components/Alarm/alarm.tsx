@@ -1,28 +1,21 @@
 import { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
-import ClosedBtn from '@assets/calendar/closed-btn.svg';
-import Quit from '@assets/alarm/quit.svg';
-import Remind from '@assets/alarm/remind.svg';
-import WakeUp from '@assets/alarm/wake-up.svg';
+import ClosedBtn from '@/assets/calendar/closed-btn.svg';
+import Quit from '@/assets/alarm/quit.svg';
+import Remind from '@/assets/alarm/remind.svg';
+import WakeUp from '@/assets/alarm/wake-up.svg';
 import moment from 'moment';
-import { useUpdateAlarmStatus } from '@hooks/alarm/useUpdateAlarmStatus';
-import { getTeamById } from '@apis/team/getTeamById';
+import { useUpdateAlarmStatus } from '@/hooks/alarm/useUpdateAlarmStatus';
 import { useQuery } from '@tanstack/react-query';
+import { getMyTeam } from '@/apis/new/member';
+import { IAlarm } from '@/types/new/common';
 
 type AlarmProps = {
   isAlarmOpen: boolean;
   toggleAlarm: () => void;
   setHover: React.Dispatch<React.SetStateAction<boolean>>;
-  data: AlarmItemProps;
+  data: IAlarm;
 };
-
-type AlarmItemProps = {
-  alarmId: number;
-  alarmType: 'TODO_AWAKE' | 'CALENDAR_REMIND' | 'TEAM_FINISH';
-  date: Date;
-  isRead: boolean;
-  referenceId: number;
-}[];
 
 interface AlarmLogoProps {
   type: 'TODO_AWAKE' | 'CALENDAR_REMIND' | 'TEAM_FINISH'; // 허용할 타입 정의
@@ -44,7 +37,7 @@ const Alarm = ({ isAlarmOpen, toggleAlarm, setHover, data }: AlarmProps) => {
 
   const { data: team } = useQuery({
     queryKey: ['team'],
-    queryFn: getTeamById
+    queryFn: getMyTeam
   });
 
   const alarmText = (data) => {

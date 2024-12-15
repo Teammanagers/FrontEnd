@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import Dot from '@assets/mypage/dot.svg';
-import SelectedFeedback from '@assets/mypage/selected-feedback.svg';
-import DefaultFeedback from '@assets/share/default-feedback.svg';
-import Word from '@assets/share/word.svg';
-import Ppt from '@assets/mypage/ppt.svg';
-import Image from '@assets/share/image.svg';
+import Dot from '@/assets/mypage/dot.svg';
+import SelectedFeedback from '@/assets/mypage/selected-feedback.svg';
+import DefaultFeedback from '@/assets/share/default-feedback.svg';
+import Word from '@/assets/share/word.svg';
+import Ppt from '@/assets/mypage/ppt.svg';
+import Image from '@/assets/share/image.svg';
 import { FileProps } from './FileProps';
 
 interface FileItemProps {

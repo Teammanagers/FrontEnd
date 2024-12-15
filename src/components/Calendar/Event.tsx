@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { EventType } from 'src/types/calendar';
-import CheckedIcon from '@assets/todo-list/checked.svg';
-import { updateEventState } from '@apis/calendar';
+import CheckedIcon from '@/assets/todo-list/checked.svg';
+import { updateEventState } from '@/apis/calendar';
 import EventModal from './EventModal';
 
 type EventProp = {

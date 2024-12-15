@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { UseTagsReturn } from '@hooks/mypage/useTags';
-import DeleteTag from '@assets/mypage/delete-tag.svg';
-import AddTag from '@assets/mypage/add-tag.svg';
+import { UseTagsReturn } from '@/hooks/mypage/useTags';
+import DeleteTag from '@/assets/mypage/delete-tag.svg';
+import AddTag from '@/assets/mypage/add-tag.svg';
 
 interface TagSectionProps {
   title: string;

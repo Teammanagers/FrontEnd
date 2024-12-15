@@ -1,5 +1,5 @@
-import OnBoardingWrapper from '@components/Login/OnBoardingWrapper';
-import CompleteImage from '@assets/login/complete.svg';
+import OnBoardingWrapper from '@/components/Login/OnBoardingWrapper';
+import CompleteImage from '@/assets/login/complete.svg';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 

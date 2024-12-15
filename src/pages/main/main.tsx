@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import Notice from '@components/Main/Notice';
-import NavigateBtn from '@assets/main/navigate-btn.svg';
-import EventCalendar from '@components/Calendar/EventCalendar';
-import TodoList from '@components/TodoList/TodoList';
-import { syncTodos } from '@utils/todoUtils';
-import { useTodoStore } from '@store/todoStore';
-import { getTeamInfo } from '@apis/main';
-import { useIdStore } from '@store/idStore';
+import Notice from '@/components/Main/Notice';
+import NavigateBtn from '@/assets/main/navigate-btn.svg';
+import EventCalendar from '@/components/Calendar/EventCalendar';
+import TodoList from '@/components/TodoList/TodoList';
+import { syncTodos } from '@/utils/todoUtils';
+import { useTodoStore } from '@/store/todoStore';
+import { getTeamInfo } from '@/apis/main';
+import { useIdStore } from '@/store/idStore';
 
 const MainPage = () => {
   const { teamId, setTeamId } = useIdStore((state) => ({

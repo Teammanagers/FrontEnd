@@ -1,22 +1,6 @@
 import { AxiosInstance } from '@/apis/new/axios-instance.ts';
 import { ScheduleRequestBody, TeamData } from '../types/management.ts';
 
-// 내 팀 조회
-export const getMyTeam = async () => {
-  const token = localStorage.getItem('teamId');
-  if (!token) {
-    return null;
-  }
-
-  try {
-    const response = await AxiosInstance.get(`/api/member/team`);
-    return response.data.result.teamList;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-};
-
 // 팀 조회
 export const getTeamData = async (teamId: number): Promise<TeamData> => {
   try {
@@ -31,7 +15,9 @@ export const getTeamData = async (teamId: number): Promise<TeamData> => {
 // 팀 멤버 조회 (역할태그 포함)
 export const getMembers = async (teamId: number) => {
   try {
-    const response = await AxiosInstance.get(`/api/team/${teamId}/member/detail`);
+    const response = await AxiosInstance.get(
+      `/api/team/${teamId}/member/detail`
+    );
     return response.data.result.teamMember;
   } catch (error) {
     console.error(error);
@@ -59,11 +45,15 @@ export const updateProfile = async (
       formData.append('imageFile', imageFile);
     }
 
-    const response = await AxiosInstance.patch(`/api/team/${teamId}`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
+    const response = await AxiosInstance.patch(
+      `/api/team/${teamId}`,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
       }
-    });
+    );
 
     console.log(response.data);
     return response.data;
@@ -80,9 +70,12 @@ export const updateTag = async (
   name: string
 ) => {
   try {
-    const response = await AxiosInstance.patch(`/api/team/${teamId}/tag/${tagId}`, {
-      name: name
-    });
+    const response = await AxiosInstance.patch(
+      `/api/team/${teamId}/tag/${tagId}`,
+      {
+        name: name
+      }
+    );
     console.log(response.data);
     return response.data;
   } catch (error) {
@@ -94,9 +87,12 @@ export const updateTag = async (
 // 역할 태그 생성
 export const createRoleTag = async (teamManageId: number, name: string) => {
   try {
-    const response = await AxiosInstance.post(`/api/management/${teamManageId}/role`, {
-      name: name
-    });
+    const response = await AxiosInstance.post(
+      `/api/management/${teamManageId}/role`,
+      {
+        name: name
+      }
+    );
     console.log(response.data);
     return response.data;
   } catch (error) {

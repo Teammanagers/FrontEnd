@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import SendButton from '@assets/share/send-button.svg';
+import SendButton from '@/assets/share/send-button.svg';
 
 interface TextInputWithProps {
   placeholder: string;

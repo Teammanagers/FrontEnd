@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import Back from '@assets/mypage/back.svg';
-import WrongUser from '@assets/mypage/wrong-user.svg';
+import Back from '@/assets/mypage/back.svg';
+import WrongUser from '@/assets/mypage/wrong-user.svg';
 import { useNavigate } from 'react-router-dom';
-import { QuitModal } from '@components/MyPage/QuitModal';
-import ProfileSettings from '@components/MyPage/profile/ProfileSettings';
-import TeamComments from '@components/MyPage/profile/TeamComments';
-import { getProfile, updateProfile } from '@apis/mypage';
+import { QuitModal } from '@/components/MyPage/QuitModal';
+import ProfileSettings from '@/components/MyPage/profile/ProfileSettings';
+import TeamComments from '@/components/MyPage/profile/TeamComments';
 import { CommentDTO } from 'src/types/profile';
+import { getMyProfile, updateMyProfile } from '@/apis/new/member';
+import { SocialType } from '@/types/new/common';
 
 export const ProfilePage = () => {
   const navigate = useNavigate();
@@ -20,22 +21,24 @@ export const ProfilePage = () => {
   const [contact, setContact] = useState<string>('');
   const [major, setMajor] = useState<string>('');
   const [commentList, setCommentList] = useState<CommentDTO[]>([]);
-  const [loginProcess, setLoginProcess] = useState<string>('');
+  const [loginProcess, setLoginProcess] = useState<SocialType>(
+    SocialType.KAKAO
+  );
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const profileData = await getProfile();
+        const profileData = await getMyProfile();
         console.log('Profile Data:', profileData);
-        if (profileData.result) {
-          setName(profileData.result.name);
-          setContact(profileData.result.phoneNumber);
-          setMajor(profileData.result.belong);
-          setLoginProcess(profileData.result.loginProcess);
-          setUploadedImage(profileData.result.imageUrl);
-          setCommentList(profileData.result.commentList);
-          console.log(profileData.result);
+        if (profileData) {
+          setName(profileData.name);
+          setContact(profileData.phoneNumber);
+          setMajor(profileData.belong);
+          setLoginProcess(profileData.loginProcess);
+          setUploadedImage(profileData.imageUrl);
+          setCommentList(profileData.commentList);
+          console.log(profileData);
         } else {
           console.error('Profile data is missing the "result" field');
         }
@@ -88,7 +91,7 @@ export const ProfilePage = () => {
             isEditing={isEditing}
             toggleEditMode={toggleEditMode}
             loginProcess={loginProcess}
-            updateProfile={updateProfile}
+            updateMyProfile={updateMyProfile}
           />
           {/* 팀원들의 한마디 */}
           <TeamComments

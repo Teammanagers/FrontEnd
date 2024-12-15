@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import styled from 'styled-components';
-import UpcomingEvent from '@components/Calendar/UpcomingEvent';
-import { getUpcomingEvent } from '@apis/calendar';
+import UpcomingEvent from '@/components/Calendar/UpcomingEvent';
+import { getUpcomingEvent } from '@/apis/calendar';
 // import { teamId } from '../../constant/index';
-import { useCalendarStore } from '@store/calendarStore';
-import { useIdStore } from '@store/idStore';
+import { useCalendarStore } from '@/store/calendarStore';
+import { useIdStore } from '@/store/idStore';
 
 const UpcomingEventList = () => {
   const { teamId } = useIdStore((state) => ({

@@ -144,3 +144,42 @@ export interface ISimpleTeamManage {
   teamManageId: number; // 팀-멤버 ID
   name: string; // 이름
 }
+
+export interface ITerms {
+  termsOfUse: boolean;
+  privacyPolicy: boolean;
+}
+
+export interface ICreateTeam {
+  title: string; // 팀명
+  teamTagList: string[]; // 팀 태그 리스트
+  imageFile: File; // 프로필 이미지 (최대 10MB)
+}
+
+export interface IUpdateTeam {
+  teamId: number;
+  teamCode: string;
+  password: string;
+}
+
+export interface IUpdateMyProfile {
+  image: File | null;
+  name: string;
+  belong: string;
+  phoneNumber: string;
+  confidentRole: string[];
+}
+
+export interface ICreateMemo {
+  teamId: number;
+  title: string;
+  tagList: string[];
+  content: string;
+}
+
+export interface IUpdateMemo {
+  memoId: number;
+  title: string;
+  tagList: string[];
+  content: string;
+}

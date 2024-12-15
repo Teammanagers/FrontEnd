@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import styled from 'styled-components';
-import AddFile from '@assets/mypage/add-file.svg';
-import SmallAdd from '@assets/mypage/small-add.svg';
+import AddFile from '@/assets/mypage/add-file.svg';
+import SmallAdd from '@/assets/mypage/small-add.svg';
 import { FileProps } from './FileProps';
 import { FileItem } from './FileItem';
 

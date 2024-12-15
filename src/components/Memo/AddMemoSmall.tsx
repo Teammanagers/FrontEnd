@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import AddMemoIcon from '@assets/memo/add-memo.svg';
-import PlusIcon from '@assets/memo/plus.svg';
+import AddMemoIcon from '@/assets/memo/add-memo.svg';
+import PlusIcon from '@/assets/memo/plus.svg';
 import { useNavigate } from 'react-router-dom';
 
 export const AddMemoSmall = () => {

@@ -1,3 +1,5 @@
+import { IUpdateMyProfile, SocialType } from '@/types/new/common';
+
 export interface ProfileSettingsProps {
   name: string;
   setName: (name: string) => void;
@@ -9,12 +11,12 @@ export interface ProfileSettingsProps {
   setUploadedImage: (image: string | null) => void;
   isEditing: boolean;
   toggleEditMode: () => void;
-  loginProcess: string;
-  updateProfile: (
-    image: File | null,
-    name: string,
-    major: string,
-    phoneNumber: string,
-    confidentRole: string[]
-  ) => Promise<void>;
+  loginProcess: SocialType;
+  updateMyProfile: ({
+    image,
+    name,
+    belong,
+    phoneNumber,
+    confidentRole
+  }: IUpdateMyProfile) => Promise<void>;
 }

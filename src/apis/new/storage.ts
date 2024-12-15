@@ -3,11 +3,21 @@ import { storageApiUrlWithTeamId, storageApiUrl } from '@/apis/new/urls';
 import { getStorageResponse } from '@/types/new/response/storage';
 
 // 팀 자료 생성
-export const createStorage = async (teamId: number): Promise<void> => {
-  const response = await AxiosInstance.post(
-    `${storageApiUrlWithTeamId(teamId)}`
-  );
-  return response.data;
+export const createStorage = async (
+  teamId: number,
+  title: string,
+  file: File
+): Promise<void> => {
+  const formData = new FormData();
+  formData.append('teamId', teamId.toString());
+  formData.append('title', title);
+  formData.append('file', file);
+
+  await AxiosInstance.post(`${storageApiUrlWithTeamId(teamId)}`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  });
 };
 
 // 팀 자료 조회
@@ -25,14 +35,10 @@ export const downloadStorage = async (
   teamId: number,
   storageId: number
 ): Promise<void> => {
-  const response = await AxiosInstance.get(
-    `${storageApiUrlWithTeamId(teamId)}/${storageId}`
-  );
-  return response.data;
+  await AxiosInstance.get(`${storageApiUrlWithTeamId(teamId)}/${storageId}`);
 };
 
 // 자료 삭제
 export const deleteStorage = async (storageId: number): Promise<void> => {
-  const response = await AxiosInstance.delete(`${storageApiUrl(storageId)}`);
-  return response.data;
+  await AxiosInstance.delete(`${storageApiUrl(storageId)}`);
 };

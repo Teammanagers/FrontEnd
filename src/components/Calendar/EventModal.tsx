@@ -5,18 +5,18 @@ import * as Dialog from '@radix-ui/react-dialog';
 import moment from 'moment';
 import ParticipantsList from './ParticipantsList';
 import { ScheduleInfoType } from '../../types/calendar';
-import ClosedBtn from '@assets/calendar/closed-btn.svg';
-import RemoveTagIcon from '@assets/calendar/remove-tag-icon.svg';
+import ClosedBtn from '@/assets/calendar/closed-btn.svg';
+import RemoveTagIcon from '@/assets/calendar/remove-tag-icon.svg';
 import {
   deleteCalendarEvent,
   getCalendarEventDetail,
   updateCalendarEvent,
   updateEventState
-} from '@apis/calendar';
-import { syncCalendarEvent } from '@utils/calendarUtils';
+} from '@/apis/calendar';
+import { syncCalendarEvent } from '@/utils/calendarUtils';
 import { EventProps } from '../../types/calendar';
-import { useCalendarStore } from '@store/calendarStore';
-import { useIdStore } from '@store/idStore';
+import { useCalendarStore } from '@/store/calendarStore';
+import { useIdStore } from '@/store/idStore';
 
 const EventModal = ({
   date,

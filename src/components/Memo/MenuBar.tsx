@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import { useState } from 'react';
-import { DeleteMemoModal } from '@components/Memo/DeleteMemoModal.tsx';
+import { DeleteMemoModal } from '@/components/Memo/DeleteMemoModal.tsx';
 import { useNavigate } from 'react-router-dom';
-import { deleteMemo } from '@apis/memo.ts';
+import { deleteMemo } from '@/apis/new/memo';
 
 interface MenuBarProps {
   memoId: number;

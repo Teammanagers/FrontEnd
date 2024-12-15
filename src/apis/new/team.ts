@@ -8,16 +8,34 @@ import {
   getTeamMemberResponse,
   getTeamResponse
 } from '@/types/new/response/team';
+import { ICreateTeam, IUpdateTeam } from '@/types/new/common';
 
 // 팀 생성
-export const createTeam = async (): Promise<createTeamResponse> => {
-  const response = await AxiosInstance.post(teamApiUrl);
+export const createTeam = async ({
+  title,
+  teamTagList,
+  imageFile
+}: ICreateTeam): Promise<createTeamResponse> => {
+  const formData = new FormData();
+  const requestBody = JSON.stringify({ title, teamTagList });
+
+  formData.append('createTeam', requestBody);
+  formData.append('imageFile', imageFile);
+
+  const response = await AxiosInstance.post(teamApiUrl, formData);
   return response.data;
 };
 
 // 팀 수정
-export const updateTeam = async (teamId: number): Promise<void> => {
-  const response = await AxiosInstance.patch(`${teamApiUrl}/${teamId}`);
+export const updateTeam = async ({
+  teamId,
+  teamCode,
+  password
+}: IUpdateTeam): Promise<void> => {
+  const response = await AxiosInstance.patch(`${teamApiUrl}/${teamId}`, {
+    teamCode,
+    password
+  });
   return response.data;
 };
 
@@ -28,9 +46,16 @@ export const joinTeam = async (teamId: number): Promise<void> => {
 };
 
 // 팀 비밀번호 생성
-export const createTeamPassword = async (teamId: number): Promise<void> => {
+export const createTeamPassword = async ({
+  teamId,
+  password
+}: {
+  teamId: number;
+  password: string;
+}): Promise<void> => {
   const response = await AxiosInstance.patch(
-    `${teamApiUrl}/${teamId}/password`
+    `${teamApiUrl}/${teamId}/password`,
+    { password }
   );
   return response.data;
 };
@@ -42,8 +67,12 @@ export const getTeam = async (teamId: number): Promise<getTeamResponse> => {
 };
 
 // 팀 조회 (팀 코드)
-export const getTeamByCode = async (): Promise<getTeamByCodeResponse> => {
-  const response = await AxiosInstance.get(teamApiUrl);
+export const getTeamByCode = async (
+  teamCode: string
+): Promise<getTeamByCodeResponse> => {
+  const response = await AxiosInstance.get(
+    `${teamApiUrl}?teamCode=${teamCode}`
+  );
   return response.data;
 };
 

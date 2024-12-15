@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import FirstPage from '@assets/mypage/first-page.svg';
-import Move from '@assets/mypage/move.svg';
+import FirstPage from '@/assets/mypage/first-page.svg';
+import Move from '@/assets/mypage/move.svg';
 import { CommentDTO } from 'src/types/profile';
 
 interface TeamCommentsProps {

@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import LogoImage from '@assets/login/project-logo.svg';
-import KakaoLogo from '@assets/login/kakao-logo.svg';
-import NaverLogo from '@assets/login/naver-logo.svg';
-import GoogleLogo from '@assets/login/google-logo.svg';
+import LogoImage from '@/assets/login/project-logo.svg';
+import KakaoLogo from '@/assets/login/kakao-logo.svg';
+import NaverLogo from '@/assets/login/naver-logo.svg';
+import GoogleLogo from '@/assets/login/google-logo.svg';
 
 const Login = () => {
   const handleKakaoButtonClick = () => {

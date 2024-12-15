@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Profile from '@assets/management/default-profile.svg';
+import Profile from '@/assets/management/default-profile.svg';
 
 export const CommentInputBox = () => {
   return (

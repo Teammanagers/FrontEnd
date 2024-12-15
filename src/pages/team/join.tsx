@@ -1,7 +1,7 @@
-import SearchResultSection from '@components/Team/SearchResultSection';
-import TeamContainer from '@components/Team/TeamContainer';
-import { useGetTeamByCode } from '@hooks/team/useGetTeamByCode';
-import { useValidatePassword } from '@hooks/team/useValidatePassword';
+import SearchResultSection from '@/components/Team/SearchResultSection';
+import TeamContainer from '@/components/Team/TeamContainer';
+import { useGetTeamByCode } from '@/hooks/team/useGetTeamByCode';
+import { useValidatePassword } from '@/hooks/team/useValidatePassword';
 import * as Dialog from '@radix-ui/react-dialog';
 import { useState } from 'react';
 import styled from 'styled-components';

@@ -6,7 +6,7 @@ import {
   AccordionContentProps,
   AccordionTriggerProps
 } from '../../types/todo-list';
-import ChevronDownIcon from '@assets/todo-list/chevron-down.svg';
+import ChevronDownIcon from '@/assets/todo-list/chevron-down.svg';
 
 export const AccordionTrigger: FC<AccordionTriggerProps> = ({
   children,

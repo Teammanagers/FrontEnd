@@ -1,10 +1,10 @@
 import styled from 'styled-components';
-import { TitleText } from '@components/Management/team-code/TeamCode.tsx';
-import { Member } from '@components/Management/member/Member.tsx';
+import { TitleText } from '@/components/Management/team-code/TeamCode.tsx';
+import { Member } from '@/components/Management/member/Member.tsx';
 import { useEffect, useState } from 'react';
-import { getMembers } from '@apis/management.ts';
+import { getMembers } from '@/apis/management.ts';
 import { MemberTypes } from '../../../types/member.ts';
-import { useIdStore } from '@store/idStore.ts';
+import { useIdStore } from '@/store/idStore.ts';
 
 export const Members = () => {
   const [members, setMembers] = useState<MemberTypes[]>([]);

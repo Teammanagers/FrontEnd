@@ -3,7 +3,7 @@ import moment from 'moment';
 import * as Popover from '@radix-ui/react-popover';
 import AddEventModal from './AddEventModal';
 import { EventType } from 'src/types/calendar';
-import AddEventButton from '@assets/calendar/add-event-btn.svg';
+import AddEventButton from '@/assets/calendar/add-event-btn.svg';
 import { useState } from 'react';
 import Event from './Event';
 
@@ -28,8 +28,8 @@ const EventPopover = ({ date, eventList }: EventPopoverProps) => {
           <PopoverContent>
             <h4 className="date">{moment(date).format('YYYY-MM-DD')}</h4>
             <ul className="event-list">
-              {eventList.map((event) => {
-                return <Event event={event} />;
+              {eventList.map((event, index) => {
+                return <Event key={index} event={event} />;
               })}
             </ul>
             <button

@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-import { AddMemoLarge } from '@components/Memo/AddMemoLarge.tsx';
-import { MemoList } from '@components/Memo/MemoList.tsx';
+import { AddMemoLarge } from '@/components/Memo/AddMemoLarge.tsx';
+import { MemoList } from '@/components/Memo/MemoList.tsx';
 import { useEffect, useState } from 'react';
-import { getMemos } from '@apis/memo.ts';
-import { useIdStore } from '@store/idStore.ts';
+import { useIdStore } from '@/store/idStore.ts';
+import { getMemoList } from '@/apis/new/memo';
 
 export const MemoPage = () => {
   const [hasMemo, setHasMemo] = useState<boolean>(false);
@@ -27,8 +27,8 @@ export const MemoPage = () => {
   useEffect(() => {
     const fetchMemos = async () => {
       try {
-        const response = await getMemos(teamId);
-        const memos = response.result.memoList;
+        const response = await getMemoList(teamId);
+        const memos = response.memoList;
         setHasMemo(memos.length > 0);
       } catch (error) {
         console.log(error);

@@ -2,19 +2,19 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import * as Checkbox from '@radix-ui/react-checkbox';
 import * as Popover from '@radix-ui/react-popover';
-import CheckedIcon from '@assets/todo-list/checked.svg';
-import TodoMenuIcon from '@assets/todo-list/todo-menu.svg';
+import CheckedIcon from '@/assets/todo-list/checked.svg';
+import TodoMenuIcon from '@/assets/todo-list/todo-menu.svg';
 import {
   deleteTodo,
   sendAwakeAlarm,
   updateTodoCheck,
   updateTodo
-} from '@apis/todo-list';
-import { useTodoStore } from '@store/todoStore';
-import { syncTodos } from '@utils/todoUtils';
+} from '@/apis/todo-list';
+import { useTodoStore } from '@/store/todoStore';
+import { syncTodos } from '@/utils/todoUtils';
 import { TodoProps } from 'src/types/todo-list';
 import { useLocation } from 'react-router-dom';
-import { useIdStore } from '@store/idStore';
+import { useIdStore } from '@/store/idStore';
 
 const Todo = ({ todo, teamManageId }: TodoProps) => {
   const { teamId, setTeamId } = useIdStore((state) => ({

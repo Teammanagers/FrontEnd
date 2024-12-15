@@ -1,14 +1,23 @@
 import { AxiosInstance } from '@/apis/new/axios-instance';
 import { memoApiUrl, memoApiUrlWithTeamId } from '@/apis/new/urls';
+import { ICreateMemo, IUpdateMemo } from '@/types/new/common';
 import {
   getMemoDetailResponse,
   getMemoListResponse
 } from '@/types/new/response/memo';
 
 // 팀 메모 생성
-export const createMemo = async (teamId: number): Promise<void> => {
-  const response = await AxiosInstance.post(`${memoApiUrlWithTeamId(teamId)}`);
-  return response.data;
+export const createMemo = async ({
+  teamId,
+  title,
+  tagList,
+  content
+}: ICreateMemo): Promise<void> => {
+  await AxiosInstance.post(`${memoApiUrlWithTeamId(teamId)}`, {
+    title,
+    tagList,
+    content
+  });
 };
 
 // 팀 메모 조회
@@ -28,13 +37,20 @@ export const getMemoDetail = async (
 };
 
 // 메모 수정
-export const updateMemo = async (memoId: number): Promise<void> => {
-  const response = await AxiosInstance.patch(memoApiUrl(memoId));
-  return response.data;
+export const updateMemo = async ({
+  memoId,
+  title,
+  tagList,
+  content
+}: IUpdateMemo): Promise<void> => {
+  await AxiosInstance.patch(memoApiUrl(memoId), {
+    title,
+    tagList,
+    content
+  });
 };
 
 // 메모 삭제
 export const deleteMemo = async (memoId: number): Promise<void> => {
-  const response = await AxiosInstance.delete(memoApiUrl(memoId));
-  return response.data;
+  await AxiosInstance.delete(memoApiUrl(memoId));
 };
