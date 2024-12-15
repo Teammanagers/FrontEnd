@@ -155,3 +155,9 @@ export interface ICreateTeam {
   teamTagList: string[]; // 팀 태그 리스트
   imageFile: File; // 프로필 이미지 (최대 10MB)
 }
+
+export interface IUpdateTeam {
+  teamId: number;
+  teamCode: string;
+  password: string;
+}

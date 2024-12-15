@@ -8,7 +8,7 @@ import {
   getTeamMemberResponse,
   getTeamResponse
 } from '@/types/new/response/team';
-import { ICreateTeam } from '@/types/new/common';
+import { ICreateTeam, IUpdateTeam } from '@/types/new/common';
 
 // 팀 생성
 export const createTeam = async (
@@ -19,8 +19,15 @@ export const createTeam = async (
 };
 
 // 팀 수정
-export const updateTeam = async (teamId: number): Promise<void> => {
-  const response = await AxiosInstance.patch(`${teamApiUrl}/${teamId}`);
+export const updateTeam = async ({
+  teamId,
+  teamCode,
+  password
+}: IUpdateTeam): Promise<void> => {
+  const response = await AxiosInstance.patch(`${teamApiUrl}/${teamId}`, {
+    teamCode,
+    password
+  });
   return response.data;
 };
 
