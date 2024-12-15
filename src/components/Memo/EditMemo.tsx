@@ -8,8 +8,9 @@ import {
 import { useNavigate, useParams } from 'react-router-dom';
 import { ButtonHTMLAttributes, useEffect, useState } from 'react';
 import { useTags } from '@/hooks/useTags.ts';
-import { deleteMemo, getMemoById, updateMemo } from '@/apis/memo.ts';
+import { deleteMemo, updateMemo } from '@/apis/memo.ts';
 import { DeleteMemoModal } from '@/components/Memo/DeleteMemoModal.tsx';
+import { getMemoDetail } from '@/apis/new/memo';
 
 export const EditMemo = () => {
   const { memoId } = useParams<{ memoId: string }>(); // useParams는 string 형태만 받아올 수 있음..
@@ -38,15 +39,12 @@ export const EditMemo = () => {
     const fetchMemo = async () => {
       if (memoId) {
         try {
-          const response = await getMemoById(Number(memoId));
-          const memo = response.result.memo;
+          const response = await getMemoDetail(Number(memoId));
+          const memo = response.memo;
 
           setTitle(memo.title);
           setContent(memo.content);
-          setTags([
-            ...tags,
-            memo.tagList.map((tag: { name: string }) => tag.name)
-          ]);
+          setTags([...tags, ...memo.tagList]);
         } catch (error) {
           console.error(error);
         }
@@ -121,7 +119,7 @@ export const EditMemo = () => {
                   </TagInputContainer>
                 ) : (
                   <>
-                    <span>{tag}</span>
+                    <span>{tag.name}</span>
                   </>
                 )}
               </Tag>
