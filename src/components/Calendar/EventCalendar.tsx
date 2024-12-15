@@ -8,10 +8,10 @@ import NextBtn from '@/assets/calendar/next-btn.svg';
 import PrevBtn from '@/assets/calendar/prev-btn.svg';
 import { useMemberStore } from '@/store/memberStore';
 import { useCalendarStore } from '@/store/calendarStore';
-import { getTeamMember } from '@/apis/calendar';
 import EventPopover from './EventPopover';
 import { syncCalendarEvent } from '@/utils/calendarUtils';
 import { useIdStore } from '@/store/idStore';
+import { getTeamMember } from '@/apis/new/team';
 
 const EventCalendar = () => {
   const { teamId, setTeamId } = useIdStore((state) => ({
@@ -47,7 +47,7 @@ const EventCalendar = () => {
 
     const fetchMember = async () => {
       const response = await getTeamMember(teamId);
-      setTeamMember(response.data.result.teamMember);
+      setTeamMember(response.teamMembers);
     };
 
     fetchMember();
