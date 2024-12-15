@@ -176,3 +176,10 @@ export interface ICreateMemo {
   tagList: string[];
   content: string;
 }
+
+export interface IUpdateMemo {
+  memoId: number;
+  title: string;
+  tagList: string[];
+  content: string;
+}

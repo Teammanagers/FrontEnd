@@ -8,9 +8,9 @@ import {
 import { useNavigate, useParams } from 'react-router-dom';
 import { ButtonHTMLAttributes, useEffect, useState } from 'react';
 import { useTags } from '@/hooks/useTags.ts';
-import { deleteMemo, updateMemo } from '@/apis/memo.ts';
+import { deleteMemo } from '@/apis/memo.ts';
 import { DeleteMemoModal } from '@/components/Memo/DeleteMemoModal.tsx';
-import { getMemoDetail } from '@/apis/new/memo';
+import { getMemoDetail, updateMemo } from '@/apis/new/memo';
 
 export const EditMemo = () => {
   const { memoId } = useParams<{ memoId: string }>(); // useParams는 string 형태만 받아올 수 있음..
@@ -76,7 +76,12 @@ export const EditMemo = () => {
     try {
       if (memoId) {
         const tagNames = tags.map((tag) => tag.name);
-        await updateMemo(Number(memoId), title, tagNames, content);
+        await updateMemo({
+          memoId: Number(memoId),
+          title,
+          tagList: tagNames,
+          content
+        });
       }
       navigate(`/memo`);
     } catch (error) {

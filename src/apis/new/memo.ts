@@ -1,6 +1,6 @@
 import { AxiosInstance } from '@/apis/new/axios-instance';
 import { memoApiUrl, memoApiUrlWithTeamId } from '@/apis/new/urls';
-import { ICreateMemo } from '@/types/new/common';
+import { ICreateMemo, IUpdateMemo } from '@/types/new/common';
 import {
   getMemoDetailResponse,
   getMemoListResponse
@@ -37,9 +37,17 @@ export const getMemoDetail = async (
 };
 
 // 메모 수정
-export const updateMemo = async (memoId: number): Promise<void> => {
-  const response = await AxiosInstance.patch(memoApiUrl(memoId));
-  return response.data;
+export const updateMemo = async ({
+  memoId,
+  title,
+  tagList,
+  content
+}: IUpdateMemo): Promise<void> => {
+  await AxiosInstance.patch(memoApiUrl(memoId), {
+    title,
+    tagList,
+    content
+  });
 };
 
 // 메모 삭제
