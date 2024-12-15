@@ -8,10 +8,11 @@ import {
   getTeamMemberResponse,
   getTeamResponse
 } from '@/types/new/response/team';
+import { ICreateTeam } from '@/types/new/common';
 
 // 팀 생성
 export const createTeam = async (
-  formData: FormData
+  formData: ICreateTeam
 ): Promise<createTeamResponse> => {
   const response = await AxiosInstance.post(teamApiUrl, formData);
   return response.data;

@@ -149,3 +149,9 @@ export interface ITerms {
   termsOfUse: boolean;
   privacyPolicy: boolean;
 }
+
+export interface ICreateTeam {
+  title: string; // 팀명
+  teamTagList: string[]; // 팀 태그 리스트
+  imageFile: File; // 프로필 이미지 (최대 10MB)
+}
