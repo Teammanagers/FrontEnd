@@ -36,7 +36,7 @@ export const SideBar = () => {
   const location = useLocation();
 
   const { data, isLoading } = useGetAlarmList(
-    Number(localStorage.getItem('teamId')) || null
+    Number(localStorage.getItem('teamId'))
   );
 
   const { teamId, setTeamId } = useIdStore((state) => ({
@@ -151,7 +151,7 @@ export const SideBar = () => {
         {isAlarmOpen ? <BellClick /> : <Bell />}
         {hover && <SideBarText selected={isAlarmOpen}>알림</SideBarText>}
         <Alarm
-          data={data?.result.alarmList}
+          data={data}
           isAlarmOpen={isAlarmOpen}
           toggleAlarm={toggleAlarm}
           setHover={setHover}

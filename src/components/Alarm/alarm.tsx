@@ -8,21 +8,14 @@ import moment from 'moment';
 import { useUpdateAlarmStatus } from '@/hooks/alarm/useUpdateAlarmStatus';
 import { useQuery } from '@tanstack/react-query';
 import { getMyTeam } from '@/apis/new/member';
+import { IAlarm } from '@/types/new/common';
 
 type AlarmProps = {
   isAlarmOpen: boolean;
   toggleAlarm: () => void;
   setHover: React.Dispatch<React.SetStateAction<boolean>>;
-  data: AlarmItemProps;
+  data: IAlarm;
 };
-
-type AlarmItemProps = {
-  alarmId: number;
-  alarmType: 'TODO_AWAKE' | 'CALENDAR_REMIND' | 'TEAM_FINISH';
-  date: Date;
-  isRead: boolean;
-  referenceId: number;
-}[];
 
 interface AlarmLogoProps {
   type: 'TODO_AWAKE' | 'CALENDAR_REMIND' | 'TEAM_FINISH'; // 허용할 타입 정의
