@@ -6,8 +6,10 @@ import { useNavigate } from 'react-router-dom';
 import { QuitModal } from '@/components/MyPage/QuitModal';
 import ProfileSettings from '@/components/MyPage/profile/ProfileSettings';
 import TeamComments from '@/components/MyPage/profile/TeamComments';
-import { getProfile, updateProfile } from '@/apis/mypage';
+import { updateProfile } from '@/apis/mypage';
 import { CommentDTO } from 'src/types/profile';
+import { getMyProfile } from '@/apis/new/member';
+import { SocialType } from '@/types/new/common';
 
 export const ProfilePage = () => {
   const navigate = useNavigate();
@@ -20,22 +22,24 @@ export const ProfilePage = () => {
   const [contact, setContact] = useState<string>('');
   const [major, setMajor] = useState<string>('');
   const [commentList, setCommentList] = useState<CommentDTO[]>([]);
-  const [loginProcess, setLoginProcess] = useState<string>('');
+  const [loginProcess, setLoginProcess] = useState<SocialType>(
+    SocialType.KAKAO
+  );
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const profileData = await getProfile();
+        const profileData = await getMyProfile();
         console.log('Profile Data:', profileData);
-        if (profileData.result) {
-          setName(profileData.result.name);
-          setContact(profileData.result.phoneNumber);
-          setMajor(profileData.result.belong);
-          setLoginProcess(profileData.result.loginProcess);
-          setUploadedImage(profileData.result.imageUrl);
-          setCommentList(profileData.result.commentList);
-          console.log(profileData.result);
+        if (profileData) {
+          setName(profileData.name);
+          setContact(profileData.phoneNumber);
+          setMajor(profileData.belong);
+          setLoginProcess(profileData.loginProcess);
+          setUploadedImage(profileData.imageUrl);
+          setCommentList(profileData.commentList);
+          console.log(profileData);
         } else {
           console.error('Profile data is missing the "result" field');
         }

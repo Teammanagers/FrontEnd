@@ -7,6 +7,7 @@ import UserImage from '@/assets/mypage/user-image.svg';
 import { useTags } from '@/hooks/mypage/useTags';
 import { TagSection } from '@/hooks/mypage/TagSection';
 import { ProfileSettingsProps } from './ProfileSettingsProps';
+import { SocialType } from '@/types/new/common';
 
 const ProfileSettings: React.FC<ProfileSettingsProps> = ({
   name,
@@ -65,21 +66,14 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
 
   const renderLoginService = () => {
     switch (loginProcess) {
-      case 'KAKAO':
-        return (
-          <>
-            <Kakao />
-            카카오 계정으로 로그인 중
-          </>
-        );
-      case 'GOOGLE':
+      case SocialType.GOOGLE:
         return (
           <>
             <Google />
             구글 계정으로 로그인 중
           </>
         );
-      case 'NAVER':
+      case SocialType.NAVER:
         return (
           <>
             <Naver />
@@ -240,7 +234,7 @@ const SetRole = styled.div<{ isEditing: boolean }>`
 //   color: ${({ theme }) => theme.colors.black};
 // `;
 
-const LoginStatus = styled.div<{ loginProcess: string }>`
+const LoginStatus = styled.div<{ loginProcess: SocialType }>`
   height: 49px;
   border-radius: 8px;
   font-size: 15px;
@@ -251,19 +245,19 @@ const LoginStatus = styled.div<{ loginProcess: string }>`
   gap: 19px;
   ${({ loginProcess }) => {
     switch (loginProcess) {
-      case 'KAKAO':
+      case SocialType.KAKAO:
       default:
         return css`
           background-color: #fee500;
           color: #000000;
         `;
-      case 'GOOGLE':
+      case SocialType.GOOGLE:
         return css`
           background-color: white;
           color: #1d1d1d;
           border: 1px solid #5a5a5a;
         `;
-      case 'NAVER':
+      case SocialType.NAVER:
         return css`
           background-color: #03c75a;
           color: white;

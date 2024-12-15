@@ -1,16 +1,4 @@
 import { AxiosInstance } from '@/apis/new/axios-instance';
-import { ProfileResponse } from 'src/types/profile';
-
-// 내 프로필 조회
-export const getProfile = async (): Promise<ProfileResponse> => {
-  try {
-    const response = await AxiosInstance.get<ProfileResponse>(`/api/member`);
-    return response.data;
-  } catch (error) {
-    console.error('Failed to fetch profile:', error);
-    throw error;
-  }
-};
 
 //내 프로필 수정
 export const updateProfile = async (

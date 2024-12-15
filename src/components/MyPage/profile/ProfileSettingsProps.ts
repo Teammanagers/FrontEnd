@@ -1,3 +1,5 @@
+import { SocialType } from '@/types/new/common';
+
 export interface ProfileSettingsProps {
   name: string;
   setName: (name: string) => void;
@@ -9,7 +11,7 @@ export interface ProfileSettingsProps {
   setUploadedImage: (image: string | null) => void;
   isEditing: boolean;
   toggleEditMode: () => void;
-  loginProcess: string;
+  loginProcess: SocialType;
   updateProfile: (
     image: File | null,
     name: string,
