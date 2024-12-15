@@ -4,7 +4,7 @@ import RegisterProfile from '@/assets/team/register-profile.svg';
 import { TagInputSection } from '@/components/Team/TagInputSection';
 import { useTagInput } from '@/hooks/useTagInput';
 import { useState } from 'react';
-import { createTeamFetcher } from '@/apis/team/postCreateTeam';
+import { createTeam } from '@/apis/new/team';
 
 export const CreateTeamPage = () => {
   const [title, setTitle] = useState<string>('');
@@ -34,7 +34,7 @@ export const CreateTeamPage = () => {
 
   const handleCreateTeam = () => {
     if (isFormValid) {
-      createTeamFetcher({
+      createTeam({
         title,
         teamTagList: tagInput.tags,
         imageFile: profileImage

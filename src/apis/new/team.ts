@@ -11,9 +11,17 @@ import {
 import { ICreateTeam, IUpdateTeam } from '@/types/new/common';
 
 // 팀 생성
-export const createTeam = async (
-  formData: ICreateTeam
-): Promise<createTeamResponse> => {
+export const createTeam = async ({
+  title,
+  teamTagList,
+  imageFile
+}: ICreateTeam): Promise<createTeamResponse> => {
+  const formData = new FormData();
+  const requestBody = JSON.stringify({ title, teamTagList });
+
+  formData.append('createTeam', requestBody);
+  formData.append('imageFile', imageFile);
+
   const response = await AxiosInstance.post(teamApiUrl, formData);
   return response.data;
 };
