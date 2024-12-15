@@ -3,30 +3,14 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import Back from '@/assets/mypage/back.svg';
 import Move from '@/assets/mypage/move.svg';
-import { getSimplePortfolio, getDetailedPortfolio } from '@/apis/portfolio';
 import { SharedFile } from '@/components/MyPage/portfolio/SharedFile';
+import { getMyPortfolio, getMyPortfolioDetail } from '@/apis/new/member';
+import { getMyPortfolioDetailResponse } from '@/types/new/response/member';
 
 interface Portfolio {
   teamId: number;
   title: string;
   period: string;
-}
-
-interface DetailedPortfolio {
-  name: string;
-  start: string;
-  end: string;
-  teamTagList: string[];
-  teamMemberList: string[];
-  teamMyRole: string[];
-  storageList: {
-    storageId: number;
-    title: string;
-    size: string;
-    uploadAt: string;
-    fileUrl: string;
-    uploader: string;
-  }[];
 }
 
 export const PortfolioPage = () => {
@@ -41,7 +25,7 @@ export const PortfolioPage = () => {
     setSelectedFileId(id);
   };
   const [detailedPortfolio, setDetailedPortfolio] =
-    useState<DetailedPortfolio | null>(null);
+    useState<getMyPortfolioDetailResponse | null>(null);
 
   const testDetailedPortfolio = {
     //임시 데이터
@@ -85,14 +69,13 @@ export const PortfolioPage = () => {
   useEffect(() => {
     const fetchSimplePortfolio = async () => {
       try {
-        const response = await getSimplePortfolio();
+        const response = await getMyPortfolio();
 
-        const portfolioData = response.result.portfolioList.map((item) => ({
+        const portfolioData = response.portfolioList.map((item) => ({
           teamId: item.teamId,
           title: item.name,
-          period: `${item.start.substring(0, 10)}~${item.end.substring(0, 10)}`
+          period: `${String(item.start).substring(0, 10)}~${String(item.end).substring(0, 10)}`
         }));
-        console.log('simple api 호출 성공');
         setPortfolios(portfolioData);
       } catch (error) {
         console.error('Failed to fetch simple portfolio:', error);
@@ -106,10 +89,8 @@ export const PortfolioPage = () => {
   const handlePortfolioClick = async (portfolio: Portfolio) => {
     setSelectedPortfolio(portfolio);
     try {
-      const response = await getDetailedPortfolio(portfolio.teamId);
-      console.log(response.result);
-      console.log('detailed api 호출 성공');
-      setDetailedPortfolio(response.result);
+      const response = await getMyPortfolioDetail(portfolio.teamId);
+      setDetailedPortfolio(response);
     } catch (error) {
       console.error('Failed to fetch detailed portfolio:', error);
     }
