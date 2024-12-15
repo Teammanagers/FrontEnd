@@ -1,16 +1,5 @@
 import { AxiosInstance } from '@/apis/new/axios-instance.ts';
 
-// 메모 개별 조회
-export const getMemoById = async (memoId: number) => {
-  try {
-    const response = await AxiosInstance.get(`/api/memo/${memoId}`);
-    return response.data;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-};
-
 // 메모 수정
 export const updateMemo = async (
   memoId: number,
