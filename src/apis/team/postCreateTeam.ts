@@ -1,7 +1,7 @@
-import { AxiosInstance } from '@/apis/new/axios-instance';
 import { CreateTeamInput } from 'src/types/team';
+import { createTeam } from '../new/team';
 
-export const createTeam = async ({
+export const createTeamFetcher = async ({
   title,
   teamTagList,
   imageFile
@@ -14,19 +14,13 @@ export const createTeam = async ({
 
   try {
     const formData = new FormData();
-    const createTeam = JSON.stringify({ title, teamTagList });
+    const requestBody = JSON.stringify({ title, teamTagList });
 
-    formData.append('createTeam', createTeam);
+    formData.append('createTeam', requestBody);
     formData.append('imageFile', imageFile);
 
-    const response = await AxiosInstance.post('/api/team', formData, {
-      withCredentials: true,
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${token}`
-      }
-    });
-    return response.data;
+    const response = await createTeam(formData);
+    return response;
   } catch (error) {
     return { error };
   }

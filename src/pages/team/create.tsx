@@ -4,15 +4,12 @@ import RegisterProfile from '@/assets/team/register-profile.svg';
 import { TagInputSection } from '@/components/Team/TagInputSection';
 import { useTagInput } from '@/hooks/useTagInput';
 import { useState } from 'react';
-import { useCreateTeam } from '@/hooks/team/useCreateTeam';
+import { createTeamFetcher } from '@/apis/team/postCreateTeam';
 
 export const CreateTeamPage = () => {
   const [title, setTitle] = useState<string>('');
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const tagInput = useTagInput();
-
-  // useCreateTeam 훅 사용
-  const createTeamMutation = useCreateTeam();
 
   const isFormValid =
     title.trim() !== '' && tagInput.tags.length > 0 && profileImage !== null;
@@ -37,7 +34,7 @@ export const CreateTeamPage = () => {
 
   const handleCreateTeam = () => {
     if (isFormValid) {
-      createTeamMutation.mutate({
+      createTeamFetcher({
         title,
         teamTagList: tagInput.tags,
         imageFile: profileImage
