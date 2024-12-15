@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { FileMenuContainer } from '@/components/Share/FileMenuContainer';
 import { FeedbackSection } from '@/components/Share/FeedbackSection';
-import { getStorageList } from '@/apis/share';
+import { getStorage } from '@/apis/new/storage';
 
 interface FileItem {
   id: number;
@@ -33,8 +33,7 @@ export const SharePage = () => {
   useEffect(() => {
     const fetchFiles = async () => {
       try {
-        const FileData = await getStorageList(teamId);
-        console.log('데이터 뭔데', FileData);
+        const FileData = await getStorage(teamId);
 
         if (Array.isArray(FileData)) {
           const formattedFiles = FileData.map((file) => ({
