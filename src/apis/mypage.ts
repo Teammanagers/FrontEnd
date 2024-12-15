@@ -1,4 +1,4 @@
-import { AxiosInstance } from '@/apis/new/axios-instance';
+import { updateMyProfile } from './new/member';
 
 //내 프로필 수정
 export const updateProfile = async (
@@ -24,15 +24,10 @@ export const updateProfile = async (
       formData.append('image', image);
     }
 
-    const response = await AxiosInstance.patch(`/api/member`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
+    const response = await updateMyProfile(formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
     });
-
-    console.log('Profile updated successfully:', response.data);
-    console.log(profileData);
-    return response.data;
+    return response;
   } catch (err) {
     console.error('Failed to update profile:', err);
     throw err;

@@ -21,8 +21,11 @@ export const getMyTodoList = async (): Promise<getMyTodoListResponse> => {
 };
 
 // 내 프로필 수정
-export const updateMyProfile = async (): Promise<void> => {
-  await AxiosInstance.patch(memberApiUrl);
+export const updateMyProfile = async (
+  formData: FormData,
+  options?: { headers: Record<string, string> }
+): Promise<void> => {
+  await AxiosInstance.patch(memberApiUrl, formData, options);
 };
 
 // 내 프로필 한마디 상태 변경
