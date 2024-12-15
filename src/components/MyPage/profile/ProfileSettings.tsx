@@ -21,7 +21,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
   isEditing,
   toggleEditMode,
   loginProcess,
-  updateProfile
+  updateMyProfile
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const selectedFile = useRef<File | null>(null); // 선택된 파일을 저장할 ref
@@ -47,13 +47,13 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
       try {
         const confidentRole: string[] = tagsHook.tags;
 
-        await updateProfile(
-          selectedFile.current,
+        await updateMyProfile({
+          image: selectedFile.current,
           name,
-          major,
-          contact,
+          belong: major,
+          phoneNumber: contact,
           confidentRole
-        );
+        });
 
         toggleEditMode(); // 수정 모드 종료
       } catch (error) {

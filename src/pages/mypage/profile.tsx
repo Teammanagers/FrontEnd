@@ -6,9 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { QuitModal } from '@/components/MyPage/QuitModal';
 import ProfileSettings from '@/components/MyPage/profile/ProfileSettings';
 import TeamComments from '@/components/MyPage/profile/TeamComments';
-import { updateProfile } from '@/apis/mypage';
 import { CommentDTO } from 'src/types/profile';
-import { getMyProfile } from '@/apis/new/member';
+import { getMyProfile, updateMyProfile } from '@/apis/new/member';
 import { SocialType } from '@/types/new/common';
 
 export const ProfilePage = () => {
@@ -92,7 +91,7 @@ export const ProfilePage = () => {
             isEditing={isEditing}
             toggleEditMode={toggleEditMode}
             loginProcess={loginProcess}
-            updateProfile={updateProfile}
+            updateMyProfile={updateMyProfile}
           />
           {/* 팀원들의 한마디 */}
           <TeamComments

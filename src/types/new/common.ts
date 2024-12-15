@@ -161,3 +161,11 @@ export interface IUpdateTeam {
   teamCode: string;
   password: string;
 }
+
+export interface IUpdateMyProfile {
+  image: File | null;
+  name: string;
+  belong: string;
+  phoneNumber: string;
+  confidentRole: string[];
+}
