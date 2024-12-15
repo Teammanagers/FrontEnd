@@ -1,13 +1,4 @@
 import { AxiosInstance } from '@/apis/new/axios-instance.ts';
-import { MemoResponse } from '../types/memo.ts';
-
-// 메모 조회
-export const getMemos = async (teamId: number): Promise<MemoResponse> => {
-  const response = await AxiosInstance.get<MemoResponse>(
-    `/api/team/${teamId}/memo`
-  );
-  return response.data;
-};
 
 // 메모 개별 조회
 export const getMemoById = async (memoId: number) => {

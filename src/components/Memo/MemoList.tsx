@@ -2,8 +2,8 @@ import { AddMemoSmall } from '@/components/Memo/AddMemoSmall.tsx';
 import { Memo } from '@/components/Memo/Memo.tsx';
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
-import { getMemos } from '@/apis/memo.ts';
 import { MemoProps } from '../../types/memo.ts';
+import { getMemoList } from '@/apis/new/memo.ts';
 
 export const MemoList = () => {
   const [memos, setMemos] = useState<MemoProps[]>([]);
@@ -12,8 +12,8 @@ export const MemoList = () => {
   useEffect(() => {
     const fetchMemos = async () => {
       try {
-        const response = await getMemos(teamId);
-        setMemos(response.result.memoList);
+        const response = await getMemoList(teamId);
+        setMemos(response.memoList);
       } catch (error) {
         console.log(error);
       }
