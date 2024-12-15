@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import LeftArrow from '@/assets/left-arrow.svg';
-import { getTeamById } from '@/apis/team/getTeamById';
 import { useQuery } from '@tanstack/react-query';
+import { getMyTeam } from '@/apis/new/member';
 
 type LayoutProps = {
   children: ReactNode;
@@ -13,7 +13,7 @@ const TeamContainer: React.FC<LayoutProps> = ({ children }) => {
   const location = useLocation();
   const { data: team } = useQuery({
     queryKey: ['team'],
-    queryFn: getTeamById
+    queryFn: getMyTeam
   });
 
   const teamTextByPath =
@@ -22,7 +22,7 @@ const TeamContainer: React.FC<LayoutProps> = ({ children }) => {
       '/team/create': '프로젝트를 위해 팀을 생성해 주세요',
       '/team/join': '팀 참가를 위해 코드를 입력해 주세요',
       '/team/share': '팀원의 참가를 위해 팀 코드를 공유해 주세요',
-      '/team': `${team.result.name}님이 현재 진행하고 있는 팀 프로젝트에요!`
+      '/team': `${team.name}님이 현재 진행하고 있는 팀 프로젝트에요!`
     }[location.pathname];
 
   return (

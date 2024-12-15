@@ -6,8 +6,8 @@ import Remind from '@/assets/alarm/remind.svg';
 import WakeUp from '@/assets/alarm/wake-up.svg';
 import moment from 'moment';
 import { useUpdateAlarmStatus } from '@/hooks/alarm/useUpdateAlarmStatus';
-import { getTeamById } from '@/apis/team/getTeamById';
 import { useQuery } from '@tanstack/react-query';
+import { getMyTeam } from '@/apis/new/member';
 
 type AlarmProps = {
   isAlarmOpen: boolean;
@@ -44,7 +44,7 @@ const Alarm = ({ isAlarmOpen, toggleAlarm, setHover, data }: AlarmProps) => {
 
   const { data: team } = useQuery({
     queryKey: ['team'],
-    queryFn: getTeamById
+    queryFn: getMyTeam
   });
 
   const alarmText = (data) => {
