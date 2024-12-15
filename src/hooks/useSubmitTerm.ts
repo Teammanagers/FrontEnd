@@ -1,17 +1,13 @@
-import { postTerms } from '@/apis/login/postTerms';
+import { createTerms } from '@/apis/new/terms';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
 export const useSubmitTerm = () => {
   const navigate = useNavigate();
   const mutation = useMutation({
-    mutationFn: postTerms,
-    onSuccess: (data) => {
-      if (data.data.isSuccess) {
-        navigate('/login-complete');
-      } else {
-        return data;
-      }
+    mutationFn: createTerms,
+    onSuccess: () => {
+      navigate('/login-complete');
     },
     onError: (error) => {
       console.log(error, 'error');

@@ -144,3 +144,8 @@ export interface ISimpleTeamManage {
   teamManageId: number; // 팀-멤버 ID
   name: string; // 이름
 }
+
+export interface ITerms {
+  termsOfUse: boolean;
+  privacyPolicy: boolean;
+}
