@@ -52,8 +52,12 @@ export const getTeam = async (teamId: number): Promise<getTeamResponse> => {
 };
 
 // 팀 조회 (팀 코드)
-export const getTeamByCode = async (): Promise<getTeamByCodeResponse> => {
-  const response = await AxiosInstance.get(teamApiUrl);
+export const getTeamByCode = async (
+  teamCode: string
+): Promise<getTeamByCodeResponse> => {
+  const response = await AxiosInstance.get(
+    `${teamApiUrl}?teamCode=${teamCode}`
+  );
   return response.data;
 };
 
