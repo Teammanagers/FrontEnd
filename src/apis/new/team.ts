@@ -46,9 +46,16 @@ export const joinTeam = async (teamId: number): Promise<void> => {
 };
 
 // 팀 비밀번호 생성
-export const createTeamPassword = async (teamId: number): Promise<void> => {
+export const createTeamPassword = async ({
+  teamId,
+  password
+}: {
+  teamId: number;
+  password: string;
+}): Promise<void> => {
   const response = await AxiosInstance.patch(
-    `${teamApiUrl}/${teamId}/password`
+    `${teamApiUrl}/${teamId}/password`,
+    { password }
   );
   return response.data;
 };

@@ -1,6 +1,6 @@
+import { createTeamPassword } from '@/apis/new/team';
 import { useMutation, UseMutationResult } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { updateTeamPassword } from '@/apis/team/updatePassword.ts';
 import { UpdateTeamPasswordInput } from 'src/types/team';
 
 export const useCreatePassword = (
@@ -8,7 +8,7 @@ export const useCreatePassword = (
 ): UseMutationResult<void, Error, UpdateTeamPasswordInput> => {
   const navigate = useNavigate();
   const mutation = useMutation({
-    mutationFn: updateTeamPassword, // API 호출 함수 전달
+    mutationFn: createTeamPassword, // API 호출 함수 전달
     onSuccess: () => {
       // 성공 시 네비게이션
       navigate('/team', {
