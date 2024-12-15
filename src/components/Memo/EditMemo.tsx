@@ -8,9 +8,8 @@ import {
 import { useNavigate, useParams } from 'react-router-dom';
 import { ButtonHTMLAttributes, useEffect, useState } from 'react';
 import { useTags } from '@/hooks/useTags.ts';
-import { deleteMemo } from '@/apis/memo.ts';
 import { DeleteMemoModal } from '@/components/Memo/DeleteMemoModal.tsx';
-import { getMemoDetail, updateMemo } from '@/apis/new/memo';
+import { deleteMemo, getMemoDetail, updateMemo } from '@/apis/new/memo';
 
 export const EditMemo = () => {
   const { memoId } = useParams<{ memoId: string }>(); // useParams는 string 형태만 받아올 수 있음..

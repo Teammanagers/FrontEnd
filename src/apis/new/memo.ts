@@ -52,6 +52,5 @@ export const updateMemo = async ({
 
 // 메모 삭제
 export const deleteMemo = async (memoId: number): Promise<void> => {
-  const response = await AxiosInstance.delete(memoApiUrl(memoId));
-  return response.data;
+  await AxiosInstance.delete(memoApiUrl(memoId));
 };
